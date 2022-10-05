@@ -1,0 +1,23 @@
+
+  .container {
+      flex: 1; 
+      padding: 35;  
+      justifyContent: 'center'; 
+      alignItems: 'center'
+  }
+  .title {
+      fontSize: 50; 
+      fontWeight: "bold"
+  }
+  .image {
+      height : 250;  
+      width : 250
+  }
+  .fixToText {
+      justifyContent: 'space-between'
+  }
+  .button {
+      backgroundColor: 'blue'; 
+      padding : 7;  
+      marginTop: 10
+}
