@@ -45,6 +45,11 @@ const RegistrarUsuario = () => {
 
     return (
         <ScrollView style={styles.container}>
+             <View style={styles.containerTitle}>
+                <Text style={styles.title}> REGISTRAR USUARIO
+                {"\n"}
+                 </Text>
+            </View>
             <View style={styles.inputGroup}>
                 <TextInput 
                 style={styles.inputText}
@@ -98,12 +103,17 @@ function validatePasswordAndPhone (password, phone) {
 const styles = StyleSheet.create({
     container : {
         flex: 1, 
-        padding: 35
+        padding: 50
+    },containerTitle : {
+        flex: 1, 
+        padding: 35, 
+        justifyContent: 'center', 
+        alignItems: 'center'
     },
     inputGroup: {
         fontSize: 20, 
         flex: 1,
-        padding: 0,
+        padding: 2,
         marginBottom: 15, 
         borderBottomWidth: 2, 
         borderBottomColor: '#cccccc'
@@ -111,7 +121,8 @@ const styles = StyleSheet.create({
         fontSize: 17
       },
       title : {
-        fontSize: 20
+        fontSize: 25,
+        fontWeight: "bold"
       }
 })
 
