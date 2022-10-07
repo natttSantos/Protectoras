@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { View, Button, Text, StyleSheet, ScrollView, Image, TouchableOpacity} from "react-native";
+import { View, Button, Text, StyleSheet, ScrollView, Image} from "react-native";
 import ficheroImagenes from '../images/ficheroImagenes'; 
 
 
