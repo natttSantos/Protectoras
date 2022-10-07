@@ -45,12 +45,7 @@ const styles = StyleSheet.create({
         width : 250
     }, 
     fixToText: {
-        justifyContent: 'space-between',
-    },
-    button : {
-        backgroundColor: 'blue', 
-        padding : 7, 
-        marginTop: 10
+        justifyContent: 'space-between'
     }
 })
 

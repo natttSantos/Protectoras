@@ -15,31 +15,33 @@ const RegistrarUsuario = () => {
         setState({...state, [nombre]: value}); 
     }; 
     const saveNewUser =  async () => {
-        if (state.nombre == '' || state.email == '' || state.telefono == ''){
+        if (state.nombre == '' || state.email == '' || state.telefono == '' || state.contraseña == ''){
             validateNullFields(); 
-        } else { 
+        } else if (validatePasswordAndPhone(state.contraseña, state.telefono)){ 
             await firebase.db.collection('users').add({
                 usuario: state.usuario, 
                 email: state.email,
                 contraseña: state.contraseña,
                 telefono: state.telefono
             })
-            alert ("Bienvenido " + state.usuario); 
+            alert ("Bienvenid@ " + state.usuario); 
         }
     } 
     
     const validateNullFields = () => {
-        let campoVacio = "Complete el campo "; 
-        if (state.nombre == ''){
-            alert(campoVacio + "nombre"); 
+        let textoAlerta = "Complete el campo: ";
+        if (state.usuario == ''){
+            textoAlerta += "\n - Nombre de usuario"; 
         } if (state.email == ''){
-            alert(campoVacio + "email"); 
+            textoAlerta += "\n - Email "; 
+        } if (state.contraseña == ''){
+            textoAlerta += "\n - Contraseña "; 
         }
         if (state.telefono == ''){
-            alert(campoVacio + "telefono"); 
+            textoAlerta += "\n - Telefono ";  
         }
+        alert (textoAlerta); 
     }
-
 
     return (
         <ScrollView style={styles.container}>
@@ -79,6 +81,19 @@ const RegistrarUsuario = () => {
         </ScrollView>
     )
 }
+
+function validatePasswordAndPhone (password, phone) {
+    let validation = true; 
+    if (password.length < 4 || password.length > 8){
+        alert("La contraseña debe tener entre 4-8 caracteres"); 
+        validation = false; 
+    }
+    if (phone.length  != 9){
+        alert("El número de teléfono debe tener 9 dígitos"); 
+        validation = false; 
+    }
+    return validation;
+  }
 
 const styles = StyleSheet.create({
     container : {
