@@ -6,6 +6,7 @@ import {
   Alert,
   ActivityIndicator,
   StyleSheet,
+  Image,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 
@@ -64,12 +65,16 @@ const PerfilAnimal = (props) => {
 
   return (
     <ScrollView style={styles.container}>
+
+<     View>
+         <Image source={require('../images/gatitos.jpg')} style={styles.image}/>
+      </View>
       <View>
         <TextInput
           placeholder="Nombre"
           autoCompleteType="nombre"
           style={styles.inputGroup}
-          value={animal.nombre}
+          value={"Nombre: "+animal.nombre}
           onChangeText={(value) => handleTextChange(value, "nombre")}
         />
       </View>
@@ -78,7 +83,7 @@ const PerfilAnimal = (props) => {
           autoCompleteType="Edad"
           placeholder="Edad"
           style={styles.inputGroup}
-          value={animal.edad.toString()+ " años"}
+          value={"Edad: "+animal.edad.toString()+ " años"}
           onChangeText={(value) => handleTextChange(value, "edad")}
         />
       </View>
@@ -87,17 +92,8 @@ const PerfilAnimal = (props) => {
           placeholder="Raza"
           autoCompleteType="raza"
           style={styles.inputGroup}
-          value={animal.raza}
+          value={"Raza: "+animal.raza}
           onChangeText={(value) => handleTextChange(value, "raza")}
-        />
-      </View>
-      <View>
-        <TextInput
-          placeholder="Descripcion"
-          autoCompleteType="descripcion"
-          style={styles.inputGroup}
-          value={animal.descripcion}
-          onChangeText={(value) => handleTextChange(value, "descripcion")}
         />
       </View>
       <View>
@@ -105,7 +101,7 @@ const PerfilAnimal = (props) => {
           placeholder="Sexo"
           autoCompleteType="sexo"
           style={styles.inputGroup}
-          value={animal.sexo}
+          value={"Sexo: "+animal.sexo}
           onChangeText={(value) => handleTextChange(value, "sexo")}
         />
       </View>
@@ -114,8 +110,17 @@ const PerfilAnimal = (props) => {
           placeholder="Fecha de nacimiento"
           autoCompleteType="fecha_nacimiento"
           style={styles.inputGroup}
-          value={animal.fecha_nacimiento}
+          value={"Fecha de nacimiento: "+animal.fecha_nacimiento}
           onChangeText={(value) => handleTextChange(value, "fecha_nacimiento")}
+        />
+      </View>
+      <View>
+        <TextInput
+          placeholder="Descripcion"
+          autoCompleteType="descripcion"
+          style={styles.inputGroup}
+          value={"Descripción: "+animal.descripcion}
+          onChangeText={(value) => handleTextChange(value, "descripcion")}
         />
       </View>
     </ScrollView>
@@ -146,6 +151,10 @@ const styles = StyleSheet.create({
   btn: {
     marginBottom: 7,
   },
+  image : {
+    height : 250, 
+    width : 250
+}
 });
 
 export default PerfilAnimal;
