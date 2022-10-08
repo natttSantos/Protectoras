@@ -9,10 +9,13 @@ const Stack = createNativeStackNavigator()
 import InicioSesion from './screens/InicioSesion'
 import RegistrarUsuario from './screens/RegistrarUsuario'
 import PrincipalScreen from './screens/PrincipalScreen'
+import ListaProtectoras from './screens/ListaProtectoras'
+
 
 function MyStack (){
   return (
     <Stack.Navigator>
+      <Stack.Screen name="ListaProtectoras" component={ListaProtectoras}/>
       <Stack.Screen name="PrincipalScreen" component={PrincipalScreen}/>
       <Stack.Screen name="InicioSesion" component={InicioSesion} />
       <Stack.Screen name="RegistrarUsuario" component={RegistrarUsuario} />
