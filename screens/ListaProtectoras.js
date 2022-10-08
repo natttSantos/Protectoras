@@ -65,7 +65,8 @@ const styles = StyleSheet.create({
         margin: 12,
         padding: 10,
         fontSize: 40,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        textAlign: "left"
     },
     lista: {
         margin: 12,
