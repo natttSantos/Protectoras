@@ -10,15 +10,21 @@ import InicioSesion from './screens/InicioSesion'
 import RegistrarUsuario from './screens/RegistrarUsuario'
 import PrincipalScreen from './screens/PrincipalScreen'
 import ListaProtectoras from './screens/ListaProtectoras'
+import SesionUsuario from './screens/SesionUsuario'
+import PerfilUsuario from './screens/PerfilUsuario';
 
 
 function MyStack (){
   return (
     <Stack.Navigator>
+      
       <Stack.Screen name="ListaProtectoras" component={ListaProtectoras}/>
       <Stack.Screen name="PrincipalScreen" component={PrincipalScreen}/>
       <Stack.Screen name="InicioSesion" component={InicioSesion} />
       <Stack.Screen name="RegistrarUsuario" component={RegistrarUsuario} />
+      <Stack.Screen name="SesionUsuario" component={SesionUsuario} />
+      <Stack.Screen name="PerfilUsuario" component={PerfilUsuario} />
+      
     </Stack.Navigator>
   )
 }

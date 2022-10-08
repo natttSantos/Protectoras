@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import { View, Button, TextInput, StyleSheet, ScrollView, Text} from "react-native";
 import firebase from '../database/firebase.js';
 
-const RegistrarUsuario = () => {
+const RegistrarUsuario = (props) => {
     
     const [state, setState] = useState({ //STATE ES UN OBJETO CON NOMBRE, EMAIL Y TLF
         usuario: "", 
@@ -25,6 +25,7 @@ const RegistrarUsuario = () => {
                 telefono: state.telefono
             })
             alert ("Bienvenid@ " + state.usuario); 
+            props.navigation.navigate('SesionUsuario'); 
         }
     } 
     
