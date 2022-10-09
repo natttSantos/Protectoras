@@ -11,16 +11,20 @@ import RegistrarUsuario from './screens/RegistrarUsuario'
 import PrincipalScreen from './screens/PrincipalScreen'
 import ListaProtectoras from './screens/ListaProtectoras'
 import AltaProtectora from './screens/AltaProtectora'
-
+import ListaAnimales from './screens/ListaAnimales';
+import PerfilAnimal from './screens/PerfilAnimal';
 
 function MyStack (){
   return (
     <Stack.Navigator>
+      <Stack.Screen name="PrincipalScreen" component={PrincipalScreen}/>
+      <Stack.Screen name="ListaAnimales" component={ListaAnimales} />
       <Stack.Screen name="AltaProtectora" component={AltaProtectora} />
       <Stack.Screen name="ListaProtectoras" component={ListaProtectoras}/>
-      <Stack.Screen name="PrincipalScreen" component={PrincipalScreen}/>
+      
       <Stack.Screen name="InicioSesion" component={InicioSesion} />
       <Stack.Screen name="RegistrarUsuario" component={RegistrarUsuario} />
+      <Stack.Screen name="PerfilAnimal" component={PerfilAnimal} />
     </Stack.Navigator>
   )
 }
