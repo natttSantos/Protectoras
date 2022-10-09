@@ -10,11 +10,13 @@ import InicioSesion from './screens/InicioSesion'
 import RegistrarUsuario from './screens/RegistrarUsuario'
 import PrincipalScreen from './screens/PrincipalScreen'
 import ListaProtectoras from './screens/ListaProtectoras'
+import AltaProtectora from './screens/AltaProtectora'
 
 
 function MyStack (){
   return (
     <Stack.Navigator>
+      <Stack.Screen name="AltaProtectora" component={AltaProtectora} />
       <Stack.Screen name="ListaProtectoras" component={ListaProtectoras}/>
       <Stack.Screen name="PrincipalScreen" component={PrincipalScreen}/>
       <Stack.Screen name="InicioSesion" component={InicioSesion} />
