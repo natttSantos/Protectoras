@@ -12,12 +12,12 @@ const ListaProtectoras = () => {
             const protectoras = []
 
             querySnapshot.docs.forEach((doc) => {
-                const {usuario, telefono, email} = doc.data()
+                const {nombre, mail, provincia} = doc.data()
                 protectoras.push({
                     id: doc.id,
-                    usuario,
-                    email,
-                    telefono 
+                    nombre,
+                    mail,
+                    provincia 
                 })
             });
             setProtectoras(protectoras)
@@ -33,7 +33,7 @@ const ListaProtectoras = () => {
                 return(
             <ListItem key={prot.id} 
             bottomDivider
-            onPress={() => alert(prot.usuario)}>
+            onPress={() => alert(prot.nombre)}>
                 <Avatar
                 style={styles.imagen}
                 rounded
@@ -43,9 +43,10 @@ const ListaProtectoras = () => {
                 style={styles.lista}>
                     <ListItem.Title 
                     style={{fontWeight: "bold"}}> 
-                        {prot.usuario} 
+                        {prot.nombre} 
                     </ListItem.Title>
-                    <ListItem.Subtitle> {prot.email} </ListItem.Subtitle>
+                    <ListItem.Subtitle> {prot.mail} </ListItem.Subtitle>
+                    <ListItem.Subtitle> {prot.provincia} </ListItem.Subtitle>
                 </ListItem.Content>
             </ListItem>
             )})

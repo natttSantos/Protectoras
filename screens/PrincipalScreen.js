@@ -32,6 +32,10 @@ const PrincipalScreen = (props) => {
                 title="Listado protectoras"
                 onPress={() => props.navigation.navigate('ListaProtectoras')}
                 />
+                <Button
+                title="Dar de alta protectora"
+                onPress={() => props.navigation.navigate('AltaProtectora')}
+                />
             </View>
         </ScrollView>
     )

@@ -18,10 +18,9 @@ function MyStack (){
   return (
     <Stack.Navigator>
       <Stack.Screen name="PrincipalScreen" component={PrincipalScreen}/>
-      <Stack.Screen name="ListaAnimales" component={ListaAnimales} />
       <Stack.Screen name="AltaProtectora" component={AltaProtectora} />
+      <Stack.Screen name="ListaAnimales" component={ListaAnimales} />
       <Stack.Screen name="ListaProtectoras" component={ListaProtectoras}/>
-      
       <Stack.Screen name="InicioSesion" component={InicioSesion} />
       <Stack.Screen name="RegistrarUsuario" component={RegistrarUsuario} />
       <Stack.Screen name="PerfilAnimal" component={PerfilAnimal} />
