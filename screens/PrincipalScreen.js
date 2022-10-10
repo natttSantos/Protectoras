@@ -24,6 +24,14 @@ const PrincipalScreen = (props) => {
                 title="Registrar"
                 onPress={() => props.navigation.navigate('RegistrarUsuario')}
                 />
+                <Button
+                title="Listado animales"
+                onPress={() => props.navigation.navigate('ListaAnimales')}
+                />
+                <Button
+                title="Listado protectoras"
+                onPress={() => props.navigation.navigate('ListaProtectoras')}
+                />
             </View>
         </ScrollView>
     )
