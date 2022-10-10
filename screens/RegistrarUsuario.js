@@ -25,7 +25,7 @@ const RegistrarUsuario = (props) => {
                 telefono: state.telefono
             })
             alert ("Bienvenid@ " + state.usuario); 
-            props.navigation.navigate('SesionUsuario'); 
+            props.navigation.navigate('InicioSesion'); 
         }
     } 
     
