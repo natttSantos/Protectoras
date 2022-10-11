@@ -63,15 +63,18 @@ const RegistrarUsuario = (props) => {
             <View style={styles.inputGroup}>
                 <TextInput 
                 style={styles.inputText}
+                secureTextEntry
                 placeholder="Contraseña (entre 4-8 caracteres)" 
                 onChangeText={(value) => handleChangeText('contraseña', value)}
                 />
             </View>
             <View style={styles.inputGroup}>
-                <TextInput 
-                style={styles.inputTextOnlyNumber}
+                <TextInput
+                style={styles.inputText}
+                //right={<TextInput.Icon icon="eye" />}
+                keyboardType="numeric"
                 placeholder="Teléfono" 
-                onChangeText={(value) => handleChangeText('telefono', value)}
+                onChange={(value) => handleChangeText('telefono', value)}
                 />
             </View>
             <View>
@@ -93,12 +96,18 @@ function validatePasswordAndPhone (password, phone) {
         alert("El número de teléfono debe tener 9 dígitos"); 
         validation = false; 
     }
-    if(typeof phone != 'number'){
-        alert("El número de teléfono no puede tener caracteres"); 
-        validation = false;     
-    }
     return validation;
   }
+
+  function valideKey(phone){
+			
+   var charCode = (e.which) ? e.which : e.keyCode
+    if (charCode > 31 && (charCode < 48 || charCode > 57)){
+        return false;
+    }
+    return true;
+}
+
 
 const styles = StyleSheet.create({
     container : {
@@ -114,10 +123,6 @@ const styles = StyleSheet.create({
         borderBottomColor: '#cccccc'
     }, inputText: {
         fontSize: 17
-      },
-      inputTextOnlyNumber: {
-        fontSize: 17, 
-        type: "number"
       },
       title : {
         fontSize: 20
