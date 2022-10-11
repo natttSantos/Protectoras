@@ -23,6 +23,7 @@ function MyStack (){
       <Stack.Screen name="ListaProtectoras" component={ListaProtectoras}/>
       <Stack.Screen name="InicioSesion" component={InicioSesion} />
       <Stack.Screen name="RegistrarUsuario" component={RegistrarUsuario} />
+      <Stack.Screen name="PerfilAnimal" component={PerfilAnimal} />
     </Stack.Navigator>
   )
 }
