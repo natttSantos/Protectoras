@@ -13,6 +13,8 @@ import ListaProtectoras from './screens/ListaProtectoras'
 import AltaProtectora from './screens/AltaProtectora'
 import ListaAnimales from './screens/ListaAnimales';
 import PerfilAnimal from './screens/PerfilAnimal';
+import UserDetailScreen from './screens/UserDetailScreen';
+
 
 function MyStack (){
   return (
@@ -24,6 +26,7 @@ function MyStack (){
       <Stack.Screen name="InicioSesion" component={InicioSesion} />
       <Stack.Screen name="RegistrarUsuario" component={RegistrarUsuario} />
       <Stack.Screen name="PerfilAnimal" component={PerfilAnimal} />
+      <Stack.Screen name="UserDetailScreen" component={UserDetailScreen} />
     </Stack.Navigator>
   )
 }

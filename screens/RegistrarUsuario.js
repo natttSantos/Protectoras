@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import { View, Button, TextInput, StyleSheet, ScrollView, Text} from "react-native";
 import firebase from '../database/firebase.js';
 
-const RegistrarUsuario = () => {
+const RegistrarUsuario = (props) => {
     
     const [state, setState] = useState({ //STATE ES UN OBJETO CON NOMBRE, EMAIL Y TLF
         usuario: "", 
@@ -25,6 +25,7 @@ const RegistrarUsuario = () => {
                 telefono: state.telefono
             })
             alert ("Bienvenid@ " + state.usuario); 
+            props.navigation.navigate('InicioSesion'); 
         }
     } 
     
@@ -45,6 +46,7 @@ const RegistrarUsuario = () => {
 
     return (
         <ScrollView style={styles.container}>
+            <Text style={styles.title}> Registro </Text>
             <View style={styles.inputGroup}>
                 <TextInput 
                 style={styles.inputText}
@@ -62,13 +64,15 @@ const RegistrarUsuario = () => {
             <View style={styles.inputGroup}>
                 <TextInput 
                 style={styles.inputText}
+                secureTextEntry
                 placeholder="Contraseña (entre 4-8 caracteres)" 
                 onChangeText={(value) => handleChangeText('contraseña', value)}
                 />
             </View>
             <View style={styles.inputGroup}>
-                <TextInput 
+                <TextInput
                 style={styles.inputText}
+                //keyboardType="numeric"
                 placeholder="Teléfono" 
                 onChangeText={(value) => handleChangeText('telefono', value)}
                 />
@@ -96,10 +100,10 @@ function validatePasswordAndPhone (password, phone) {
   }
 
 const styles = StyleSheet.create({
-    container : {
+    container: {
         flex: 1, 
         padding: 35
-    },
+    }, 
     inputGroup: {
         fontSize: 20, 
         flex: 1,
@@ -110,9 +114,13 @@ const styles = StyleSheet.create({
     }, inputText: {
         fontSize: 17
       },
-      title : {
-        fontSize: 20
-      }
+      title: {
+        margin: 12,
+        padding: 10,
+        fontSize: 40,
+        fontWeight: 'bold',
+        textAlign: "left"
+    },
 })
 
 
