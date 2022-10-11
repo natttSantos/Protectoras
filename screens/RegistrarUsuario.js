@@ -72,10 +72,9 @@ const RegistrarUsuario = (props) => {
             <View style={styles.inputGroup}>
                 <TextInput
                 style={styles.inputText}
-                //right={<TextInput.Icon icon="eye" />}
-                keyboardType="numeric"
+                //keyboardType="numeric"
                 placeholder="Teléfono" 
-                onChange={(value) => handleChangeText('telefono', value)}
+                onChangeText={(value) => handleChangeText('telefono', value)}
                 />
             </View>
             <View>
@@ -99,16 +98,6 @@ function validatePasswordAndPhone (password, phone) {
     }
     return validation;
   }
-
-  function valideKey(phone){
-			
-   var charCode = (e.which) ? e.which : e.keyCode
-    if (charCode > 31 && (charCode < 48 || charCode > 57)){
-        return false;
-    }
-    return true;
-}
-
 
 const styles = StyleSheet.create({
     container: {
