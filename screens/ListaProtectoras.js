@@ -37,9 +37,7 @@ const ListaProtectoras = () => {
             <ListItem key={prot.id} 
             bottomDivider
             onPress={() => {() => {
-                props.navigation.navigate("PerfilProtectora", {
-                  protectoraId: prot.id,
-                });
+                alert("PAN");
               }}}>
                 <Avatar
                 style={styles.imagen}

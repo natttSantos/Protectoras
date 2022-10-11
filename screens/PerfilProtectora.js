@@ -53,7 +53,7 @@ const PerfilProtectora = (props) => {
   
 
   useEffect(() => {
-    getProtectoraById(props.route.params.protectora.id);
+    getProtectoraById(props.route.params.protectoraId);
   }, []);
 
   if (loading) {
