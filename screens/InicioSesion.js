@@ -35,6 +35,7 @@ const InicioSesion = (props) => {
 
     return (
         <ScrollView style={styles.container}>
+            <Text style={styles.title}> Inicio Sesión </Text>
             <View style={styles.inputGroup}>
                 <TextInput 
                 style={styles.inputText}
@@ -74,9 +75,12 @@ const styles = StyleSheet.create({
     }, inputText: {
         fontSize: 17
       },
-      title : {
-        fontSize: 20
-      }
+      title: {
+        margin: 12,
+        padding: 10,
+        fontSize: 40,
+        fontWeight: 'bold',
+        textAlign: "left"}
 })
 
 export default InicioSesion; 

@@ -46,6 +46,7 @@ const RegistrarUsuario = (props) => {
 
     return (
         <ScrollView style={styles.container}>
+            <Text style={styles.title}> Registro </Text>
             <View style={styles.inputGroup}>
                 <TextInput 
                 style={styles.inputText}
@@ -110,10 +111,10 @@ function validatePasswordAndPhone (password, phone) {
 
 
 const styles = StyleSheet.create({
-    container : {
+    container: {
         flex: 1, 
         padding: 35
-    },
+    }, 
     inputGroup: {
         fontSize: 20, 
         flex: 1,
@@ -124,9 +125,13 @@ const styles = StyleSheet.create({
     }, inputText: {
         fontSize: 17
       },
-      title : {
-        fontSize: 20
-      }
+      title: {
+        margin: 12,
+        padding: 10,
+        fontSize: 40,
+        fontWeight: 'bold',
+        textAlign: "left"
+    },
 })
 
 
