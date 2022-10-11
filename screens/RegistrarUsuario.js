@@ -69,7 +69,7 @@ const RegistrarUsuario = (props) => {
             </View>
             <View style={styles.inputGroup}>
                 <TextInput 
-                style={styles.inputText}
+                style={styles.inputTextOnlyNumber}
                 placeholder="Teléfono" 
                 onChangeText={(value) => handleChangeText('telefono', value)}
                 />
@@ -93,6 +93,10 @@ function validatePasswordAndPhone (password, phone) {
         alert("El número de teléfono debe tener 9 dígitos"); 
         validation = false; 
     }
+    if(typeof phone != 'number'){
+        alert("El número de teléfono no puede tener caracteres"); 
+        validation = false;     
+    }
     return validation;
   }
 
@@ -110,6 +114,10 @@ const styles = StyleSheet.create({
         borderBottomColor: '#cccccc'
     }, inputText: {
         fontSize: 17
+      },
+      inputTextOnlyNumber: {
+        fontSize: 17, 
+        type: "number"
       },
       title : {
         fontSize: 20
