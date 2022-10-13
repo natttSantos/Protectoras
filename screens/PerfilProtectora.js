@@ -13,6 +13,7 @@ import { TextInput } from "react-native-gesture-handler";
 import firebase from "../database/firebase";
 
 const PerfilProtectora = (props) => {
+
   const initialState = {
     nombre:"",
     mail:"",
