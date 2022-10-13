@@ -14,7 +14,7 @@ const InicioSesion = (props) => {
     }; 
 
     const validateUser = async () => {
-        const dbRef = firebase.db.collection('users').onSnapshot((querySnapchot => {
+        const usuarios = firebase.db.collection('users').onSnapshot((querySnapchot => {
             //const users = [];
 
             querySnapchot.docs.forEach((doc) => {
@@ -36,7 +36,7 @@ const InicioSesion = (props) => {
                 }
             })
         }));
-        dbRef = firebase.db.collection('protectoras').onSnapshot((querySnapchot => {
+        const protectoras = firebase.db.collection('protectoras').onSnapshot((querySnapchot => {
 
             querySnapchot.docs.forEach((doc) => {
                 const {email, contraseña} = doc.data();
