@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 
+
 import {
   ScrollView,
   Button,
@@ -15,6 +16,11 @@ import { TextInput } from "react-native-gesture-handler";
 
 import firebase from "../database/firebase";
 
+
+ const state = {
+  imageFirebase: ""
+};
+
 const PerfilAnimal = (props) => {
   const initialState = {
     nombre:"",
@@ -23,11 +29,28 @@ const PerfilAnimal = (props) => {
     edad:"años",
     descripcion:"",
     fecha_nacimiento:""
+    
   };
+
+  const uploadImage = uri => {
+    return new Promise((resolve, reject) => {
+      let xhr = new XMLHttpRequest();
+      xhr.onerror = reject;
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+          resolve(xhr.response);
+        }
+      };
+
+      xhr.open("GET", uri);
+      xhr.responseType = "blob";
+      xhr.send();
+    });
+  };
+
   const openGallery = async () => {
-    const resultPermission = await Permissions.askAsync(
-      Permissions.CAMERA_ROLL
-    );
+    
+    const resultPermission =true; 
     if (resultPermission) {
       const resultImagePicker = await ImagePicker.launchImageLibraryAsync({
         allowsEditing: true,
@@ -36,14 +59,15 @@ const PerfilAnimal = (props) => {
 
       if (resultImagePicker.cancelled === false) {
         const imageUri = resultImagePicker.uri;
-        const { userId } = this.state;
+        console.log(imageUri);
+        //const { animalId } = this.state;
 
-        this.uploadImage(imageUri)
+        uploadImage(imageUri)
           .then(resolve => {
             let ref = firebase
-              .storage()
-              .ref()
-              .child(`images/${userId}`);
+            .st
+            .ref()
+            .child(`images/${animal.id}`);
             ref
               .put(resolve)
               .then(resolve => {
@@ -59,6 +83,25 @@ const PerfilAnimal = (props) => {
       }
     }
   };
+
+
+  const loadImage = async () => {
+    const { animalId } = this.state;
+
+    firebase
+      .st
+      .ref(`images/${animal.id}`)
+      .getDownloadURL()
+      .then(resolve => {
+        this.setState({
+          imageFirebase: resolve
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
   const [animal, setAnimal] = useState(initialState);
   const [loading, setLoading] = useState(true);
 
