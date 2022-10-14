@@ -166,6 +166,15 @@ const PerfilAnimal = (props) => {
       </View>
       <View>
         <TextInput
+          placeholder="Sexo"
+          autoCompleteType="sexo"
+          style={styles.inputGroup}
+          value={"Sexo: "+animal.sexo}
+          onChangeText={(value) => handleTextChange(value, "sexo")}
+        />
+      </View>
+      <View>
+        <TextInput
           autoCompleteType="Edad"
           placeholder="Edad"
           style={styles.inputGroup}
@@ -184,11 +193,11 @@ const PerfilAnimal = (props) => {
       </View>
       <View>
         <TextInput
-          placeholder="Sexo"
-          autoCompleteType="sexo"
+          placeholder="Fecha de nacimiento"
+          autoCompleteType="fecha_nacimiento"
           style={styles.inputGroup}
-          value={"Sexo: "+animal.sexo}
-          onChangeText={(value) => handleTextChange(value, "sexo")}
+          value={"Fecha de nacimiento: "+animal.fecha_nacimiento}
+          onChangeText={(value) => handleTextChange(value, "fecha_nacimiento")}
         />
       </View>
       <View>
@@ -198,15 +207,6 @@ const PerfilAnimal = (props) => {
           style={styles.inputGroup}
           value={"Protectora: "+animal.protectora}
           onChangeText={(value) => handleTextChange(value, "protectora")}
-        />
-      </View>
-      <View>
-        <TextInput
-          placeholder="Fecha de nacimiento"
-          autoCompleteType="fecha_nacimiento"
-          style={styles.inputGroup}
-          value={"Fecha de nacimiento: "+animal.fecha_nacimiento}
-          onChangeText={(value) => handleTextChange(value, "fecha_nacimiento")}
         />
       </View>
       <View>
