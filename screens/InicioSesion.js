@@ -25,7 +25,7 @@ const InicioSesion = (props) => {
                     contraseña
                 })*/
                 if (email == state.email && contraseña == state.contraseña) {
-                    props.navigation.navigate('UserDetailScreen', {
+                    props.navigation.navigate('SesionUsuario', {
                         userId: doc.id
                     })
                 } 
