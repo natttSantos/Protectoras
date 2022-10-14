@@ -15,6 +15,7 @@ import ListaAnimales from './screens/ListaAnimales';
 import PerfilAnimal from './screens/PerfilAnimal';
 import SesionUsuario from './screens/SesionUsuario';
 import PerfilUsuario from './screens/PerfilUsuario';
+import PerfilProtectora from './screens/PerfilProtectora';
 
 
 
@@ -30,6 +31,7 @@ function MyStack (){
       <Stack.Screen name="PerfilAnimal" component={PerfilAnimal} />
       <Stack.Screen name="SesionUsuario" component={SesionUsuario} />
       <Stack.Screen name="PerfilUsuario" component={PerfilUsuario} />
+      <Stack.Screen name="PerfilProtectora" component={PerfilProtectora} />
     </Stack.Navigator>
   )
 }

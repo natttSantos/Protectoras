@@ -28,7 +28,8 @@ const PerfilAnimal = (props) => {
     sexo:"",
     edad:"años",
     descripcion:"",
-    fecha_nacimiento:""
+    fecha_nacimiento:"",
+    protectora:"",
     
   };
 
@@ -146,7 +147,12 @@ const PerfilAnimal = (props) => {
   return (
     <ScrollView style={styles.container}>
 
-<     View>
+      <View style={styles.inputGroup}>
+      <TextInput
+      style={styles.title}
+      value={animal.nombre}
+      onChangeText={(value) => handleTextChange(value, "nombre")}
+    />
          <Image source={require('../images/gatitos.jpg')} style={styles.image}/>
       </View>
       <View>
@@ -183,6 +189,15 @@ const PerfilAnimal = (props) => {
           style={styles.inputGroup}
           value={"Sexo: "+animal.sexo}
           onChangeText={(value) => handleTextChange(value, "sexo")}
+        />
+      </View>
+      <View>
+        <TextInput
+          placeholder="Protectora"
+          autoCompleteType="protectora"
+          style={styles.inputGroup}
+          value={"Protectora: "+animal.protectora}
+          onChangeText={(value) => handleTextChange(value, "protectora")}
         />
       </View>
       <View>
@@ -237,9 +252,13 @@ const styles = StyleSheet.create({
     marginBottom: 7,
   },
   image : {
-    height : 250, 
-    width : 250
-}
+    height : 170, 
+    width : 170
+},
+title : {
+  fontSize: 50,
+  fontWeight: "bold", 
+},
 });
 
 export default PerfilAnimal;
