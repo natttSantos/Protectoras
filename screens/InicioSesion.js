@@ -29,11 +29,11 @@ const InicioSesion = (props) => {
                         userId: doc.id
                     })
                 } 
-                else {
+                /*else {
                     Alert.alert("Error", "El usuario o la contraseña son incorrectas", [
                         {text: "Cerrar"}
                     ]);
-                }
+                }*/
             })
         }));
         const protectoras = firebase.db.collection('protectoras').onSnapshot((querySnapchot => {
@@ -45,11 +45,11 @@ const InicioSesion = (props) => {
                         userId: doc.id
                     })
                 } 
-                else {
+                /*else {
                     Alert.alert("Error", "El usuario o la contraseña son incorrectas", [
                         {text: "Cerrar"}
                     ]);
-                }
+                }*/
             })
         }));
     };

@@ -1,9 +1,17 @@
 
-import React from "react";
-import firebase from '../database/firebase.js';
-import {View, Text, StyleSheet, ScrollView} from "react-native";
 
-let nombreUsuario, email, telefono; 
+import firebase from '../database/firebase.js';
+import React, { useEffect, useState } from "react";
+import {
+  ScrollView,
+  Button,
+  View,
+  Alert,
+  ActivityIndicator,
+  StyleSheet,
+  Image,
+  TextInput
+} from "react-native";
 
 
 const PerfilUsuario = (props) => {
@@ -12,7 +20,7 @@ const PerfilUsuario = (props) => {
         email: "" , 
         telefono: "", 
     }
-    const [animal, setUsario] = useState(initialState);
+    const [usuario, setUsario] = useState(initialState);
     const [loading, setLoading] = useState(true);
 
     const handleChangeText = (value, prop) => {
@@ -21,8 +29,8 @@ const PerfilUsuario = (props) => {
     const getUserById = async (id) => {
         const dbRef = firebase.db.collection("users").doc(id);
         const doc = await dbRef.get();
-        const animal = doc.data();
-        setUsuario({ ...animal, id: doc.id });
+        const usuario = doc.data();
+        setUsuario({ ...usuario, id: doc.id });
         setLoading(false);
       };
  return (
@@ -33,44 +41,35 @@ const PerfilUsuario = (props) => {
       </View>
       <View>
         <TextInput
-          placeholder="Nombre"
+          placeholder="nombre"
           autoCompleteType="nombre"
           style={styles.inputGroup}
-          value={"Nombre: "+animal.nombre}
+          value={"Nombre: "+usuario.nombre}
           onChangeText={(value) => handleTextChange(value, "nombre")}
         />
       </View>
       <View>
         <TextInput
-          autoCompleteType="Edad"
-          placeholder="Edad"
+          autoCompleteType="Email"
+          placeholder="email"
           style={styles.inputGroup}
-          value={"Edad: "+animal.edad.toString()+ " años"}
+          value={"Email: "+ usuario.email}
           onChangeText={(value) => handleTextChange(value, "edad")}
         />
       </View>
       <View>
         <TextInput
-          placeholder="Raza"
-          autoCompleteType="raza"
+          placeholder="telefono"
+          autoCompleteType="telefono"
           style={styles.inputGroup}
-          value={"Raza: "+animal.raza}
-          onChangeText={(value) => handleTextChange(value, "raza")}
-        />
-      </View>
-      <View>
-        <TextInput
-          placeholder="Sexo"
-          autoCompleteType="sexo"
-          style={styles.inputGroup}
-          value={"Sexo: "+animal.sexo}
-          onChangeText={(value) => handleTextChange(value, "sexo")}
+          value={"Telefono: "+ usuario.telefono}
+          onChangeText={(value) => handleTextChange(value, "telefono")}
         />
       </View> 
     </ScrollView>
   );
     
-;
+
  }; 
 
 
