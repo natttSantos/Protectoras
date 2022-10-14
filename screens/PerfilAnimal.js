@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import * as Permissions from 'expo-permissions';
+import * as ImagePicker from 'expo-image-picker';
+
 import {
   ScrollView,
   Button,
@@ -21,7 +24,41 @@ const PerfilAnimal = (props) => {
     descripcion:"",
     fecha_nacimiento:""
   };
+  const openGallery = async () => {
+    const resultPermission = await Permissions.askAsync(
+      Permissions.CAMERA_ROLL
+    );
+    if (resultPermission) {
+      const resultImagePicker = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+        aspect: [4, 3]
+      });
 
+      if (resultImagePicker.cancelled === false) {
+        const imageUri = resultImagePicker.uri;
+        const { userId } = this.state;
+
+        this.uploadImage(imageUri)
+          .then(resolve => {
+            let ref = firebase
+              .storage()
+              .ref()
+              .child(`images/${userId}`);
+            ref
+              .put(resolve)
+              .then(resolve => {
+                console.log("Imagen subida correctamente");
+              })
+              .catch(error => {
+                console.log("Error al subir la imagen");
+              });
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
+    }
+  };
   const [animal, setAnimal] = useState(initialState);
   const [loading, setLoading] = useState(true);
 
@@ -121,6 +158,11 @@ const PerfilAnimal = (props) => {
           style={styles.inputGroup}
           value={"Descripción: "+animal.descripcion}
           onChangeText={(value) => handleTextChange(value, "descripcion")}
+        />
+         <Button
+          onPress={() => openGallery()}
+          title="Selecionar una imagen"
+          color="#841584"
         />
       </View>
     </ScrollView>
