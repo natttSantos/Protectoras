@@ -3,7 +3,7 @@ import { View, Button, TextInput, Text, StyleSheet, ScrollView, ProgressViewIOSC
 import firebase from '../database/firebase';
 import {Avatar, ListItem} from "react-native-elements";
 
-const ListaProtectoras = () => {
+const ListaProtectoras = (props) => {
 
     const [protect, setProtectoras] = useState([]);
 
@@ -37,9 +37,11 @@ const ListaProtectoras = () => {
                 return(
             <ListItem key={prot.id} 
             bottomDivider
-            onPress={() => {() => {
-                alert("PAN");
-              }}}>
+            onPress={() =>  {
+                props.navigation.navigate("PerfilProtectora", {
+                    protectoraId: prot.id
+                  })
+              }}>
                 <Avatar
                 style={styles.imagen}
                 rounded
