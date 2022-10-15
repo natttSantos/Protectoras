@@ -6,7 +6,8 @@ import {
   StyleSheet,
   Image,
   Linking,
-  Button
+  Button,
+  Alert
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 
@@ -65,7 +66,8 @@ const PerfilProtectora = (props) => {
 };
 
 const OpenURLButton = ({ url, children }) => {
-  const handlePress = useCallback(async () => {
+  
+    const handlePress = useCallback(async () => {
     // Checking if the link is supported for links with custom URL scheme.
     const supported = await Linking.canOpenURL(url);
 
@@ -74,7 +76,7 @@ const OpenURLButton = ({ url, children }) => {
       // by some browser in the mobile
       await Linking.openURL(url);
     } else {
-      Alert.alert(`Don't know how to open this URL: ${url}`);
+      Alert.alert(`No es posible abrir la URL: ${url}`);
     }
   }, [url]);
 
