@@ -1,7 +1,17 @@
-import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import firebase from '../database/firebase.js';
 import { Appbar, FAB, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React, { useEffect, useState } from "react";
+import {
+  ScrollView,
+  Button,
+  View,
+  Alert,
+  ActivityIndicator,
+  StyleSheet,
+  Image,
+  TextInput
+} from "react-native";
 
 const BOTTOM_APPBAR_HEIGHT = 80;
 const MEDIUM_FAB_HEIGHT = 56;
@@ -10,32 +20,55 @@ const SesionUsuario = (props) => {
   const { bottom } = useSafeAreaInsets();
   const theme = useTheme();
 
+  const initialState = {
+    usuario: "",
+    email: "" , 
+    telefono: "", 
+}
+const [usuario, setUsuario] = useState(initialState);
+const [loading, setLoading] = useState(true);
+
+const handleTextChange = (value, prop) => {
+  setUsuario({ ...usuario, [prop]: value });
+};
+
+const getUsuarioById = async (id) => {
+  const dbRef = firebase.db.collection("users").doc(id);
+  const doc = await dbRef.get();
+  const usuario = doc.data();
+  console.log(usuario)
+  setUsuario({ ...usuario, id: doc.id });
+  setLoading(false);
+};
+
+useEffect(() => { 
+  getUsuarioById(props.route.params.userId); 
+}, []);
+
+if (loading) {
+  return (
+    <View style={styles.loader}>
+      <ActivityIndicator size="large" color="#9E9E9E" />
+    </View>
+  );
+}
   return (
     <Appbar
       style={[
         styles.bottom,
         {
-          height: BOTTOM_APPBAR_HEIGHT + bottom,
-          //backgroundColor: theme.colors.elevation.level2,
+          height: BOTTOM_APPBAR_HEIGHT + bottom
         },
       ]}
       safeAreaInsets={{ bottom }}
     >
+      <Appbar.Content title={usuario.usuario} />
       <Appbar.Action icon="home" onPress={() => {}} />
       <Appbar.Action icon="plus-circle" onPress={() => {}} />
       <Appbar.Action icon="chat" onPress={() => {}} />
-      <Appbar.Action icon="account" onPress={() => { props.navigation.navigate('PerfilUsuario'); }} />
-      <FAB
-        mode="flat"
-        size="medium"
-        icon="plus"
-        onPress={() => {}}
-        style={[
-          styles.fab,
-          { top: (BOTTOM_APPBAR_HEIGHT - MEDIUM_FAB_HEIGHT) / 2 },
-        ]}
-      />
+      <Appbar.Action icon="account" onPress={() => { props.navigation.navigate('PerfilUsuario', {usuarioId: usuario})  }} />
     </Appbar>
+    
   );
 };
 
