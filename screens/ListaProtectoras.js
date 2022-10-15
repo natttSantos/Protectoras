@@ -36,9 +36,9 @@ const ListaProtectoras = () => {
                 return(
             <ListItem key={prot.id} 
             bottomDivider
-            onPress={() => {() => {
+            onPress={() => {
                 alert("PAN");
-              }}}>
+              }}>
                 <Avatar
                 style={styles.imagen}
                 rounded
