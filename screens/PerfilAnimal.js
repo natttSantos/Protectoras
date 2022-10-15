@@ -149,7 +149,7 @@ const PerfilAnimal = (props) => {
   return (
     <ScrollView style={styles.container}>
 
-<View>
+      <View>
         <Image source={require('../images/gatitos.jpg')} style={styles.image}/>
         <Text style = {styles.texto} >
           {"Nombre: " + animal.nombre}
@@ -218,6 +218,13 @@ boton: {
   backgroundColor: "#DDDDDD",
   padding: 10
 },
+texto: {
+  fontSize : 16,
+  padding : 5,
+  borderBottomWidth: 1,
+  borderBottomColor: "#cccccc",
+  marginBottom: 10
+}
 });
 
 export default PerfilAnimal;
