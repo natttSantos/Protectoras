@@ -10,7 +10,7 @@ import {
   Alert
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { TouchableOpacity } from "react-native-web";
+import { TouchableOpacity } from "react-native";
 
 import firebase from "../database/firebase";
 
@@ -66,7 +66,7 @@ const PerfilProtectora = (props) => {
   );
 };
 
-const BotonAbrirURL = ({ url, children }) => {
+const BotonAbrirURL = ({ url }) => {
   
     const handlePress = useCallback(async () => {
     //Revisando si el link es soportado/válido
@@ -80,7 +80,12 @@ const BotonAbrirURL = ({ url, children }) => {
     }
   }, [url]);
 
-  return <TouchableOpacity title={children} onPress={handlePress} />;
+  return <TouchableOpacity  
+            style={styles.boton} 
+            onPress={handlePress} 
+            >
+              <Text>PÁGINA WEB</Text>
+          </TouchableOpacity>
 };
 
 const styles = StyleSheet.create({
@@ -92,6 +97,11 @@ const styles = StyleSheet.create({
     height : 250, 
     width : 250,
     marginBottom : 15
+  },
+  boton: {
+    alignItems: "center",
+    backgroundColor: "#DDDDDD",
+    padding: 10
   },
   texto: {
     fontSize : 16,
