@@ -3,6 +3,7 @@ import {
   ScrollView,
   Button,
   View,
+  Text,
   Alert,
   ActivityIndicator,
   StyleSheet,
@@ -16,10 +17,10 @@ const PerfilProtectora = (props) => {
 
   const initialState = {
     nombre:"",
-    mail:"",
-    provincia:"",
-    telefono:"",
-    urlweb:"",
+    email:"",
+    localizacion:"",
+    direccion:"",
+    url:"",
     descripcion:""
   };
 
@@ -42,10 +43,10 @@ const PerfilProtectora = (props) => {
     const protectoraRef = firebase.db.collection("protectoras").doc(animal.id);
     await protectoraRef.set({
       nombre: protectora.nombre,
-      mail: protectora.mail,
-      provincia: protectora.provincia,
-      telefono: protectora.telefono.toString(),
-      urlweb: protectora.urlweb,
+      email: protectora.email,
+      localizacion: protectora.localizacion,
+      direccion: protectora.direccion,
+      url: protectora.url,
       descripcion: protectora.descripcion,
     });
     setProtectora(initialState);
@@ -70,56 +71,53 @@ const PerfilProtectora = (props) => {
 
 <     View>
          <Image source={require('../images/Greenpeace.jpg')} style={styles.image}/>
-      </View>
-      <View>
+         <Text >           
+          {"Nombre: " + protectora.nombre}
+          </Text>    
         <TextInput
           placeholder="Nombre"
           autoCompleteType="nombre"
+          editable = {false}
           style={styles.inputGroup}
           value={"Nombre: "+protectora.nombre}
           onChangeText={(value) => handleTextChange(value, "nombre")}
         />
-      </View>
-      <View>
         <TextInput
-          autoCompleteType="Mail"
-          placeholder="mail"
+          autoCompleteType="Email"
+          placeholder="email"
+          editable = {false}
           style={styles.inputGroup}
-          value={"Mail: "+protectora.mail}
-          onChangeText={(value) => handleTextChange(value, "mail")}
+          value={"Email: "+protectora.email}
+          onChangeText={(value) => handleTextChange(value, "email")}
         />
-      </View>
-      <View>
         <TextInput
-          placeholder="Provincia"
-          autoCompleteType="provincia"
+          placeholder="Localización"
+          autoCompleteType="localizacion"
+          editable = {false}
           style={styles.inputGroup}
-          value={"Provincia: "+protectora.provincia}
-          onChangeText={(value) => handleTextChange(value, "provincia")}
+          value={"Localización: "+protectora.localizacion}
+          onChangeText={(value) => handleTextChange(value, "localizacion")}
         />
-      </View>
-      <View>
         <TextInput
-          placeholder="Teléfono"
-          autoCompleteType="telefono"
+          placeholder="Dirección"
+          autoCompleteType="direccion"
+          editable = {false}
           style={styles.inputGroup}
-          value={"Teléfono: "+protectora.telefono.toString()}
-          onChangeText={(value) => handleTextChange(value, "telefono")}
+          value={"Dirección: "+protectora.direccion}
+          onChangeText={(value) => handleTextChange(value, "direccion")}
         />
-      </View>
-      <View>
         <TextInput
           placeholder="Pág. Web"
           autoCompleteType="pagWeb"
+          editable = {false}
           style={styles.inputGroup}
-          value={"Pág. Web " + protectora.urlweb}
+          value={"Pág. Web " + protectora.url}
           onChangeText={(value) => handleTextChange(value, "pagWeb")}
         />
-      </View>
-      <View>
         <TextInput
           placeholder="Descripcion"
           autoCompleteType="descripcion"
+          editable = {false}
           style={styles.inputGroup}
           value={"Descripción: "+protectora.descripcion}
           onChangeText={(value) => handleTextChange(value, "descripcion")}
