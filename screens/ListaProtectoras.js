@@ -3,7 +3,7 @@ import { View, Button, TextInput, Text, StyleSheet, ScrollView, ProgressViewIOSC
 import firebase from '../database/firebase';
 import {Avatar, ListItem} from "react-native-elements";
 
-const ListaProtectoras = (props) => {
+const ListaProtectoras = () => {
 
     const [protect, setProtectoras] = useState([]);
 
@@ -12,13 +12,12 @@ const ListaProtectoras = (props) => {
             const protectoras = []
 
             querySnapshot.docs.forEach((doc) => {
-                const {nombre, mail, localidad, direccion, telefono, urlweb, descripcion} = doc.data()
+                const {nombre, mail, provincia, telefono, urlweb, descripcion} = doc.data()
                 protectoras.push({
                     id: doc.id,
                     nombre,
                     mail,
-                    localidad,
-                    direccion,
+                    provincia,
                     telefono,
                     urlweb,
                     descripcion
@@ -37,10 +36,8 @@ const ListaProtectoras = (props) => {
                 return(
             <ListItem key={prot.id} 
             bottomDivider
-            onPress={() =>  {
-                props.navigation.navigate("PerfilProtectora", {
-                    protectoraId: prot.id
-                  })
+            onPress={() => {
+                alert("PAN");
               }}>
                 <Avatar
                 style={styles.imagen}
@@ -54,7 +51,6 @@ const ListaProtectoras = (props) => {
                         {prot.nombre} 
                     </ListItem.Title>
                     <ListItem.Subtitle> {prot.mail} </ListItem.Subtitle>
-                    <ListItem.Subtitle> {prot.direccion} </ListItem.Subtitle>
                 </ListItem.Content>
             </ListItem>
             )})

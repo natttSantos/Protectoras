@@ -1,8 +1,4 @@
 import React, { useEffect, useState } from "react";
-import * as Permissions from 'expo-permissions';
-import * as ImagePicker from 'expo-image-picker';
-
-
 import {
   ScrollView,
   Button,
@@ -16,11 +12,6 @@ import { TextInput } from "react-native-gesture-handler";
 
 import firebase from "../database/firebase";
 
-
- const state = {
-  imageFirebase: ""
-};
-
 const PerfilAnimal = (props) => {
   const initialState = {
     nombre:"",
@@ -28,79 +19,7 @@ const PerfilAnimal = (props) => {
     sexo:"",
     edad:"años",
     descripcion:"",
-    fecha_nacimiento:"",
-    protectora:"",
-    
-  };
-
-  const uploadImage = uri => {
-    return new Promise((resolve, reject) => {
-      let xhr = new XMLHttpRequest();
-      xhr.onerror = reject;
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4) {
-          resolve(xhr.response);
-        }
-      };
-
-      xhr.open("GET", uri);
-      xhr.responseType = "blob";
-      xhr.send();
-    });
-  };
-
-  const openGallery = async () => {
-    
-    const resultPermission =true; 
-    if (resultPermission) {
-      const resultImagePicker = await ImagePicker.launchImageLibraryAsync({
-        allowsEditing: true,
-        aspect: [4, 3]
-      });
-
-      if (resultImagePicker.cancelled === false) {
-        const imageUri = resultImagePicker.uri;
-        console.log(imageUri);
-        //const { animalId } = this.state;
-
-        uploadImage(imageUri)
-          .then(resolve => {
-            let ref = firebase
-            .st
-            .ref()
-            .child(`images/${animal.id}`);
-            ref
-              .put(resolve)
-              .then(resolve => {
-                console.log("Imagen subida correctamente");
-              })
-              .catch(error => {
-                console.log("Error al subir la imagen");
-              });
-          })
-          .catch(error => {
-            console.log(error);
-          });
-      }
-    }
-  };
-
-
-  const loadImage = async () => {
-    const { animalId } = this.state;
-
-    firebase
-      .st
-      .ref(`images/${animal.id}`)
-      .getDownloadURL()
-      .then(resolve => {
-        this.setState({
-          imageFirebase: resolve
-        });
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    fecha_nacimiento:""
   };
 
   const [animal, setAnimal] = useState(initialState);
@@ -147,12 +66,7 @@ const PerfilAnimal = (props) => {
   return (
     <ScrollView style={styles.container}>
 
-      <View style={styles.inputGroup}>
-      <TextInput
-      style={styles.title}
-      value={animal.nombre}
-      onChangeText={(value) => handleTextChange(value, "nombre")}
-    />
+<     View>
          <Image source={require('../images/gatitos.jpg')} style={styles.image}/>
       </View>
       <View>
@@ -162,15 +76,6 @@ const PerfilAnimal = (props) => {
           style={styles.inputGroup}
           value={"Nombre: "+animal.nombre}
           onChangeText={(value) => handleTextChange(value, "nombre")}
-        />
-      </View>
-      <View>
-        <TextInput
-          placeholder="Sexo"
-          autoCompleteType="sexo"
-          style={styles.inputGroup}
-          value={"Sexo: "+animal.sexo}
-          onChangeText={(value) => handleTextChange(value, "sexo")}
         />
       </View>
       <View>
@@ -193,6 +98,15 @@ const PerfilAnimal = (props) => {
       </View>
       <View>
         <TextInput
+          placeholder="Sexo"
+          autoCompleteType="sexo"
+          style={styles.inputGroup}
+          value={"Sexo: "+animal.sexo}
+          onChangeText={(value) => handleTextChange(value, "sexo")}
+        />
+      </View>
+      <View>
+        <TextInput
           placeholder="Fecha de nacimiento"
           autoCompleteType="fecha_nacimiento"
           style={styles.inputGroup}
@@ -202,25 +116,11 @@ const PerfilAnimal = (props) => {
       </View>
       <View>
         <TextInput
-          placeholder="Protectora"
-          autoCompleteType="protectora"
-          style={styles.inputGroup}
-          value={"Protectora: "+animal.protectora}
-          onChangeText={(value) => handleTextChange(value, "protectora")}
-        />
-      </View>
-      <View>
-        <TextInput
           placeholder="Descripcion"
           autoCompleteType="descripcion"
           style={styles.inputGroup}
           value={"Descripción: "+animal.descripcion}
           onChangeText={(value) => handleTextChange(value, "descripcion")}
-        />
-         <Button
-          onPress={() => openGallery()}
-          title="Selecionar una imagen"
-          color="#841584"
         />
       </View>
     </ScrollView>
@@ -252,13 +152,9 @@ const styles = StyleSheet.create({
     marginBottom: 7,
   },
   image : {
-    height : 170, 
-    width : 170
-},
-title : {
-  fontSize: 50,
-  fontWeight: "bold", 
-},
+    height : 250, 
+    width : 250
+}
 });
 
 export default PerfilAnimal;

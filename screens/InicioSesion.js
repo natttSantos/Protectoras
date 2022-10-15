@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { View, Button, TextInput, Text,StyleSheet, ScrollView, ProgressViewIOSComponent, Alert} from "react-native";
+import { View, Button, TextInput, Text,StyleSheet, ScrollView, ProgressViewIOSComponent} from "react-native";
 import firebase from '../database/firebase';
 
 const InicioSesion = (props) => {
@@ -14,7 +14,7 @@ const InicioSesion = (props) => {
     }; 
 
     const validateUser = async () => {
-        const usuarios = firebase.db.collection('users').onSnapshot((querySnapchot => {
+        const dbRef = firebase.db.collection('users').onSnapshot((querySnapchot => {
             //const users = [];
 
             querySnapchot.docs.forEach((doc) => {
@@ -25,31 +25,10 @@ const InicioSesion = (props) => {
                     contraseña
                 })*/
                 if (email == state.email && contraseña == state.contraseña) {
-                    props.navigation.navigate('SesionUsuario', {
-                        userId: doc.id
-                    })
-                } 
-                /*else {
-                    Alert.alert("Error", "El usuario o la contraseña son incorrectas", [
-                        {text: "Cerrar"}
-                    ]);
-                }*/
-            })
-        }));
-        const protectoras = firebase.db.collection('protectoras').onSnapshot((querySnapchot => {
-
-            querySnapchot.docs.forEach((doc) => {
-                const {email, contraseña} = doc.data();
-                if (email == state.email && contraseña == state.contraseña) {
                     props.navigation.navigate('UserDetailScreen', {
                         userId: doc.id
                     })
                 } 
-                /*else {
-                    Alert.alert("Error", "El usuario o la contraseña son incorrectas", [
-                        {text: "Cerrar"}
-                    ]);
-                }*/
             })
         }));
     };
@@ -73,7 +52,7 @@ const InicioSesion = (props) => {
             </View>
             <View>
                 <Button title="Iniciar sesion"
-                onPress={() => validateUser() }
+                onPress={() => validateUser()}
                 />
             </View>
         </ScrollView>
