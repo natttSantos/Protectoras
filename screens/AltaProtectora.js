@@ -1,36 +1,39 @@
+import { style } from "deprecated-react-native-prop-types/DeprecatedTextPropTypes";
 import React, {useEffect, useState} from "react";
 import { ScrollView, View, Text, StyleSheet, TextInput } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Button } from "react-native-elements";
 import firebase from '../database/firebase';
 
-const AltaProtectora = () => {
+const AltaProtectora = (props) => {
     DropDownPicker.setListMode("SCROLLVIEW");
 
     const [mails, setMails] = useState([]);
+    const [colore, setColor] = useState('black');
 
     useEffect(() => {
         firebase.db.collection('protectoras').onSnapshot((querySnapshot) => {
-            const mails = []
+            const emails = []
 
             querySnapshot.docs.forEach((doc) => {
-                const {mail} = doc.data()
-                mails.push({
-                    mail
+                const {email} = doc.data()
+                emails.push({
+                    email
                 })
             });
-            setMails(mails)
+            setMails(emails)
         });
     }, []);
 
     const [protectora, setProtectora] = useState({
         descripcion: "",
-        mail: "",
+        email: "",
         nombre: "",
-        localidad: "",
+        contraseña: "",
+        localizacion: "",
         direccion: "",
         telefono: "",
-        urlweb: ""
+        url: ""
     })
 
     const [open, setOpen] = useState(false)
@@ -43,21 +46,40 @@ const AltaProtectora = () => {
         setProtectora({...protectora, [nombre]: value});
     }
 
+    const handleChangeTextDescripcion = (nombre, value) => {
+        if(value.length == 15) {
+            alert("¡Su descripción ya contiene los 200 caracteres permitidos!")
+        } else {
+            setProtectora({...protectora, [nombre]: value});
+            if (value.length == 10)
+                alert("¡Cuidado! Su descripción ya contiene 180 caracteres (max. 200)")
+        }
+    }
+
     const saveNewProtectora = async () => {
-        if (protectora.nombre == '' || protectora.mail == '' || protectora.provincia == '' || protectora.urlweb == '') {
+        if (protectora.nombre == '' || protectora.mail == '' || protectora.provincia == '' || protectora.url == '') {
             validateFields();
-        } else if (validatePhone(protectora.telefono)){
-            const dbRef = await firebase.db.collection('protectoras')
-            console.log(mails)
+        } else if (validatePasswordAndPhone(protectora.contraseña, protectora.telefono)){
             let validation = true;
             mails.forEach(obj => {
-                if(obj.mail == protectora.mail)
+                if(obj.email == protectora.email)
                     validation = false;
             })
-
             if(!validation)
-                console.log("Repe");
-            alert ("Bienvenid@ " + protectora.nombre); 
+                alert("El email introducido ya ha sido registrado, pruebe con otro");
+            else {
+                await firebase.db.collection('protectoras').add({
+                    nombre: protectora.nombre,
+                    email: protectora.email,
+                    contraseña: protectora.contraseña,
+                    direccion: protectora.direccion,
+                    localizacion: protectora.localizacion,
+                    url: protectora.url,
+                    descripcion: protectora.descripcion,
+                    telefono: protectora.telefono
+                })
+                alert("Bienvenido " + protectora.nombre)
+            }
         }
     }
 
@@ -65,11 +87,11 @@ const AltaProtectora = () => {
         let textoAlerta = "Complete el campo: ";
         if (protectora.nombre == ''){
             textoAlerta += "\n - Nombre de protectora"; 
-        } if (protectora.mail == ''){
+        } if (protectora.email == ''){
             textoAlerta += "\n - Mail "; 
         } if (protectora.provincia == ''){
             textoAlerta += "\n - Provincia "; 
-        } if (protectora.urlweb == ''){
+        } if (protectora.url == ''){
             textoAlerta += "\n - URL de tu web ";  
         } if (protectora.direcion == ''){
             textoAlerta += "\n - Direccion ";  
@@ -89,17 +111,25 @@ const AltaProtectora = () => {
                 />
             </View>
             <View 
+            style={styles.inputGroup}> 
+                <TextInput 
+                style={styles.inputText}
+                placeholder="Contraseña"
+                onChangeText={(value) => handleChangeText('contraseña', value)}
+                />
+            </View>
+            <View 
             style={styles.inputGroup}>
                 <TextInput 
                     style={styles.inputText}
-                    placeholder="Mail"
-                    onChangeText={(value) => handleChangeText('mail', value)}
+                    placeholder="Email"
+                    onChangeText={(value) => handleChangeText('email', value)}
                     />
             </View>
             <View>
                 <DropDownPicker
                                 style={{marginTop: 15, marginBottom: 15}}
-                                placeholder="Seleccione una localidad"
+                                placeholder="Seleccione una localizacion"
                                 items={items}
                                 setItems={setItems}
                                 open={open}
@@ -107,7 +137,7 @@ const AltaProtectora = () => {
                                 value={value}
                                 setValue={setValue}
                                 onChangeValue={(value) => {
-                                    handleChangeText('localidad', value);
+                                    handleChangeText('localizacion', value);
                                   }}
                             />
             </View>
@@ -124,7 +154,7 @@ const AltaProtectora = () => {
                 <TextInput 
                     style={styles.inputText}
                     placeholder="URL de la página web"
-                    onChangeText={(value) => handleChangeText('urlweb', value)}
+                    onChangeText={(value) => handleChangeText('url', value)}
                     />
             </View>
             <View 
@@ -137,10 +167,10 @@ const AltaProtectora = () => {
             </View>
             <View 
             style={styles.descripcion}>
-                <TextInput 
-                    style={styles.inputText}
-                    placeholder="Descripcion"
-                    onChangeText={(value) => handleChangeText('descripcion', value)}
+                <TextInput                     
+                    style={{fontSize: 17, color: colore}}
+                    placeholder="Descripcion (max. 200 caracteres)"
+                    onChangeText={(value) => handleChangeTextDescripcion('descripcion', value)}
                     />
             </View>
             <View style={{marginTop: 15}}>
@@ -152,8 +182,12 @@ const AltaProtectora = () => {
     )
 }
 
-function validatePhone (phone) {
+function validatePasswordAndPhone (password, phone) {
     let validation = true; 
+    if (password.length < 4 || password.length > 8){
+        alert("La contraseña debe tener entre 4-8 caracteres"); 
+        validation = false; 
+    }
     if (phone.length  != 9){
         alert("El número de teléfono debe tener 9 dígitos"); 
         validation = false; 
