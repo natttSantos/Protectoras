@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { View, Button, TextInput, Text, StyleSheet, ScrollView, ProgressViewIOSComponent} from "react-native";
+import {Linking, View, Button, TextInput, Text, StyleSheet, ScrollView, ProgressViewIOSComponent} from "react-native";
 import firebase from '../database/firebase';
 import {Avatar, ListItem} from "react-native-elements";
 
@@ -12,15 +12,14 @@ const ListaProtectoras = (props) => {
             const protectoras = []
 
             querySnapshot.docs.forEach((doc) => {
-                const {nombre, mail, localidad, direccion, telefono, urlweb, descripcion} = doc.data()
+                const {url, nombre, localizacion, email, direccion, descripcion} = doc.data()
                 protectoras.push({
                     id: doc.id,
+                    url,
                     nombre,
-                    mail,
-                    localidad,
+                    localizacion,
+                    email,
                     direccion,
-                    telefono,
-                    urlweb,
                     descripcion
                 })
             });

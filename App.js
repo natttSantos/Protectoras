@@ -15,7 +15,8 @@ import ListaAnimales from './screens/ListaAnimales';
 import PerfilAnimal from './screens/PerfilAnimal';
 import SesionUsuario from './screens/SesionUsuario';
 import PerfilUsuario from './screens/PerfilUsuario';
-import { Title } from 'react-native-paper';
+import PerfilProtectora from './screens/PerfilProtectora';
+import UserDetailScreen from './screens/UserDetailScreen';
 
 
 
@@ -29,8 +30,10 @@ function MyStack (){
       <Stack.Screen name="InicioSesion" component={InicioSesion} />
       <Stack.Screen name="RegistrarUsuario" component={RegistrarUsuario} />
       <Stack.Screen name="PerfilAnimal" component={PerfilAnimal} />
-      <Stack.Screen name="SesionUsuario" component={SesionUsuario} options={{title:'Sesión Usuario'}}/>
-      <Stack.Screen name="PerfilUsuario" component={PerfilUsuario} options={{title:'Perfil Usuario'}} />
+      <Stack.Screen name="SesionUsuario" component={SesionUsuario} />
+      <Stack.Screen name="PerfilUsuario" component={PerfilUsuario} />
+      <Stack.Screen name="PerfilProtectora" component={PerfilProtectora} />
+      <Stack.Screen name="UserDetailScreen" component={UserDetailScreen} />
     </Stack.Navigator>
   )
 }

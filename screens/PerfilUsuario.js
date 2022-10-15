@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
   inputGroup: {
     flex: 1,
-    padding: 6,
+    padding: 1,
     marginBottom: 15,
     borderBottomWidth: 2,
     borderBottomColor: "#cccccc",
@@ -107,6 +107,8 @@ const styles = StyleSheet.create({
     marginBottom: 7,
   },
   image : {
+    flex: 1,
+    padding: 1,
     height : 250, 
     width : 250, 
     padding: 6, 
