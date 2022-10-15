@@ -25,8 +25,9 @@ const InicioSesion = (props) => {
                     contraseña
                 })*/
                 if (email == state.email && contraseña == state.contraseña) {
+                    console.log(doc.id); 
                     props.navigation.navigate('SesionUsuario', {
-                        userId: doc.id
+                        userId: doc.id  
                     })
                 } 
                 /*else {
