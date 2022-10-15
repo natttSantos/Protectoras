@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   ScrollView,
+  Button,
   View,
   Text,
   StyleSheet,
@@ -11,6 +12,7 @@ import { TextInput } from "react-native-gesture-handler";
 import firebase from "../database/firebase";
 
 const PerfilProtectora = (props) => {
+
   const initialState = {
     nombre:"",
     email:"",

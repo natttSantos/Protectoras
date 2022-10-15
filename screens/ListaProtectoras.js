@@ -12,14 +12,15 @@ const ListaProtectoras = (props) => {
             const protectoras = []
 
             querySnapshot.docs.forEach((doc) => {
-                const {nombre, email, localidad, direccion, url, descripcion} = doc.data()
+                const {nombre, mail, localidad, direccion, telefono, urlweb, descripcion} = doc.data()
                 protectoras.push({
                     id: doc.id,
                     nombre,
-                    email,
+                    mail,
                     localidad,
                     direccion,
-                    url,
+                    telefono,
+                    urlweb,
                     descripcion
                 })
             });
@@ -39,8 +40,8 @@ const ListaProtectoras = (props) => {
             onPress={() =>  {
                 props.navigation.navigate("PerfilProtectora", {
                     protectoraId: prot.id
-                })
-            }}>
+                  })
+              }}>
                 <Avatar
                 style={styles.imagen}
                 rounded
@@ -52,7 +53,7 @@ const ListaProtectoras = (props) => {
                     style={{fontWeight: "bold"}}> 
                         {prot.nombre} 
                     </ListItem.Title>
-                    <ListItem.Subtitle> {prot.email} </ListItem.Subtitle>
+                    <ListItem.Subtitle> {prot.mail} </ListItem.Subtitle>
                     <ListItem.Subtitle> {prot.direccion} </ListItem.Subtitle>
                 </ListItem.Content>
             </ListItem>
