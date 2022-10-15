@@ -10,6 +10,7 @@ import {
   Alert
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native-web";
 
 import firebase from "../database/firebase";
 
@@ -79,7 +80,7 @@ const BotonAbrirURL = ({ url, children }) => {
     }
   }, [url]);
 
-  return <Button title={children} onPress={handlePress} />;
+  return <TouchableOpacity title={children} onPress={handlePress} />;
 };
 
 const styles = StyleSheet.create({
