@@ -2,28 +2,27 @@ import firebase from '../database/firebase.js';
 import { Appbar, FAB, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import React, { useEffect, useState } from "react";
-import {
-  ScrollView,
-  Button,
-  View,
-  Alert,
-  ActivityIndicator,
-  StyleSheet,
-  Image,
-  TextInput
-} from "react-native";
+import Icon from 'react-native-vector-icons/Ionicons'
+
+import { Tab } from 'react-native-elements';
+import PerfilUsuario from './PerfilUsuario.js';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import RegistrarUsuario from './RegistrarUsuario.js';
+import UserDetailScreen from './UserDetailScreen.js';
+import Home from './Home.js';
 
 const BOTTOM_APPBAR_HEIGHT = 80;
 const MEDIUM_FAB_HEIGHT = 56;
 
 const SesionUsuario = (props) => {
-  const { bottom } = useSafeAreaInsets();
-  const theme = useTheme();
+
+  const Tab = createBottomTabNavigator(); 
 
   const initialState = {
-    usuario: "",
-    email: "" , 
-    telefono: "", 
+    usuario: "", 
+    email: "",
+    contraseña: "",
+    telefono: ""
 }
 const [usuario, setUsario] = useState(initialState);
 const [loading, setLoading] = useState(true);
@@ -45,46 +44,27 @@ useEffect(() => {
   getUsuarioById(props.route.params.userId); 
 }, []);
 
-if (loading) {
+
   return (
-    <View style={styles.loader}>
-      <ActivityIndicator size="large" color="#9E9E9E" />
-    </View>
-  );
-}
-  return (
-    <Appbar
-      style={[
-        styles.bottom,
-        {
-          height: BOTTOM_APPBAR_HEIGHT + bottom
-        },
-      ]}
-      safeAreaInsets={{ bottom }}
-    >
-      <Appbar.Content title={usuario.usuario} />
-      <Appbar.Action icon="home" onPress={() => {}} />
-      <Appbar.Action icon="plus-circle" onPress={() => {}} />
-      <Appbar.Action icon="chat" onPress={() => {}} />
-      <Appbar.Action icon="account" onPress={() => { props.navigation.navigate('PerfilUsuario', {usuarioId: usuario})  }} />
-    </Appbar>
-    
+    <Tab.Navigator>
+      <Tab.Screen name = 'Home' component = {Home} 
+         options={{
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="home-outline" size={30} />
+          )
+        }}
+        initialParams={{ userId: props.route.params.userId }}
+      />
+      <Tab.Screen name = 'Perfil' component = {PerfilUsuario} 
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="person-circle-outline" size={30} />
+          )
+        }}
+        initialParams={{ userId: props.route.params.userId }}/>
+    </Tab.Navigator>  
   );
 };
-
-const styles = StyleSheet.create({
-  bottom: {
-    backgroundColor: 'aquamarine',
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  fab: {
-    position: 'absolute',
-    right: 20,
-  },
-});
 
 
 export default SesionUsuario;

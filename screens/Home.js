@@ -14,7 +14,7 @@ import {
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
-const PerfilUsuario = (props) => {
+const Home = (props) => {
     const initialState = {
         usuario: "",
         email: "" , 
@@ -42,31 +42,13 @@ const PerfilUsuario = (props) => {
       getUsuarioById(props.route.params.userId); 
     }, []);
   
-    if (loading) {
-      return (
-        <View style={styles.loader}>
-          <ActivityIndicator size="large" color="#9E9E9E" />
-        </View>
-      );
-    }
+    
  return (
   <ScrollView style={styles.container}>
   <View>
-    <Image source={require('../images/perfilUsuario.jpg')} style={styles.image}/>
     <Text style = {styles.texto} >
-      {"Nombre: " + usuario.nombre}
+        {usuario.nombre}
     </Text>
-    <Text style = {styles.texto} >
-      {"Email: " + usuario.email}
-    </Text>
-    <Text style = {styles.texto} >
-      {"Telefono: " + usuario.telefono}
-    </Text>
-    <TouchableOpacity style={styles.button}
-         onPress={() => { props.navigation.navigate('PerfilUsuario', { userId: props.route.params.userId })  }}
-          >
-         <Text>Modificar</Text> 
-    </TouchableOpacity>
   </View>
 </ScrollView>
 
@@ -86,11 +68,10 @@ const PerfilUsuario = (props) => {
     marginBottom : 15
   },
   texto: {
-    fontSize : 16,
-    padding : 5,
-    borderBottomWidth: 1,
-    borderBottomColor: "#cccccc",
-    marginBottom: 10
+    fontSize : 30,
+    padding : 10,
+    fontWeight: "bold", 
+
   }, 
   button: {
     alignItems: "center",
@@ -102,4 +83,5 @@ const PerfilUsuario = (props) => {
 
 
 
-export default PerfilUsuario; 
+export default Home; 
+

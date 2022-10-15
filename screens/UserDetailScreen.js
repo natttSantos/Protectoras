@@ -5,7 +5,7 @@ const UserDetailScreen = (props) => {
     //console.log(props.route.params.userId);
     return (
         <View>
-            <Text>UserDetailScreen </Text>
+            
         </View>
     )
 }

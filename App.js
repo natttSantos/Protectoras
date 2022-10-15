@@ -17,6 +17,7 @@ import SesionUsuario from './screens/SesionUsuario';
 import PerfilUsuario from './screens/PerfilUsuario';
 import PerfilProtectora from './screens/PerfilProtectora';
 import UserDetailScreen from './screens/UserDetailScreen';
+import Home from './screens/Home';
 
 
 
@@ -31,6 +32,7 @@ function MyStack (){
       <Stack.Screen name="RegistrarUsuario" component={RegistrarUsuario} />
       <Stack.Screen name="PerfilAnimal" component={PerfilAnimal} />
       <Stack.Screen name="SesionUsuario" component={SesionUsuario} />
+      <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="PerfilUsuario" component={PerfilUsuario} />
       <Stack.Screen name="PerfilProtectora" component={PerfilProtectora} />
       <Stack.Screen name="UserDetailScreen" component={UserDetailScreen} />
