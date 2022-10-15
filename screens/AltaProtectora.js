@@ -5,14 +5,11 @@ import { Button } from "react-native-elements";
 import firebase from '../database/firebase';
 
 const AltaProtectora = () => {
-    DropDownPicker.setListMode("SCROLLVIEW");
-
     const [protectora, setProtectora] = useState({
         descripcion: "",
         mail: "",
         nombre: "",
-        localidad: "",
-        direccion: "",
+        provincia: "",
         telefono: "",
         urlweb: ""
     })
@@ -36,7 +33,6 @@ const AltaProtectora = () => {
                 descripcion: protectora.descripcion,
                 urlweb: protectora.urlweb,
                 provincia: protectora.provincia,
-                direccion: protectora.direccion,
                 mail: protectora.mail,
                 telefono: protectora.telefono
             })
@@ -52,16 +48,15 @@ const AltaProtectora = () => {
             textoAlerta += "\n - Mail "; 
         } if (protectora.provincia == ''){
             textoAlerta += "\n - Provincia "; 
-        } if (protectora.urlweb == ''){
+        }
+        if (protectora.urlweb == ''){
             textoAlerta += "\n - URL de tu web ";  
-        } if (protectora.direcion == ''){
-            textoAlerta += "\n - Direccion ";  
         }
         alert (textoAlerta); 
     }
 
     return(
-        <ScrollView style={styles.container}> 
+        <View style={styles.container}> 
             <Text style={styles.title}> Protectora </Text>
             <View 
             style={styles.inputGroup}> 
@@ -82,7 +77,7 @@ const AltaProtectora = () => {
             <View>
                 <DropDownPicker
                                 style={{marginTop: 15, marginBottom: 15}}
-                                placeholder="Seleccione una localidad"
+                                placeholder="Seleccione una provincia"
                                 items={items}
                                 setItems={setItems}
                                 open={open}
@@ -90,17 +85,9 @@ const AltaProtectora = () => {
                                 value={value}
                                 setValue={setValue}
                                 onChangeValue={(value) => {
-                                    handleChangeText('localidad', value);
+                                    handleChangeText('provincia', value);
                                   }}
                             />
-            </View>
-            <View 
-            style={styles.inputGroup}>
-                <TextInput 
-                    style={styles.inputText}
-                    placeholder="Dirección"
-                    onChangeText={(value) => handleChangeText('direccion', value)}
-                    />
             </View>
             <View 
             style={styles.inputGroup}>
@@ -131,7 +118,7 @@ const AltaProtectora = () => {
                 title="Dar de alta" 
                 onPress={() => {saveNewProtectora()}}/>
             </View>
-        </ScrollView>
+        </View>
     )
 }
 
