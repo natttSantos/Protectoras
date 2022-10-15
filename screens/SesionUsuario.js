@@ -24,11 +24,11 @@ const SesionUsuario = (props) => {
     contraseña: "",
     telefono: ""
 }
-const [usuario, setUsario] = useState(initialState);
+const [usuario, setUsuario] = useState(initialState);
 const [loading, setLoading] = useState(true);
 
 const handleTextChange = (value, prop) => {
-  setUsario({ ...usuario, [prop]: value });
+  setUsuario({ ...usuario, [prop]: value });
 };
 
 const getUsuarioById = async (id) => {
@@ -36,7 +36,7 @@ const getUsuarioById = async (id) => {
   const doc = await dbRef.get();
   const usuario = doc.data();
   console.log(usuario)
-  setUsario({ ...usuario, id: doc.id });
+  setUsuario({ ...usuario, id: doc.id });
   setLoading(false);
 };
 
