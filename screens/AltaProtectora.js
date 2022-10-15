@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { ScrollView, View, Text, StyleSheet, TextInput } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Button } from "react-native-elements";
@@ -6,6 +6,22 @@ import firebase from '../database/firebase';
 
 const AltaProtectora = () => {
     DropDownPicker.setListMode("SCROLLVIEW");
+
+    const [mails, setMails] = useState([]);
+
+    useEffect(() => {
+        firebase.db.collection('protectoras').onSnapshot((querySnapshot) => {
+            const mails = []
+
+            querySnapshot.docs.forEach((doc) => {
+                const {mail} = doc.data()
+                mails.push({
+                    mail
+                })
+            });
+            setMails(mails)
+        });
+    }, []);
 
     const [protectora, setProtectora] = useState({
         descripcion: "",
@@ -31,15 +47,16 @@ const AltaProtectora = () => {
         if (protectora.nombre == '' || protectora.mail == '' || protectora.provincia == '' || protectora.urlweb == '') {
             validateFields();
         } else if (validatePhone(protectora.telefono)){
-            await firebase.db.collection('protectoras').add({
-                nombre: protectora.nombre,
-                descripcion: protectora.descripcion,
-                urlweb: protectora.urlweb,
-                provincia: protectora.provincia,
-                direccion: protectora.direccion,
-                mail: protectora.mail,
-                telefono: protectora.telefono
+            const dbRef = await firebase.db.collection('protectoras')
+            console.log(mails)
+            let validation = true;
+            mails.forEach(obj => {
+                if(obj.mail == protectora.mail)
+                    validation = false;
             })
+
+            if(!validation)
+                console.log("Repe");
             alert ("Bienvenid@ " + protectora.nombre); 
         }
     }

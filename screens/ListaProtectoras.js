@@ -25,8 +25,8 @@ const ListaProtectoras = () => {
                 })
             });
             setProtectoras(protectoras)
-        })
-    })
+        });
+    }, []);
 
     return(
         <ScrollView>
@@ -37,9 +37,7 @@ const ListaProtectoras = () => {
                 return(
             <ListItem key={prot.id} 
             bottomDivider
-            onPress={() => {() => {
-                alert("PAN");
-              }}}>
+            onPress={() => alert("pan")}>
                 <Avatar
                 style={styles.imagen}
                 rounded
