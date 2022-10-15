@@ -18,12 +18,12 @@ const MEDIUM_FAB_HEIGHT = 56;
 
 const UserDetailScreen = (props) => {
     //console.log(props.route.params.userId);
-    return (
+/*     return (
         <View>
             
         </View>
         );
-    }
+    } */
         return (
         <Appbar
             style={[
