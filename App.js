@@ -16,6 +16,7 @@ import PerfilAnimal from './screens/PerfilAnimal';
 import SesionUsuario from './screens/SesionUsuario';
 import PerfilUsuario from './screens/PerfilUsuario';
 import PerfilProtectora from './screens/PerfilProtectora';
+import UserDetailScreen from './screens/UserDetailScreen';
 
 
 
@@ -32,6 +33,7 @@ function MyStack (){
       <Stack.Screen name="SesionUsuario" component={SesionUsuario} />
       <Stack.Screen name="PerfilUsuario" component={PerfilUsuario} />
       <Stack.Screen name="PerfilProtectora" component={PerfilProtectora} />
+      <Stack.Screen name="UserDetailScreen" component={UserDetailScreen} />
     </Stack.Navigator>
   )
 }
