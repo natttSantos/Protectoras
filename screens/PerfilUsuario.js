@@ -90,15 +90,17 @@ const styles = StyleSheet.create({
   },
   inputGroup: {
     flex: 1,
-    padding: 0,
+    padding: 1,
     marginBottom: 15,
-    borderBottomWidth: 1,
+    borderBottomWidth: 2,
     borderBottomColor: "#cccccc",
   },
   btn: {
     marginBottom: 7,
   },
   image : {
+    flex: 1,
+    padding: 1,
     height : 250, 
     width : 250
 }
