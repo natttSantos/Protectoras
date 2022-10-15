@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   ScrollView,
   View,
   Text,
   StyleSheet,
   Image,
+  Linking,
+  Button
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 
@@ -52,14 +54,31 @@ const PerfilProtectora = (props) => {
           {"Dirección: " + protectora.direccion}
         </Text>        
         <Text style = {styles.texto} >
-          {"Página web: " + protectora.url}
-        </Text>   
-        <Text style = {styles.texto} >
           {"Descripción: " + protectora.descripcion}
-        </Text>   
+        </Text>
+        <OpenURLButton url={protectora.url}>
+          Página web
+        </OpenURLButton>
       </View>
     </ScrollView>
   );
+};
+
+const OpenURLButton = ({ url, children }) => {
+  const handlePress = useCallback(async () => {
+    // Checking if the link is supported for links with custom URL scheme.
+    const supported = await Linking.canOpenURL(url);
+
+    if (supported) {
+      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+      // by some browser in the mobile
+      await Linking.openURL(url);
+    } else {
+      Alert.alert(`Don't know how to open this URL: ${url}`);
+    }
+  }, [url]);
+
+  return <Button title={children} onPress={handlePress} />;
 };
 
 const styles = StyleSheet.create({
