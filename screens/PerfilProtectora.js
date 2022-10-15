@@ -57,23 +57,22 @@ const PerfilProtectora = (props) => {
         <Text style = {styles.texto} >
           {"Descripción: " + protectora.descripcion}
         </Text>
-        <OpenURLButton url={protectora.url}>
+        <BotonAbrirURL url={protectora.url}>
           Página web
-        </OpenURLButton>
+        </BotonAbrirURL>
       </View>
     </ScrollView>
   );
 };
 
-const OpenURLButton = ({ url, children }) => {
+const BotonAbrirURL = ({ url, children }) => {
   
     const handlePress = useCallback(async () => {
-    // Checking if the link is supported for links with custom URL scheme.
-    const supported = await Linking.canOpenURL(url);
+    //Revisando si el link es soportado/válido
+    const soportado = await Linking.canOpenURL(url);
 
-    if (supported) {
-      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
-      // by some browser in the mobile
+    if (soportado) {
+      // Abirendo el link con el navegador del teléfono
       await Linking.openURL(url);
     } else {
       Alert.alert(`No es posible abrir la URL: ${url}`);
