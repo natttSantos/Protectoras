@@ -8,7 +8,7 @@ import firebase from '../database/firebase';
 const AltaProtectora = (props) => {
     DropDownPicker.setListMode("SCROLLVIEW");
 
-    const [mails, setMails] = useState([]);
+    const [emails, setEmails] = useState([]);
     const [colore, setColor] = useState('black');
 
     useEffect(() => {
@@ -21,7 +21,7 @@ const AltaProtectora = (props) => {
                     email
                 })
             });
-            setMails(emails)
+            setEmails(emails)
         });
     }, []);
 
@@ -46,22 +46,12 @@ const AltaProtectora = (props) => {
         setProtectora({...protectora, [nombre]: value});
     }
 
-    const handleChangeTextDescripcion = (nombre, value) => {
-        if(value.length == 15) {
-            alert("¡Su descripción ya contiene los 200 caracteres permitidos!")
-        } else {
-            setProtectora({...protectora, [nombre]: value});
-            if (value.length == 10)
-                alert("¡Cuidado! Su descripción ya contiene 180 caracteres (max. 200)")
-        }
-    }
-
     const saveNewProtectora = async () => {
-        if (protectora.nombre == '' || protectora.mail == '' || protectora.provincia == '' || protectora.url == '') {
+        if (protectora.nombre == '' || protectora.email == '' || protectora.provincia == '' || protectora.url == '') {
             validateFields();
         } else if (validatePasswordAndPhone(protectora.contraseña, protectora.telefono)){
             let validation = true;
-            mails.forEach(obj => {
+            emails.forEach(obj => {
                 if(obj.email == protectora.email)
                     validation = false;
             })
@@ -170,7 +160,14 @@ const AltaProtectora = (props) => {
                 <TextInput                     
                     style={{fontSize: 17, color: colore}}
                     placeholder="Descripcion (max. 200 caracteres)"
-                    onChangeText={(value) => handleChangeTextDescripcion('descripcion', value)}
+                    maxLength = {15}
+                    onChangeText={(value) => {
+                        if (value.length == 180)
+                            alert("¡Cuidado! Su descripción ya contiene 180 caracteres (max. 200)")
+                        if (value.length == 200)
+                            alert("¡Su descripción ya contiene los 200 caracteres permitidos!")
+                        handleChangeText('descripcion', value)
+                    }}
                     />
             </View>
             <View style={{marginTop: 15}}>
