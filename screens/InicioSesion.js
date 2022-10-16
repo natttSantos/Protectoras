@@ -13,9 +13,45 @@ const InicioSesion = (props) => {
         setState({...state, [nombre]: value}); 
     }; 
 
+    const showAlert = () => {
+        Alert.alert("Error", "El usuario o la contraseña son incorrectas", [
+            {text: "Cerrar"}
+        ]);
+    }
+
     const validateUser = async () => {
         var usuarioCorrecto = false;
-        const usuarios = firebase.db.collection('users').onSnapshot((querySnapchot => {
+        const usuarios = firebase.db.collection("users");
+        const snapshot = await usuarios.where("email", "==", state.email).get();
+        if (!snapshot.empty) {
+            snapshot.forEach((doc) => {
+                const {email, contraseña} = doc.data();
+                console.log(doc.id)
+                if(contraseña == state.contraseña) {
+                    usuarioCorrecto = true;
+                    props.navigation.navigate('SesionUsuario', {userId: doc.id})
+                }
+                else {showAlert();}
+            })
+        }
+        else {
+            const protectoras = firebase.db.collection("protectoras");
+            const snapshot2 = await protectoras.where("email", "==", state.email).get();
+            if (!snapshot2.empty) {
+                snapshot2.forEach((doc) => {
+                    const {email, contraseña} = doc.data();
+                    console.log(doc.id)
+                    if(contraseña == state.contraseña) {
+                        console.log(doc.data());
+                        usuarioCorrecto = true;
+                        props.navigation.navigate('SesionUsuario', {userId: doc.id})
+                    }
+                    else {showAlert();}
+                })
+            }
+            else { showAlert();}
+        }
+        /*const usuarios = firebase.db.collection('users').onSnapshot((querySnapchot => {
             //const users = [];
 
             querySnapchot.docs.forEach((doc) => {
@@ -24,7 +60,7 @@ const InicioSesion = (props) => {
                     id: doc.id,
                     email,
                     contraseña
-                })*/
+                })
                 if (email == state.email && contraseña == state.contraseña) {
                     console.log(doc.id);
                     usuarioCorrecto = true;
@@ -51,7 +87,7 @@ const InicioSesion = (props) => {
             Alert.alert("Error", "El usuario o la contraseña son incorrectas", [
                 {text: "Cerrar"}
             ]);
-        }
+        } */
     };
 
     return (
