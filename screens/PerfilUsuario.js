@@ -65,7 +65,7 @@ const PerfilUsuario = (props) => {
     <TouchableOpacity style={styles.button}
          onPress={() => { props.navigation.navigate('PerfilUsuario', { userId: props.route.params.userId })  }}
           >
-         <Text>Modificar</Text> 
+         <Text style={styles.buttonText}>Modificar</Text> 
     </TouchableOpacity>
   </View>
 </ScrollView>
@@ -86,7 +86,7 @@ const PerfilUsuario = (props) => {
     marginBottom : 15
   },
   texto: {
-    fontSize : 16,
+    fontSize : 18,
     padding : 5,
     borderBottomWidth: 1,
     borderBottomColor: "#cccccc",
@@ -94,9 +94,17 @@ const PerfilUsuario = (props) => {
   }, 
   button: {
     alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10
+    padding: 10, 
+    backgroundColor: "#6c91c2",
   },
+  buttonText: {
+    fontSize: 18,
+    colors: "#ffffff",
+    fontWeight: "bold",
+    alignSelf: "center",
+    textTransform: "uppercase"    
+  }
+
 });
 
 

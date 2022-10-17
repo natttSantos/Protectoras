@@ -10,9 +10,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import RegistrarUsuario from './RegistrarUsuario.js';
 import UserDetailScreen from './UserDetailScreen.js';
 import Home from './Home.js';
-
-const BOTTOM_APPBAR_HEIGHT = 80;
-const MEDIUM_FAB_HEIGHT = 56;
+import RegistrarAnimal from './RegistrarAnimal';
 
 const SesionUsuario = (props) => {
 
@@ -49,16 +47,27 @@ useEffect(() => {
     <Tab.Navigator>
       <Tab.Screen name = 'Home' component = {Home} 
          options={{
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <Icon name="home-outline" size={30} />
+            <Icon name="home-outline" size={35} color={'blue'} />
+          )
+        }}
+        initialParams={{ userId: props.route.params.userId }}
+      />
+      <Tab.Screen name = 'Add' component = {RegistrarAnimal} 
+         options={{
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="add-circle-outline" size={35} color={'blue'} />
           )
         }}
         initialParams={{ userId: props.route.params.userId }}
       />
       <Tab.Screen name = 'Perfil' component = {PerfilUsuario} 
         options={{
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <Icon name="person-circle-outline" size={30} />
+            <Icon name="person-circle-outline" size={35} color={'blue'} />
           )
         }}
         initialParams={{ userId: props.route.params.userId }}/>

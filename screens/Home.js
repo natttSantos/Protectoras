@@ -68,10 +68,11 @@ const Home = (props) => {
     marginBottom : 15
   },
   texto: {
-    fontSize : 30,
+    fontSize : 20,
     padding : 10,
+    color: 'blue',
     fontWeight: "bold", 
-
+    textAlign: 'right'
   }, 
   button: {
     alignItems: "center",
