@@ -70,8 +70,9 @@ const Home = (props) => {
   texto: {
     fontSize : 20,
     padding : 10,
-    fontWeight: "bold"
-
+    color: 'blue',
+    fontWeight: "bold", 
+    textAlign: 'right'
   }, 
   button: {
     alignItems: "center",

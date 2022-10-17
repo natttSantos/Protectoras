@@ -46,6 +46,7 @@ useEffect(() => {
     <Tab.Navigator>
       <Tab.Screen name = 'Home' component = {Home} 
          options={{
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Icon name="home-outline" size={35} color={'blue'} />
           )
@@ -54,6 +55,7 @@ useEffect(() => {
       />
       <Tab.Screen name = 'Perfil' component = {PerfilUsuario} 
         options={{
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Icon name="person-circle-outline" size={35} color={'blue'} />
           )
