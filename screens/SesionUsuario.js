@@ -11,9 +11,6 @@ import RegistrarUsuario from './RegistrarUsuario.js';
 import UserDetailScreen from './UserDetailScreen.js';
 import Home from './Home.js';
 
-const BOTTOM_APPBAR_HEIGHT = 80;
-const MEDIUM_FAB_HEIGHT = 56;
-
 const SesionUsuario = (props) => {
 
   const Tab = createBottomTabNavigator(); 
@@ -50,7 +47,7 @@ useEffect(() => {
       <Tab.Screen name = 'Home' component = {Home} 
          options={{
           tabBarIcon: ({ color, size }) => (
-            <Icon name="home-outline" size={30} />
+            <Icon name="home-outline" size={35} color={'blue'} />
           )
         }}
         initialParams={{ userId: props.route.params.userId }}
@@ -58,7 +55,7 @@ useEffect(() => {
       <Tab.Screen name = 'Perfil' component = {PerfilUsuario} 
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Icon name="person-circle-outline" size={30} />
+            <Icon name="person-circle-outline" size={35} color={'blue'} />
           )
         }}
         initialParams={{ userId: props.route.params.userId }}/>
