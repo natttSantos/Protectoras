@@ -11,20 +11,6 @@ const AltaProtectora = (props) => {
     const [emails, setEmails] = useState([]);
     const [colore, setColor] = useState('black');
 
-    useEffect(() => {
-        firebase.db.collection('protectoras').onSnapshot((querySnapshot) => {
-            const emails = []
-
-            querySnapshot.docs.forEach((doc) => {
-                const {email} = doc.data()
-                emails.push({
-                    email
-                })
-            });
-            setEmails(emails)
-        });
-    }, []);
-
     const [protectora, setProtectora] = useState({
         descripcion: "",
         email: "",
@@ -50,15 +36,14 @@ const AltaProtectora = (props) => {
         if (protectora.nombre == '' || protectora.email == '' || protectora.provincia == '' || protectora.url == '') {
             validateFields();
         } else if (validatePasswordAndPhone(protectora.contraseña, protectora.telefono)){
-            let validation = true;
-            emails.forEach(obj => {
-                if(obj.email == protectora.email)
-                    validation = false;
-            })
-            if(!validation)
+            const dbRef = firebase.db.collection('protectoras')
+            const doc = await dbRef.where("email", "==", protectora.email.trim()).get()
+            const emailRepe = doc.docs.length == 1
+
+            if(emailRepe)
                 alert("El email introducido ya ha sido registrado, pruebe con otro");
             else {
-                await firebase.db.collection('protectoras').add({
+                await dbRef.add({
                     nombre: protectora.nombre,
                     email: protectora.email,
                     contraseña: protectora.contraseña,
@@ -77,14 +62,18 @@ const AltaProtectora = (props) => {
         let textoAlerta = "Complete el campo: ";
         if (protectora.nombre == ''){
             textoAlerta += "\n - Nombre de protectora"; 
+        } if (protectora.contraseña == ''){
+            textoAlerta += "\n - Contraseña ";  
         } if (protectora.email == ''){
             textoAlerta += "\n - Mail "; 
-        } if (protectora.provincia == ''){
-            textoAlerta += "\n - Provincia "; 
+        } if (protectora.localizacion == ''){
+            textoAlerta += "\n - Localización "; 
+        } if (protectora.direccion == ''){
+            textoAlerta += "\n - Direccion ";  
         } if (protectora.url == ''){
             textoAlerta += "\n - URL de tu web ";  
-        } if (protectora.direcion == ''){
-            textoAlerta += "\n - Direccion ";  
+        } if (protectora.telefono == ''){
+            textoAlerta += "\n - Telefono ";  
         }
         alert (textoAlerta); 
     }
@@ -92,11 +81,12 @@ const AltaProtectora = (props) => {
     return(
         <ScrollView style={styles.container}> 
             <Text style={styles.title}> Protectora </Text>
+            <Text style={{marginTop: 15, color: 'darkred'}}> * Campo obligatorio </Text>
             <View 
             style={styles.inputGroup}> 
                 <TextInput 
                 style={styles.inputText}
-                placeholder="Nombre"
+                placeholder="* Nombre"
                 onChangeText={(value) => handleChangeText('nombre', value)}
                 />
             </View>
@@ -104,7 +94,7 @@ const AltaProtectora = (props) => {
             style={styles.inputGroup}> 
                 <TextInput 
                 style={styles.inputText}
-                placeholder="Contraseña"
+                placeholder="* Contraseña"
                 onChangeText={(value) => handleChangeText('contraseña', value)}
                 />
             </View>
@@ -112,14 +102,14 @@ const AltaProtectora = (props) => {
             style={styles.inputGroup}>
                 <TextInput 
                     style={styles.inputText}
-                    placeholder="Email"
+                    placeholder="* Email"
                     onChangeText={(value) => handleChangeText('email', value)}
                     />
             </View>
             <View>
                 <DropDownPicker
                                 style={{marginTop: 15, marginBottom: 15}}
-                                placeholder="Seleccione una localizacion"
+                                placeholder="* Seleccione una localizacion"
                                 items={items}
                                 setItems={setItems}
                                 open={open}
@@ -135,7 +125,7 @@ const AltaProtectora = (props) => {
             style={styles.inputGroup}>
                 <TextInput 
                     style={styles.inputText}
-                    placeholder="Dirección"
+                    placeholder="* Dirección"
                     onChangeText={(value) => handleChangeText('direccion', value)}
                     />
             </View>
@@ -143,7 +133,7 @@ const AltaProtectora = (props) => {
             style={styles.inputGroup}>
                 <TextInput 
                     style={styles.inputText}
-                    placeholder="URL de la página web"
+                    placeholder="* URL de la página web"
                     onChangeText={(value) => handleChangeText('url', value)}
                     />
             </View>
@@ -151,7 +141,7 @@ const AltaProtectora = (props) => {
             style={styles.inputGroup}>
                 <TextInput 
                     style={styles.inputText}
-                    placeholder="Telefono"
+                    placeholder="* Telefono"
                     onChangeText={(value) => handleChangeText('telefono', value)}
                     />
             </View>
