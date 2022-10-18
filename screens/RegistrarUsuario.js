@@ -23,7 +23,8 @@ const RegistrarUsuario = (props) => {
                 usuario: state.usuario, 
                 email: state.email,
                 contraseña: state.contraseña,
-                telefono: state.telefono
+                telefono: state.telefono,
+                alta: "No"
             })
             alert ("Bienvenid@ " + state.usuario); 
             props.navigation.navigate('InicioSesion'); 

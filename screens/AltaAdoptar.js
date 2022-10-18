@@ -79,13 +79,14 @@ const AltaAdoptar = (props) => {
 
     return(
         <ScrollView style={styles.container}> 
-            <Text style={styles.title}> Protectora </Text>
+            <Text style={styles.title}> Crear Perfil Adoptar </Text>
             <View 
             style={styles.inputGroup}> 
                 <TextInput 
                 style={styles.inputText}
                 placeholder="Nombre"
                 onChangeText={(value) => handleChangeText('nombre', value)}
+                
                 />
             </View>
             <View 
@@ -130,7 +131,10 @@ const AltaAdoptar = (props) => {
             <View style={{marginTop: 15}}>
                 <Button 
                 title="Dar de alta" 
-                onPress={() => {updateUsuario()}}/>
+                onPress={() => {updateUsuario();
+                    props.navigation.navigate('PerfilUsuario', {
+                        userId: usuario.id,
+                      }); }}/>
             </View>
         </ScrollView>
     )

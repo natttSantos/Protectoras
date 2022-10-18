@@ -11,6 +11,7 @@ import RegistrarUsuario from './RegistrarUsuario.js';
 import UserDetailScreen from './UserDetailScreen.js';
 import Home from './Home.js';
 import RegistrarAnimal from './RegistrarAnimal';
+import AltaGlobal from './AltaGlobal.js';
 
 const SesionUsuario = (props) => {
 
@@ -54,7 +55,7 @@ useEffect(() => {
         }}
         initialParams={{ userId: props.route.params.userId }}
       />
-      <Tab.Screen name = 'Add' component = {RegistrarAnimal} 
+      <Tab.Screen name = 'Add' component = {AltaGlobal} 
          options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (

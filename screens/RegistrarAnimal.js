@@ -1,35 +1,24 @@
 import React, {useEffect, useState } from "react";
-import { ScrollView, View, Text, StyleSheet, TextInput } from "react-native";
+import { ScrollView, View, Text, StyleSheet, TextInput,TouchableOpacity } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Button } from "react-native-elements";
 import firebase from '../database/firebase';
+import DatePicker from 'react-native-modern-datepicker';
+
 
 
 const RegistrarAnimal = (props) => {
-    const initialState = {
+    const [state, setState] = useState({
       nombre:"",
-      apellidos:"",
-      localizacion:"",
-      dni:"",
-      n_animales:"",
+      tipo:"",
+      raza:"",
+      sexo:"",
+      descripcion:"",
       
-    };
+    });
     const drop = DropDownPicker.setListMode("SCROLLVIEW");
+    const [chosenDate, setChosenDate] = useState(new Date());
 
-    useEffect(() => {
-        getUsuarioById(props.route.params.userId);
-      }, []);
-
-      const getUsuarioById = async (id) => {
-        const dbRef = firebase.db.collection("users").doc(id);
-        const doc = await dbRef.get();
-        const usuario = doc.data();
-        setUsuario({ ...usuario, id: doc.id });
-        setLoading(false);
-      };
-
-    const [usuario, setUsuario] = useState(initialState);
-    const [loading, setLoading] = useState(true);
 
     const [sexoOpen, setSexoOpen] = useState(false);
     const [sexoValue, setSexoValue] = useState(null);
@@ -52,45 +41,50 @@ const RegistrarAnimal = (props) => {
                      
 
     const handleChangeText = (nombre, value) => {
-        setUsuario({...usuario, [nombre]: value});
-    }
+        setState({...state, [nombre]: value}); 
+    }; 
 
-    const updateUsuario = async () => {
-        if (usuario.nombre == '' || usuario.apellidos == '' || usuario.localizacion == '' || usuario.dni == ''|| usuario.n_animales == '') {
-            validateFields();
+    const saveNewUser =  async () => {
+        if (state.nombre == '' || state.raza == '' || state.descripcion == '' || state.tipo == '' || state.sexo ==''){
+            validateNullFields(); 
+        } else{ 
+            await firebase.db.collection('animales').add({
+                nombre: state.nombre, 
+                tipo: state.tipo,
+                raza: state.raza,
+                sexo: state.sexo, 
+                decripcion: state.descripcion
+            })
+            mensajeExito(); 
+            props.navigation.navigate('Home'); 
+        }
+    } 
+    const mensajeExito = () =>{
+        if(state.sexo == "Masculino"){
+            alert (state.nombre + " ha sido registrado!");     
         } else{
-        const usuarioRef = firebase.db.collection("users").doc(usuario.id);
-        console.log(usuario.id);
-        await usuarioRef.set({
-          alta : "Si",  
-          nombre : usuario.nombre,
-          apellidos : usuario.apellidos,
-          dni : usuario.dni,
-          localizacion : usuario.localizacion,
-          n_animales : usuario.n_animales,
-          email : usuario.email,
-          contraseña: usuario.contraseña,
-          usuario: usuario.usuario,
-          telefono: usuario.telefono,
-        });
-        setUsuario(initialState);}
-      };
-
-    const validateFields = () => {
+            alert (state.nombre + " ha sido registrada!"); 
+        }
+    }
+    const validateNullFields = () => {
         let textoAlerta = "Complete el campo: ";
-        if (usuario.nombre == ''){
-            textoAlerta += "\n - Nombre "; 
-        } if (usuario.apellidos == ''){
-            textoAlerta += "\n - Apellidos ";  
-        } if (usuario.dni == ''){
-            textoAlerta += "\n - DNI "; 
-        } if (usuario.localizacion == ''){
-            textoAlerta += "\n - Localización ";  
-        } if (usuario.n_animales == ''){
-            textoAlerta += "\n - Número de animales ";  
+        if (state.nombre == ''){
+            textoAlerta += "\n - Nombre de animal"; 
+        } if (state.raza == ''){
+            textoAlerta += "\n - Raza "; 
+        } if (state.descripcion == ''){
+            textoAlerta += "\n - Descripción "; 
+        }
+        if (state.tipo == ''){
+            textoAlerta += "\n - Tipo "; 
+        }
+        if (state.sexo == ''){
+            textoAlerta += "\n - Sexo "; 
         }
         alert (textoAlerta); 
     }
+    
+    
 
     return(
         <ScrollView style={styles.container}> 
@@ -110,8 +104,7 @@ const RegistrarAnimal = (props) => {
                 placeholder="Nombre"
                 onChangeText={(value) => handleChangeText('nombre', value)}
                 />
-            </View>
-            <View>
+            
                 <DropDownPicker
                                 style={{marginTop: 20, marginBottom: 20}}
                                 placeholder="Tipo"
@@ -125,15 +118,13 @@ const RegistrarAnimal = (props) => {
                                     handleChangeText('tipo', value);
                                   }}
                             />
-            </View>
-            <View>
+            
                 <TextInput 
                     style={styles.inputs}
                     placeholder="Raza"
                     onChangeText={(value) => handleChangeText('raza', value)}
                     />
-            </View>
-            <View>
+            
             <DropDownPicker
                                 style={{marginTop: 10, marginBottom: 15}}
                                 placeholder="Sexo"
@@ -147,26 +138,34 @@ const RegistrarAnimal = (props) => {
                                     handleChangeText('sexo', value);
                                   }}
                             />
-            </View>
-            <View>
+                
+                <Text>{chosenDate}</Text>
+            
+                <DatePicker
+                    date={chosenDate}
+                    onDateChange={setChosenDate}
+                />
+                
                 <TextInput 
                     style={styles.inputs}
                     placeholder="Insertar foto"
-                    onChangeText={(value) => handleChangeText('dni', value)}
+                    onChangeText={(value) => handleChangeText('foto', value)}
                     />
-            </View>
-            <View>
+            
                 <TextInput 
                     style={styles.descripcion}
                     placeholder="Descripción (max 200 caracteres)"
-                    onChangeText={(value) => handleChangeText('n_animales', value)}
+                    onChangeText={(value) => handleChangeText('descripcion', value)}
                     />
-            </View>
-            <View style={{marginTop: 15}}>
-                <Button 
-                title="Dar de alta" 
-                onPress={() => {updateUsuario()}}/>
-            </View>
+
+                <TouchableOpacity 
+                    onPress={() => {saveNewUser()}}
+                    style={styles.button}>
+                        <Text style={styles.buttonText}>
+                            Dar de alta
+                        </Text>
+                </TouchableOpacity>
+        </View> 
         </ScrollView>
     )
 }
@@ -177,7 +176,8 @@ const styles = StyleSheet.create({
         padding: 35
     },
     descripcion : {
-        height: 100,
+        height: 100, 
+        marginBottom: 40,
         fontSize: 18,
         borderWidth: 1,
         paddingLeft: 10,
@@ -194,9 +194,23 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         paddingLeft: 10,
         paddingRight: 10,
-        fontSize: 18,
+        fontSize: 18,  
         width: "100%",
         borderWidth: 1
-    }
+    }, 
+    
+    button : {
+        elevation: 8,
+        backgroundColor: "#6c91c2",
+        padding: 10
+      },
+      buttonText: {
+        fontSize: 18,
+        colors: "#ffffff",
+        fontWeight: "bold",
+        alignSelf: "center",
+        textTransform: "uppercase"    
+      }
 })
 export default RegistrarAnimal;
+//getToday()
