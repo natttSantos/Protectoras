@@ -20,6 +20,7 @@ import AltaAdoptar from './screens/AltaAdoptar';
 import UserDetailScreen from './screens/UserDetailScreen';
 import Home from './screens/Home';
 import RegistrarAnimal from './screens/RegistrarAnimal';
+import PerfilAdoptar from './screens/PerfilAdoptar';
 
 
 function MyStack (){
@@ -39,6 +40,7 @@ function MyStack (){
       <Stack.Screen name="PerfilProtectora" component={PerfilProtectora} />
       <Stack.Screen name="AltaAdoptar" component={AltaAdoptar} />
       <Stack.Screen name="UserDetailScreen" component={UserDetailScreen} />
+      <Stack.Screen name="PerfilAdoptar" component={PerfilAdoptar} />
     </Stack.Navigator>
   )
 }
