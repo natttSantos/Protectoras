@@ -94,6 +94,7 @@ const AltaProtectora = (props) => {
             style={styles.inputGroup}> 
                 <TextInput 
                 style={styles.inputText}
+                secureTextEntry={true}
                 placeholder="* Contraseña"
                 onChangeText={(value) => handleChangeText('contraseña', value)}
                 />
@@ -150,7 +151,8 @@ const AltaProtectora = (props) => {
                 <TextInput                     
                     style={{fontSize: 17, color: colore}}
                     placeholder="Descripcion (max. 200 caracteres)"
-                    maxLength = {15}
+                    maxLength = {200}
+                    multiline = {true}
                     onChangeText={(value) => {
                         if (value.length == 180)
                             alert("¡Cuidado! Su descripción ya contiene 180 caracteres (max. 200)")
