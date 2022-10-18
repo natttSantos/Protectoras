@@ -1,5 +1,5 @@
 import React, {useEffect, useState } from "react";
-import { ScrollView, View, Text, StyleSheet, TextInput } from "react-native";
+import { ScrollView, View, Text, StyleSheet, TextInput,TouchableOpacity } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Button } from "react-native-elements";
 import firebase from '../database/firebase';
@@ -110,8 +110,7 @@ const RegistrarAnimal = (props) => {
                 placeholder="Nombre"
                 onChangeText={(value) => handleChangeText('nombre', value)}
                 />
-            </View>
-            <View>
+            
                 <DropDownPicker
                                 style={{marginTop: 20, marginBottom: 20}}
                                 placeholder="Tipo"
@@ -125,15 +124,13 @@ const RegistrarAnimal = (props) => {
                                     handleChangeText('tipo', value);
                                   }}
                             />
-            </View>
-            <View>
+            
                 <TextInput 
                     style={styles.inputs}
                     placeholder="Raza"
                     onChangeText={(value) => handleChangeText('raza', value)}
                     />
-            </View>
-            <View>
+            
             <DropDownPicker
                                 style={{marginTop: 10, marginBottom: 15}}
                                 placeholder="Sexo"
@@ -147,26 +144,27 @@ const RegistrarAnimal = (props) => {
                                     handleChangeText('sexo', value);
                                   }}
                             />
-            </View>
-            <View>
+            
                 <TextInput 
                     style={styles.inputs}
                     placeholder="Insertar foto"
                     onChangeText={(value) => handleChangeText('dni', value)}
                     />
-            </View>
-            <View>
+            
                 <TextInput 
                     style={styles.descripcion}
                     placeholder="Descripción (max 200 caracteres)"
                     onChangeText={(value) => handleChangeText('n_animales', value)}
                     />
-            </View>
-            <View style={{marginTop: 15}}>
-                <Button 
-                title="Dar de alta" 
-                onPress={() => {updateUsuario()}}/>
-            </View>
+
+                <TouchableOpacity 
+                    onPress={() => {updateUsuario()}}
+                    style={styles.button}>
+                        <Text style={styles.buttonText}>
+                            Dar de alta
+                        </Text>
+                </TouchableOpacity>
+        </View> 
         </ScrollView>
     )
 }
@@ -177,7 +175,8 @@ const styles = StyleSheet.create({
         padding: 35
     },
     descripcion : {
-        height: 100,
+        height: 100, 
+        marginBottom: 40,
         fontSize: 18,
         borderWidth: 1,
         paddingLeft: 10,
@@ -194,9 +193,21 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         paddingLeft: 10,
         paddingRight: 10,
-        fontSize: 18,
+        fontSize: 18,  
         width: "100%",
         borderWidth: 1
-    }
+    }, 
+    button : {
+        elevation: 8,
+        backgroundColor: "#6c91c2",
+        padding: 10
+      },
+      buttonText: {
+        fontSize: 18,
+        colors: "#ffffff",
+        fontWeight: "bold",
+        alignSelf: "center",
+        textTransform: "uppercase"    
+      }
 })
 export default RegistrarAnimal;
