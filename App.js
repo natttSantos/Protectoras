@@ -41,6 +41,7 @@ function MyStack (){
       <Stack.Screen name="PerfilProtectora" component={PerfilProtectora} />
       <Stack.Screen name="AltaAdoptar" component={AltaAdoptar} />
       <Stack.Screen name="UserDetailScreen" component={UserDetailScreen} />
+      <Stack.Screen name="PerfilAdoptar" component={PerfilAdoptar} />
     </Stack.Navigator>
   )
 }

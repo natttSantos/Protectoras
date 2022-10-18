@@ -21,6 +21,7 @@ const PerfilUsuario = (props) => {
         telefono: "", 
         nombre: "",
         contraseña: "",
+        alta:""
     }
     const [usuario, setUsario] = useState(initialState);
     const [loading, setLoading] = useState(true);
@@ -63,9 +64,18 @@ const PerfilUsuario = (props) => {
       {"Telefono: " + usuario.telefono}
     </Text>
     <TouchableOpacity style={styles.button}
-         onPress={() => { props.navigation.navigate('PerfilUsuario', { userId: props.route.params.userId })  }}
+         onPress={() => { props.navigation.navigate('AltaAdoptar', {
+          userId: usuario.id,
+        });  }}
           >
-         <Text style={styles.buttonText}>Modificar</Text> 
+         <Text style={styles.buttonText}>Modificar Perfil Adoptar</Text> 
+    </TouchableOpacity>
+    <TouchableOpacity style={styles.button}
+         onPress={() => { if(usuario.alta == "Si") props.navigation.navigate('PerfilAdoptar', {
+          userId: usuario.id,
+        });  }}
+          >
+         <Text style={styles.buttonText}>Perfil Adoptar</Text> 
     </TouchableOpacity>
   </View>
 </ScrollView>
