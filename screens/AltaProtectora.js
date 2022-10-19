@@ -8,9 +8,6 @@ import firebase from '../database/firebase';
 const AltaProtectora = (props) => {
     DropDownPicker.setListMode("SCROLLVIEW");
 
-    const [emails, setEmails] = useState([]);
-    const [colore, setColor] = useState('black');
-
     const [protectora, setProtectora] = useState({
         descripcion: "",
         email: "",
@@ -149,7 +146,7 @@ const AltaProtectora = (props) => {
             <View 
             style={styles.descripcion}>
                 <TextInput                     
-                    style={{fontSize: 17, color: colore}}
+                    style={{fontSize: 17}}
                     placeholder="Descripcion (max. 200 caracteres)"
                     maxLength = {200}
                     multiline = {true}

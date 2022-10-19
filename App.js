@@ -21,6 +21,7 @@ import UserDetailScreen from './screens/UserDetailScreen';
 import Home from './screens/Home';
 import RegistrarAnimal from './screens/RegistrarAnimal';
 import AltaGlobal from './screens/AltaGlobal';
+import PerfilAdoptar from './screens/PerfilAdoptar';
 
 
 function MyStack (){

@@ -40,9 +40,7 @@ const InicioSesion = (props) => {
             if (!snapshot2.empty) {
                 snapshot2.forEach((doc) => {
                     const {contraseña} = doc.data();
-                    console.log(doc.id)
                     if(contraseña == state.contraseña) {
-                        console.log(doc.data());
                         usuarioCorrecto = true;
                         props.navigation.navigate('UserDetailScreen', {userId: doc.id})
                     }
