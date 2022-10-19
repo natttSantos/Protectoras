@@ -1,4 +1,4 @@
-import firebase from '../database/firebase.js';
+import firebase from '../../database/firebase.js';
 import { Appbar, FAB, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import React, { useEffect, useState } from "react";

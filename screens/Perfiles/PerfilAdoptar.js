@@ -2,7 +2,7 @@ import React, {useEffect, useState } from "react";
 import { ScrollView, View, Text, StyleSheet, TextInput } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Button } from "react-native-elements";
-import firebase from '../database/firebase';
+import firebase from '../../database/firebase';
 
 
 const PerfilAdoptar = (props) => {
