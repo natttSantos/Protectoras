@@ -5,8 +5,16 @@ import {Avatar, ListItem} from "react-native-elements";
 
 const ListaAnimales = (props) => {
 
-    const [animales, setProtectoras] = useState([]);
+  const initialStatee = {
+    imageFirebase:"",
+    staet :""
+    
+  };
+  const [cosas, setState] = useState(initialStatee);
 
+    const [animales, setProtectoras] = useState([]);
+    const URLAnimal = "";
+    var state = "";
     useEffect(() => {
         firebase.db.collection('animales').onSnapshot((querySnapshot) => {
             const listaAnimales = []
@@ -27,14 +35,48 @@ const ListaAnimales = (props) => {
         })
     })
 
+    
+    const loadImage = async () => {
+      firebase
+      .st
+      .ref(`images/${animal.nombre}`)
+      .getDownloadURL().then(function(url) {
+      setState({
+       imageFirebase: url
+    });
+  });
+
+  };
+
+
+
+      const checkImage = () => {
+        const { imageFirebase } = cosas;
+        console.log(imageFirebase);
+        if (cosas != "") {
+          return (
+            <Avatar
+                style={styles.imagen}
+                rounded
+                source={{uri: imageFirebase}} />
+          );
+        }
+        return null;
+      };
+
     return(
         <ScrollView>
             <Text style={styles.titulo}>
                 Lista Animales
             </Text>
             { animales.map((animal) => {
+              //  uploadImage(animal.nombre);
+              //  loadImage();
+                
                 return(
+                    
             <ListItem key={animal.id} 
+            
             bottomDivider
             onPress={() => {
                 props.navigation.navigate("PerfilAnimal", {
@@ -42,6 +84,8 @@ const ListaAnimales = (props) => {
                 });
               }}
             >
+              {loadImage()}
+                
                 <ListItem.Chevron />
                 <ListItem.Content 
                 style={styles.lista}>
