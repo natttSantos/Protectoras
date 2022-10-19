@@ -29,7 +29,7 @@ const InicioSesion = (props) => {
                 console.log(doc.id)
                 if(contraseña == state.contraseña) {
                     usuarioCorrecto = true;
-                    props.navigation.navigate('SesionUsuario', {userId: doc.id})
+                    props.navigation.navigate('SesionUsuario', {userId: doc.id, isUsuario: true})
                 }
                 else {showAlert();}
             })
@@ -44,7 +44,7 @@ const InicioSesion = (props) => {
                     if(contraseña == state.contraseña) {
                         console.log(doc.data());
                         usuarioCorrecto = true;
-                        props.navigation.navigate('SesionUsuario', {userId: doc.id})
+                        props.navigation.navigate('SesionProtectora', {userId: doc.id})
                     }
                     else {showAlert();}
                 })

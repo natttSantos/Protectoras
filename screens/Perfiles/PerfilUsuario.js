@@ -53,7 +53,7 @@ const PerfilUsuario = (props) => {
  return (
   <ScrollView style={styles.container}>
   <View>
-    <Image source={require('../images/perfilUsuario.jpg')} style={styles.image}/>
+    <Image source={require('../../images/perfilUsuario.jpg')} style={styles.image}/>
     <Text style = {styles.texto} >
       {"Nombre: " + usuario.nombre}
     </Text>
@@ -104,7 +104,8 @@ const PerfilUsuario = (props) => {
   }, 
   button: {
     alignItems: "center",
-    padding: 10, 
+    padding: 10,
+    marginTop : 25,
     backgroundColor: "#6c91c2",
   },
   buttonText: {

@@ -35,14 +35,14 @@ const PerfilProtectora = (props) => {
   };
 
   useEffect(() => {
-    getProtectoraById(props.route.params.protectoraId);
+    getProtectoraById(props.route.params.userId);
   }, []);
 
   return (
     <ScrollView style={styles.container}>
 
       <View>
-        <Image source={require('../images/Greenpeace.jpg')} style={styles.image}/>
+        <Image source={require('../../images/Greenpeace.jpg')} style={styles.image}/>
         <Text style = {styles.texto} >
           {"Nombre: " + protectora.nombre}
         </Text>
