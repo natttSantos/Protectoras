@@ -42,6 +42,7 @@ const AltaAdoptar = (props) => {
 
     const updateUsuario = async () => {
         if (usuario.nombre == '' || usuario.apellidos == '' || usuario.localizacion == '' || usuario.dni == ''|| usuario.n_animales == '') {
+            console.log(usuario.apellidos);
             validateFields();
         } else{
         const usuarioRef = firebase.db.collection("users").doc(usuario.id);
@@ -63,6 +64,7 @@ const AltaAdoptar = (props) => {
 
     const validateFields = () => {
         let textoAlerta = "Complete el campo: ";
+        console.log(usuario.apellidos);
         if (usuario.nombre == ''){
             textoAlerta += "\n - Nombre "; 
         } if (usuario.apellidos == ''){
@@ -92,6 +94,7 @@ const AltaAdoptar = (props) => {
             <View 
             style={styles.inputGroup}>
                 <TextInput 
+                
                     style={styles.inputText}
                     placeholder="Apellidos"
                     onChangeText={(value) => handleChangeText('apellidos', value)}
