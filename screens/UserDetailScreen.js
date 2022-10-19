@@ -55,8 +55,8 @@ const UserDetailScreen = (props) => {
     }
 
     useEffect(() => {
-        getProtectoraPorId(props.route.params.protectoraId)
-        getAllAnimalesDeProtectora(props.route.params.protectoraId)
+        getProtectoraPorId(props.route.params.userId)
+        getAllAnimalesDeProtectora(props.route.params.userId)
     }, [])
 
 

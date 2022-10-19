@@ -22,10 +22,10 @@ const InicioSesion = (props) => {
     const validateUser = async () => {
         var usuarioCorrecto = false;
         const usuarios = firebase.db.collection("users");
-        const snapshot = await usuarios.where("email", "==", state.email).get();
+        const snapshot = await usuarios.where("email", "==", state.email.trim()).get();
         if (!snapshot.empty) {
             snapshot.forEach((doc) => {
-                const {email, contraseña} = doc.data();
+                const {contraseña} = doc.data();
                 console.log(doc.id)
                 if(contraseña == state.contraseña) {
                     usuarioCorrecto = true;
@@ -36,10 +36,10 @@ const InicioSesion = (props) => {
         }
         else {
             const protectoras = firebase.db.collection("protectoras");
-            const snapshot2 = await protectoras.where("email", "==", state.email).get();
+            const snapshot2 = await protectoras.where("email", "==", state.email.trim()).get();
             if (!snapshot2.empty) {
                 snapshot2.forEach((doc) => {
-                    const {email, contraseña} = doc.data();
+                    const {contraseña} = doc.data();
                     console.log(doc.id)
                     if(contraseña == state.contraseña) {
                         console.log(doc.data());
