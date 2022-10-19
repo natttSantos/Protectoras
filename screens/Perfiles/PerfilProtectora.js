@@ -12,7 +12,7 @@ import {
 import { TextInput } from "react-native-gesture-handler";
 import { TouchableOpacity } from "react-native";
 
-import firebase from "../database/firebase";
+import firebase from "../../database/firebase";
 
 const PerfilProtectora = (props) => {
 

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { View, Button, TextInput, Text, StyleSheet, ScrollView, ProgressViewIOSComponent} from "react-native";
-import firebase from '../database/firebase';
+import firebase from '../../database/firebase';
 import {Avatar, ListItem} from "react-native-elements";
 
 const ListaAnimales = (props) => {

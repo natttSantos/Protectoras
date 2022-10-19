@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import { View, Button, TextInput, StyleSheet, ScrollView, Text} from "react-native";
 import { color } from "react-native-elements/dist/helpers/index.js";
-import firebase from '../database/firebase.js';
+import firebase from '../../database/firebase.js';
 
 const RegistrarUsuario = (props) => {
     
