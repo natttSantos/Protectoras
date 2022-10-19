@@ -7,20 +7,22 @@ const Stack = createNativeStackNavigator()
 
  //Importamos los tres componentes creados: 
 import InicioSesion from './screens/InicioSesion'
-import RegistrarUsuario from './screens/RegistrarUsuario'
+import RegistrarUsuario from './screens/Altas/RegistrarUsuario'
 import PrincipalScreen from './screens/PrincipalScreen'
-import ListaProtectoras from './screens/ListaProtectoras'
-import AltaProtectora from './screens/AltaProtectora'
-import ListaAnimales from './screens/ListaAnimales';
-import PerfilAnimal from './screens/PerfilAnimal';
-import SesionUsuario from './screens/SesionUsuario';
-import PerfilUsuario from './screens/PerfilUsuario';
-import PerfilProtectora from './screens/PerfilProtectora';
-import AltaAdoptar from './screens/AltaAdoptar';
+import ListaProtectoras from './screens/Listas/ListaProtectoras'
+import AltaProtectora from './screens/Altas/AltaProtectora'
+import ListaAnimales from './screens/Listas/ListaAnimales';
+import PerfilAnimal from './screens/Perfiles/PerfilAnimal';
+import SesionUsuario from './screens/Sesiones/SesionUsuario';
+import PerfilUsuario from './screens/Perfiles/PerfilUsuario';
+import PerfilProtectora from './screens/Perfiles/PerfilProtectora';
+import AltaAdoptar from './screens/Altas/AltaAdoptar';
 import UserDetailScreen from './screens/UserDetailScreen';
 import Home from './screens/Home';
-import RegistrarAnimal from './screens/RegistrarAnimal';
-import PerfilAdoptar from './screens/PerfilAdoptar';
+import RegistrarAnimal from './screens/Altas/RegistrarAnimal';
+import AltaGlobal from './screens/Altas/AltaGlobal';
+import PerfilAdoptar from './screens/Perfiles/PerfilAdoptar';
+
 
 
 function MyStack (){
@@ -35,6 +37,7 @@ function MyStack (){
       <Stack.Screen name="PerfilAnimal" component={PerfilAnimal} />
       <Stack.Screen name="SesionUsuario" component={SesionUsuario} />
       <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="AltaGlobal" component={AltaGlobal} />
       <Stack.Screen name="RegistrarAnimal" component={RegistrarAnimal} />
       <Stack.Screen name="PerfilUsuario" component={PerfilUsuario} />
       <Stack.Screen name="PerfilProtectora" component={PerfilProtectora} />

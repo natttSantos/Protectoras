@@ -16,8 +16,6 @@ import {
 } from "react-native";
 import { style } from 'deprecated-react-native-prop-types/DeprecatedViewPropTypes.js';
 
-const BOTTOM_APPBAR_HEIGHT = 80;
-const MEDIUM_FAB_HEIGHT = 56;
 
 const UserDetailScreen = (props) => {
 
@@ -57,8 +55,8 @@ const UserDetailScreen = (props) => {
     }
 
     useEffect(() => {
-        getProtectoraPorId(props.route.params.protectoraId)
-        getAllAnimalesDeProtectora(props.route.params.protectoraId)
+        getProtectoraPorId(props.route.params.userId)
+        getAllAnimalesDeProtectora(props.route.params.userId)
     }, [])
 
 
@@ -78,15 +76,6 @@ const UserDetailScreen = (props) => {
                         </ListItem>);
                 })}
                 </ScrollView>
-                <Appbar style = {styles.bottom}>
-
-                    <Appbar.Content title={protectoraActual.nombre} />
-                    <Appbar.Action icon="home" onPress={() => { } } />
-                    <Appbar.Action icon="plus-circle" onPress={() => { } } />
-                    <Appbar.Action icon="chat" onPress={() => { } } />
-                    <Appbar.Action icon="account" onPress={() => { } } />
-                </Appbar>
-                    
                 </>
         
         );

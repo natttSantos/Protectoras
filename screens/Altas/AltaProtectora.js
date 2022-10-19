@@ -3,13 +3,10 @@ import React, {useEffect, useState} from "react";
 import { ScrollView, View, Text, StyleSheet, TextInput } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Button } from "react-native-elements";
-import firebase from '../database/firebase';
+import firebase from '../../database/firebase';
 
 const AltaProtectora = (props) => {
     DropDownPicker.setListMode("SCROLLVIEW");
-
-    const [emails, setEmails] = useState([]);
-    const [colore, setColor] = useState('black');
 
     const [protectora, setProtectora] = useState({
         descripcion: "",
@@ -94,6 +91,7 @@ const AltaProtectora = (props) => {
             style={styles.inputGroup}> 
                 <TextInput 
                 style={styles.inputText}
+                secureTextEntry={true}
                 placeholder="* Contraseña"
                 onChangeText={(value) => handleChangeText('contraseña', value)}
                 />
@@ -148,9 +146,10 @@ const AltaProtectora = (props) => {
             <View 
             style={styles.descripcion}>
                 <TextInput                     
-                    style={{fontSize: 17, color: colore}}
+                    style={{fontSize: 17}}
                     placeholder="Descripcion (max. 200 caracteres)"
-                    maxLength = {15}
+                    maxLength = {200}
+                    multiline = {true}
                     onChangeText={(value) => {
                         if (value.length == 180)
                             alert("¡Cuidado! Su descripción ya contiene 180 caracteres (max. 200)")

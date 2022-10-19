@@ -1,16 +1,17 @@
-import firebase from '../database/firebase.js';
+import firebase from '../../database/firebase.js';
 import { Appbar, FAB, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import React, { useEffect, useState } from "react";
 import Icon from 'react-native-vector-icons/Ionicons'
 
 import { Tab } from 'react-native-elements';
-import PerfilUsuario from './PerfilUsuario.js';
+import PerfilUsuario from '../Perfiles/PerfilUsuario.js';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import RegistrarUsuario from './RegistrarUsuario.js';
-import UserDetailScreen from './UserDetailScreen.js';
-import Home from './Home.js';
-import RegistrarAnimal from './RegistrarAnimal';
+import RegistrarUsuario from '../Altas/RegistrarUsuario.js';
+import UserDetailScreen from '../UserDetailScreen.js';
+import Home from '../Home.js';
+import RegistrarAnimal from '../Altas/RegistrarAnimal';
+import AltaGlobal from '../Altas/AltaGlobal.js';
 
 const SesionUsuario = (props) => {
 
@@ -54,7 +55,7 @@ useEffect(() => {
         }}
         initialParams={{ userId: props.route.params.userId }}
       />
-      <Tab.Screen name = 'Add' component = {RegistrarAnimal} 
+      <Tab.Screen name = 'Add' component = {AltaGlobal} 
          options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
