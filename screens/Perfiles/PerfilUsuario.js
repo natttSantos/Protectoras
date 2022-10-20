@@ -104,7 +104,8 @@ const PerfilUsuario = (props) => {
   }, 
   button: {
     alignItems: "center",
-    padding: 10, 
+    padding: 10,
+    marginTop : 25,
     backgroundColor: "#6c91c2",
   },
   buttonText: {
