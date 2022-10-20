@@ -1,38 +1,33 @@
 import firebase from '../database/firebase.js';
-import { Appbar, FAB, useTheme } from 'react-native-paper';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import React, { useEffect, useState } from "react";
-import {Avatar, ListItem} from "react-native-elements";
+import Icon from 'react-native-vector-icons/Ionicons'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {   
-    ScrollView,
-    Button,
-    Text,
     View,
-    Alert,
     ActivityIndicator,
-    StyleSheet,
-    Image,
-    TextInput
-} from "react-native";
-import { style } from 'deprecated-react-native-prop-types/DeprecatedViewPropTypes.js';
+    StyleSheet} from "react-native";
+
+import ListaAnimalesProtectora from './Listas/ListaAnimalesProtectora';
+import PerfilProtectora from './Perfiles/PerfilProtectora';
 
 
 const UserDetailScreen = (props) => {
-
+    const Tab = createBottomTabNavigator(); 
     const [protectoraActual, setProtectora] = useState({
         id: "",
         nombre: ""
     })
 
     const [animales, setAnimales] = useState([])
+    const [loading, setLoading] = useState(true);
 
     const getProtectoraPorId = async (id) => {
         const dbRef = firebase.db.collection('protectoras').doc(id)
         const doc = await dbRef.get()
-        const protectoraActual = doc.data()
+        const protectora = doc.data()
         setProtectora({
             ...protectoraActual,
-            id: protectoraActual.id
+            id: protectora.id
         })
     }
 
@@ -42,15 +37,20 @@ const UserDetailScreen = (props) => {
         const dbRef = firebase.db.collection('animales').where("id_protectora", "==", id)
         const docs = await dbRef.get()
         docs.forEach(doc => {
-            const {nombre} = doc.data()
+            const {nombre, sexo, edad, raza} = doc.data()
             animales.push({
                 id: doc.id,
                 id_protectora: id,
-                nombre
+                nombre,
+                raza,
+                edad,
+                sexo
+
             })
         })
 
         setAnimales(animales)
+        setLoading(false)
         //const animales = doc.data()
     }
 
@@ -60,25 +60,37 @@ const UserDetailScreen = (props) => {
     }, [])
 
 
-        return (
-            <><ScrollView>
-                {animales.map(animal => {
-                    return (
-                        <ListItem key={animal.id}
-                            bottomDivider>
-                            <Avatar 
-                            style = {styles.imagen}
-                            source = {{uri: 'https://statics.memondo.com/p/s1/ccs/2022/10/CC_2795378_7e45a8644f28403f99ef1c5df2008edf_meme_otros_este_es_mierdon_thumb_fb.jpg?cb=7121585'}}/>
-                            <ListItem.Content 
-                            style = {styles.lista}>
-                                <ListItem.Title> {animal.nombre} </ListItem.Title>
-                            </ListItem.Content>
-                        </ListItem>);
-                })}
-                </ScrollView>
-                </>
-        
-        );
+    if (loading) {
+         return (
+            <View>
+                <ActivityIndicator />
+            </View>
+         )       
+    }
+    return (
+        <>
+        <Tab.Navigator>
+            <Tab.Screen name='Home' component={ListaAnimalesProtectora}
+            options={{
+                headerShown: false,
+                tabBarIcon: () => (
+                    <Icon name="home-outline" size={35} color={'blue'} />
+                )
+            }} 
+            initialParams={{animales: animales}}/>
+            <Tab.Screen name='Perfil' component={PerfilProtectora}
+            options={{
+                headerShown: false,
+                tabBarIcon: () => (
+                    <Icon name="person-circle-outline" size={35} color={'blue'} />
+                )
+            }}
+            initialParams={{protectoraId: props.route.params.userId}}
+            />
+        </Tab.Navigator>
+        </>
+    
+    );
 }
 
 const styles = StyleSheet.create({
@@ -105,14 +117,8 @@ const styles = StyleSheet.create({
               fontSize: 40,
               fontWeight: 'bold',
               textAlign: "left"
-          },
-          lista: {
-              margin: 12,
-              padding: 10
-          },
-          imagen: {
-              height: 60,
-              width: 60
           }
       });
+
+
 export default UserDetailScreen; 

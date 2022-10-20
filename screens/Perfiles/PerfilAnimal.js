@@ -150,7 +150,7 @@ const PerfilAnimal = (props) => {
     <ScrollView style={styles.container}>
 
       <View>
-        <Image source={require('../images/gatitos.jpg')} style={styles.image}/>
+        <Image source={require('../../images/gatitos.jpg')} style={styles.image}/>
         <Text style = {styles.texto} >
           {"Nombre: " + animal.nombre}
         </Text>

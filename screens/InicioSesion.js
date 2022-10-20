@@ -42,7 +42,7 @@ const InicioSesion = (props) => {
                     const {contraseña} = doc.data();
                     if(contraseña == state.contraseña) {
                         usuarioCorrecto = true;
-                        props.navigation.navigate('SesionUsuario', {userId: doc.id})
+                        props.navigation.navigate('UserDetailScreen', {userId: doc.id})
                     }
                     else {showAlert();}
                 })

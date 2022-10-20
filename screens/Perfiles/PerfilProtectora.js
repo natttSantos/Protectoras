@@ -42,7 +42,7 @@ const PerfilProtectora = (props) => {
     <ScrollView style={styles.container}>
 
       <View>
-        <Image source={require('../images/Greenpeace.jpg')} style={styles.image}/>
+        <Image source={require('../../images/Greenpeace.jpg')} style={styles.image}/>
         <Text style = {styles.texto} >
           {"Nombre: " + protectora.nombre}
         </Text>
