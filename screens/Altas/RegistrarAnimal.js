@@ -3,7 +3,8 @@ import { ScrollView, View, Text, StyleSheet, TextInput,TouchableOpacity } from "
 import DropDownPicker from "react-native-dropdown-picker";
 import { Button } from "react-native-elements";
 import firebase from '../../database/firebase';
-import DatePicker, { getToday } from 'react-native-modern-datepicker';
+import DatePicker from 'react-native-date-picker'
+
 
 
 
@@ -19,8 +20,8 @@ const RegistrarAnimal = (props) => {
     });
     const drop = DropDownPicker.setListMode("SCROLLVIEW");
    
-   
-
+    const [date, setDate] = useState(new Date())
+    const [openDate, setOpenDate] = useState(false)
 
     const [sexoOpen, setSexoOpen] = useState(false);
     const [sexoValue, setSexoValue] = useState(null);
@@ -200,7 +201,19 @@ const RegistrarAnimal = (props) => {
                 
                
             
-               
+        <Button title="Open" onPress={() => setOpenDate(true)} />
+      <DatePicker
+        modal
+        open={openDate}
+        date={date}
+        onConfirm={(date) => {
+          setOpenDate(false)
+          setDate(date)
+        }}
+        onCancel={() => {
+          setOpenDate(false)
+        }}
+      />
                 
                 <TextInput 
                     style={styles.inputs}
