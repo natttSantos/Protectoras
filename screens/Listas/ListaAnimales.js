@@ -36,13 +36,14 @@ const ListaAnimales = (props) => {
     })
 
     
-    const loadImage = async () => {
+    const loadImage = p = async () => {
+      console.log(p);
       firebase
       .st
-      .ref(`images/${animal.nombre}`)
+      .ref(`images/${p}`)
       .getDownloadURL().then(function(url) {
       setState({
-       imageFirebase: url
+       url
     });
   });
 
@@ -71,7 +72,7 @@ const ListaAnimales = (props) => {
             </Text>
             { animales.map((animal) => {
               //  uploadImage(animal.nombre);
-              //  loadImage();
+            //  {loadImage(animal.nombre)}
                 
                 return(
                     
@@ -84,8 +85,7 @@ const ListaAnimales = (props) => {
                 });
               }}
             >
-              {loadImage()}
-                
+              {checkImage()}
                 <ListItem.Chevron />
                 <ListItem.Content 
                 style={styles.lista}>

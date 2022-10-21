@@ -50,6 +50,8 @@ const PerfilUsuario = (props) => {
         </View>
       );
     }
+
+    //<Image source={require('../images/perfilUsuario.jpg')} style={styles.image}/>
  return (
   <ScrollView style={styles.container}>
   <View>

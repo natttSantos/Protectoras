@@ -23,14 +23,14 @@ import RegistrarAnimal from './screens/Altas/RegistrarAnimal';
 import AltaGlobal from './screens/Altas/AltaGlobal';
 import PerfilAdoptar from './screens/Perfiles/PerfilAdoptar';
 import SesionUsuario from './screens/Sesiones/SesionUsuario';
-import SesionProtectora from './screens/Sesiones/SesionProtectora';
+import SesionProtectora from './screens/SesionProtectora/SesionProtectora';
 
 
 
 function MyStack (){
   return (
     <Stack.Navigator>
-      <Stack.Screen name="PrincipalScreen" component={PrincipalScreen}/>
+      <Stack.Screen name="PrincipalScreen" component={PrincipalScreen} options={{headerShown: false}}/>
       <Stack.Screen name="AltaProtectora" component={AltaProtectora} />
       <Stack.Screen name="ListaAnimales" component={ListaAnimales} />
       <Stack.Screen name="ListaProtectoras" component={ListaProtectoras}/>
@@ -45,7 +45,7 @@ function MyStack (){
       <Stack.Screen name="PerfilUsuario" component={PerfilUsuario} />
       <Stack.Screen name="PerfilProtectora" component={PerfilProtectora} />
       <Stack.Screen name="AltaAdoptar" component={AltaAdoptar} />
-      <Stack.Screen name="UserDetailScreen" component={UserDetailScreen} />
+      <Stack.Screen name="UserDetailScreen" component={UserDetailScreen} options={{title: 'Detalles'}} />
       <Stack.Screen name="PerfilAdoptar" component={PerfilAdoptar} />
     </Stack.Navigator>
   )

@@ -1,4 +1,4 @@
-import firebase from '../database/firebase.js';
+import firebase from '../../database/firebase.js';
 import React, { useEffect, useState } from "react";
 import Icon from 'react-native-vector-icons/Ionicons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -7,11 +7,11 @@ import {
     ActivityIndicator,
     StyleSheet} from "react-native";
 
-import ListaAnimalesProtectora from './Listas/ListaAnimalesProtectora';
-import PerfilProtectora from './Perfiles/PerfilProtectora';
+import ListaAnimalesProtectora from '../Listas/ListaAnimalesProtectora';
+import PerfilProtectora from '../Perfiles/PerfilProtectora';
 
 
-const UserDetailScreen = (props) => {
+const SesionProtectora = (props) => {
     const Tab = createBottomTabNavigator(); 
     const [protectoraActual, setProtectora] = useState({
         id: "",
@@ -85,7 +85,7 @@ const UserDetailScreen = (props) => {
                     <Icon name="person-circle-outline" size={35} color={'blue'} />
                 )
             }}
-            initialParams={{protectoraId: props.route.params.userId}}
+            initialParams={{userId: props.route.params.userId}}
             />
         </Tab.Navigator>
         </>
@@ -121,4 +121,4 @@ const styles = StyleSheet.create({
       });
 
 
-export default UserDetailScreen; 
+export default SesionProtectora; 
