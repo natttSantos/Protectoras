@@ -36,11 +36,11 @@ const ListaAnimales = (props) => {
     })
 
     
-    const loadImage = p = async () => {
+    const loadImage = async () => {
       console.log(p);
       firebase
       .st
-      .ref(`images/${p}`)
+      .ref(`images/${animal}`)
       .getDownloadURL().then(function(url) {
       setState({
        url
@@ -85,7 +85,6 @@ const ListaAnimales = (props) => {
                 });
               }}
             >
-              {checkImage()}
                 <ListItem.Chevron />
                 <ListItem.Content 
                 style={styles.lista}>
