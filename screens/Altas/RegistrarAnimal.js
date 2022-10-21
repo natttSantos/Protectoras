@@ -14,6 +14,7 @@ const RegistrarAnimal = (props) => {
       raza:"",
       sexo:"",
       descripcion:"",
+      foto:""
       
     });
     const drop = DropDownPicker.setListMode("SCROLLVIEW");
@@ -46,7 +47,7 @@ const RegistrarAnimal = (props) => {
     }; 
 
     const saveNewUser =  async () => {
-        if (state.nombre == '' || state.raza == '' || state.descripcion == '' || state.tipo == '' || state.sexo ==''){
+        if (state.nombre == '' || state.raza == '' || state.descripcion == '' || state.tipo == '' || state.sexo =='' || state.foto ==""){
             validateNullFields(); 
         } else{ 
             await firebase.db.collection('animales').add({
@@ -82,9 +83,66 @@ const RegistrarAnimal = (props) => {
         if (state.sexo == ''){
             textoAlerta += "\n - Sexo "; 
         }
+        if (state.foto == ''){
+            textoAlerta += "\n - Foto "; 
+        }
         alert (textoAlerta); 
     }
+    const uploadImage = uri => {
+        return new Promise((resolve, reject) => {
+          console.log(resolve + " " + reject);
+          let xhr = new XMLHttpRequest();
+          xhr.onerror = reject;
+          xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+              resolve(xhr.response);
+            }
+          };
     
+          xhr.open("GET", uri);
+          xhr.responseType = "blob";
+          xhr.send();
+        });
+      };
+
+
+      const openGallery = async () => {
+    
+        const resultPermission =true; 
+        if (resultPermission) {
+          const resultImagePicker = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [4, 3]
+          });
+    
+          if (resultImagePicker.cancelled === false) {
+            const imageUri = resultImagePicker.uri;
+            uploadImage(imageUri)
+              .then(resolve => {
+                let ref = firebase
+                .st
+                .ref()
+                .child(`images/${animal.nombre}`);
+                ref
+                  .put(resolve)
+                  .then(resolve => {
+                    console.log("Imagen subida correctamente");
+                    setState({
+                        foto: "Si"
+                     });
+                  })
+                  .catch(error => {
+                    console.log(error);
+                    console.log(error);
+                    console.log("Error al subir la imagen");
+                  });
+              })
+              .catch(error => {
+                console.log(error);
+              });
+          }
+        }
+      };
     
 
     return(
@@ -158,6 +216,13 @@ const RegistrarAnimal = (props) => {
                     placeholder="Descripción (max 200 caracteres)"
                     onChangeText={(value) => handleChangeText('descripcion', value)}
                     />
+
+                <TouchableOpacity  
+                    style={styles.boton} 
+                    onPress={() => openGallery()}
+                    >
+                    <Text>Selecciona una imagen</Text>
+                </TouchableOpacity>
 
                 <TouchableOpacity 
                     onPress={() => {saveNewUser()}}
