@@ -50,10 +50,12 @@ const PerfilUsuario = (props) => {
         </View>
       );
     }
+
+    //<Image source={require('../images/perfilUsuario.jpg')} style={styles.image}/>
  return (
   <ScrollView style={styles.container}>
   <View>
-    <Image source={require('../images/perfilUsuario.jpg')} style={styles.image}/>
+
     <Text style = {styles.texto} >
       {"Nombre: " + usuario.nombre}
     </Text>
