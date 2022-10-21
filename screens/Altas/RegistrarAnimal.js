@@ -45,6 +45,7 @@ const RegistrarAnimal = (props) => {
     const handleChangeText = (nombre, value) => {
         setState({...state, [nombre]: value}); 
     }; 
+    
 
     const saveNewUser =  async () => {
         if (state.nombre == '' || state.raza == '' || state.descripcion == '' || state.tipo == '' || state.sexo =='' || state.foto ==""){
