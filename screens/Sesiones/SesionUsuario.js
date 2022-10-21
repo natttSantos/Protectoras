@@ -14,15 +14,17 @@ import RegistrarAnimal from '../Altas/RegistrarAnimal';
 import AltaGlobal from '../Altas/AltaGlobal.js';
 
 const SesionUsuario = (props) => {
-
+  const initialState = {
+    usuario: "",
+    email: "" , 
+    telefono: "", 
+    nombre: "",
+    contraseña: "",
+    alta:""
+}
   const Tab = createBottomTabNavigator(); 
 
-  const initialState = {
-    usuario: "", 
-    email: "",
-    contraseña: "",
-    telefono: ""
-}
+
 const [usuario, setUsuario] = useState(initialState);
 const [loading, setLoading] = useState(true);
 
@@ -53,7 +55,7 @@ useEffect(() => {
             <Icon name="home-outline" size={35} color={'blue'} />
           )
         }}
-        initialParams={{ userId: props.route.params.userId }}
+        initialParams={{ userId: props.route.params.userId, isUsuario:true }}
       />
       <Tab.Screen name = 'Add' component = {AltaGlobal} 
          options={{
@@ -62,7 +64,7 @@ useEffect(() => {
             <Icon name="add-circle-outline" size={35} color={'blue'} />
           )
         }}
-        initialParams={{ userId: props.route.params.userId }}
+        initialParams={{ userId: props.route.params.userId, isUsuario:true}}
       />
       <Tab.Screen name = 'Perfil' component = {PerfilUsuario} 
         options={{

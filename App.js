@@ -13,7 +13,7 @@ import ListaProtectoras from './screens/Listas/ListaProtectoras'
 import AltaProtectora from './screens/Altas/AltaProtectora'
 import ListaAnimales from './screens/Listas/ListaAnimales';
 import PerfilAnimal from './screens/Perfiles/PerfilAnimal';
-import SesionUsuario from './screens/Sesiones/SesionUsuario';
+import Sesion from './screens/Sesiones/SesionUsuario';
 import PerfilUsuario from './screens/Perfiles/PerfilUsuario';
 import PerfilProtectora from './screens/Perfiles/PerfilProtectora';
 import AltaAdoptar from './screens/Altas/AltaAdoptar';
@@ -22,13 +22,15 @@ import Home from './screens/Home';
 import RegistrarAnimal from './screens/Altas/RegistrarAnimal';
 import AltaGlobal from './screens/Altas/AltaGlobal';
 import PerfilAdoptar from './screens/Perfiles/PerfilAdoptar';
+import SesionUsuario from './screens/Sesiones/SesionUsuario';
+import SesionProtectora from './screens/SesionProtectora/SesionProtectora';
 
 
 
 function MyStack (){
   return (
     <Stack.Navigator>
-      <Stack.Screen name="PrincipalScreen" component={PrincipalScreen}/>
+      <Stack.Screen name="PrincipalScreen" component={PrincipalScreen} options={{headerShown: false}}/>
       <Stack.Screen name="AltaProtectora" component={AltaProtectora} />
       <Stack.Screen name="ListaAnimales" component={ListaAnimales} />
       <Stack.Screen name="ListaProtectoras" component={ListaProtectoras}/>
@@ -36,13 +38,14 @@ function MyStack (){
       <Stack.Screen name="RegistrarUsuario" component={RegistrarUsuario} />
       <Stack.Screen name="PerfilAnimal" component={PerfilAnimal} />
       <Stack.Screen name="SesionUsuario" component={SesionUsuario} />
+      <Stack.Screen name="SesionProtectora" component={SesionProtectora} />
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="AltaGlobal" component={AltaGlobal} />
       <Stack.Screen name="RegistrarAnimal" component={RegistrarAnimal} />
       <Stack.Screen name="PerfilUsuario" component={PerfilUsuario} />
       <Stack.Screen name="PerfilProtectora" component={PerfilProtectora} />
       <Stack.Screen name="AltaAdoptar" component={AltaAdoptar} />
-      <Stack.Screen name="UserDetailScreen" component={UserDetailScreen} />
+      <Stack.Screen name="UserDetailScreen" component={UserDetailScreen} options={{title: 'Detalles'}} />
       <Stack.Screen name="PerfilAdoptar" component={PerfilAdoptar} />
     </Stack.Navigator>
   )

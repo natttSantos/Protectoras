@@ -12,15 +12,10 @@ import {
   Text
 } from "react-native";
 import { TouchableOpacity } from 'react-native-gesture-handler';
-
-
+ 
 const Home = (props) => {
     const initialState = {
-        usuario: "",
-        email: "" , 
-        telefono: "", 
-        nombre: "",
-        contraseña: "",
+        nombre: ""  
     }
     const [usuario, setUsario] = useState(initialState);
     const [loading, setLoading] = useState(true);
@@ -30,10 +25,14 @@ const Home = (props) => {
     };
   
     const getUsuarioById = async (id) => {
-      const dbRef = firebase.db.collection("users").doc(id);
+      dbRef = null; 
+      if (props.route.params.isUsuario == false){
+        dbRef = firebase.db.collection("protectoras").doc(id);
+      } else{
+        dbRef = firebase.db.collection("users").doc(id);  
+      }
       const doc = await dbRef.get();
       const usuario = doc.data();
-      console.log(usuario)
       setUsario({ ...usuario, id: doc.id });
       setLoading(false);
     };
