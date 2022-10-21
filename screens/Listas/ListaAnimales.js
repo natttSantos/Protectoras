@@ -85,7 +85,6 @@ const ListaAnimales = (props) => {
                 });
               }}
             >
-              {checkImage()}
                 <ListItem.Chevron />
                 <ListItem.Content 
                 style={styles.lista}>
