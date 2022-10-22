@@ -57,7 +57,7 @@ const PerfilUsuario = (props) => {
   <View>
     <Image source={require('../../images/perfilUsuario.jpg')} style={styles.image}/>
     <Text style = {styles.texto} >
-      {"Nombre: " + usuario.nombre}
+      {"Nombre de usuario: " + usuario.usuario}
     </Text>
     <Text style = {styles.texto} >
       {"Email: " + usuario.email}
@@ -65,20 +65,22 @@ const PerfilUsuario = (props) => {
     <Text style = {styles.texto} >
       {"Telefono: " + usuario.telefono}
     </Text>
-    <TouchableOpacity style={styles.button}
-         onPress={() => { props.navigation.navigate('AltaAdoptar', {
-          userId: usuario.id,
-        });  }}
-          >
-         <Text style={styles.buttonText}>Modificar Perfil Adoptar</Text> 
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.button}
-         onPress={() => { if(usuario.alta == "Si") props.navigation.navigate('PerfilAdoptar', {
-          userId: usuario.id,
-        });  }}
-          >
-         <Text style={styles.buttonText}>Perfil Adoptar</Text> 
-    </TouchableOpacity>
+
+    <Button
+          onPress={() => { if(usuario.alta == "No")props.navigation.navigate('AltaAdoptar', {userId: props.route.params.userId}); 
+          else alert("Ya se ha dado de alta");
+        }}
+          title="Dar de alta para adoptar"
+          color="#841584"
+        />
+
+<Button
+          onPress={() => { if(usuario.alta == "Si")props.navigation.navigate('PerfilAdoptar', {userId: props.route.params.userId}); 
+          else alert("Primero debe sarse de alta");
+        }}
+          title="Perfil adoptar"
+          color="#841584"
+        />
   </View>
 </ScrollView>
 

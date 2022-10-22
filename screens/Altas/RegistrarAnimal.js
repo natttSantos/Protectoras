@@ -47,6 +47,7 @@ const RegistrarAnimal = (props) => {
     const handleChangeText = (nombre, value) => {
         setState({...state, [nombre]: value}); 
     }; 
+    
 
     const saveNewUser =  async () => {
       
