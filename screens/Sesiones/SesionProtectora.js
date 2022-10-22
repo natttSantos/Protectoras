@@ -3,13 +3,13 @@ import { Appbar, FAB, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import React, { useEffect, useState } from "react";
 import Icon from 'react-native-vector-icons/Ionicons'
+import {View, ActivityIndicator} from "react-native"
 
 import { Tab } from 'react-native-elements';
 import PerfilProtectora from '../Perfiles/PerfilProtectora';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import RegistrarUsuario from '../Altas/RegistrarUsuario.js';
-import UserDetailScreen from '../UserDetailScreen.js';
-import Home from '../Home.js';
+import ListaAnimalesProtectora from '../Listas/ListaAnimalesProtectora.js';
 import RegistrarAnimal from '../Altas/RegistrarAnimal';
 import AltaGlobal from '../Altas/AltaGlobal.js';
 
@@ -22,60 +22,86 @@ const SesionProtectora = (props) => {
     url:"",
     descripcion:""
   };
-const Tab = createBottomTabNavigator(); 
+  const Tab = createBottomTabNavigator(); 
 
-const [usuario, setUsuario] = useState(initialState);
-const [loading, setLoading] = useState(true);
+  const [usuario, setUsuario] = useState(initialState);
+  const [animales, setAnimales] = useState([])
+  const [loading, setLoading] = useState(true);
 
-const handleTextChange = (value, prop) => {
-  setUsuario({ ...usuario, [prop]: value });
-};
+  const getUsuarioById = async (id) => {
+    const dbRef = firebase.db.collection("users").doc(id);
+    const doc = await dbRef.get();
+    const usuario = doc.data();
+    console.log(usuario)
+    setUsuario({ ...usuario, id: doc.id });
+  };
 
-const getUsuarioById = async (id) => {
-  const dbRef = firebase.db.collection("users").doc(id);
-  const doc = await dbRef.get();
-  const usuario = doc.data();
-  console.log(usuario)
-  setUsuario({ ...usuario, id: doc.id });
-  setLoading(false);
-};
+  const getAllAnimalesDeProtectora = async (id) => {
+    const animales = []
 
-useEffect(() => { 
-  getUsuarioById(props.route.params.userId); 
-}, []);
+    const dbRef = firebase.db.collection('animales').where("id_protectora", "==", id)
+    const docs = await dbRef.get()
+    docs.forEach(doc => {
+        const {nombre, sexo, edad, raza} = doc.data()
+        animales.push({
+            id: doc.id,
+            id_protectora: id,
+            nombre,
+            raza,
+            edad,
+            sexo
+        })
+    })
 
+    setAnimales(animales)
+    setLoading(false)
+    //const animales = doc.data()
+  }
 
-  return (
+  useEffect(() => { 
+    getUsuarioById(props.route.params.userId);
+    getAllAnimalesDeProtectora(props.route.params.userId);
+  }, []);
 
-    <Tab.Navigator>
-      <Tab.Screen name = 'Home' component = {Home} 
-         options={{
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="home-outline" size={35} color={'blue'} />
-          )
-        }}
-        initialParams={{ userId: props.route.params.userId, isUsuario:false}}
-      />
-      <Tab.Screen name = 'Add' component = {AltaGlobal} 
-         options={{
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="add-circle-outline" size={35} color={'blue'} />
-          )
-        }}
-        initialParams={{ userId: props.route.params.userId, isUsuario: false}}
-      />
-      <Tab.Screen name = 'Perfil' component = {PerfilProtectora} 
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="person-circle-outline" size={35} color={'blue'} />
-          )
-        }}
-        initialParams={{ userId: props.route.params.userId }}/>
-    </Tab.Navigator>  
-  );
+  if (loading) {
+    return (
+       <View>
+           <ActivityIndicator />
+       </View>
+    )       
+  }
+
+    return (
+
+      <Tab.Navigator>
+        <Tab.Screen name = 'Home' component = {ListaAnimalesProtectora} 
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <Icon name="home-outline" size={35} color={'blue'} />
+            )
+          }}
+          initialParams={{ animales: animales}}
+        />
+        <Tab.Screen name = 'Add' component = {AltaGlobal} 
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <Icon name="add-circle-outline" size={35} color={'blue'} />
+            )
+          }}
+          initialParams={{ userId: props.route.params.userId, isUsuario: false}}
+        />
+        <Tab.Screen name = 'Perfil' component = {PerfilProtectora} 
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <Icon name="person-circle-outline" size={35} color={'blue'} />
+            )
+          }}
+          initialParams={{ userId: props.route.params.userId }}/>
+      </Tab.Navigator>  
+    );
 };
 
 

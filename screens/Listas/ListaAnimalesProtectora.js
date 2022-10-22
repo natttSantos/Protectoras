@@ -9,19 +9,19 @@ const ListaAnimalesProtectora = (props) => {
     const [imagenes, setImagenes] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const imagenesAux = []
+    let imagenesAux = []
     const animales = props.route.params.animales
 
     const cargarImagenes = async () => {
         let i = animales.length
 
-        await animales.map(async (animal) => {
+        await animales.map(async (animal, index) => {
             await firebase
             .st
             .ref(`images/${animal.nombre}`)
             .getDownloadURL().then(function(url) {
                 i--
-                imagenesAux.push(url)
+                imagenesAux[index] = url
                 setImagenes(...imagenes, imagenesAux)
                 if(i == 0) setLoading(false)
             });
@@ -49,7 +49,6 @@ const ListaAnimalesProtectora = (props) => {
                             onPress={() => {props.navigation.navigate('PerfilAnimal', {animalId: animal.id})}}>
                             <Avatar 
                             style = {styles.imagen}
-                            onPress={() => {console.log(imagenes); console.log(index)}}
                             source={{uri: imagenes[index]}}
                             />
                             <ListItem.Content 
