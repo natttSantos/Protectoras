@@ -42,6 +42,8 @@ const RegistrarUsuario = (props) => {
         }
         if (state.telefono == ''){
             textoAlerta += "\n - Telefono ";  
+        }else if (state.telefono.length != 9 || isNaN(state.telefono)){
+            textoAlerta += "\n - El teléfono debe contener 9 números ";  
         }
         alert (textoAlerta); 
     }

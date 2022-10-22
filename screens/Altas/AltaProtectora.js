@@ -71,6 +71,8 @@ const AltaProtectora = (props) => {
             textoAlerta += "\n - URL de tu web ";  
         } if (protectora.telefono == ''){
             textoAlerta += "\n - Telefono ";  
+        }else if (protectora.telefono.length != 9 || isNaN(protectora.telefono)){
+            textoAlerta += "\n - El teléfono debe contener 9 números ";  
         }
         alert (textoAlerta); 
     }

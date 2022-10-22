@@ -27,8 +27,8 @@ const AltaAdoptar = (props) => {
         setUsuario({ ...usuario, id: doc.id });
         setLoading(false);
       };
-
-    const [usuario, setUsuario] = useState(initialState);
+    const [nuevosDatos, setNuevosDatos] = useState(initialState);
+    const [usuario, setUsuario] = useState();
     const [loading, setLoading] = useState(true);
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState(null)
@@ -37,43 +37,49 @@ const AltaAdoptar = (props) => {
                         {label: 'Cuenca', value: 'Cuenca'}])
 
     const handleChangeText = (nombre, value) => {
-        setUsuario({...usuario, [nombre]: value});
+        setNuevosDatos({...nuevosDatos, [nombre]: value});
     }
 
     const updateUsuario = async () => {
-        if (usuario.nombre == '' || usuario.apellidos == '' || usuario.localizacion == '' || usuario.dni == ''|| usuario.n_animales == '') {
-            console.log(usuario.apellidos);
+        if (nuevosDatos.nombre == '' || nuevosDatos.apellidos == '' || nuevosDatos.localizacion == '' || nuevosDatos.dni == ''|| nuevosDatos.n_animales == '') {
+            console.log(nuevosDatos.apellidos);
             validateFields();
-        } else{
+        } else if (nuevosDatos.nombre != '' && nuevosDatos.apellidos != '' && nuevosDatos.localizacion != '' && nuevosDatos.dni != ''&& nuevosDatos.n_animales != ''){
         const usuarioRef = firebase.db.collection("users").doc(usuario.id);
         console.log(usuario.id);
         await usuarioRef.set({
           alta : "Si",  
-          nombre : usuario.nombre,
-          apellidos : usuario.apellidos,
-          dni : usuario.dni,
-          localizacion : usuario.localizacion,
-          n_animales : usuario.n_animales,
+          nombre : nuevosDatos.nombre,
+          apellidos : nuevosDatos.apellidos,
+          dni : nuevosDatos.dni,
+          localizacion : nuevosDatos.localizacion,
+          n_animales : nuevosDatos.n_animales,
           email : usuario.email,
           contraseña: usuario.contraseña,
           usuario: usuario.usuario,
           telefono: usuario.telefono,
         });
-        setUsuario(initialState);}
+        setUsuario(initialState);
+        props.navigation.navigate('PerfilUsuario', {
+            userId: usuario.id,
+          });
+        }
+        
       };
 
     const validateFields = () => {
         let textoAlerta = "Complete el campo: ";
-        console.log(usuario.apellidos);
-        if (usuario.nombre == ''){
+        if (nuevosDatos.nombre == ''){
             textoAlerta += "\n - Nombre "; 
-        } if (usuario.apellidos == ''){
+        } if (nuevosDatos.apellidos == ''){
             textoAlerta += "\n - Apellidos ";  
-        } if (usuario.dni == ''){
+        } if (nuevosDatos.dni == ''){
             textoAlerta += "\n - DNI "; 
-        } if (usuario.localizacion == ''){
+        }else if(nuevosDatos.dni.length != 9){
+            textoAlerta += "\n - El DNI está compuesto por 8 números y una letra"; 
+        }  if (nuevosDatos.localizacion == ''){
             textoAlerta += "\n - Localización ";  
-        } if (usuario.n_animales == ''){
+        } if (nuevosDatos.n_animales == ''){
             textoAlerta += "\n - Número de animales ";  
         }
         alert (textoAlerta); 
@@ -135,9 +141,7 @@ const AltaAdoptar = (props) => {
                 <Button 
                 title="Dar de alta" 
                 onPress={() => {updateUsuario();
-                    props.navigation.navigate('PerfilUsuario', {
-                        userId: usuario.id,
-                      }); }}/>
+                     }}/>
             </View>
         </ScrollView>
     )
