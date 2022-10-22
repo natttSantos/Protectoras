@@ -124,7 +124,6 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
 
   };
 */
-
   const getAnimalById = async (id) => {
     const dbRef = firebase.db.collection("animales").doc(id);
     const doc = await dbRef.get();

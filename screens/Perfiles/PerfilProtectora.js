@@ -37,7 +37,7 @@ const PerfilProtectora = (props) => {
   useEffect(() => {
     getProtectoraById(props.route.params.userId);
   }, []);
-
+//<Image source={require(' /images/Greenpeace.jpg')} style={styles.image}/>
   return (
     <ScrollView style={styles.container}>
 

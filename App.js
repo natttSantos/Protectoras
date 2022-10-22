@@ -23,7 +23,7 @@ import RegistrarAnimal from './screens/Altas/RegistrarAnimal';
 import AltaGlobal from './screens/Altas/AltaGlobal';
 import PerfilAdoptar from './screens/Perfiles/PerfilAdoptar';
 import SesionUsuario from './screens/Sesiones/SesionUsuario';
-import SesionProtectora from './screens/SesionProtectora/SesionProtectora';
+import SesionProtectora from './screens/Sesiones/SesionProtectora';
 
 
 

@@ -4,6 +4,8 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { Button } from "react-native-elements";
 import firebase from '../../database/firebase';
 import DatePicker from 'react-native-modern-datepicker';
+import * as ImagePicker from 'expo-image-picker';
+
 
 
 
@@ -14,12 +16,13 @@ const RegistrarAnimal = (props) => {
       raza:"",
       sexo:"",
       descripcion:"",
+      foto:"",
+      fecha: "21/10/2022"
       
     });
     const drop = DropDownPicker.setListMode("SCROLLVIEW");
    
-    const [chosenDate, setChosenDate] = useState(new Date());
-
+    const [chosenDate, setChosenDate] = useState('');
 
     const [sexoOpen, setSexoOpen] = useState(false);
     const [sexoValue, setSexoValue] = useState(null);
@@ -44,9 +47,12 @@ const RegistrarAnimal = (props) => {
     const handleChangeText = (nombre, value) => {
         setState({...state, [nombre]: value}); 
     }; 
+    
 
     const saveNewUser =  async () => {
+      
         if (state.nombre == '' || state.raza == '' || state.descripcion == '' || state.tipo == '' || state.sexo ==''){
+            console.log(chosenDate); 
             validateNullFields(); 
         } else{ 
             await firebase.db.collection('animales').add({
@@ -54,10 +60,11 @@ const RegistrarAnimal = (props) => {
                 tipo: state.tipo,
                 raza: state.raza,
                 sexo: state.sexo, 
-                decripcion: state.descripcion
+                decripcion: state.descripcion,
+                fecha: chosenDate
             })
             mensajeExito(); 
-            props.navigation.navigate('Home'); 
+            props.navigation.navigate('SesionProtectora', {userId: props.route.params.userId}); 
         }
     } 
     const mensajeExito = () =>{
@@ -82,11 +89,71 @@ const RegistrarAnimal = (props) => {
         if (state.sexo == ''){
             textoAlerta += "\n - Sexo "; 
         }
+        if (state.foto == ''){
+            textoAlerta += "\n - Foto "; 
+        }
         alert (textoAlerta); 
     }
+    const uploadImage = uri => {
+        return new Promise((resolve, reject) => {
+          console.log(resolve + " " + reject);
+          let xhr = new XMLHttpRequest();
+          xhr.onerror = reject;
+          xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+              resolve(xhr.response);
+            }
+          };
     
+          xhr.open("GET", uri);
+          xhr.responseType = "blob";
+          xhr.send();
+        });
+      };
+
+
+      const openGallery = async () => {
+    
+        const resultPermission =true; 
+        if (resultPermission) {
+          const resultImagePicker = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [4, 3]
+          });
+    
+          if (resultImagePicker.cancelled === false) {
+            const imageUri = resultImagePicker.uri;
+            uploadImage(imageUri)
+              .then(resolve => {
+                let ref = firebase
+                .st
+                .ref()
+                .child(`images/${animal.nombre}`);
+                ref
+                  .put(resolve)
+                  .then(resolve => {
+                    console.log("Imagen subida correctamente");
+                    setState({
+                        foto: "Si"
+                     });
+                  })
+                  .catch(error => {
+                    console.log(error);
+                    console.log(error);
+                    console.log("Error al subir la imagen");
+                  });
+              })
+              .catch(error => {
+                console.log(error);
+              });
+          }
+        }
+      };
     
 
+    const validateDate = date => {
+        setState({fecha: date.toDateString()})
+    }
     return(
         <ScrollView style={styles.container}> 
             <Text style={styles.title}> Registrar Animal</Text>
@@ -141,9 +208,14 @@ const RegistrarAnimal = (props) => {
                             />
                 
                
-            
-                <DatePicker
+
+        <TextInput 
+                    style={styles.inputs}
+                    placeholder={state.fecha}
+                    />
+        <DatePicker
                     date={chosenDate}
+                    onChangeText={(date) => handleChangeText('fecha', date.toDateString())}
                     onDateChange={setChosenDate}
                 />
                 
@@ -158,6 +230,13 @@ const RegistrarAnimal = (props) => {
                     placeholder="Descripción (max 200 caracteres)"
                     onChangeText={(value) => handleChangeText('descripcion', value)}
                     />
+
+                <TouchableOpacity  
+                    style={styles.boton} 
+                    onPress={() => openGallery()}
+                    >
+                    <Text>Selecciona una imagen</Text>
+                </TouchableOpacity>
 
                 <TouchableOpacity 
                     onPress={() => {saveNewUser()}}
@@ -214,4 +293,3 @@ const styles = StyleSheet.create({
       }
 })
 export default RegistrarAnimal;
-//getToday()
