@@ -3,7 +3,8 @@ import { ScrollView, View, Text, StyleSheet, TextInput,TouchableOpacity } from "
 import DropDownPicker from "react-native-dropdown-picker";
 import { Button } from "react-native-elements";
 import firebase from '../../database/firebase';
-import DatePicker from 'react-native-date-picker'
+import DatePicker from 'react-native-modern-datepicker';
+import * as ImagePicker from 'expo-image-picker';
 
 
 
@@ -15,13 +16,13 @@ const RegistrarAnimal = (props) => {
       raza:"",
       sexo:"",
       descripcion:"",
-      foto:""
+      foto:"",
+      fecha: "21/10/2022"
       
     });
     const drop = DropDownPicker.setListMode("SCROLLVIEW");
    
-    const [date, setDate] = useState(new Date())
-    const [openDate, setOpenDate] = useState(false)
+    const [chosenDate, setChosenDate] = useState('');
 
     const [sexoOpen, setSexoOpen] = useState(false);
     const [sexoValue, setSexoValue] = useState(null);
@@ -48,7 +49,9 @@ const RegistrarAnimal = (props) => {
     }; 
 
     const saveNewUser =  async () => {
-        if (state.nombre == '' || state.raza == '' || state.descripcion == '' || state.tipo == '' || state.sexo =='' || state.foto ==""){
+      
+        if (state.nombre == '' || state.raza == '' || state.descripcion == '' || state.tipo == '' || state.sexo ==''){
+            console.log(chosenDate); 
             validateNullFields(); 
         } else{ 
             await firebase.db.collection('animales').add({
@@ -56,10 +59,11 @@ const RegistrarAnimal = (props) => {
                 tipo: state.tipo,
                 raza: state.raza,
                 sexo: state.sexo, 
-                decripcion: state.descripcion
+                decripcion: state.descripcion,
+                fecha: chosenDate
             })
             mensajeExito(); 
-            props.navigation.navigate('Home'); 
+            props.navigation.navigate('SesionProtectora', {userId: props.route.params.userId}); 
         }
     } 
     const mensajeExito = () =>{
@@ -146,6 +150,9 @@ const RegistrarAnimal = (props) => {
       };
     
 
+    const validateDate = date => {
+        setState({fecha: date.toDateString()})
+    }
     return(
         <ScrollView style={styles.container}> 
             <Text style={styles.title}> Registrar Animal</Text>
@@ -200,20 +207,16 @@ const RegistrarAnimal = (props) => {
                             />
                 
                
-            
-        <Button title="Open" onPress={() => setOpenDate(true)} />
-      <DatePicker
-        modal
-        open={openDate}
-        date={date}
-        onConfirm={(date) => {
-          setOpenDate(false)
-          setDate(date)
-        }}
-        onCancel={() => {
-          setOpenDate(false)
-        }}
-      />
+
+        <TextInput 
+                    style={styles.inputs}
+                    placeholder={state.fecha}
+                    />
+        <DatePicker
+                    date={chosenDate}
+                    onChangeText={(date) => handleChangeText('fecha', date.toDateString())}
+                    onDateChange={setChosenDate}
+                />
                 
                 <TextInput 
                     style={styles.inputs}
