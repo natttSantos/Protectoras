@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { View, Button, TextInput, StyleSheet, ScrollView, Text} from "react-native";
+import { View, Button, TextInput, StyleSheet, ScrollView, Text, Alert, TouchableOpacity} from "react-native";
 import { color } from "react-native-elements/dist/helpers/index.js";
 import firebase from '../../database/firebase.js';
 
@@ -18,7 +18,13 @@ const RegistrarUsuario = (props) => {
     const saveNewUser =  async () => {
         if (state.nombre == '' || state.email == '' || state.telefono == '' || state.contraseña == ''){
             validateNullFields(); 
-        } else if (validatePasswordAndPhone(state.contraseña, state.telefono)){ 
+        }
+
+        let users = firebase.db.collection('users');
+        let emails = await users.where("email", "==", state.email).get();
+        let telefonos = await users.where("telefono", "==", state.telefono).get();
+        let noRepetidos = checkEmail(emails, telefonos);
+        if (noRepetidos && validatePasswordAndPhone(state.contraseña, state.telefono)) { 
             await firebase.db.collection('users').add({
                 usuario: state.usuario, 
                 email: state.email,
@@ -30,6 +36,29 @@ const RegistrarUsuario = (props) => {
             props.navigation.navigate('InicioSesion'); 
         }
     } 
+
+    function checkEmail (emails) {
+        if (emails.empty) {return true;}
+        else {
+            Alert.alert("Error", "El email introducido ya está en uso", [
+                {text: "Cerrar"}
+            ]);
+            return false;
+        }
+    }
+
+    function validatePasswordAndPhone (password, phone) {
+        let validation = true; 
+        if (password.length < 4 || password.length > 8){
+            alert("La contraseña debe tener entre 4-8 caracteres"); 
+            validation = false; 
+        }
+        if (phone.length  != 9){
+            alert("El número de teléfono debe tener 9 dígitos"); 
+            validation = false; 
+        }
+        return validation;
+    }
     
     const validateNullFields = () => {
         let textoAlerta = "Complete el campo: ";
@@ -50,58 +79,41 @@ const RegistrarUsuario = (props) => {
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.title}> Registro </Text>
-            <View style={styles.inputGroup}>
-                <TextInput 
-                style={styles.inputText}
-                placeholder="Nombre de usuario" 
-                onChangeText={(value) => handleChangeText('usuario', value)}
-                />
-            </View>
-            <View style={styles.inputGroup}>
-                <TextInput 
-                style={styles.inputText}
-                placeholder="Email " 
-                onChangeText={(value) => handleChangeText('email', value)}
-                />
-            </View>
-            <View style={styles.inputGroup}>
-                <TextInput 
-                style={styles.inputText}
-                secureTextEntry
-                placeholder="Contraseña (entre 4-8 caracteres)" 
-                onChangeText={(value) => handleChangeText('contraseña', value)}
-                />
-            </View>
-            <View style={styles.inputGroup}>
-                <TextInput
-                style={styles.inputText}
-                //keyboardType="numeric"
-                placeholder="Teléfono" 
-                onChangeText={(value) => handleChangeText('telefono', value)}
-                />
-            </View>
             <View>
-                <Button title="Registrar usuario"
-                onPress={() => saveNewUser()}
+                <Text style={styles.title}> Registro </Text>
+                <TextInput 
+                    style={styles.inputText}
+                    placeholder="Nombre de usuario" 
+                    onChangeText={(value) => handleChangeText('usuario', value)}
                 />
+                <TextInput 
+                    style={styles.inputText}
+                    placeholder="Email " 
+                    onChangeText={(value) => handleChangeText('email', value)}
+                />
+                <TextInput 
+                    style={styles.inputText}
+                    secureTextEntry
+                    placeholder="Contraseña (entre 4-8 caracteres)" 
+                    onChangeText={(value) => handleChangeText('contraseña', value)}
+                />
+                <TextInput
+                    style={styles.inputText}
+                    keyboardType="numeric"
+                    placeholder="Teléfono" 
+                    onChangeText={(value) => handleChangeText('telefono', value)}
+                />
+                <TouchableOpacity 
+                    onPress={() => saveNewUser()}
+                    style={styles.button}>
+                        <Text style={styles.buttonText}>
+                            Registrar usuario
+                        </Text>
+                </TouchableOpacity>
             </View>
         </ScrollView>
     )
 }
-
-function validatePasswordAndPhone (password, phone) {
-    let validation = true; 
-    if (password.length < 4 || password.length > 8){
-        alert("La contraseña debe tener entre 4-8 caracteres"); 
-        validation = false; 
-    }
-    if (phone.length  != 9){
-        alert("El número de teléfono debe tener 9 dígitos"); 
-        validation = false; 
-    }
-    return validation;
-  }
 
 const styles = StyleSheet.create({
     container: {
@@ -116,15 +128,31 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2, 
         borderBottomColor: '#cccccc'
     }, inputText: {
-        fontSize: 17
-      },
+        height: 40,
+        borderColor: "gray",
+        marginTop: 10,
+        paddingLeft: 10,
+        paddingRight: 10,
+        fontSize: 18,
+        width: "100%",
+        borderWidth: 1,
+    },
       title: {
-        margin: 12,
-        padding: 10,
         fontSize: 40,
         fontWeight: 'bold',
-        textAlign: "left"
+    },button : {
+        elevation: 8,
+        backgroundColor: "#6c91c2",
+        padding: 10,
+        marginTop: 20,
     },
+      buttonText: {
+        fontSize: 18,
+        colors: "#ffffff",
+        fontWeight: "bold",
+        alignSelf: "center",
+        textTransform: "uppercase"    
+    }
 })
 
 
