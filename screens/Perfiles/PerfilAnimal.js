@@ -17,6 +17,7 @@ import { TextInput } from "react-native-gesture-handler";
 import { TouchableOpacity } from "react-native";
 
 import firebase from "../../database/firebase";
+import { enableScreens } from "react-native-screens";
 
 
 /*  const state = {
@@ -180,6 +181,19 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
       );
     }
     return null;
+  }
+
+  const adoptarAnimal = () => {
+    if(props.route.params.registrado) { 
+      Alert.alert("Enhorabuena", "Tu solicitud de adopción se ha creado con éxito", [
+        {text: "Cerrar"}
+    ]);
+    } else {
+      Alert.alert("Error", "Necesitas estar registrado para adoptar", [
+        {text: "Cerrar"}
+    ]);
+    }
+
   };
 
   return (
@@ -218,7 +232,16 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
             >
               <Text>Cargar una imagen</Text>
         </TouchableOpacity>
-      </View>
+        <TouchableOpacity  
+            style={styles.boton} 
+            onPress={() => adoptarAnimal()}
+            >
+              <Text>Adoptar</Text>
+        </TouchableOpacity>
+        <Text style = {styles.texto} >
+        Esto esta MAL, deberian haber margenes
+        </Text>
+      </View> 
     </ScrollView>
   );
 };

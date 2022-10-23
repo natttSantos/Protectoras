@@ -81,7 +81,7 @@ const ListaAnimales = (props) => {
             bottomDivider
             onPress={() => {
                 props.navigation.navigate("PerfilAnimal", {
-                  animalId: animal.id,
+                  animalId: animal.id, registrado: false,
                 });
               }}
             >
