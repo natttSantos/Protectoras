@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { View, Button, TextInput, StyleSheet, ScrollView, Text} from "react-native";
+import { View, Button, TextInput, StyleSheet, ScrollView, Text, Alert} from "react-native";
 import { color } from "react-native-elements/dist/helpers/index.js";
 import firebase from '../../database/firebase.js';
 
@@ -18,7 +18,13 @@ const RegistrarUsuario = (props) => {
     const saveNewUser =  async () => {
         if (state.nombre == '' || state.email == '' || state.telefono == '' || state.contraseña == ''){
             validateNullFields(); 
-        } else if (validatePasswordAndPhone(state.contraseña, state.telefono)){ 
+        }
+
+        let users = firebase.db.collection('users');
+        let emails = await users.where("email", "==", state.email).get();
+        let telefonos = await users.where("telefono", "==", state.telefono).get();
+        let noRepetidos = checkEmail(emails, telefonos);
+        if (noRepetidos && validatePasswordAndPhone(state.contraseña, state.telefono)) { 
             await firebase.db.collection('users').add({
                 usuario: state.usuario, 
                 email: state.email,
@@ -30,6 +36,16 @@ const RegistrarUsuario = (props) => {
             props.navigation.navigate('InicioSesion'); 
         }
     } 
+
+    function checkEmail (emails) {
+        if (emails.empty) {return true;}
+        else {
+            Alert.alert("Error", "El email introducido ya está en uso", [
+                {text: "Cerrar"}
+            ]);
+            return false;
+        }
+    }
     
     const validateNullFields = () => {
         let textoAlerta = "Complete el campo: ";
