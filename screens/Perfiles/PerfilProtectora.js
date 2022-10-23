@@ -62,6 +62,7 @@ const PerfilProtectora = (props) => {
           Página web
         </BotonAbrirURL>
       </View>
+      
     </ScrollView>
   );
 };
