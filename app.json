@@ -23,8 +23,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF",
-        "permissions": ["CAMERA_ROLL"]
+        "backgroundColor": "#FFFFFF"
       }
     },
     "web": {
