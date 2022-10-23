@@ -238,9 +238,6 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
             >
               <Text>Adoptar</Text>
         </TouchableOpacity>
-        <Text style = {styles.texto} >
-        Esto esta MAL, deberian haber margenes
-        </Text>
       </View> 
     </ScrollView>
   );
@@ -249,7 +246,9 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 35,
+    padding: 25,
+    marginTop: 5,
+    marginBottom: 5,
   },
   loader: {
     left: 0,
@@ -288,7 +287,7 @@ texto: {
   padding : 5,
   borderBottomWidth: 1,
   borderBottomColor: "#cccccc",
-  marginBottom: 10
+  marginBottom: 5
 }
 });
 
