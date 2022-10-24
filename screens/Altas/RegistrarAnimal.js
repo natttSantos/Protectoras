@@ -10,6 +10,11 @@ import * as ImagePicker from 'expo-image-picker';
 
 
 const RegistrarAnimal = (props) => {
+
+  const [foto, setFoto] = useState({
+    existe:"",
+    
+  });
     const [state, setState] = useState({
       nombre:"",
       tipo:"",
@@ -52,7 +57,7 @@ const RegistrarAnimal = (props) => {
     
     const saveNewUser =  async () => {
       
-        if (state.nombre == '' || state.raza == '' || state.descripcion == '' || state.tipo == '' || state.sexo =='' || state.fecha_nacimiento == ''){
+        if (state.nombre == '' || state.raza == '' || state.descripcion == '' || foto.existe == ''|| state.tipo == '' || state.sexo =='' || props.route.params.valueFecha == ''){
             validateNullFields(); 
         } else{ 
             await firebase.db.collection('animales').add({
@@ -91,7 +96,7 @@ const RegistrarAnimal = (props) => {
         if (state.sexo == ''){
             textoAlerta += "\n - Sexo "; 
         }
-        if (state.foto == ''){
+        if (foto.existe == ''){
             textoAlerta += "\n - Foto "; 
         }
         if (props.route.params.valueFecha == ''){
@@ -140,13 +145,13 @@ const RegistrarAnimal = (props) => {
                 let ref = firebase
                 .st
                 .ref()
-                .child(`images/${animal.nombre}`);
+                .child(`images/${state.nombre}`);
                 ref
                   .put(resolve)
                   .then(resolve => {
                     console.log("Imagen subida correctamente");
-                    setState({
-                        foto: "Si"
+                    setFoto({
+                        existe: "Si"
                      });
                   })
                   .catch(error => {
