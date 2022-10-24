@@ -94,11 +94,13 @@ const RegistrarAnimal = (props) => {
         if (state.foto == ''){
             textoAlerta += "\n - Foto "; 
         }
-        if (state.fecha_nacimiento == ''){
+        if (props.route.params.valueFecha == ''){
           textoAlerta += "\n - Fecha Nacimiento "; 
       }
         alert (textoAlerta); 
     }
+
+
     const showPicker = () => {
       this.setState({
         isVisible: true  
@@ -163,17 +165,7 @@ const RegistrarAnimal = (props) => {
       const [date, setDate] = useState(new Date());
       const [fechaFormato, setFechaFormato] = useState('');
      
-     
-      const formatFecha = fecha => {
-         setDate(fecha);
-         const dia = fecha.getDate();
-         const mes = fecha.getMonth() + 1;
-         const anio = fecha.getFullYear();
-         setFechaFormato(`${dia}/${mes}/${anio}`);
-       };
-    const validateDate = date => {
-        setState({fecha: date.toDateString()})
-    }
+
     return(
         <ScrollView style={styles.container}> 
             <Text style={styles.title}> Registrar Animal</Text>
