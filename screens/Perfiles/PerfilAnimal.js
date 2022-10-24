@@ -196,6 +196,27 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
 
   };
 
+
+/*
+NO BORRAR
+        <TouchableOpacity  
+            style={styles.boton} 
+            onPress={() => openGallery()}
+            >
+              <Text>Selecciona una imagen</Text>
+        </TouchableOpacity>
+        <TouchableOpacity  
+            style={styles.boton} 
+            onPress={() => loadImage()}
+            >
+              <Text>Cargar una imagen</Text>
+        </TouchableOpacity>
+
+*/
+
+
+
+
   return (
     
     <ScrollView style={styles.container}>
@@ -217,18 +238,7 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
         <Text style = {styles.texto} >
           {"Descripción: " + animal.descripcion}
         </Text>
-        <TouchableOpacity  
-            style={styles.boton} 
-            onPress={() => openGallery()}
-            >
-              <Text>Selecciona una imagen</Text>
-        </TouchableOpacity>
-        <TouchableOpacity  
-            style={styles.boton} 
-            onPress={() => loadImage()}
-            >
-              <Text>Cargar una imagen</Text>
-        </TouchableOpacity>
+
         <TouchableOpacity  
             style={styles.boton} 
             onPress={() => adoptarAnimal()}
