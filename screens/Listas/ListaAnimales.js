@@ -15,6 +15,8 @@ const ListaAnimales = (props) => {
     const [animales, setProtectoras] = useState([]);
     const URLAnimal = "";
     var state = "";
+
+
     useEffect(() => {
         firebase.db.collection('animales').onSnapshot((querySnapshot) => {
             const listaAnimales = []
@@ -36,30 +38,32 @@ const ListaAnimales = (props) => {
     })
 
     
-    const loadImage = async () => {
-      console.log(p);
-      firebase
+    const loadImage = async uri => {
+      //console.log(uri);
+      await firebase
       .st
-      .ref(`images/${animal}`)
+      .ref(`images/${uri}`)
       .getDownloadURL().then(function(url) {
-      setState({
-       url
-    });
+        setState({
+          imageFirebase: url
+       });
   });
+  const { imageFirebase } = cosas;
+  return imageFirebase;
 
   };
 
 
 
-      const checkImage = () => {
+      const checkImage = uri => {
         const { imageFirebase } = cosas;
-        console.log(imageFirebase);
-        if (cosas != "") {
+        console.log(uri);
+        if (true) {
           return (
             <Avatar
                 style={styles.imagen}
                 rounded
-                source={{uri: imageFirebase}} />
+                source={{uri: uri}} />
           );
         }
         return null;
@@ -75,16 +79,22 @@ const ListaAnimales = (props) => {
             //  {loadImage(animal.nombre)}
                 
                 return(
-                    
+                 // {uploadImage(animal.nombre)}
+                //  {loadImage(animal.nombre)}
             <ListItem key={animal.id} 
-            
+                  
             bottomDivider
             onPress={() => {
                 props.navigation.navigate("PerfilAnimal", {
-                  animalId: animal.id, registrado: false,
+                  animalId: animal.id,
                 });
               }}
             >
+
+              <Avatar
+                style={styles.imagen}
+                rounded
+                source={{uri:  loadImage(animal.nombre)}} />
                 <ListItem.Chevron />
                 <ListItem.Content 
                 style={styles.lista}>

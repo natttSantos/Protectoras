@@ -53,6 +53,15 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
   const [loading, setLoading] = useState(true);
   const [cosas, setState] = useState(initialStatee);
 
+  const initialStaate = {
+    usuario: "",
+    email: "" , 
+    telefono: "", 
+    nombre: "",
+    contraseña: "",
+    alta:""
+}
+const [usuario, setUsario] = useState(initialStaate);
 
 
   const uploadImage = uri => {
@@ -125,6 +134,17 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
 
   };
 */
+
+const getUsuarioById = async (id) => {
+  const dbRef = firebase.db.collection("users").doc(id);
+  const doc = await dbRef.get();
+  const usuario = doc.data();
+  console.log(usuario)
+  setUsario({ ...usuario, id: doc.id });
+  setLoading(false);
+};
+
+
   const getAnimalById = async (id) => {
     const dbRef = firebase.db.collection("animales").doc(id);
     const doc = await dbRef.get();
@@ -159,7 +179,8 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
 
   useEffect(() => {
     getAnimalById(props.route.params.animalId);
-    
+    getUsuarioById(props.route.params.userId); 
+    console.log(props.route.params.userId);
   }, []);
 
   if (loading) {
@@ -184,7 +205,8 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
   }
 
   const adoptarAnimal = () => {
-    if(props.route.params.alta=="Si") { 
+console.log(usuario.nombre);
+    if(usuario.alta=="Si") { 
       Alert.alert("Información", "Notificación enviada correctamente", [
         {text: "Cerrar"}
     ]);

@@ -130,7 +130,9 @@ const Home = (props) => {
       onPress={() => {
       props.navigation.navigate("PerfilAnimal", {
       animalId: animal.id, registrado: true,
+      userId: props.route.params.userId,
       });
+      console.log(props.route.params.userId + "        aaa");
       }}
       >
       <ListItem.Chevron />
