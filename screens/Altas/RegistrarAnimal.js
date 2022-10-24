@@ -57,7 +57,7 @@ const RegistrarAnimal = (props) => {
     
     const saveNewUser =  async () => {
       
-        if (state.nombre == '' || state.raza == '' || state.descripcion == '' || foto.existe == ''|| state.tipo == '' || state.sexo =='' || props.route.params.valueFecha == ''){
+        if (state.nombre == '' || state.raza == '' || state.descripcion == '' || foto.existe == ''|| state.tipo == '' || state.sexo =='' || props.route.params.valueFecha == undefined){
             validateNullFields(); 
         } else{ 
             await firebase.db.collection('animales').add({
@@ -99,7 +99,7 @@ const RegistrarAnimal = (props) => {
         if (foto.existe == ''){
             textoAlerta += "\n - Foto "; 
         }
-        if (props.route.params.valueFecha == ''){
+        if (props.route.params.valueFecha == undefined){
           textoAlerta += "\n - Fecha Nacimiento "; 
       }
         alert (textoAlerta); 

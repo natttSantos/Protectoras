@@ -20,24 +20,23 @@ const InicioSesion = (props) => {
     }
 
     const validateUser = async () => {
-        var usuarioCorrecto = false;
         const usuarios = firebase.db.collection("users");
-        const snapshot = await usuarios.where("email", "==", state.email.trim()).get();
+        const snapshot = await usuarios.where("email", "==", state.email).get();
         if (!snapshot.empty) {
             const usuario = snapshot.docs[0]
-            console.log(usuario.id)
-            usuarioCorrecto = true;
-            props.navigation.navigate('SesionUsuario', {userId: usuario.id, isUsuario: true})
+            if (usuario.get("contraseña") == state.contraseña){
+                props.navigation.navigate('SesionUsuario', {userId: usuario.id, isUsuario: true})
+            } else { showAlert(); }
         }
         else {
             const protectoras = firebase.db.collection("protectoras");
-            const snapshot2 = await protectoras.where("email", "==", state.email.trim()).get();
+            const snapshot2 = await protectoras.where("email", "==", state.email).get();
             if (!snapshot2.empty) {
                 const protectora = snapshot2.docs[0]
-                usuarioCorrecto = true;
-                props.navigation.navigate('SesionProtectora', {userId: protectora.id})
+                if(protectora.get('contraseña') == state.contraseña) {
+                    props.navigation.navigate('SesionProtectora', {userId: protectora.id})
+                } else { showAlert(); }
             }
-            else { showAlert();}
         }
     };
 
