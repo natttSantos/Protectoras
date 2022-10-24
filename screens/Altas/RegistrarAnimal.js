@@ -17,7 +17,9 @@ const RegistrarAnimal = (props) => {
       sexo:"",
       descripcion:"",
       foto:"",
-      fecha: "21/10/2022"
+      fecha: "", 
+      id_protectora: "", 
+      adoptado: ""
       
     });
     const drop = DropDownPicker.setListMode("SCROLLVIEW");
@@ -48,11 +50,10 @@ const RegistrarAnimal = (props) => {
         setState({...state, [nombre]: value}); 
     }; 
     
-
     const saveNewUser =  async () => {
       
         if (state.nombre == '' || state.raza == '' || state.descripcion == '' || state.tipo == '' || state.sexo ==''){
-            console.log(chosenDate); 
+            console.log(state.fechafecha); 
             validateNullFields(); 
         } else{ 
             await firebase.db.collection('animales').add({
@@ -61,7 +62,9 @@ const RegistrarAnimal = (props) => {
                 raza: state.raza,
                 sexo: state.sexo, 
                 decripcion: state.descripcion,
-                fecha: chosenDate
+                fecha: props.route.params.valueFecha,
+                id_protectora: props.route.params.userId, 
+                adoptado: false
             })
             mensajeExito(); 
             props.navigation.navigate('SesionProtectora', {userId: props.route.params.userId}); 
@@ -93,6 +96,11 @@ const RegistrarAnimal = (props) => {
             textoAlerta += "\n - Foto "; 
         }
         alert (textoAlerta); 
+    }
+    const showPicker = () => {
+      this.setState({
+        isVisible: true  
+      })
     }
     const uploadImage = uri => {
         return new Promise((resolve, reject) => {
@@ -150,7 +158,17 @@ const RegistrarAnimal = (props) => {
         }
       };
     
-
+      const [date, setDate] = useState(new Date());
+      const [fechaFormato, setFechaFormato] = useState('');
+     
+     
+      const formatFecha = fecha => {
+         setDate(fecha);
+         const dia = fecha.getDate();
+         const mes = fecha.getMonth() + 1;
+         const anio = fecha.getFullYear();
+         setFechaFormato(`${dia}/${mes}/${anio}`);
+       };
     const validateDate = date => {
         setState({fecha: date.toDateString()})
     }
@@ -163,6 +181,7 @@ const RegistrarAnimal = (props) => {
                     height: 40,
                     borderColor: "black",
                     marginTop: 40,
+                    marginBottom: 20,
                     paddingLeft: 10,
                     paddingRight: 10,
                     fontSize: 18,
@@ -173,6 +192,8 @@ const RegistrarAnimal = (props) => {
                 onChangeText={(value) => handleChangeText('nombre', value)}
                 />
             
+              <Text style={{fontSize: 18, marginBottom: 10}}> {props.route.params.valueFecha}</Text>   
+              <Button title="Seleccione una fecha Nacimiento" onPress={() => props.navigation.navigate('FechaNacimentoAnimal', {userId: props.route.params.userId})} />      
                 <DropDownPicker
                                 style={{marginTop: 20, marginBottom: 20}}
                                 placeholder="Tipo"
@@ -206,37 +227,14 @@ const RegistrarAnimal = (props) => {
                                     handleChangeText('sexo', value);
                                   }}
                             />
-                
-               
 
-        <TextInput 
-                    style={styles.inputs}
-                    placeholder={state.fecha}
-                    />
-        <DatePicker
-                    date={chosenDate}
-                    onChangeText={(date) => handleChangeText('fecha', date.toDateString())}
-                    onDateChange={setChosenDate}
-                />
-                
-                <TextInput 
-                    style={styles.inputs}
-                    placeholder="Insertar foto"
-                    onChangeText={(value) => handleChangeText('foto', value)}
-                    />
-            
                 <TextInput 
                     style={styles.descripcion}
                     placeholder="Descripción (max 200 caracteres)"
                     onChangeText={(value) => handleChangeText('descripcion', value)}
                     />
 
-                <TouchableOpacity  
-                    style={styles.boton} 
-                    onPress={() => openGallery()}
-                    >
-                    <Text>Selecciona una imagen</Text>
-                </TouchableOpacity>
+        <Button title="Selecciona una imagen" onPress={() =>  openGallery()} />      
 
                 <TouchableOpacity 
                     onPress={() => {saveNewUser()}}
@@ -256,8 +254,9 @@ const styles = StyleSheet.create({
         padding: 35
     },
     descripcion : {
-        height: 100, 
-        marginBottom: 40,
+        height: 60, 
+        marginTop: 30,
+        marginBottom: 30,
         fontSize: 18,
         borderWidth: 1,
         paddingLeft: 10,
@@ -281,6 +280,7 @@ const styles = StyleSheet.create({
     
     button : {
         elevation: 8,
+        marginTop: 40,
         backgroundColor: "#6c91c2",
         padding: 10
       },
