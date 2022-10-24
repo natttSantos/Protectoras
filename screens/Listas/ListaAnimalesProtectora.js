@@ -15,17 +15,22 @@ const ListaAnimalesProtectora = (props) => {
     const cargarImagenes = async () => {
         let i = animales.length
 
-        await animales.map(async (animal, index) => {
-            await firebase
-            .st
-            .ref(`images/${animal.nombre}`)
-            .getDownloadURL().then(function(url) {
-                i--
-                imagenesAux[index] = url
-                setImagenes(...imagenes, imagenesAux)
-                if(i == 0) setLoading(false)
-            });
-        })
+        if(i > 0){
+            await animales.map(async (animal, index) => {
+                await firebase
+                .st
+                .ref(`images/${animal.nombre}`)
+                .getDownloadURL().then(function(url) {
+                    i--
+                    imagenesAux[index] = url
+                    setImagenes(...imagenes, imagenesAux)
+                    if(i == 0) setLoading(false)
+                });
+            })
+        }
+        else {
+            setLoading(false)
+        }
     }
 
     useEffect(() => {
@@ -40,29 +45,39 @@ const ListaAnimalesProtectora = (props) => {
         )
     }
 
-    return(
-        <ScrollView>
-                {animales.map((animal, index) => {
-                    return (
-                        <ListItem key={animal.id}
-                            bottomDivider
-                            onPress={() => {props.navigation.navigate('PerfilAnimal', {animalId: animal.id})}}>
-                            <Avatar 
-                            style = {styles.imagen}
-                            source={{uri: imagenes[index]}}
-                            />
-                            <ListItem.Content 
-                            style = {styles.lista}
-                            >
-                                <ListItem.Title> {animal.nombre} </ListItem.Title>
-                                <ListItem.Subtitle> {animal.edad} años</ListItem.Subtitle>
-                                <ListItem.Subtitle> {animal.raza} </ListItem.Subtitle>
-                                <ListItem.Subtitle> {animal.sexo} </ListItem.Subtitle>
-                            </ListItem.Content>
-                        </ListItem>);
-                })}
-            </ScrollView>
-    )
+    if(animales.length > 0) {
+        return(
+            <ScrollView>
+                    {animales.map((animal, index) => {
+                        return (
+                            <ListItem key={animal.id}
+                                bottomDivider
+                                onPress={() => {props.navigation.navigate('PerfilAnimal', {animalId: animal.id})}}>
+                                <Avatar 
+                                style = {styles.imagen}
+                                source={{uri: imagenes[index]}}
+                                />
+                                <ListItem.Content 
+                                style = {styles.lista}
+                                >
+                                    <ListItem.Title> {animal.nombre} </ListItem.Title>
+                                    <ListItem.Subtitle> {animal.edad} años</ListItem.Subtitle>
+                                    <ListItem.Subtitle> {animal.raza} </ListItem.Subtitle>
+                                    <ListItem.Subtitle> {animal.sexo} </ListItem.Subtitle>
+                                </ListItem.Content>
+                            </ListItem>);
+                    })}
+                </ScrollView>
+        )
+    } else {
+        return (
+            <View>
+                <Text>
+                    NO HAY ANIMALES
+                </Text>
+            </View>
+        )
+    }
 }
 
 const styles = StyleSheet.create({
