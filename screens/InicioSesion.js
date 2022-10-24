@@ -24,105 +24,35 @@ const InicioSesion = (props) => {
         const usuarios = firebase.db.collection("users");
         const snapshot = await usuarios.where("email", "==", state.email.trim()).get();
         if (!snapshot.empty) {
-            snapshot.forEach((doc) => {
-                const {contraseña} = doc.data();
-                console.log(doc.id)
-                if(contraseña == state.contraseña) {
-                    usuarioCorrecto = true;
-                    props.navigation.navigate('SesionUsuario', {userId: doc.id, isUsuario: true})
-                }
-                else {showAlert();}
-            })
+            const usuario = snapshot.docs[0]
+            console.log(usuario.id)
+            usuarioCorrecto = true;
+            props.navigation.navigate('SesionUsuario', {userId: usuario.id, isUsuario: true})
         }
         else {
             const protectoras = firebase.db.collection("protectoras");
             const snapshot2 = await protectoras.where("email", "==", state.email.trim()).get();
             if (!snapshot2.empty) {
-                snapshot2.forEach((doc) => {
-                    const {contraseña} = doc.data();
-                    if(contraseña == state.contraseña) {
-                        usuarioCorrecto = true;
-                        props.navigation.navigate('SesionProtectora', {userId: doc.id})
-                    }
-                    else {showAlert();}
-                })
+                const protectora = snapshot2.docs[0]
+                usuarioCorrecto = true;
+                props.navigation.navigate('SesionProtectora', {userId: protectora.id})
             }
             else { showAlert();}
         }
-        /*const usuarios = firebase.db.collection('users').onSnapshot((querySnapchot => {
-            //const users = [];
-
-            querySnapchot.docs.forEach((doc) => {
-                const {email, contraseña} = doc.data();
-                /*users.push({
-                    id: doc.id,
-                    email,
-                    contraseña
-                })
-                if (email == state.email && contraseña == state.contraseña) {
-                    console.log(doc.id);
-                    usuarioCorrecto = true;
-                    props.navigation.navigate('SesionUsuario', {
-                        userId: doc.id  
-                    })
-                }
-            })
-        }));
-        const protectoras = firebase.db.collection('protectoras').onSnapshot((querySnapchot => {
-
-            querySnapchot.docs.forEach((doc) => {
-                const {email, contraseña} = doc.data();
-                if (email == state.email && contraseña == state.contraseña) {
-                    console.log(doc.id);
-                    usuarioCorrecto = true;
-                    props.navigation.navigate('UserDetailScreen', {
-                        protectoraId: doc.id
-                    })
-                }
-            })
-        }));
-        if (!usuarioCorrecto) { 
-            Alert.alert("Error", "El usuario o la contraseña son incorrectas", [
-                {text: "Cerrar"}
-            ]);
-        } */
     };
 
     return (
         <ScrollView style={styles.container}>
             <View>
-                <Text style={styles.title}>
-                    {"Email"}
-                </Text>
                 <TextInput 
-                style={{
-                    height: 40,
-                    borderColor: "gray",
-                    marginTop: 10,
-                    paddingLeft: 10,
-                    paddingRight: 10,
-                    fontSize: 18,
-                    width: "100%",
-                    borderWidth: 1,
-                }}                
+                style={styles.inputText}           
+                placeholder="Email"     
                 onChangeText={(value) => handleChangeText('email', value)}
                 />
-                <Text style={{fontSize: 20, marginTop: 20,}}>
-                    {"Contraseña"}
-                </Text>
                 <TextInput 
                 secureTextEntry={true}
-                style={{
-                    height: 40,
-                    borderColor: "gray",
-                    marginTop: 10,
-                    marginBottom: 20,
-                    paddingLeft: 10,
-                    paddingRight: 10,
-                    fontSize: 18,
-                    width: "100%",
-                    borderWidth: 1,
-                }}
+                style={styles.inputText}
+                placeholder="Contraseña"
                 onChangeText={(value) => handleChangeText('contraseña', value)}
                 />
                 <TouchableOpacity 
@@ -154,7 +84,14 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2, 
         borderBottomColor: '#cccccc'
     }, inputText: {
-        fontSize: 17
+        height: 40,
+        borderColor: "gray",
+        marginTop: 10,
+        paddingLeft: 10,
+        paddingRight: 10,
+        fontSize: 18,
+        width: "100%",
+        borderWidth: 1,
       },
       title : {
         fontSize: 20
@@ -162,7 +99,8 @@ const styles = StyleSheet.create({
       button : {
         elevation: 8,
         backgroundColor: "#6c91c2",
-        padding: 10
+        padding: 10,
+        marginTop: 20,
       },
       buttonText: {
         fontSize: 18,
