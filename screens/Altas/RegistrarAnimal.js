@@ -17,7 +17,7 @@ const RegistrarAnimal = (props) => {
       sexo:"",
       descripcion:"",
       foto:"",
-      fecha: "", 
+      fecha_nacimiento: "", 
       id_protectora: "", 
       adoptado: ""
       
@@ -62,7 +62,7 @@ const RegistrarAnimal = (props) => {
                 raza: state.raza,
                 sexo: state.sexo, 
                 decripcion: state.descripcion,
-                fecha: props.route.params.valueFecha,
+                fecha_nacimiento: props.route.params.valueFecha,
                 id_protectora: props.route.params.userId, 
                 adoptado: false
             })
@@ -193,7 +193,7 @@ const RegistrarAnimal = (props) => {
                 />
             
               <Text style={{fontSize: 18, marginBottom: 10}}> {props.route.params.valueFecha}</Text>   
-              <Button title="Seleccione una fecha Nacimiento" onPress={() => props.navigation.navigate('FechaNacimentoAnimal', {userId: props.route.params.userId})} />      
+              <Button title="Seleccione una fecha Nacimiento" onPress={() => props.navigation.navigate('FechaNacimientoAnimal', {userId: props.route.params.userId})} />      
                 <DropDownPicker
                                 style={{marginTop: 20, marginBottom: 20}}
                                 placeholder="Tipo"

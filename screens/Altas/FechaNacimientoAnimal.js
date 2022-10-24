@@ -3,7 +3,7 @@ import { ScrollView, View, Text, StyleSheet, TextInput, Button } from "react-nat
 import DatePicker from 'react-native-modern-datepicker';
 
 
-const FechaNacimentoAnimal = (props) => {
+const FechaNacimientoAnimal = (props) => {
     const [state, setState] = useState({
         fecha: "22/10/2022"
       });
@@ -31,4 +31,4 @@ const FechaNacimentoAnimal = (props) => {
 }
 
 
-export default FechaNacimentoAnimal;
+export default FechaNacimientoAnimal;

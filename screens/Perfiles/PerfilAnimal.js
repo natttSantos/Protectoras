@@ -206,9 +206,6 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
           {"Nombre: " + animal.nombre}
         </Text>
         <Text style = {styles.texto} >
-          {"Edad: " + animal.edad}
-        </Text>
-        <Text style = {styles.texto} >
           {"Raza: " + animal.raza}
         </Text>
         <Text style = {styles.texto} >

@@ -24,7 +24,7 @@ import AltaGlobal from './screens/Altas/AltaGlobal';
 import PerfilAdoptar from './screens/Perfiles/PerfilAdoptar';
 import SesionUsuario from './screens/Sesiones/SesionUsuario';
 import SesionProtectora from './screens/Sesiones/SesionProtectora';
-import FechaNacimentoAnimal from './screens/Altas/FechaNacimentoAnimal';
+import FechaNacimientoAnimal from './screens/Altas/FechaNacimientoAnimal';
 
 
 function MyStack (){
@@ -42,7 +42,7 @@ function MyStack (){
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="AltaGlobal" component={AltaGlobal} />
       <Stack.Screen name="RegistrarAnimal" component={RegistrarAnimal} />
-      <Stack.Screen name="FechaNacimentoAnimal" component={FechaNacimentoAnimal} />
+      <Stack.Screen name="FechaNacimientoAnimal" component={FechaNacimientoAnimal} />
       <Stack.Screen name="PerfilUsuario" component={PerfilUsuario} />
       <Stack.Screen name="PerfilProtectora" component={PerfilProtectora} />
       <Stack.Screen name="AltaAdoptar" component={AltaAdoptar} />
