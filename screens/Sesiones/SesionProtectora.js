@@ -42,13 +42,13 @@ const SesionProtectora = (props) => {
     const dbRef = firebase.db.collection('animales').where("id_protectora", "==", id)
     const docs = await dbRef.get()
     docs.forEach(doc => {
-        const {nombre, sexo, edad, raza} = doc.data()
+        const {nombre, sexo,descripcion, raza} = doc.data()
         animales.push({
             id: doc.id,
             id_protectora: id,
             nombre,
             raza,
-            edad,
+            descripcion,
             sexo
         })
     })

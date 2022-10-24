@@ -65,7 +65,7 @@ const RegistrarAnimal = (props) => {
                 tipo: state.tipo,
                 raza: state.raza,
                 sexo: state.sexo, 
-                decripcion: state.descripcion,
+                descripcion: state.descripcion,
                 fecha_nacimiento: props.route.params.valueFecha,
                 id_protectora: props.route.params.userId, 
                 adoptado: false

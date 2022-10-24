@@ -184,12 +184,12 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
   }
 
   const adoptarAnimal = () => {
-    if(props.route.params.registrado) { 
-      Alert.alert("Información", "Tienes que completar tu perfil para poder adoptar", [
+    if(props.route.params.alta=="Si") { 
+      Alert.alert("Información", "Notificación enviada correctamente", [
         {text: "Cerrar"}
     ]);
     } else {
-      Alert.alert("Error", "Necesitas iniciar sesión para poder adoptar", [
+      Alert.alert("Información", "Tienes que completar tu perfil para poder adoptar", [
         {text: "Cerrar"}
     ]);
     }

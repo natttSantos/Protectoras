@@ -61,7 +61,6 @@ const ListaAnimalesProtectora = (props) => {
                                 style = {styles.lista}
                                 >
                                     <ListItem.Title> {animal.nombre} </ListItem.Title>
-                                    <ListItem.Subtitle> {animal.edad} años</ListItem.Subtitle>
                                     <ListItem.Subtitle> {animal.raza} </ListItem.Subtitle>
                                     <ListItem.Subtitle> {animal.sexo} </ListItem.Subtitle>
                                 </ListItem.Content>
