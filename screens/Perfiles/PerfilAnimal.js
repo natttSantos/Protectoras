@@ -207,12 +207,13 @@ const getUsuarioById = async (id) => {
   const adoptarAnimal = () => {
 console.log(usuario.nombre);
     if(usuario.alta=="Si") { 
-      Alert.alert("Información", "Notificación enviada correctamente", [
+      Alert.alert("Información", "Solicitud enviada correctamente", [
         {text: "Cerrar"}
     ]);
     } else {
       Alert.alert("Información", "Tienes que completar tu perfil para poder adoptar", [
-        {text: "Cerrar"}
+        {text: "Cerrar"},
+        {text: "Completar perfil",  onPress: () => props.navigation.navigate('AltaAdoptar', {userId: props.route.params.userId})}
     ]);
     }
 

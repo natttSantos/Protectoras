@@ -132,7 +132,6 @@ const Home = (props) => {
       animalId: animal.id, registrado: true,
       userId: props.route.params.userId,
       });
-      console.log(props.route.params.userId + "        aaa");
       }}
       >
       <ListItem.Chevron />
