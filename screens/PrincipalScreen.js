@@ -25,14 +25,6 @@ const PrincipalScreen = (props) => {
                 onPress={() => props.navigation.navigate('RegistrarUsuario')}
                 />
                 <Button
-                title="Listado animales"
-                onPress={() => props.navigation.navigate('ListaAnimales')}
-                />
-                <Button
-                title="Listado protectoras"
-                onPress={() => props.navigation.navigate('ListaProtectoras')}
-                />
-                <Button
                 title="Dar de alta protectora"
                 onPress={() => props.navigation.navigate('AltaProtectora')}
                 />
