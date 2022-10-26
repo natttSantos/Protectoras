@@ -27,7 +27,7 @@ const Home = (props) => {
     };
   
     const getUsuarioById = async (id) => {
-      dbRef = null; 
+      let dbRef = null; 
       if (props.route.params.isUsuario == false){
         dbRef = firebase.db.collection("protectoras").doc(id);
       } else{
