@@ -112,7 +112,7 @@ const Home = (props) => {
   <ScrollView style={styles.container}>
  
     <Text style = {styles.texto} >
-        Bienvenido, {usuario.nombre}
+        Bienvenid@, {usuario.nombre}
     </Text>
  
     <Text style={styles.titulo}>
