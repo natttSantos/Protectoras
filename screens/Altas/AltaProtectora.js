@@ -4,6 +4,7 @@ import { ScrollView, View, Text, StyleSheet, TextInput } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Button } from "react-native-elements";
 import firebase from '../../database/firebase';
+import * as ImagePicker from 'expo-image-picker';
 
 const AltaProtectora = (props) => {
     DropDownPicker.setListMode("SCROLLVIEW");
@@ -19,6 +20,13 @@ const AltaProtectora = (props) => {
         url: ""
     })
 
+    
+
+    const [foto, setFoto] = useState({
+        existe:"",
+        
+      });
+
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState(null)
     const [items, setItems] = useState([{label: 'Comunidad Valenciana', value: 'Comunidad Valenciana'},
@@ -30,7 +38,7 @@ const AltaProtectora = (props) => {
     }
 
     const saveNewProtectora = async () => {
-        if (protectora.nombre == '' || protectora.email == '' || protectora.provincia == '' || protectora.url == '') {
+        if (protectora.nombre == '' || protectora.email == '' || protectora.provincia == '' || protectora.url == ''|| foto.existe == '') {
             validateFields();
         } else if (validatePasswordAndPhone(protectora.contraseña, protectora.telefono)){
             const dbRef = firebase.db.collection('protectoras')
@@ -55,6 +63,62 @@ const AltaProtectora = (props) => {
         }
     }
 
+    const uploadImage = uri => {
+        return new Promise((resolve, reject) => {
+          console.log(resolve + " " + reject);
+          let xhr = new XMLHttpRequest();
+          xhr.onerror = reject;
+          xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+              resolve(xhr.response);
+            }
+          };
+    
+          xhr.open("GET", uri);
+          xhr.responseType = "blob";
+          xhr.send();
+        });
+      };
+
+
+    const openGallery = async () => {
+    
+        const resultPermission =true; 
+        if (resultPermission) {
+          const resultImagePicker = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [4, 3]
+          });
+    
+          if (resultImagePicker.cancelled === false) {
+            const imageUri = resultImagePicker.uri;
+            uploadImage(imageUri)
+              .then(resolve => {
+                let ref = firebase
+                .st
+                .ref()
+                .child(`imagesProtectora/${protectora.nombre}`);
+                ref
+                  .put(resolve)
+                  .then(resolve => {
+                    console.log("Imagen subida correctamente");
+                    setFoto({
+                        existe: "Si"
+                     });
+                  })
+                  .catch(error => {
+                    console.log(error);
+                    console.log(error);
+                    console.log("Error al subir la imagen");
+                  });
+              })
+              .catch(error => {
+                console.log(error);
+              });
+          }
+        }
+      };
+
     const validateFields = () => {
         let textoAlerta = "Complete el campo: ";
         if (protectora.nombre == ''){
@@ -67,6 +131,8 @@ const AltaProtectora = (props) => {
             textoAlerta += "\n - Localización "; 
         } if (protectora.direccion == ''){
             textoAlerta += "\n - Direccion ";  
+        } if (foto.existe == ''){
+            textoAlerta += "\n - Foto "; 
         } if (protectora.url == ''){
             textoAlerta += "\n - URL de tu web ";  
         } if (protectora.telefono == ''){
@@ -162,6 +228,7 @@ const AltaProtectora = (props) => {
                     />
             </View>
             <View style={{marginTop: 15}}>
+            <Button title="Selecciona una imagen" onPress={() =>  openGallery()} /> 
                 <Button 
                 title="Dar de alta" 
                 onPress={() => {saveNewProtectora()}}/>
