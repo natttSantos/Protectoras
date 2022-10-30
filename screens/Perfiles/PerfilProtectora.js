@@ -25,6 +25,14 @@ const PerfilProtectora = (props) => {
     descripcion:""
   };
 
+  const initialStatee = {
+    imageFirebase:"a",
+    staet :""
+    
+  };
+
+  const [cosas, setState] = useState(initialStatee);
+
   const [protectora, setProtectora] = useState(initialState);
 
   const getProtectoraById = async (id) => {
@@ -32,7 +40,30 @@ const PerfilProtectora = (props) => {
     const doc = await dbRef.get();
     const protectora = doc.data();
     setProtectora({ ...protectora, id: doc.id });
+
+    firebase
+    .st
+    .ref(`imagesProtectora/${protectora.nombre}`)
+    .getDownloadURL().then(function(url) {
+    setState({
+     imageFirebase: url
+  });
+});
   };
+
+
+  const checkImage = () => {
+    const { imageFirebase } = cosas;
+    if (cosas != "") {
+      return (
+        <Image
+          style={{ width: 300, height: 300 }}
+          source={{ uri: imageFirebase }}
+        />
+      );
+    }
+    return null;
+  }
 
   useEffect(() => {
     getProtectoraById(props.route.params.userId);
@@ -42,7 +73,7 @@ const PerfilProtectora = (props) => {
     <ScrollView style={styles.container}>
 
       <View>
-        <Image source={require('../../images/Greenpeace.jpg')} style={styles.image}/>
+      {checkImage()}
         <Text style = {styles.texto} >
           {"Nombre: " + protectora.nombre}
         </Text>
