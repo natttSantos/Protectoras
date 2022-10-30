@@ -52,7 +52,7 @@ const ListaProtectoras = (props) => {
                     style={{fontWeight: "bold"}}> 
                         {prot.nombre} 
                     </ListItem.Title>
-                    <ListItem.Subtitle> {prot.mail} </ListItem.Subtitle>
+                    <ListItem.Subtitle> {prot.email} </ListItem.Subtitle>
                     <ListItem.Subtitle> {prot.direccion} </ListItem.Subtitle>
                 </ListItem.Content>
             </ListItem>

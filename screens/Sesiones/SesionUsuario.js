@@ -12,6 +12,7 @@ import UserDetailScreen from '../UserDetailScreen.js';
 import Home from '../Home.js';
 import RegistrarAnimal from '../Altas/RegistrarAnimal';
 import AltaGlobal from '../Altas/AltaGlobal.js';
+import ListaProtectoras from '../Listas/ListaProtectoras.js';
 
 const SesionUsuario = (props) => {
   const initialState = {
@@ -53,6 +54,15 @@ useEffect(() => {
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Icon name="home-outline" size={35} color={'blue'} />
+          )
+        }}
+        initialParams={{ userId: props.route.params.userId, isUsuario:true }}
+      />
+      <Tab.Screen name = 'Search' component = {ListaProtectoras} 
+         options={{
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="search-outline" size={35} color={'blue'} />
           )
         }}
         initialParams={{ userId: props.route.params.userId, isUsuario:true }}
