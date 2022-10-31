@@ -27,6 +27,7 @@ import SesionProtectora from './screens/Sesiones/SesionProtectora';
 import FechaNacimientoAnimal from './screens/Altas/FechaNacimientoAnimal';
 
 
+
 function MyStack (){
   return (
     <Stack.Navigator>

@@ -7,6 +7,7 @@ import {
   Image,
   Linking,
   Button,
+  ActivityIndicator,
   Alert
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
@@ -32,7 +33,7 @@ const PerfilProtectora = (props) => {
   };
 
   const [cosas, setState] = useState(initialStatee);
-
+  const [loading, setLoading] = useState(true);
   const [protectora, setProtectora] = useState(initialState);
 
   const getProtectoraById = async (id) => {
@@ -40,7 +41,7 @@ const PerfilProtectora = (props) => {
     const doc = await dbRef.get();
     const protectora = doc.data();
     setProtectora({ ...protectora, id: doc.id });
-
+    setLoading(false);
     firebase
     .st
     .ref(`imagesProtectora/${protectora.nombre}`)
@@ -49,6 +50,7 @@ const PerfilProtectora = (props) => {
      imageFirebase: url
   });
 });
+
   };
 
 
@@ -66,10 +68,19 @@ const PerfilProtectora = (props) => {
   }
 
   useEffect(() => {
-    getProtectoraById(props.route.params.userId);
+    getProtectoraById(props.route.params.protectoraId);
   }, []);
 //<Image source={require(' /images/Greenpeace.jpg')} style={styles.image}/>
+if (loading) {
   return (
+    <View style={styles.loader}>
+      <ActivityIndicator size="large" color="#9E9E9E" />
+    </View>
+  );
+}
+
+
+return (
     <ScrollView style={styles.container}>
 
       <View>
@@ -130,9 +141,19 @@ const styles = StyleSheet.create({
     width : 250,
     marginBottom : 15
   },
+  loader: {
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   boton: {
     alignItems: "center",
     backgroundColor: "#DDDDDD",
+    marginTop : 25,
     padding: 10
   },
   texto: {
@@ -140,7 +161,7 @@ const styles = StyleSheet.create({
     padding : 5,
     borderBottomWidth: 1,
     borderBottomColor: "#cccccc",
-    marginBottom: 10
+    marginTop : 13
   }
 });
 
