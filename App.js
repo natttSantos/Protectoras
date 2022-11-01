@@ -28,6 +28,7 @@ import FechaNacimientoAnimal from './screens/Altas/FechaNacimientoAnimal';
 import ModificarProtectora from './screens/Modificar/ModificarProtectora';
 
 
+
 function MyStack (){
   return (
     <Stack.Navigator>
