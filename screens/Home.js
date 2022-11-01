@@ -14,6 +14,7 @@ import {
 } from "react-native";
 //import { TouchableOpacity } from 'react-native-gesture-handler';
 import {Avatar, ListItem} from "react-native-elements";
+import ListaAnimalesProtectora from './Listas/ListaAnimalesProtectora.js';
  
 const Home = (props) => {
     
@@ -32,7 +33,7 @@ const Home = (props) => {
       }
       const doc = await dbRef.get();
       const usuario = doc.data();
-      setUsario({ ...usuario, id: doc.id });
+      setUsario({id: doc.id, nombre: usuario.usuario });
       setLoading(false);
     };
   
@@ -70,8 +71,8 @@ const Home = (props) => {
 
       useEffect(() => {
         if(estado.gatoPressed)
-          setAnimalesACargar(animales.filter(animal => animal.tipo == 'Gato'))
-        if(estado.perroPressed)
+          setAnimalesACargar(animales.filter(animal => animal.tipo === 'Gato'))
+        else if(estado.perroPressed)
           setAnimalesACargar(animales.filter(animal => animal.tipo == 'Perro'))
         else
           setAnimalesACargar(animales)
@@ -109,7 +110,7 @@ const Home = (props) => {
             </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => handleColorChange('gato')}
+          onPress={() => {handleColorChange('gato')}}
           style={[styles.button, estado.gatoPressed ? {backgroundColor: 'blue'} : {backgroundColor: 'white'}]}>
             <Text style={styles.buttonText}>
                 GATO
@@ -118,7 +119,7 @@ const Home = (props) => {
       </View>
 
       { animalesACargar.map((animal) => {
-                  
+
       return(
                       
         <ListItem key={animal.id} 
