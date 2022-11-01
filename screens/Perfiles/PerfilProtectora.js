@@ -71,13 +71,13 @@ const PerfilProtectora = (props) => {
   useEffect(() => {
     getProtectoraById(props.route.params.protectoraId);
   }, []);
-//<Image source={require(' /images/Greenpeace.jpg')} style={styles.image}/>
-if (loading) {
-  return (
-    <View style={styles.loader}>
-      <ActivityIndicator size="large" color="#9E9E9E" />
-    </View>
-  );
+  
+  if(loading) {
+    return(
+        <View>
+            <ActivityIndicator />
+        </View>
+    )
 }
 
 

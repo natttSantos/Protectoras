@@ -8,13 +8,14 @@ const ListaProtectoras = (props) => {
 
     const [imagenes, setImagenes] = useState([]);
     const [loading, setLoading] = useState(true);
-    const protectoras = props.route.params.protectoras
+    
     const initialState = {
         nombre: ""  
     }
     const [usuario, setUsario] = useState(initialState);
 
     let imagenesAux = []
+    const protectoras = props.route.params.protectoras
 
     const getUsuarioById = async (id) => {
         let dbRef = null; 
@@ -53,7 +54,6 @@ const ListaProtectoras = (props) => {
     }
     
     useEffect(() => {
-        getUsuarioById(props.route.params.userId)
         cargarImagenes()
     }, [])
 
@@ -67,9 +67,6 @@ const ListaProtectoras = (props) => {
     if(protectoras.length > 0) {
         return(
             <ScrollView style={styles.container}>
-                <Text style = {styles.texto} >
-                    Bienvenid@, {usuario.nombre}
-                </Text>
  
                 <Text style={styles.titulo}>
                     Lista Protectoras
