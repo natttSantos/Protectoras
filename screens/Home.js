@@ -8,10 +8,11 @@ import {
   Alert,
   ActivityIndicator,
   StyleSheet,
+  TouchableOpacity,
   Image,
   Text
 } from "react-native";
-import { TouchableOpacity } from 'react-native-gesture-handler';
+//import { TouchableOpacity } from 'react-native-gesture-handler';
 import {Avatar, ListItem} from "react-native-elements";
  
 const Home = (props) => {
@@ -21,10 +22,6 @@ const Home = (props) => {
     }
     const [usuario, setUsario] = useState(initialState);
     const [loading, setLoading] = useState(true);
-  
-    const handleTextChange = (value, prop) => {
-      setUsario({ ...usuario, [prop]: value });
-    };
   
     const getUsuarioById = async (id) => {
       let dbRef = null; 
@@ -45,112 +42,112 @@ const Home = (props) => {
   
     // CÓDIGO LISTA ANIMALES //
 
+      const [estado, setEstado] = useState({
+        perroPressed: false,
+        gatoPressed: false
+      })
 
-      const initialStatee = {
-        imageFirebase:"",
-        staet :""
-        
-      };
+      const [animales, setAnimales] = useState([]);
+      const [animalesACargar, setAnimalesACargar] = useState([]);
 
-      const [cosas, setState] = useState(initialStatee);
-
-      const [animales, setProtectoras] = useState([]);
-      const URLAnimal = "";
-      var state = "";
       useEffect(() => {
           firebase.db.collection('animales').onSnapshot((querySnapshot) => {
               const listaAnimales = []
   
               querySnapshot.docs.forEach((doc) => {
-                  const {nombre, raza, sexo, edad, descripcion, fecha_nacimiento} = doc.data()
+                  const {nombre, descripcion, tipo} = doc.data()
                   listaAnimales.push({
                       id: doc.id,
                       nombre,
-                      raza,
-                      sexo,
-                      edad,
                       descripcion,
-                      fecha_nacimiento
+                      tipo
                   })
               });
-              setProtectoras(listaAnimales)
+              setAnimales(listaAnimales)
+              setAnimalesACargar(listaAnimales)
           })
-      })
-  
+      }, [])
+
+      useEffect(() => {
+        if(estado.gatoPressed)
+          setAnimalesACargar(animales.filter(animal => animal.tipo == 'Gato'))
+        if(estado.perroPressed)
+          setAnimalesACargar(animales.filter(animal => animal.tipo == 'Perro'))
+        else
+          setAnimalesACargar(animales)
+      }, [estado])
       
-      const loadImage = async () => {
-        console.log(p);
-        firebase
-        .st
-        .ref(`images/${animal}`)
-        .getDownloadURL().then(function(url) {
-        setState({
-         url
-      });
-    });
-  
+
+    const handleColorChange = (animal) => {
+      if(animal == 'perro'){
+        if(estado.gatoPressed && !estado.perroPressed)
+          setEstado({ ...estado, ['perroPressed']: !estado.perroPressed, ['gatoPressed']: !estado.gatoPressed});
+        else
+          setEstado({ ...estado, ['perroPressed']: !estado.perroPressed});}
+      else { 
+        if(estado.perroPressed && !estado.gatoPressed)
+          setEstado({ ...estado, ['gatoPressed']: !estado.gatoPressed, ['perroPressed']: !estado.perroPressed});
+        else
+          setEstado({ ...estado, ['gatoPressed']: !estado.gatoPressed});}
     };
+
+  return (
+    <ScrollView style={styles.container}>
+      <Text style = {styles.texto} >
+      Bienvenid@, {usuario.nombre}
+      </Text>
   
-  
-  
-        const checkImage = () => {
-          const { imageFirebase } = cosas;
-          console.log(imageFirebase);
-          if (cosas != "") {
-            return (
-              <Avatar
-                  style={styles.imagen}
-                  rounded
-                  source={{uri: imageFirebase}} />
-            );
-          }
-          return null;
-        };
-      
+      <Text style={styles.titulo}>
+        Lista Animales
+      </Text>
+      <View style ={{flexDirection:'row', justifyContent: 'space-between', width:150}}>
+      <TouchableOpacity
+          onPress={() => {handleColorChange('perro')}}
+          style={[styles.button, estado.perroPressed ? {backgroundColor: 'blue'} : {backgroundColor: 'white'}]}>
+            <Text style={styles.buttonText}>
+                PERRO
+            </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => handleColorChange('gato')}
+          style={[styles.button, estado.gatoPressed ? {backgroundColor: 'blue'} : {backgroundColor: 'white'}]}>
+            <Text style={styles.buttonText}>
+                GATO
+            </Text>
+        </TouchableOpacity>
+      </View>
 
- return (
-  <ScrollView style={styles.container}>
- 
-    <Text style = {styles.texto} >
-        Bienvenid@, {usuario.nombre}
-    </Text>
- 
-    <Text style={styles.titulo}>
-       Lista Animales
-    </Text>
-    { animales.map((animal) => {
-   // uploadImage(animal.nombre);
-   //  {loadImage(animal.nombre)}
-                
-    return(
-                    
-      <ListItem key={animal.id} 
-            
-      bottomDivider
-      onPress={() => {
-      props.navigation.navigate("PerfilAnimal", {
-      animalId: animal.id, registrado: true,
-      userId: props.route.params.userId,
-      });
-      }}
-      >
-      <ListItem.Chevron />
-        <ListItem.Content 
-          style={styles.lista}>
-            <ListItem.Title 
-            style={{fontWeight: "bold"}}> 
-            {animal.nombre} 
-            </ListItem.Title>
-          <ListItem.Subtitle> {animal.descripcion} </ListItem.Subtitle>
-        </ListItem.Content>
-      </ListItem>
-      )})
-    }
+      { animalesACargar.map((animal) => {
+                  
+      return(
+                      
+        <ListItem key={animal.id} 
+              
+        bottomDivider
+        onPress={() => {
+        props.navigation.navigate("PerfilAnimal", {
+        animalId: animal.id, registrado: true,
+        userId: props.route.params.userId,
+        });
+        }}
+        >
+        <ListItem.Chevron />
+          <ListItem.Content 
+            style={styles.lista}>
+              <ListItem.Title 
+              style={{fontWeight: "bold"}}> 
+              {animal.nombre} 
+              </ListItem.Title>
+            <ListItem.Subtitle> {animal.descripcion} </ListItem.Subtitle>
+          </ListItem.Content>
+        </ListItem>
+        )})
+      }
 
 
-</ScrollView>
+  </ScrollView>
 
-  )
+    )
 
  }
 
@@ -170,11 +167,12 @@ const Home = (props) => {
     color: 'blue',
     fontWeight: "bold", 
     textAlign: 'right'
-  }, 
-  button: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10
+  },
+  button : {
+    elevation: 8,
+    padding: 10,
+    marginTop: 20,
+    marginBottom: 20
   },
   input: {
     height: 40,
@@ -196,6 +194,13 @@ const Home = (props) => {
   imagen: {
       height: 60,
       width: 60
+  },
+  buttonText: {
+    fontSize: 14,
+    colors: "#ffffff",
+    fontWeight: "bold",
+    alignSelf: "center",
+    textTransform: "uppercase"    
   }
 });
 
