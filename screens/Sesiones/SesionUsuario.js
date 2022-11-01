@@ -14,6 +14,7 @@ import RegistrarAnimal from '../Altas/RegistrarAnimal';
 import AltaGlobal from '../Altas/AltaGlobal.js';
 import ListaProtectoras from '../Listas/ListaProtectoras.js';
 
+
 const SesionUsuario = (props) => {
   const initialState = {
     usuario: "",
@@ -28,11 +29,31 @@ const SesionUsuario = (props) => {
 
 const [usuario, setUsuario] = useState(initialState);
 const [loading, setLoading] = useState(true);
+const [protectoras, setProtectoras] = useState([]);
+
 
 const handleTextChange = (value, prop) => {
   setUsuario({ ...usuario, [prop]: value });
 };
 
+const getProtectoras = async () => {
+  firebase.db.collection('protectoras').onSnapshot((querySnapshot) => {
+    querySnapshot.docs.forEach((doc) => {
+        const {url, nombre, localizacion, email, direccion, descripcion} = doc.data()
+        protectoras.push({
+            id: doc.id,
+            url,
+            nombre,
+            localizacion,
+            email,
+            direccion,
+            descripcion
+        })
+    });
+    console.log(protectoras.length)
+    setProtectoras(protectoras)
+});
+}
 const getUsuarioById = async (id) => {
   const dbRef = firebase.db.collection("users").doc(id);
   const doc = await dbRef.get();
@@ -44,6 +65,7 @@ const getUsuarioById = async (id) => {
 
 useEffect(() => { 
   getUsuarioById(props.route.params.userId); 
+  getProtectoras(); 
 }, []);
 
 
@@ -65,7 +87,7 @@ useEffect(() => {
             <Icon name="search-outline" size={35} color={'blue'} />
           )
         }}
-        initialParams={{ userId: props.route.params.userId, isUsuario:true }}
+        initialParams={{ userId: props.route.params.userId, isUsuario:true, protectoras:protectoras}}
       />
       <Tab.Screen name = 'Add' component = {AltaGlobal} 
          options={{

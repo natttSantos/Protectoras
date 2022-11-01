@@ -99,7 +99,7 @@ const SesionProtectora = (props) => {
               <Icon name="person-circle-outline" size={35} color={'blue'} />
             )
           }}
-          initialParams={{ userId: props.route.params.userId }}/>
+          initialParams={{ protectoraId: props.route.params.userId }}/>
       </Tab.Navigator>  
     );
 };
