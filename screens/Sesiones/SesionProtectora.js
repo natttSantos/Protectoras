@@ -20,7 +20,8 @@ const SesionProtectora = (props) => {
     localizacion:"",
     direccion:"",
     url:"",
-    descripcion:""
+    descripcion:"",
+    fotoModificada:""
   };
   const Tab = createBottomTabNavigator(); 
 
@@ -29,11 +30,12 @@ const SesionProtectora = (props) => {
   const [loading, setLoading] = useState(true);
 
   const getUsuarioById = async (id) => {
-    const dbRef = firebase.db.collection("users").doc(id);
+    const dbRef = firebase.db.collection("protectoras").doc(id);
     const doc = await dbRef.get();
     const usuario = doc.data();
     console.log(usuario)
     setUsuario({ ...usuario, id: doc.id });
+    console.log(id + "   a     ");
   };
 
   const getAllAnimalesDeProtectora = async (id) => {
