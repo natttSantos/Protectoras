@@ -22,7 +22,8 @@ const PerfilProtectora = (props) => {
     localizacion:"",
     direccion:"",
     url:"",
-    descripcion:""
+    descripcion:"",
+    fotoModificada:""
   };
 
   const initialStatee = {
@@ -43,7 +44,7 @@ const PerfilProtectora = (props) => {
 
     firebase
     .st
-    .ref(`imagesProtectora/${protectora.nombre}`)
+    .ref(`imagesProtectora/${protectora.fotoModificada}`)
     .getDownloadURL().then(function(url) {
     setState({
      imageFirebase: url
@@ -92,11 +93,26 @@ const PerfilProtectora = (props) => {
         <BotonAbrirURL url={protectora.url}>
           Página web
         </BotonAbrirURL>
+        <Button title="Modificar" onPress={() => {
+                      props.navigation.navigate('ModificarProtectora', {userId: props.route.params.userId}),
+                      console.log(props.route.params.userId)
+                    }} />
+        <TouchableOpacity 
+                    onPress={() => {
+                      props.navigation.navigate('ModificarProtectora', {userId: props.route.params.userId}) 
+                    }}
+                    style={styles.button}>
+                        <Text style={styles.buttonText}>
+                            Dar de alta protectora
+                        </Text>
+        </TouchableOpacity>
       </View>
       
     </ScrollView>
   );
 };
+
+
 
 const BotonAbrirURL = ({ url }) => {
   

@@ -25,6 +25,7 @@ import PerfilAdoptar from './screens/Perfiles/PerfilAdoptar';
 import SesionUsuario from './screens/Sesiones/SesionUsuario';
 import SesionProtectora from './screens/Sesiones/SesionProtectora';
 import FechaNacimientoAnimal from './screens/Altas/FechaNacimientoAnimal';
+import ModificarProtectora from './screens/Modificar/ModificarProtectora';
 
 
 function MyStack (){
@@ -48,6 +49,7 @@ function MyStack (){
       <Stack.Screen name="AltaAdoptar" component={AltaAdoptar} />
       <Stack.Screen name="UserDetailScreen" component={UserDetailScreen} options={{title: 'Detalles'}} />
       <Stack.Screen name="PerfilAdoptar" component={PerfilAdoptar} />
+      <Stack.Screen name="ModificarProtectora" component={ModificarProtectora} />
     </Stack.Navigator>
   )
 }
