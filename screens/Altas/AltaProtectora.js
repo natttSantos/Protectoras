@@ -135,6 +135,7 @@ const AltaProtectora = (props) => {
                     setFoto({
                         existe: "Si"
                      });
+                     alert("Imagen subida correctamente")
                   })
                   .catch(error => {
                     console.log(error);
