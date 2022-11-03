@@ -48,6 +48,9 @@ const ListaAnimalesProtectora = (props) => {
     if(animales.length > 0) {
         return(
             <ScrollView>
+                <Text style={styles.titulo}>
+                    Lista Animales
+                </Text>
                     {animales.map((animal, index) => {
                         return (
                             <ListItem key={animal.id}
@@ -87,6 +90,13 @@ const styles = StyleSheet.create({
     lista: {
         margin: 12,
         padding: 10
+    }, 
+    titulo: {
+        margin: 12,
+        padding: 10,
+        fontSize: 40,
+        fontWeight: 'bold',
+        textAlign: "left"
     }
 })
 export default ListaAnimalesProtectora;
