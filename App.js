@@ -13,7 +13,6 @@ import ListaProtectoras from './screens/Listas/ListaProtectoras'
 import AltaProtectora from './screens/Altas/AltaProtectora'
 import ListaAnimales from './screens/Listas/ListaAnimales';
 import PerfilAnimal from './screens/Perfiles/PerfilAnimal';
-import Sesion from './screens/Sesiones/SesionUsuario';
 import PerfilUsuario from './screens/Perfiles/PerfilUsuario';
 import PerfilProtectora from './screens/Perfiles/PerfilProtectora';
 import AltaAdoptar from './screens/Altas/AltaAdoptar';

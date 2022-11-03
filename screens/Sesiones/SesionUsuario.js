@@ -13,7 +13,7 @@ import Home from '../Home.js';
 import RegistrarAnimal from '../Altas/RegistrarAnimal';
 import AltaGlobal from '../Altas/AltaGlobal.js';
 import ListaProtectoras from '../Listas/ListaProtectoras.js';
-
+import ListaAnimales from '../Listas/ListaAnimales.js';
 
 const SesionUsuario = (props) => {
   const initialState = {
@@ -30,7 +30,7 @@ const SesionUsuario = (props) => {
 const [usuario, setUsuario] = useState(initialState);
 const [loading, setLoading] = useState(true);
 const [protectoras, setProtectoras] = useState([]);
-
+const [animales, setAnimales] = useState([]);
 
 const handleTextChange = (value, prop) => {
   setUsuario({ ...usuario, [prop]: value });
@@ -50,10 +50,27 @@ const getProtectoras = async () => {
             descripcion
         })
     });
-    console.log(protectoras.length)
     setProtectoras(protectoras)
 });
 }
+const getAnimales = async () => {
+  firebase.db.collection('animales').onSnapshot((querySnapshot) => {
+    const listaAnimales = []
+
+    querySnapshot.docs.forEach((doc) => {
+        const {nombre, descripcion, tipo} = doc.data()
+        listaAnimales.push({
+            id: doc.id,
+            nombre,
+            descripcion,
+            tipo
+        })
+    });
+    setAnimales(listaAnimales)
+})
+}
+
+
 const getUsuarioById = async (id) => {
   const dbRef = firebase.db.collection("users").doc(id);
   const doc = await dbRef.get();
@@ -66,19 +83,20 @@ const getUsuarioById = async (id) => {
 useEffect(() => { 
   getUsuarioById(props.route.params.userId); 
   getProtectoras(); 
+  getAnimales(); 
 }, []);
 
 
   return (
     <Tab.Navigator>
-      <Tab.Screen name = 'Home' component = {Home} 
+      <Tab.Screen name = 'Home' component = {ListaAnimales} 
          options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Icon name="home-outline" size={35} color={'blue'} />
           )
         }}
-        initialParams={{ userId: props.route.params.userId, isUsuario:true }}
+        initialParams={{ userId: props.route.params.userId, isUsuario:true, animales:animales}}
       />
       <Tab.Screen name = 'Search' component = {ListaProtectoras} 
          options={{
