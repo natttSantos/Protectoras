@@ -45,7 +45,7 @@ const PerfilProtectora = (props) => {
     setLoading(false);
     firebase
     .st
-    .ref(`imagesProtectora/${protectora.nombre}`)
+    .ref(`imagesProtectora/${protectora.fotoModificada}`)
     .getDownloadURL().then(function(url) {
     setState({
      imageFirebase: url
@@ -105,8 +105,7 @@ return (
           Página web
         </BotonAbrirURL>
         <Button title="Modificar" onPress={() => {
-                      props.navigation.navigate('ModificarProtectora', {userId: props.route.params.userId}),
-                      console.log(props.route.params.userId)
+                      props.navigation.navigate('ModificarProtectora', {userId: props.route.params.protectoraId})
                     }} />
         <TouchableOpacity 
                     onPress={() => {
