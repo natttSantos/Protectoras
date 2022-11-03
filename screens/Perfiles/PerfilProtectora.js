@@ -45,7 +45,7 @@ const PerfilProtectora = (props) => {
     setLoading(false);
     firebase
     .st
-    .ref(`imagesProtectora/${protectora.nombre}`)
+    .ref(`imagesProtectora/${protectora.fotoModificada}`)
     .getDownloadURL().then(function(url) {
     setState({
      imageFirebase: url

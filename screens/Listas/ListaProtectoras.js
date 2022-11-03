@@ -1,34 +1,15 @@
-import React, {useEffect, useState} from "react";
-import {Linking, View, Button, TextInput, Text, StyleSheet, ActivityIndicator, ScrollView, ProgressViewIOSComponent} from "react-native";
-import firebase from '../../database/firebase';
+import React, {useState, useEffect} from "react"
+import {ScrollView, View, StyleSheet, Text}  from 'react-native'
 import {Avatar, ListItem} from "react-native-elements";
-import { style } from "deprecated-react-native-prop-types/DeprecatedTextInputPropTypes";
+import { ActivityIndicator } from "react-native-paper";
+import firebase from "../../database/firebase";
 
 const ListaProtectoras = (props) => {
-
     const [imagenes, setImagenes] = useState([]);
-    const [loading, setLoading] = useState(true);
-    
-    const initialState = {
-        nombre: ""  
-    }
-    const [usuario, setUsario] = useState(initialState);
+    const [loading, setLoading] = useState(true); 
 
     let imagenesAux = []
     const protectoras = props.route.params.protectoras
-
-    const getUsuarioById = async (id) => {
-        let dbRef = null; 
-        if (props.route.params.isUsuario == false){
-          dbRef = firebase.db.collection("protectoras").doc(id);
-        } else{
-          dbRef = firebase.db.collection("users").doc(id);  
-        }
-        const doc = await dbRef.get();
-        const usuario = doc.data();
-        setUsario({ ...usuario, id: doc.id });
-        setLoading(false);
-      };
 
     const cargarImagenes = async () => {
         let i = protectoras.length
@@ -37,7 +18,7 @@ const ListaProtectoras = (props) => {
             await protectoras.map(async (protectora, index) => {
                 await firebase
                 .st
-                .ref(`imagesProtectora/${protectora.nombre}`)
+                .ref(`imagesProtectora/${protectora.fotoModificada}`)
                 .getDownloadURL().then(function(url) {
                     i--
                     imagenesAux[index] = url
