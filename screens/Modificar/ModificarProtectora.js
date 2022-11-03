@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import { ScrollView, View, Text, StyleSheet, TextInput,Image } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Button } from "react-native-elements";
-import firebase from '../../database/firebase';
+import firebase from "../../database/firebase";
 import * as ImagePicker from 'expo-image-picker';
 
 const ModificarProtectora = (props) => {
@@ -24,14 +24,14 @@ const ModificarProtectora = (props) => {
     const initialStatee = {
         imageFirebase:"a",
         staet :""
-        
+
       };
-    
+
     const [cosas, setState] = useState(initialStatee);
 
     const [foto, setFoto] = useState({
         existe:"",
-        
+
       });
 
     const [open, setOpen] = useState(false)
@@ -49,7 +49,7 @@ const ModificarProtectora = (props) => {
         if (protectora.nombre == '' || protectora.email == ''|| protectora.email == '' || protectora.provincia == '' || protectora.telefono == ""|| protectora.url == ''|| protectora.direccion == ''|| protectora.descripcion == '') {
             validateFields();
         } else  {
-            
+
             const protectoraRef = firebase.db.collection("protectoras").doc(protectora.id);
             console.log(protectora.id);
             await protectoraRef.set({
@@ -66,7 +66,7 @@ const ModificarProtectora = (props) => {
                 alert("Datos cambiados correctamente")
             }
         }
-    
+
 
     const uploadImage = uri => {
         return new Promise((resolve, reject) => {
@@ -78,7 +78,7 @@ const ModificarProtectora = (props) => {
               resolve(xhr.response);
             }
           };
-    
+
           xhr.open("GET", uri);
           xhr.responseType = "blob";
           xhr.send();
@@ -87,14 +87,14 @@ const ModificarProtectora = (props) => {
 
 
     const openGallery = async () => {
-    
+
         const resultPermission =true; 
         if (resultPermission) {
           const resultImagePicker = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
             aspect: [4, 3]
           });
-    
+
           if (resultImagePicker.cancelled === false) {
             const imageUri = resultImagePicker.uri;
             uploadImage(imageUri)
@@ -110,6 +110,7 @@ const ModificarProtectora = (props) => {
                     setFoto({
                         existe: "Si"
                      });
+                     alert("Imagen subida correctamente")
                   })
                   .catch(error => {
                     console.log(error);
@@ -137,7 +138,7 @@ const ModificarProtectora = (props) => {
         setState({
          imageFirebase: url,
          staet: "Existe"
-         
+
       });
     });
       };
@@ -155,9 +156,10 @@ const ModificarProtectora = (props) => {
         }
         return null;
       }
-    
+
       useEffect(() => {
         getProtectoraById(props.route.params.userId);
+        console.log(props.route.params.userId);
       }, []);
 
 
@@ -186,15 +188,15 @@ const ModificarProtectora = (props) => {
     }
 
     return(
-        
-           
+
+
         <ScrollView style={styles.container}> 
         {checkImage()}
         <Button style={{position: 'fixed',  right: 0}} title="Selecciona una imagen" onPress={() =>  openGallery()} /> 
             <Text style={{marginTop: 15, color: 'darkred'}}> * Campo obligatorio </Text>
             <View 
             style={styles.inputGroup}> 
-            
+
                 <TextInput 
                 style={styles.inputText}
                 placeholder="* Nombre"
@@ -281,14 +283,14 @@ const ModificarProtectora = (props) => {
                     />
             </View>
             <View style={{marginTop: 15}}>
-            
+
                 <Button 
                 title="Dar de alta" 
                 onPress={() => {saveNewProtectora()}}/>
             </View>
-            
+
         </ScrollView>
-        
+
     )
 }
 
