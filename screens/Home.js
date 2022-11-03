@@ -34,7 +34,6 @@ const Home = (props) => {
       const doc = await dbRef.get();
       const usuario = doc.data();
       setUsario({id: doc.id, nombre: usuario.usuario });
-      setLoading(false);
     };
   
     useEffect(() => { 
@@ -43,30 +42,67 @@ const Home = (props) => {
   
     // CÓDIGO LISTA ANIMALES //
 
-      const [estado, setEstado] = useState({
-        perroPressed: false,
-        gatoPressed: false
+    const [estado, setEstado] = useState({
+      perroPressed: false,
+      gatoPressed: false
+    })
+
+    const [animales, setAnimales] = useState([]);
+    const [animalesACargar, setAnimalesACargar] = useState([]);
+    const [imagenes, setImagenes] = useState([]);
+    const [imagenesACargar, setImagenesACargar] = useState([]);
+
+    const cargarImagenes = async () => {
+        let i = animales.length
+        let imagenesAux = []
+
+        if(i > 0){
+          animales.map(async (animal, index) => {
+            await firebase
+              .st
+              .ref(`images/${animal.nombre}`)
+              .getDownloadURL().then(function (url) {
+                i--;
+                imagenesAux[index] = url;
+                setImagenes(...imagenes, imagenesAux);
+                setImagenesACargar(...imagenesACargar, imagenesAux)
+                if (i == 0) 
+                  setLoading(false);
+              });
+          })
+        }
+        else {
+             setLoading(false)
+        }
+    }
+
+    const actualizarImagenes = () => {
+      const imagenesAux = []
+
+      animalesACargar.map((animal) => {
+        const index = animales.findIndex(animalin => animalin == animal)
+        imagenesAux.push(imagenes[index])
       })
 
-      const [animales, setAnimales] = useState([]);
-      const [animalesACargar, setAnimalesACargar] = useState([]);
+      setImagenesACargar(imagenesAux)
+      
+    }
 
       useEffect(() => {
-          firebase.db.collection('animales').onSnapshot((querySnapshot) => {
-              const listaAnimales = []
-  
-              querySnapshot.docs.forEach((doc) => {
-                  const {nombre, descripcion, tipo} = doc.data()
-                  listaAnimales.push({
-                      id: doc.id,
-                      nombre,
-                      descripcion,
-                      tipo
-                  })
-              });
-              setAnimales(listaAnimales)
-              setAnimalesACargar(listaAnimales)
-          })
+        firebase.db.collection('animales').onSnapshot((querySnapshot) => {
+            const listaAnimales = []
+
+            querySnapshot.docs.forEach((doc) => {
+                const {nombre, descripcion, tipo} = doc.data()
+                listaAnimales.push({
+                    id: doc.id,
+                    nombre,
+                    descripcion,
+                    tipo
+                })
+            });
+            setAnimales(listaAnimales)
+        })
       }, [])
 
       useEffect(() => {
@@ -77,6 +113,20 @@ const Home = (props) => {
         else
           setAnimalesACargar(animales)
       }, [estado])
+
+      
+    useEffect(() => {
+      setLoading(true)
+      if(imagenes.length != 0) {
+        actualizarImagenes()
+        setLoading(false)
+      }
+    }, [animalesACargar])
+
+    useEffect(() => {
+      cargarImagenes()
+      setAnimalesACargar(animales)
+    }, [animales])
       
 
     const handleColorChange = (animal) => {
@@ -91,6 +141,9 @@ const Home = (props) => {
         else
           setEstado({ ...estado, ['gatoPressed']: !estado.gatoPressed});}
     };
+
+    
+  
 
   return (
     <ScrollView style={styles.container}>
@@ -118,32 +171,27 @@ const Home = (props) => {
         </TouchableOpacity>
       </View>
 
-      { animalesACargar.map((animal) => {
+      {loading ? <View><ActivityIndicator /></View> : 
 
-      return(
-                      
-        <ListItem key={animal.id} 
-              
-        bottomDivider
-        onPress={() => {
-        props.navigation.navigate("PerfilAnimal", {
-        animalId: animal.id, registrado: true,
-        userId: props.route.params.userId,
-        });
-        }}
-        >
-        <ListItem.Chevron />
-          <ListItem.Content 
-            style={styles.lista}>
-              <ListItem.Title 
-              style={{fontWeight: "bold"}}> 
-              {animal.nombre} 
-              </ListItem.Title>
-            <ListItem.Subtitle> {animal.descripcion} </ListItem.Subtitle>
-          </ListItem.Content>
-        </ListItem>
-        )})
-      }
+      animalesACargar.map((animal, index) => {
+        return (
+            <ListItem key={animal.id}
+                bottomDivider
+                onPress={() => {props.navigation.navigate('PerfilAnimal', {animalId: animal.id})}}>
+                <Avatar 
+                style = {styles.imagen}
+                source={{uri: imagenesACargar[index]}}
+                />
+                <ListItem.Content 
+                style = {styles.lista}
+                >
+                    <ListItem.Title> {animal.nombre} </ListItem.Title>
+                    <ListItem.Subtitle> {animal.raza} </ListItem.Subtitle>
+                    <ListItem.Subtitle> {animal.sexo} </ListItem.Subtitle>
+                </ListItem.Content>
+              </ListItem>);
+      })
+    }
 
 
   </ScrollView>
