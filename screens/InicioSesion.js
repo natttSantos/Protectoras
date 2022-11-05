@@ -22,6 +22,9 @@ const InicioSesion = (props) => {
     const validateUser = async () => {
         const usuarios = firebase.db.collection("users");
         const snapshot = await usuarios.where("email", "==", state.email).get();
+        
+        const protectoras = firebase.db.collection("protectoras");
+        const snapshot2 = await protectoras.where("email", "==", state.email).get();
         if (!snapshot.empty) {
             const usuario = snapshot.docs[0]
             if (usuario.get("contraseña") == state.contraseña){
@@ -29,14 +32,15 @@ const InicioSesion = (props) => {
             } else { showAlert(); }
         }
         else {
-            const protectoras = firebase.db.collection("protectoras");
-            const snapshot2 = await protectoras.where("email", "==", state.email).get();
             if (!snapshot2.empty) {
                 const protectora = snapshot2.docs[0]
                 if(protectora.get('contraseña') == state.contraseña) {
                     props.navigation.navigate('SesionProtectora', {userId: protectora.id})
                 } else { showAlert(); }
             }
+        }
+        if (snapshot.empty && snapshot2.empty) {
+            showAlert();
         }
     };
 

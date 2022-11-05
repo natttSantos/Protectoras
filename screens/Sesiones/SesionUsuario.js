@@ -40,7 +40,7 @@ const handleTextChange = (value, prop) => {
 const getProtectoras = async () => {
   firebase.db.collection('protectoras').onSnapshot((querySnapshot) => {
     querySnapshot.docs.forEach((doc) => {
-        const {url, nombre, localizacion, email, direccion, descripcion} = doc.data()
+        const {url, nombre, localizacion, email, direccion, descripcion, fotoModificada} = doc.data()
         protectoras.push({
             id: doc.id,
             url,
@@ -48,7 +48,8 @@ const getProtectoras = async () => {
             localizacion,
             email,
             direccion,
-            descripcion
+            descripcion, 
+            fotoModificada
         })
     });
     setProtectoras(protectoras)

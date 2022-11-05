@@ -1,46 +1,16 @@
-
-import firebase from '../../database/firebase.js';
-import React, { useEffect, useState } from "react";
-import {
-  ScrollView,
-  Button,
-  View,
-  Alert,
-  ActivityIndicator,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  Text
-} from "react-native";
-//import { TouchableOpacity } from 'react-native-gesture-handler';
+import React, {useState, useEffect} from "react"
+import {ScrollView, View, StyleSheet, Text, TouchableOpacity}  from 'react-native'
 import {Avatar, ListItem} from "react-native-elements";
+import { ActivityIndicator } from "react-native-paper";
+import firebase from "../../database/firebase";
  
 const ListaAnimales = (props) => {
-    
-  const initialState = {
-        nombre: ""  
-    }
-    const [usuario, setUsario] = useState(initialState);
+
     const [imagenes, setImagenes] = useState([]);
     const [loading, setLoading] = useState(true);
     let imagenesAux = []
   
-    const getUsuarioById = async (id) => {
-      let dbRef = null; 
-      if (props.route.params.isUsuario == false){
-        dbRef = firebase.db.collection("protectoras").doc(id);
-      } else{
-        dbRef = firebase.db.collection("users").doc(id);  
-      }
-      const doc = await dbRef.get();
-      const usuario = doc.data();
-      setUsario({id: doc.id, nombre: usuario.usuario });
-      setLoading(false);
-    };
-  
-    useEffect(() => { 
-      getUsuarioById(props.route.params.userId); 
-    }, []);
+
   
     // CÓDIGO LISTA ANIMALES //
 
@@ -119,9 +89,7 @@ const ListaAnimales = (props) => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style = {styles.texto} >
-      Bienvenid@, {usuario.nombre}
-      </Text>
+      
   
       <Text style={styles.titulo}>
         Lista Animales
@@ -151,8 +119,7 @@ const ListaAnimales = (props) => {
         bottomDivider
         onPress={() => {
         props.navigation.navigate("PerfilAnimal", {
-        animalId: animal.id, registrado: true,
-        userId: props.route.params.userId,
+        animalId: animal.id, registrado: true
         });
         }}
         >
