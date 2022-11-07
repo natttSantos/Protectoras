@@ -28,7 +28,7 @@ const InicioSesion = (props) => {
         if (!snapshot.empty) {
             const usuario = snapshot.docs[0]
             if (usuario.get("contraseña") == state.contraseña){
-                props.navigation.navigate('SesionUsuario', {userId: usuario.id, isUsuario: true})
+                props.navigation.navigate('SesionUsuario', {userId: usuario.id})
             } else { showAlert(); }
         }
         else {

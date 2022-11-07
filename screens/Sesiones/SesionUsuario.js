@@ -113,7 +113,7 @@ useEffect(() => {
          options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
-            <Icon name="animal-circle-outline" size={35} color={'blue'} />
+            <Icon name="paw-outline" size={35} color={'blue'} />
           )
         }}
         initialParams={{ userId: props.route.params.userId, isUsuario:true}}

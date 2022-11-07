@@ -12,6 +12,7 @@ import RegistrarUsuario from '../Altas/RegistrarUsuario.js';
 import ListaAnimalesProtectora from '../Listas/ListaAnimalesProtectora.js';
 import RegistrarAnimal from '../Altas/RegistrarAnimal';
 import AltaGlobal from '../Altas/AltaGlobal.js';
+import ListaSolicitudes from '../Listas/ListaSolicitudes.js';
 
 const SesionProtectora = (props) => {
   const initialState = {
@@ -33,9 +34,7 @@ const SesionProtectora = (props) => {
     const dbRef = firebase.db.collection("protectoras").doc(id);
     const doc = await dbRef.get();
     const usuario = doc.data();
-    console.log(usuario)
     setUsuario({ ...usuario, id: doc.id });
-    console.log(id + "   a     ");
   };
 
   const getAllAnimalesDeProtectora = async (id) => {
@@ -83,13 +82,22 @@ const SesionProtectora = (props) => {
               <Icon name="home-outline" size={35} color={'blue'} />
             )
           }}
-          initialParams={{ animales: animales}}
+          initialParams={{ animales: animales, userId: props.route.params.userId}}
         />
         <Tab.Screen name = 'Add' component = {AltaGlobal} 
           options={{
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <Icon name="add-circle-outline" size={35} color={'blue'} />
+            )
+          }}
+          initialParams={{ userId: props.route.params.userId, isUsuario: false}}
+        />
+        <Tab.Screen name = 'Solicitudes' component = {ListaSolicitudes} 
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <Icon name="briefcase-outline" size={35} color={'blue'} />
             )
           }}
           initialParams={{ userId: props.route.params.userId, isUsuario: false}}

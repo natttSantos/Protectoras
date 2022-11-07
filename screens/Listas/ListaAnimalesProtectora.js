@@ -55,7 +55,7 @@ const ListaAnimalesProtectora = (props) => {
                         return (
                             <ListItem key={animal.id}
                                 bottomDivider
-                                onPress={() => {props.navigation.navigate('PerfilAnimal', {animalId: animal.id})}}>
+                                onPress={() => {props.navigation.navigate('PerfilAnimal', {animalId: animal.id, userId: props.route.params.userId, esUsuario: false})}}>
                                 <Avatar 
                                 style = {styles.imagen}
                                 source={{uri: imagenes[index]}}

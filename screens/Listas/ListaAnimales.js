@@ -6,65 +6,74 @@ import firebase from "../../database/firebase";
  
 const ListaAnimales = (props) => {
 
-    const [imagenes, setImagenes] = useState([]);
     const [loading, setLoading] = useState(true);
-    let imagenesAux = []
-  
-
   
     // CÓDIGO LISTA ANIMALES //
 
-      const [estado, setEstado] = useState({
-        perroPressed: false,
-        gatoPressed: false
-      })
+    const [estado, setEstado] = useState({
+      perroPressed: false,
+      gatoPressed: false
+    })
 
-      const [animales, setAnimales] = useState([]);
-      const [animalesACargar, setAnimalesACargar] = useState([]);
+    const [animales, setAnimales] = useState([]);
+    const [animalesACargar, setAnimalesACargar] = useState([]);
+    const [imagenes, setImagenes] = useState([]);
+    const [imagenesACargar, setImagenesACargar] = useState([]);
 
-      useEffect(() => {
-          firebase.db.collection('animales').onSnapshot((querySnapshot) => {
-              const listaAnimales = []
-  
-              querySnapshot.docs.forEach((doc) => {
-                  const {nombre, descripcion, tipo} = doc.data()
-                  listaAnimales.push({
-                      id: doc.id,
-                      nombre,
-                      descripcion,
-                      tipo
-                  })
-              });
-              setAnimales(listaAnimales)
-              setAnimalesACargar(listaAnimales)
-          })
-      }, [])
-
-      const cargarImagenes = async () => {
+    const cargarImagenes = async () => {
         let i = animales.length
+        let imagenesAux = []
 
         if(i > 0){
-            await animales.map(async (animal, index) => {
-                await firebase
-                .st
-                .ref(`images/${animal.nombre}`)
-                .getDownloadURL().then(function(url) {
-                    i--
-                    imagenesAux[index] = url
-                    setImagenes(...imagenes, imagenesAux)
-                    if(i == 0) setLoading(false)
-                });
-                console.log("si entro")
-            })
+          animales.map(async (animal, index) => {
+            await firebase
+              .st
+              .ref(`images/${animal.nombre}`)
+              .getDownloadURL().then(function (url) {
+                i--;
+                imagenesAux[index] = url;
+                setImagenes(...imagenes, imagenesAux);
+                setImagenesACargar(...imagenesACargar, imagenesAux)
+                if (i == 0) 
+                  setLoading(false);
+              });
+          })
         }
         else {
-            console.log("no entro")
-            setLoading(false)
+             setLoading(false)
         }
     }
-    
+
+    const actualizarImagenes = () => {
+      const imagenesAux = []
+
+      animalesACargar.map((animal) => {
+        const index = animales.findIndex(animalin => animalin == animal)
+        imagenesAux.push(imagenes[index])
+      })
+
+      setImagenesACargar(imagenesAux)
+      
+    }
+
       useEffect(() => {
-        cargarImagenes()
+        firebase.db.collection('animales').onSnapshot((querySnapshot) => {
+            const listaAnimales = []
+
+            querySnapshot.docs.forEach((doc) => {
+                const {nombre, descripcion, tipo} = doc.data()
+                listaAnimales.push({
+                    id: doc.id,
+                    nombre,
+                    descripcion,
+                    tipo
+                })
+            });
+            setAnimales(listaAnimales)
+        })
+      }, [])
+
+      useEffect(() => {
         if(estado.gatoPressed)
           setAnimalesACargar(animales.filter(animal => animal.tipo === 'Gato'))
         else if(estado.perroPressed)
@@ -72,6 +81,20 @@ const ListaAnimales = (props) => {
         else
           setAnimalesACargar(animales)
       }, [estado])
+
+      
+    useEffect(() => {
+      setLoading(true)
+      if(imagenes.length != 0) {
+        actualizarImagenes()
+        setLoading(false)
+      }
+    }, [animalesACargar])
+
+    useEffect(() => {
+      cargarImagenes()
+      setAnimalesACargar(animales)
+    }, [animales])
       
 
     const handleColorChange = (animal) => {
@@ -86,6 +109,10 @@ const ListaAnimales = (props) => {
         else
           setEstado({ ...estado, ['gatoPressed']: !estado.gatoPressed});}
     };
+
+    
+  
+
 
   return (
     <ScrollView style={styles.container}>
@@ -119,13 +146,13 @@ const ListaAnimales = (props) => {
         bottomDivider
         onPress={() => {
         props.navigation.navigate("PerfilAnimal", {
-        animalId: animal.id, registrado: true
+        animalId: animal.id, userId: props.route.params.userId, esUsuario: true
         });
         }}
         >
         <Avatar 
            style = {styles.imagen}
-           source={{uri: imagenes[index]}}
+           source={{uri: imagenesACargar[index]}}
         />
         <ListItem.Chevron />
           <ListItem.Content 
