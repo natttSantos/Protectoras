@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
   container : {
       flex: 2, 
       padding: 35, 
-      height: 3000
+      height: 1150
   },
    
   inputGroup: {
