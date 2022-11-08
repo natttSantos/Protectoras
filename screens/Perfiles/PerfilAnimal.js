@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
-
+import _ from 'lodash'
 
 import {
   ScrollView,
@@ -178,9 +178,30 @@ const getUsuarioById = async (id) => {
   };
 
   const enviarSolicitud = async () => {
-    // await firebase.db.collection('solicitudes').add(
-    //   id_protectora: 
-    // )
+    const solicitudes = firebase.db.collection('solicitudes')
+    const solicitudAEnviar = {
+      id_animal: animal.id,
+      id_protectora: animal.id_protectora,
+      id_usuario: usuario.id
+    }
+
+    const soliRepe = await solicitudes.where("id_protectora", "==", animal.id_protectora)
+    .where("id_animal", "==", animal.id)
+    .where("id_usuario", "==", usuario.id).get()
+    
+    const estaRepetido = !soliRepe.empty
+
+    if(!estaRepetido) {
+      await solicitudes.add(solicitudAEnviar)
+
+      Alert.alert("Información", "Solicitud enviada correctamente", [
+        {text: "Cerrar"}
+      ])
+    } else {
+      Alert.alert("Información", "Ya enviaste la solicitud de adopcion", [
+        {text: "Cerrar"}
+      ])
+    }
   }
 
   useEffect(() => {
@@ -211,9 +232,7 @@ const getUsuarioById = async (id) => {
 
   const adoptarAnimal = () => {
     if(usuario.alta=="Si") { 
-      Alert.alert("Información", "Solicitud enviada correctamente", [
-        {text: "Cerrar"}
-    ]);
+      enviarSolicitud();
     } else {
       Alert.alert("Información", "Tienes que completar tu perfil para poder adoptar", [
         {text: "Cerrar"},
