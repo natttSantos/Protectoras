@@ -78,7 +78,14 @@ const PerfilUsuario = (props) => {
           onPress={() => { if(usuario.alta == "Si")props.navigation.navigate('PerfilAdoptar', {userId: props.route.params.userId}); 
           else alert("Primero debe sarse de alta");
         }}
-          title="Perfil adoptar"
+          title="Perfil de Adopción"
+          color="#841584"
+        />
+
+<Button
+          onPress={() => { props.navigation.navigate('ModificarUsuario', {userId: props.route.params.userId});
+        }}
+          title="Editar Perfil"
           color="#841584"
         />
   </View>
