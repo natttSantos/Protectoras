@@ -181,8 +181,7 @@ const getUsuarioById = async (id) => {
   };
 
   const validateOptionalFields = (value) => {
-    let noInfo = "No tenemos información sobre esta característica."
-    console.log("!!" + value.peso)
+    let noInfo = "No tenemos información sobre esta característica."; 
     if(value.peso == ""){
       setPesoOpcional(noInfo); 
     } else {
