@@ -328,4 +328,4 @@ const styles = StyleSheet.create({
         borderColor: '#cccccc'
     }
 })
-export default ModificarProtectora;
+export default ModificarUsuario;
