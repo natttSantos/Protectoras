@@ -66,7 +66,7 @@ const RegistrarAnimal = (props) => {
    
     const saveNewUser =  async () => {
       
-        if (state.nombre == '' || state.raza == '' || state.descripcion == '' || foto.existe == ''|| state.tipo == '' || state.sexo =='' || props.route.params.valueFecha == undefined){
+        if (state.nombre == '' || state.raza == '' ||state.peso == ''|| state.edad == ''||state.descripcion == '' || foto.existe == ''|| state.tipo == '' || state.sexo =='' ||state.nivelActividad =='' || props.route.params.valueFecha == undefined){
             validateNullFields();  
         } else{ 
             click(); 
@@ -99,11 +99,18 @@ const RegistrarAnimal = (props) => {
     const validateNullFields = () => {
         let textoAlerta = "Complete el campo: ";
         if (state.nombre == ''){
-            textoAlerta += "\n - Nombre de animal"; 
-        } if (state.raza == ''){
+            textoAlerta += "\n - Nombre"; 
+        } if (props.route.params.valueFecha == undefined){
+          textoAlerta += "\n - Fecha Nacimiento "; 
+        }
+        if (state.raza == ''){
             textoAlerta += "\n - Raza "; 
-        } if (state.descripcion == ''){
-            textoAlerta += "\n - Descripción "; 
+        } 
+        if (state.edad == ''){
+          textoAlerta += "\n - Edad "; 
+        }
+        if (state.peso == ''){
+          textoAlerta += "\n - Peso "; 
         }
         if (state.tipo == ''){
             textoAlerta += "\n - Tipo "; 
@@ -111,12 +118,16 @@ const RegistrarAnimal = (props) => {
         if (state.sexo == ''){
             textoAlerta += "\n - Sexo "; 
         }
+        if (state.nivelActividad == ''){
+          textoAlerta += "\n - Nivel Actividad "; 
+      }
+      if (state.descripcion == ''){
+        textoAlerta += "\n - Descripción "; 
+    }
         if (foto.existe == ''){
             textoAlerta += "\n - Foto "; 
         }
-        if (props.route.params.valueFecha == undefined){
-          textoAlerta += "\n - Fecha Nacimiento "; 
-      }
+        
         alert (textoAlerta); 
     }
 
@@ -181,11 +192,7 @@ const RegistrarAnimal = (props) => {
           }
         }
       };
-    
-      const [date, setDate] = useState(new Date());
-      const [fechaFormato, setFechaFormato] = useState('');
-     
-
+  
     return(
         <ScrollView style={styles.container}> 
             <Text style={styles.title}> Registrar Animal</Text>
@@ -201,19 +208,21 @@ const RegistrarAnimal = (props) => {
               <TextInput 
                     style={styles.inputGroup}
                     placeholder="Edad (en años)"
+                    keyboardType="numeric"
                     onChangeText={(value) => handleChangeText('edad', value)}
                     />
               <TextInput 
                     style={styles.inputGroup}
                     placeholder="Peso (en kg)"
+                    keyboardType="numeric"
                     onChangeText={(value) => handleChangeText('peso', value)}
                     />
-              <TextInput 
-                    style={styles.inputGroup}
-                    placeholder="Raza"
-                    onChangeText={(value) => handleChangeText('raza', value)}
-                    />
               
+              <TextInput 
+                style={styles.inputGroup}
+                placeholder="Raza"
+                onChangeText={(value) => handleChangeText('raza', value)}
+                />
                 <DropDownPicker
                                 style={{marginTop: 20, marginBottom: 25}}
                                 placeholder="Tipo"
@@ -294,14 +303,17 @@ const styles = StyleSheet.create({
       padding: 35, 
       height: 3000
   },
+   
   inputGroup: {
-      fontSize: 18, 
-      padding: 0,
-      marginBottom: 10,
-      marginTop: 10, 
-      borderBottomWidth: 2, 
-      borderBottomColor: '#cccccc'
-  }, 
+    height: 40,
+    borderColor: "gray",
+    marginTop: 20,
+    paddingLeft: 10,
+    paddingRight: 10,
+    fontSize: 18,
+    width: "100%",
+    borderWidth: 1.5,
+  },
   inputText: {
       fontSize: 15
   },
@@ -312,11 +324,13 @@ const styles = StyleSheet.create({
   },
   descripcion : {
       height: 100,
+      borderColor: "gray",
       fontSize: 18,
-      borderWidth: 2,
+      paddingLeft: 10,
+      paddingRight: 10,
+      borderWidth: 1.5,
       marginBottom: 20,
-      marginTop: 10,
-      borderColor: '#cccccc'
+      marginTop: 10
   },button : {
     elevation: 8,
     backgroundColor: "#6c91c2",
