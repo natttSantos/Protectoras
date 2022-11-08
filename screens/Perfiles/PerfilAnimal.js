@@ -61,7 +61,8 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
     contraseña: "",
     alta:""
 }
-const [usuario, setUsario] = useState(initialStaate);
+const [usuario, setUsario] = useState("");
+const [esUsuario] = useState(props.route.params.esUsuario);
 
 
   const uploadImage = uri => {
@@ -139,8 +140,7 @@ const getUsuarioById = async (id) => {
   const dbRef = firebase.db.collection("users").doc(id);
   const doc = await dbRef.get();
   const usuario = doc.data();
-  console.log(usuario)
-  setUsario({ ...usuario, id: doc.id });
+  setUsario({...usuario, id: doc.id});
   setLoading(false);
 };
 
@@ -177,10 +177,15 @@ const getUsuarioById = async (id) => {
     props.navigation.navigate("ListaAnimales");
   };
 
+  const enviarSolicitud = async () => {
+    // await firebase.db.collection('solicitudes').add(
+    //   id_protectora: 
+    // )
+  }
+
   useEffect(() => {
     getAnimalById(props.route.params.animalId);
     getUsuarioById(props.route.params.userId); 
-    console.log(props.route.params.userId);
   }, []);
 
   if (loading) {
@@ -205,7 +210,6 @@ const getUsuarioById = async (id) => {
   }
 
   const adoptarAnimal = () => {
-console.log(usuario.nombre);
     if(usuario.alta=="Si") { 
       Alert.alert("Información", "Solicitud enviada correctamente", [
         {text: "Cerrar"}
@@ -262,12 +266,14 @@ NO BORRAR
           {"Descripción: " + animal.descripcion}
         </Text>
 
-        <TouchableOpacity  
+        {esUsuario ?  
+          <TouchableOpacity  
             style={styles.boton} 
             onPress={() => adoptarAnimal()}
             >
               <Text>Adoptar</Text>
         </TouchableOpacity>
+        : null}
       </View> 
     </ScrollView>
   );

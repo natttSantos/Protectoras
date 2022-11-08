@@ -14,6 +14,7 @@ import RegistrarAnimal from '../Altas/RegistrarAnimal';
 import AltaGlobal from '../Altas/AltaGlobal.js';
 import ListaProtectoras from '../Listas/ListaProtectoras.js';
 import ListaAnimales from '../Listas/ListaAnimales.js';
+import MapaAnimalEncontrado from '../Mapa/MapaAnimalEncontrado.js';
 
 const SesionUsuario = (props) => {
   const initialState = {
@@ -108,6 +109,16 @@ useEffect(() => {
         }}
         initialParams={{ userId: props.route.params.userId, isUsuario:true, protectoras:protectoras}}
       />
+      <Tab.Screen name = 'Animal' component = {MapaAnimalEncontrado} 
+         options={{
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="paw-outline" size={35} color={'blue'} />
+          )
+        }}
+        initialParams={{ userId: props.route.params.userId, isUsuario:true}}
+      />
+
       <Tab.Screen name = 'Add' component = {AltaGlobal} 
          options={{
           headerShown: false,
