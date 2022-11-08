@@ -66,10 +66,9 @@ const RegistrarAnimal = (props) => {
    
     const saveNewUser =  async () => {
       
-        if (state.nombre == '' || state.raza == '' ||state.peso == ''|| state.edad == ''||state.descripcion == '' || foto.existe == ''|| state.tipo == '' || state.sexo =='' ||state.nivelActividad =='' || props.route.params.valueFecha == undefined){
+        if (state.nombre == '' || state.raza == '' || state.descripcion == '' || foto.existe == ''|| state.tipo == '' || state.sexo =='' || props.route.params.valueFecha == undefined){
             validateNullFields();  
         } else{ 
-            click(); 
             await firebase.db.collection('animales').add({
                 nombre: state.nombre, 
                 tipo: state.tipo,
@@ -106,21 +105,13 @@ const RegistrarAnimal = (props) => {
         if (state.raza == ''){
             textoAlerta += "\n - Raza "; 
         } 
-        if (state.edad == ''){
-          textoAlerta += "\n - Edad "; 
-        }
-        if (state.peso == ''){
-          textoAlerta += "\n - Peso "; 
-        }
         if (state.tipo == ''){
             textoAlerta += "\n - Tipo "; 
         }
         if (state.sexo == ''){
             textoAlerta += "\n - Sexo "; 
         }
-        if (state.nivelActividad == ''){
-          textoAlerta += "\n - Nivel Actividad "; 
-      }
+        
       if (state.descripcion == ''){
         textoAlerta += "\n - Descripción "; 
     }
@@ -199,12 +190,12 @@ const RegistrarAnimal = (props) => {
             <View style={styles.container}> 
                 <TextInput 
                 style={styles.inputGroup}
-                placeholder="Nombre"
+                placeholder="* Nombre"
                 onChangeText={(value) => handleChangeText('nombre', value)}
                 />
             
               <Text style={{fontSize: 18, marginBottom: 10}}> {props.route.params.valueFecha}</Text>   
-              <Button title="Seleccione una fecha Nacimiento" onPress={() => props.navigation.navigate('FechaNacimientoAnimal', {userId: props.route.params.userId})} />      
+              <Button title="* Seleccione una fecha Nacimiento" onPress={() => props.navigation.navigate('FechaNacimientoAnimal', {userId: props.route.params.userId})} />      
               <TextInput 
                     style={styles.inputGroup}
                     placeholder="Edad (en años)"
@@ -220,12 +211,12 @@ const RegistrarAnimal = (props) => {
               
               <TextInput 
                 style={styles.inputGroup}
-                placeholder="Raza"
+                placeholder="* Raza"
                 onChangeText={(value) => handleChangeText('raza', value)}
                 />
                 <DropDownPicker
                                 style={{marginTop: 20, marginBottom: 25}}
-                                placeholder="Tipo"
+                                placeholder="* Tipo"
                                 items={tipo}
                                 setItems={setTipo}
                                 open={tipoOpen}
@@ -240,7 +231,7 @@ const RegistrarAnimal = (props) => {
             
             <DropDownPicker
                                 style={{marginTop: 35, marginBottom: 20}}
-                                placeholder="Sexo"
+                                placeholder="* Sexo"
                                 items={sexo}
                                 setItems={setSexo}
                                 open={sexoOpen}
@@ -278,12 +269,12 @@ const RegistrarAnimal = (props) => {
                 />
                 <TextInput 
                     style={styles.descripcion}
-                    placeholder="Descripción (max 200 caracteres)"
+                    placeholder="* Descripción (max 200 caracteres)"
                     onChangeText={(value) => handleChangeText('descripcion', value)}
                     />
 
                     
-        <Button title="Selecciona una imagen" onPress={() =>  openGallery()} />      
+        <Button title="* Selecciona una imagen" onPress={() =>  openGallery()} />      
 
                 <TouchableOpacity 
                     onPress={() => {saveNewUser()}}

@@ -38,32 +38,49 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
     staet :""
     
   };
-
+   
   const initialState = {
-    nombre:"",
-    apellidos:"",
-    localizacion:"",
-    dni:"",
-    n_animales:"",
-
-  };
+      nombre:"",
+      tipo:"",
+      raza:"",
+      sexo:"",
+      descripcion:"",
+      foto:"",
+      fecha_nacimiento: "", 
+      id_protectora: "", 
+      adoptado: "", 
+      peso: "", 
+      edad: "", 
+      nivelActividad: "", 
+      vacunado: "", 
+      microchip: ""
+  }
   var u = "aaa";
 
   const [animal, setAnimal] = useState(initialState);
   const [loading, setLoading] = useState(true);
   const [cosas, setState] = useState(initialStatee);
 
-  const initialStaate = {
-    usuario: "",
-    email: "" , 
-    telefono: "", 
-    nombre: "",
-    contraseña: "",
-    alta:""
-}
 const [usuario, setUsario] = useState("");
 const [esUsuario] = useState(props.route.params.esUsuario);
 
+//Campos Opcionales
+const [pesoOpcional, setPesoOpcional] = useState("");
+const [edadOpcional, setEdadOpcional] = useState("");
+const [nivelOpcional, setNivelOpcional] = useState("");
+
+const [hasMicrochip, setHasMicroChip] = useState("No");
+const [hasVacuna, setHasVacuna] = useState("No");
+
+
+const checkMicrochip_Vacunado = () => {
+  if(animal.microchip === true){
+    setHasMicroChip("Si")
+  }
+  if(animal.vacunado === true){
+    setHasVacuna("Si")
+  }
+}
 
   const uploadImage = uri => {
     return new Promise((resolve, reject) => {
@@ -160,9 +177,29 @@ const getUsuarioById = async (id) => {
      imageFirebase: url
   });
 });
-    
+    validateOptionalFields(animal); 
   };
 
+  const validateOptionalFields = (value) => {
+    let noInfo = "No tenemos información sobre esta característica."
+    console.log("!!" + value.peso)
+    if(value.peso == ""){
+      setPesoOpcional(noInfo); 
+    } else {
+      setPesoOpcional(value.peso + " Kg")
+    }
+    if(value.edad == ""){
+      setEdadOpcional(noInfo); 
+    } else {
+      setEdadOpcional(value.edad + " años")
+    }
+    if(value.nivelActividad == ""){
+      setNivelOpcional(noInfo); 
+    } else {
+      setNivelOpcional(value.nivelActividad); 
+    }
+
+  }
   const updateAnimal = async () => {
     const animalRef = firebase.db.collection("animales").doc(animal.id);
     await animalRef.set({
@@ -185,8 +222,9 @@ const getUsuarioById = async (id) => {
 
   useEffect(() => {
     getAnimalById(props.route.params.animalId);
-    getUsuarioById(props.route.params.userId); 
+    getUsuarioById(props.route.params.userId);  
   }, []);
+
 
   if (loading) {
     return (
@@ -262,6 +300,21 @@ NO BORRAR
         <Text style = {styles.texto} >
           {"Fecha de nacimiento: " + animal.fecha_nacimiento}
         </Text>     
+        <Text style = {styles.texto} >
+          {"Edad: " + edadOpcional}
+        </Text> 
+        <Text style = {styles.texto} >
+          {"Peso: " + pesoOpcional}
+        </Text> 
+        <Text style = {styles.texto} >
+          {"Vacunado: " + hasVacuna}
+        </Text> 
+        <Text style = {styles.texto} >
+          {"MicroChip: " + hasMicrochip}
+        </Text> 
+        <Text style = {styles.texto} >
+          {"Nivel Actividad: " + nivelOpcional}
+        </Text>
         <Text style = {styles.texto} >
           {"Descripción: " + animal.descripcion}
         </Text>
