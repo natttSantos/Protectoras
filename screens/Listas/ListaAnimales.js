@@ -87,10 +87,15 @@ const ListaAnimales = (props) => {
           setEstado({ ...estado, ['gatoPressed']: !estado.gatoPressed});}
     };
 
+    if(loading) {
+      return(
+          <View>
+              <ActivityIndicator />
+          </View>
+      )
+  }
   return (
     <ScrollView style={styles.container}>
-      
-  
       <Text style={styles.titulo}>
         Lista Animales
       </Text>
