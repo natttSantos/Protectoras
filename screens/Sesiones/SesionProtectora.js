@@ -100,7 +100,7 @@ const SesionProtectora = (props) => {
               <Icon name="briefcase-outline" size={35} color={'blue'} />
             )
           }}
-          initialParams={{ userId: props.route.params.userId, isUsuario: false}}
+          initialParams={{ userId: props.route.params.userId}}
         />
         <Tab.Screen name = 'Perfil' component = {PerfilProtectora} 
           options={{
