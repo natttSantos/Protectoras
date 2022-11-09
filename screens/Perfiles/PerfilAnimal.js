@@ -68,19 +68,11 @@ const [esUsuario] = useState(props.route.params.esUsuario);
 const [pesoOpcional, setPesoOpcional] = useState("");
 const [edadOpcional, setEdadOpcional] = useState("");
 const [nivelOpcional, setNivelOpcional] = useState("");
+const [vacunadoOpcional, setVacunadoOpcional] = useState("No");
+const [microChipOpcional, setMicroChipOpcional] = useState("No");
 
-const [hasMicrochip, setHasMicroChip] = useState("No");
-const [hasVacuna, setHasVacuna] = useState("No");
 
 
-const checkMicrochip_Vacunado = () => {
-  if(animal.microchip === true){
-    setHasMicroChip("Si")
-  }
-  if(animal.vacunado === true){
-    setHasVacuna("Si")
-  }
-}
 
   const uploadImage = uri => {
     return new Promise((resolve, reject) => {
@@ -178,6 +170,7 @@ const getUsuarioById = async (id) => {
   });
 });
     validateOptionalFields(animal); 
+    checkMicrochip_Vacunado(animal); 
   };
 
   const validateOptionalFields = (value) => {
@@ -197,8 +190,16 @@ const getUsuarioById = async (id) => {
     } else {
       setNivelOpcional(value.nivelActividad); 
     }
-
   }
+  
+const checkMicrochip_Vacunado = (value) => {
+  if(value.microchip === true){
+    setMicroChipOpcional("Si")
+  } 
+  if(value.vacunado === true){
+    setVacunadoOpcional("Si")
+  }
+}
   const updateAnimal = async () => {
     const animalRef = firebase.db.collection("animales").doc(animal.id);
     await animalRef.set({
@@ -306,10 +307,10 @@ NO BORRAR
           {"Peso: " + pesoOpcional}
         </Text> 
         <Text style = {styles.texto} >
-          {"Vacunado: " + hasVacuna}
+          {"Vacunado: " + vacunadoOpcional}
         </Text> 
         <Text style = {styles.texto} >
-          {"MicroChip: " + hasMicrochip}
+          {"MicroChip: " + microChipOpcional}
         </Text> 
         <Text style = {styles.texto} >
           {"Nivel Actividad: " + nivelOpcional}
