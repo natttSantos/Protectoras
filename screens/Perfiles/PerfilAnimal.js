@@ -57,9 +57,10 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
   }
   var u = "aaa";
 
-  const [animal, setAnimal] = useState(initialState);
-  const [loading, setLoading] = useState(true);
-  const [cosas, setState] = useState(initialStatee);
+const [animal, setAnimal] = useState(initialState);
+const [loading, setLoading] = useState(true);
+const [cosas, setState] = useState(initialStatee);
+const [protectoraAnimal, setProtectoraAnimal] = useState(""); 
 
 const [usuario, setUsario] = useState("");
 const [esUsuario] = useState(props.route.params.esUsuario);
@@ -280,6 +281,7 @@ const checkMicrochip_Vacunado = (value) => {
 
   };
 
+  
 
 /*
 NO BORRAR
@@ -346,6 +348,12 @@ NO BORRAR
               <Text>Adoptar</Text>
         </TouchableOpacity>
         : null}
+        <TouchableOpacity  
+            style={styles.boton} 
+            onPress={() => props.navigation.navigate('PerfilProtectora', {protectoraId: animal.id_protectora})}
+            >
+              <Text>Contactar</Text>
+        </TouchableOpacity>
       </View> 
     </ScrollView>
   );
@@ -387,8 +395,10 @@ title : {
 },
 boton: {
   alignItems: "center",
-  backgroundColor: "#DDDDDD",
-  padding: 10
+    fontSize : 20,
+    backgroundColor: "#E9967A",
+    marginTop : 25,
+    padding: 10
 },
 texto: {
   fontSize : 16,
