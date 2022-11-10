@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import {ScrollView, View, StyleSheet, TouchableOpacity, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import Solicitud from '../../components/Solicitud.js';
+import InformacionSolicitud from '../InformacionSolicitud.js';
 
 const ListaSolicitudes = (props) => {
 
@@ -25,25 +26,25 @@ const ListaSolicitudes = (props) => {
         })
     }
 
-    async function getNombreDeAnimal(id_animal) {
-        const animal = await firebase.db.collection('animales').doc(id_animal).get()
-        console.log(animal.nombre)
-        const nombre = animal.nombre
-        return "nombre"
+    const aceptar = (aceptarIndex) => {
+
     }
 
+    const verInformacion = (index) => {
+        props.navigation.navigate('InformacionSolicitud', {id_animal: solicitudes[index].id_animal, id_usuario: solicitudes[index].id_usuario})
+    }
     useEffect(() => {
         getAllSolicitudes(props.route.params.userId)
     }, [])
 
     return (
         <ScrollView>
-            {solicitudes.map(solicitud => {
+            {solicitudes.map((solicitud, index) => {
                 return (
                     <View
                     key={solicitud.id}
                     style={styles.container}>
-                        <Solicitud solicitud={solicitud} />
+                        <Solicitud solicitud={solicitud} verInformacion={() => verInformacion(index)}/>
                     </View>
                 )
             })}
