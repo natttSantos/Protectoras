@@ -1,16 +1,18 @@
 import firebase from '../../database/firebase.js';
 import React, { useState, useEffect } from 'react';
-import {ScrollView, View, StyleSheet, TouchableOpacity, Text} from 'react-native';
+import {ScrollView, View, StyleSheet, Alert, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import Solicitud from '../../components/Solicitud.js';
 import InformacionSolicitud from '../InformacionSolicitud.js';
+import { onPress } from 'deprecated-react-native-prop-types/DeprecatedTextPropTypes.js';
 
 const ListaSolicitudes = (props) => {
 
     const [solicitudes, setSolicitudes] = useState([])
 
     const getAllSolicitudes = (id_protectora) => {
-        firebase.db.collection('solicitudes').where("id_protectora", "==", id_protectora).onSnapshot(querySnapshot => {
+        firebase.db.collection('solicitudes').where("id_protectora", "==", id_protectora).
+        where("solucionada", "==", false).onSnapshot(querySnapshot => {
             const solicitudesAux = []
 
             querySnapshot.docs.forEach(doc => {
@@ -26,8 +28,37 @@ const ListaSolicitudes = (props) => {
         })
     }
 
-    const aceptar = (aceptarIndex) => {
+    const aceptarSolicitud = async(solicitud) => {
+        await firebase.db.collection('animales').doc(solicitud.id_animal).set({
+            adoptado: true,
+            id_adoptante: solicitud.id_usuario
+        }, {merge: true})
 
+        await firebase.db.collection('solicitudes').doc(solicitud.id).set({
+            solucionada: true
+        }, {merge: true})
+    }
+
+    const aceptar = (aceptarIndex) => {
+        Alert.alert("Información", "¿Está seguro que quiere aceptar la solicitud de adopción?", [
+            {text: "Confirmar", 
+            onPress: () => {
+                aceptarSolicitud(solicitudes[aceptarIndex]);
+                setSolicitudes(solicitudes.filter((solicitud, index) => index != aceptarIndex))
+            }}, 
+            {text: "Cancelar"}
+        ])
+    }
+
+    const declinar = (declinarIndex) => {
+        Alert.alert("Información", "¿Está seguro que quiere denegar la solicitud de adopción?", [
+            {text: "Confirmar", 
+            onPress: async () => {
+                await firebase.db.collection('solicitudes').doc(solicitudes[declinarIndex].id).delete()
+                setSolicitudes(solicitudes.filter((solicitud, index) => index != declinarIndex))
+            }}, 
+            {text: "Cancelar"}
+        ])
     }
 
     const verInformacion = (index) => {
@@ -44,7 +75,8 @@ const ListaSolicitudes = (props) => {
                     <View
                     key={solicitud.id}
                     style={styles.container}>
-                        <Solicitud solicitud={solicitud} verInformacion={() => verInformacion(index)}/>
+                        <Solicitud solicitud={solicitud} verInformacion={() => verInformacion(index)}
+                        declinar={() => declinar(index)} aceptar={() => aceptar(index)}/>
                     </View>
                 )
             })}

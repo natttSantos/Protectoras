@@ -220,7 +220,8 @@ const checkMicrochip_Vacunado = (value) => {
     const solicitudAEnviar = {
       id_animal: animal.id,
       id_protectora: animal.id_protectora,
-      id_usuario: usuario.id
+      id_usuario: usuario.id,
+      solucionada: false,
     }
 
     const soliRepe = await solicitudes.where("id_protectora", "==", animal.id_protectora)
@@ -341,19 +342,18 @@ NO BORRAR
         </Text>
 
         {esUsuario ?  
-          <TouchableOpacity  
-            style={styles.boton} 
+          <><TouchableOpacity
+            style={styles.boton}
             onPress={() => adoptarAnimal()}
-            >
-              <Text>Adoptar</Text>
-        </TouchableOpacity>
-        : null}
-        <TouchableOpacity  
-            style={styles.boton} 
-            onPress={() => props.navigation.navigate('PerfilProtectora', {protectoraId: animal.id_protectora})}
-            >
+          >
+            <Text>Adoptar</Text>
+          </TouchableOpacity><TouchableOpacity
+            style={styles.boton}
+            onPress={() => props.navigation.navigate('PerfilProtectora', { protectoraId: animal.id_protectora })}
+          >
               <Text>Contactar</Text>
-        </TouchableOpacity>
+            </TouchableOpacity></>
+        : null}
       </View> 
     </ScrollView>
   );

@@ -97,7 +97,7 @@ const SesionProtectora = (props) => {
           options={{
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
-              <Icon name="briefcase-outline" size={35} color={'blue'} />
+              <Icon name="file-tray-full-outline" size={35} color={'blue'} />
             )
           }}
           initialParams={{ userId: props.route.params.userId}}
