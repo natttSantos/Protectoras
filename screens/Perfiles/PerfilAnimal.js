@@ -57,9 +57,10 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
   }
   var u = "aaa";
 
-  const [animal, setAnimal] = useState(initialState);
-  const [loading, setLoading] = useState(true);
-  const [cosas, setState] = useState(initialStatee);
+const [animal, setAnimal] = useState(initialState);
+const [loading, setLoading] = useState(true);
+const [cosas, setState] = useState(initialStatee);
+const [protectoraAnimal, setProtectoraAnimal] = useState(""); 
 
 const [usuario, setUsario] = useState("");
 const [esUsuario] = useState(props.route.params.esUsuario);
@@ -68,19 +69,11 @@ const [esUsuario] = useState(props.route.params.esUsuario);
 const [pesoOpcional, setPesoOpcional] = useState("");
 const [edadOpcional, setEdadOpcional] = useState("");
 const [nivelOpcional, setNivelOpcional] = useState("");
+const [vacunadoOpcional, setVacunadoOpcional] = useState("No");
+const [microChipOpcional, setMicroChipOpcional] = useState("No");
 
-const [hasMicrochip, setHasMicroChip] = useState("No");
-const [hasVacuna, setHasVacuna] = useState("No");
 
 
-const checkMicrochip_Vacunado = () => {
-  if(animal.microchip === true){
-    setHasMicroChip("Si")
-  }
-  if(animal.vacunado === true){
-    setHasVacuna("Si")
-  }
-}
 
   const uploadImage = uri => {
     return new Promise((resolve, reject) => {
@@ -178,6 +171,7 @@ const getUsuarioById = async (id) => {
   });
 });
     validateOptionalFields(animal); 
+    checkMicrochip_Vacunado(animal); 
   };
 
   const validateOptionalFields = (value) => {
@@ -197,8 +191,16 @@ const getUsuarioById = async (id) => {
     } else {
       setNivelOpcional(value.nivelActividad); 
     }
-
   }
+  
+const checkMicrochip_Vacunado = (value) => {
+  if(value.microchip === true){
+    setMicroChipOpcional("Si")
+  } 
+  if(value.vacunado === true){
+    setVacunadoOpcional("Si")
+  }
+}
   const updateAnimal = async () => {
     const animalRef = firebase.db.collection("animales").doc(animal.id);
     await animalRef.set({
@@ -279,6 +281,7 @@ const getUsuarioById = async (id) => {
 
   };
 
+  
 
 /*
 NO BORRAR
@@ -325,10 +328,10 @@ NO BORRAR
           {"Peso: " + pesoOpcional}
         </Text> 
         <Text style = {styles.texto} >
-          {"Vacunado: " + hasVacuna}
+          {"Vacunado: " + vacunadoOpcional}
         </Text> 
         <Text style = {styles.texto} >
-          {"MicroChip: " + hasMicrochip}
+          {"MicroChip: " + microChipOpcional}
         </Text> 
         <Text style = {styles.texto} >
           {"Nivel Actividad: " + nivelOpcional}
@@ -345,6 +348,12 @@ NO BORRAR
               <Text>Adoptar</Text>
         </TouchableOpacity>
         : null}
+        <TouchableOpacity  
+            style={styles.boton} 
+            onPress={() => props.navigation.navigate('PerfilProtectora', {protectoraId: animal.id_protectora})}
+            >
+              <Text>Contactar</Text>
+        </TouchableOpacity>
       </View> 
     </ScrollView>
   );
@@ -386,8 +395,10 @@ title : {
 },
 boton: {
   alignItems: "center",
-  backgroundColor: "#DDDDDD",
-  padding: 10
+    fontSize : 20,
+    backgroundColor: "#E9967A",
+    marginTop : 25,
+    padding: 10
 },
 texto: {
   fontSize : 16,
