@@ -57,9 +57,10 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
   }
   var u = "aaa";
 
-  const [animal, setAnimal] = useState(initialState);
-  const [loading, setLoading] = useState(true);
-  const [cosas, setState] = useState(initialStatee);
+const [animal, setAnimal] = useState(initialState);
+const [loading, setLoading] = useState(true);
+const [cosas, setState] = useState(initialStatee);
+const [protectoraAnimal, setProtectoraAnimal] = useState(""); 
 
 const [usuario, setUsario] = useState("");
 const [esUsuario] = useState(props.route.params.esUsuario);
@@ -219,7 +220,8 @@ const checkMicrochip_Vacunado = (value) => {
     const solicitudAEnviar = {
       id_animal: animal.id,
       id_protectora: animal.id_protectora,
-      id_usuario: usuario.id
+      id_usuario: usuario.id,
+      solucionada: false,
     }
 
     const soliRepe = await solicitudes.where("id_protectora", "==", animal.id_protectora)
@@ -280,6 +282,7 @@ const checkMicrochip_Vacunado = (value) => {
 
   };
 
+  
 
 /*
 NO BORRAR
@@ -339,12 +342,17 @@ NO BORRAR
         </Text>
 
         {esUsuario ?  
-          <TouchableOpacity  
-            style={styles.boton} 
+          <><TouchableOpacity
+            style={styles.boton}
             onPress={() => adoptarAnimal()}
-            >
-              <Text>Adoptar</Text>
-        </TouchableOpacity>
+          >
+            <Text>Adoptar</Text>
+          </TouchableOpacity><TouchableOpacity
+            style={styles.boton}
+            onPress={() => props.navigation.navigate('PerfilProtectora', { protectoraId: animal.id_protectora })}
+          >
+              <Text>Contactar</Text>
+            </TouchableOpacity></>
         : null}
       </View> 
     </ScrollView>
@@ -387,8 +395,10 @@ title : {
 },
 boton: {
   alignItems: "center",
-  backgroundColor: "#DDDDDD",
-  padding: 10
+    fontSize : 20,
+    backgroundColor: "#E9967A",
+    marginTop : 25,
+    padding: 10
 },
 texto: {
   fontSize : 16,
