@@ -26,6 +26,7 @@ import SesionProtectora from './screens/Sesiones/SesionProtectora';
 import FechaNacimientoAnimal from './screens/Altas/FechaNacimientoAnimal';
 import ModificarProtectora from './screens/Modificar/ModificarProtectora';
 import MapaAnimalEncontrado from './screens/Mapa/MapaAnimalEncontrado';
+import MapaAnimalEncontradoProtectora from './screens/Mapa/MapaAnimalEncontradoProtectora';
 
 
 
@@ -52,6 +53,7 @@ function MyStack (){
       <Stack.Screen name="PerfilAdoptar" component={PerfilAdoptar} />
       <Stack.Screen name="ModificarProtectora" component={ModificarProtectora} />
       <Stack.Screen name="MapaAnimalEncontrado" component={MapaAnimalEncontrado} />
+      <Stack.Screen name="MapaAnimalEncontradoProtectora" component={MapaAnimalEncontradoProtectora} />
     </Stack.Navigator>
   )
 }

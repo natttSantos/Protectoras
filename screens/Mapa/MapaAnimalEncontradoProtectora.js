@@ -1,18 +1,22 @@
+
 import React, {useEffect, useState} from "react";
 import * as Location from 'expo-location';
-import { StyleSheet, Text, View,ActivityIndicator,ScrollView,TextInput } from 'react-native';
+import { StyleSheet, Text, View,ActivityIndicator,ScrollView,TextInput,Image } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 //import MapViewDirections from 'react-native-maps-directions';
 //import { GOOGLE_MAPS_KEY } from '@env';
 import { Button } from "react-native-elements";
+const carImage = require('../../images/perfilUsuario.jpg')
 import firebase from '../../database/firebase';
 import DropDownPicker from "react-native-dropdown-picker";
 import * as ImagePicker from 'expo-image-picker';
 
-const MapaAnimalEncontrado = (props) => {
+
+const MapaAnimalEncontradoProtectora = (props) => {
 
 
   const [loading, setLoading] = useState(true);
+  const [loading2, setLoading2] = useState(true);
   const [imagenes, setImagenes] = useState([]);
   let imagenesAux = []
 
@@ -65,6 +69,9 @@ const [notificacionAnimal, setNotificacionAnimal] = useState({
 
 
 const [coordenadas, setCoordenadas] = useState({
+  latitud:"",
+  longitud:""
+  
 });
 
 const handleChangeText = (nombre, value) => {
@@ -86,6 +93,40 @@ const handleChangeText = (nombre, value) => {
     //setLoading(false);
   };
 
+  const [notificacionCargar, setCargarNotificacion] = useState(initialStatee);
+  const initialStatee = {
+    latitud:"",
+    longitud:"",
+    descripcion:"",
+    tipo:"",
+    usuario:""
+}
+
+
+const initialStateee = {
+  imageFirebase:"a",
+  staet :""
+  
+};
+const [cosas, setFotoAnimal] = useState(initialStatee);
+
+  const getNotificacionAnimal = async (id) => {
+    const dbRef = firebase.db.collection("notificacionAnimal").doc(id);
+    const doc = await dbRef.get();
+    const notificacionCargar = doc.data();
+    setCargarNotificacion({ ...notificacionCargar, id: doc.id });
+    firebase
+    .st
+    .ref(`imagesNotificacionAnimal/${notificacionCargar.tipo+notificacionCargar.descripcion}`)
+    .getDownloadURL().then(function(url) {
+      setFotoAnimal({
+     imageFirebase: url
+  });
+});
+    setLoading2(false);
+    console.log("holaaa");
+  //  checkImage();
+  };
 
   const [usuario, setUsuario] = useState(initialState);
   const initialState = {
@@ -98,6 +139,8 @@ const handleChangeText = (nombre, value) => {
 }
 
   const [protectoras, setProtectoras] = useState([]);
+  const [notificacionesAnimalEncontrado, setNotificacionesAnimalEncontrado] = useState([]);
+
   useEffect(() => {
     getLocationPermission();
     getUsuarioById(props.route.params.userId); 
@@ -116,8 +159,32 @@ const handleChangeText = (nombre, value) => {
       setProtectoras(listaProtectoras)
       //cargarImagenes();
   });
+
+
+  firebase.db.collection('notificacionAnimal').onSnapshot((querySnapshot) => {
+    const listaNotificaciones = []
+
+    querySnapshot.docs.forEach((doc) => {
+        const {descripcion, tipo, usuario, latitud, longitud, recogido, horas, minutos, dia, mes, año} = doc.data()
+        listaNotificaciones.push({
+            id: doc.id,
+            latitud,
+            longitud,
+            descripcion,
+            tipo,
+            usuario,
+            recogido,
+            dia,
+            mes,
+            año,
+            horas,
+            minutos,
+        })
+    });
+    setNotificacionesAnimalEncontrado(listaNotificaciones)
+    //cargarImagenes();
+});
   }, [])
-let fechaActual = new Date();
 
   const [tipoOpen, setTipoOpen] = useState(false);
   const [tipoValue, setTipoValue] = useState(null);
@@ -139,91 +206,44 @@ let fechaActual = new Date();
 
     })
     setOrigin(current);
-    setCoordenadas(current);
     setLoading(false);
-    
+    setCoordenadas(current);
   }
 
 
-  const uploadImage = uri => {
-    return new Promise((resolve, reject) => {
-      console.log(resolve + " " + reject);
-      let xhr = new XMLHttpRequest();
-      xhr.onerror = reject;
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4) {
-          resolve(xhr.response);
-        }
-      };
 
-      xhr.open("GET", uri);
-      xhr.responseType = "blob";
-      xhr.send();
-    });
-  };
+  const modificarNotificacion = async (id) => {
+    const protectoraRef = firebase.db.collection("notificacionAnimal").doc(id);
+    await protectoraRef.set({
+      tipo: notificacionCargar.tipo,
+      descripcion: notificacionCargar.descripcion,
+      latitud: notificacionCargar.latitud,
+      longitud: notificacionCargar.longitud,
+      usuario: notificacionCargar.usuario,
+      recogido: "Si"
+        })
+        alert("Notificacion enviada correctamente")
+}
 
 
-const openGallery = async () => {
-if(notificacionAnimal.tipo != "" && notificacionAnimal.descripcion != ""){
-    const resultPermission =true; 
-    if (resultPermission) {
-      const resultImagePicker = await ImagePicker.launchImageLibraryAsync({
-        allowsEditing: true,
-        aspect: [4, 3]
-      });
-    
-      if (resultImagePicker.cancelled === false) {
-        const imageUri = resultImagePicker.uri;
-        uploadImage(imageUri)
-          .then(resolve => {
-            let ref = firebase
-            .st
-            .ref()
-            .child(`imagesNotificacionAnimal/${notificacionAnimal.tipo+notificacionAnimal.descripcion}`);
-            ref
-              .put(resolve)
-              .then(resolve => {
-                console.log("Imagen subida correctamente");
-                setFoto({
-                    existe: "Si"
-                 });
-                 alert("Imagen subida correctamente")
-              })
-              .catch(error => {
-                console.log(error);
-                console.log(error);
-                console.log("Error al subir la imagen");
-              });
-          })
-          .catch(error => {
-            console.log(error);
-          });
-      }
-      
-    }
-}else{alert ("Primero debe introducir el tipo de animal y su descripción");}
-  };
 
 
-  const guardarNotificacion = async () => {
+
+
+
+  const saveNewProtectora = async () => {
     if (notificacionAnimal.tipo =="" || notificacionAnimal.descripcion=="") {
         validateFields();
     } else {
-      await firebase.db.collection('notificacionAnimal').add({
+        const dbRef = firebase.db.collection('notificacionAnimal');
+            await dbRef.add({
                 tipo: notificacionAnimal.tipo,
                 descripcion: notificacionAnimal.descripcion,
-                latitud: coordenadas.latitude,
-                longitud: coordenadas.longitude,
-                usuario: usuario.usuario,
-                recogido: "No",
-                dia : fechaActual.getDate(),
-                mes : fechaActual.getMonth(),
-                año: fechaActual.getFullYear(),
-                horas: fechaActual.getHours(),
-                minutos: fechaActual.getMinutes(),
-
+                latitud: coordenadas.latitud,
+                longitud: coordenadas.longitud,
+                usuario: usuario.usuario
             })
-            alert("Notificacion enviada correctamente")
+            
         
     }
 }
@@ -240,12 +260,43 @@ const validateFields = () => {
   alert (textoAlerta); 
 }
 
+const checkImage = () => {
+  if(!loading2){
+    console.log("sdgsd");
+    const { imageFirebase } = cosas;
+    const { tipo } = notificacionCargar;
+    console.log(notificacionCargar.tipo+"         bbbbb");
+   // setLoading2(false);
+      return (
+        <View>
+           <Text style = {styles.texto} >
+          {"Avistado por: "+notificacionCargar.usuario+" el " +notificacionCargar.dia +"/" + notificacionCargar.mes +"/" + notificacionCargar.año+ " a las " +notificacionCargar.horas +":"+notificacionCargar.minutos  }
+        </Text>
+        <Text style = {styles.texto} >
+          {"Nombre: " + notificacionCargar.tipo}
+        </Text>
+        <Text style = {styles.texto} >
+          {"Descripcion: " + notificacionCargar.descripcion}
+        </Text>
+        <Image
+          style={{ width: 300, height: 300 }}
+          source={{ uri: imageFirebase }}
+        />
+        <Button title="Recogido" onPress={() =>  modificarNotificacion(notificacionCargar.id)} /> 
+        </View>
+        
+      );
+    
+  }
+}
+
   /* Codigo para saber donde estan las protectoras
   {protectoras.map((protectora, index) => {
               
     return (
             <Marker 
                title={protectora.nombre}
+               pinColor= '#843B90'
                coordinate={{
                   longitude: protectora.longitud,
                   latitude: protectora.latitud
@@ -266,29 +317,7 @@ if(!loading) {
   return (
     <ScrollView > 
     <View style={styles.container}> 
-    <DropDownPicker
-                                style={{marginTop: 20, marginBottom: 20}}
-                                placeholder="Tipo"
-                                items={tipo}
-                                setItems={setTipo}
-                                open={tipoOpen}
-                                setOpen={setTipoOpen}
-                                value={tipoValue}
-                                setValue={setTipoValue}
-                                onChangeValue={(value) => {
-                                    handleChangeText('tipo', value);
-                                  }}
-                            />
-                            <TextInput 
-                    style={styles.descripcion}
-                    placeholder="Descripción (max 200 caracteres)"
-                    onChangeText={(value) => handleChangeText('descripcion', value)}
-                    />
-                    
-                    
-                    <Button title="Adjuntar fotografía" onPress={() =>  openGallery()} /> 
-                    
-                    
+    
       <MapView 
         style={styles.map}
         initialRegion={{
@@ -299,18 +328,30 @@ if(!loading) {
           }}
       >
                 <Marker 
-           pinColor= '#BD562A'
+          
+          pinColor= '#BD562A'
           coordinate={coordenadas}
           onDragEnd={(direction) => setOrigin(direction.nativeEvent.coordinate)}
         />
+          {notificacionesAnimalEncontrado.map((notificacionAnimalActual, index) => {
+              if(notificacionAnimalActual.recogido =="No")
+              return (
+                      <Marker 
+                         title={notificacionAnimalActual.nombre}
+                         pinColor= '#6BE795'
+                         coordinate={{
+                            longitude: notificacionAnimalActual.longitud,
+                            latitude: notificacionAnimalActual.latitud
+                         }}
+                         onPress={() => {getNotificacionAnimal(notificacionAnimalActual.id)}}
+                        />);
+          })}
 
-            
-        
       </MapView>
-      
+      {checkImage()}
       <Button 
                 title="Enviar" 
-                onPress={() => {guardarNotificacion()}}/>
+                onPress={() => {saveNewProtectora()}}/>
       </View>
       </ScrollView>
   );
@@ -329,7 +370,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1, 
         padding: 35,
-        height:700
+        height:900
   },
   map: {
     width: 290,
@@ -348,5 +389,12 @@ inputGroup: {
   borderBottomWidth: 2, 
   borderBottomColor: '#cccccc'
 }, 
+texto:{
+  fontSize : 16,
+  padding : 5,
+  borderBottomWidth: 1,
+  borderBottomColor: "#cccccc",
+  marginTop : 13
+}
 });
-export default MapaAnimalEncontrado;
+export default MapaAnimalEncontradoProtectora;
