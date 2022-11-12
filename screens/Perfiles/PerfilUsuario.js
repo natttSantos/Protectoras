@@ -65,29 +65,30 @@ const PerfilUsuario = (props) => {
     <Text style = {styles.texto} >
       {"Telefono: " + usuario.telefono}
     </Text>
-
-    <Button
-          onPress={() => { if(usuario.alta == "No")props.navigation.navigate('AltaAdoptar', {userId: props.route.params.userId}); 
-          else alert("Ya se ha dado de alta");
-        }}
-          title="Dar de alta para adoptar"
-          color="#841584"
-        />
-
-<Button
-          onPress={() => { if(usuario.alta == "Si")props.navigation.navigate('PerfilAdoptar', {userId: props.route.params.userId}); 
-          else alert("Primero debe sarse de alta");
-        }}
-          title="Perfil de Adopción"
-          color="#841584"
-        />
-
-<Button
-          onPress={() => { props.navigation.navigate('ModificarUsuario', {userId: props.route.params.userId});
-        }}
-          title="Editar Perfil"
-          color="#841584"
-        />
+    {props.route.params.canEdit ? 
+    <><Button
+           onPress={() => {
+             if (usuario.alta == "No")
+               props.navigation.navigate('AltaAdoptar', { userId: props.route.params.userId });
+             else
+               alert("Ya se ha dado de alta");
+           } }
+           title="Dar de alta para adoptar"
+           color="#841584" /><Button
+             onPress={() => {
+               if (usuario.alta == "Si")
+                 props.navigation.navigate('PerfilAdoptar', { userId: props.route.params.userId });
+               else
+                 alert("Primero debe sarse de alta");
+             } }
+             title="Perfil de Adopción"
+             color="#841584" /><Button
+             onPress={() => {
+               props.navigation.navigate('ModificarUsuario', { userId: props.route.params.userId });
+             } }
+             title="Editar Perfil"
+             color="#841584" /></>
+    : null}
   </View>
 </ScrollView>
 
