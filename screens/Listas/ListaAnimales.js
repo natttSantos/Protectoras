@@ -110,19 +110,17 @@ const ListaAnimales = (props) => {
           setEstado({ ...estado, ['gatoPressed']: !estado.gatoPressed});}
     };
 
-    if(loading) {
-      return(
-          <View>
-              <ActivityIndicator />
-          </View>
-      )
-  }
+    
+  
+
+
   return (
     <ScrollView style={styles.container}>
+      
+  
       <Text style={styles.titulo}>
         Lista Animales
       </Text>
-      <View style={styles.container}>
       <View style ={{flexDirection:'row', justifyContent: 'space-between', width:150}}>
       <TouchableOpacity
           onPress={() => {handleColorChange('perro')}}
@@ -169,7 +167,7 @@ const ListaAnimales = (props) => {
         )})
       }
 
-  </View>
+
   </ScrollView>
 
     )
@@ -180,7 +178,6 @@ const ListaAnimales = (props) => {
   container: {
       flex: 1, 
       marginHorizontal: 10,
-      height: 3000
   },
   image : {
     height : 250, 

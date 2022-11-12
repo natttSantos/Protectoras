@@ -1,31 +1,40 @@
 import { style } from "deprecated-react-native-prop-types/DeprecatedTextPropTypes";
 import React, {useEffect, useState} from "react";
-import { ScrollView, View, Text, StyleSheet, TextInput } from "react-native";
+import { ScrollView, View, Text, StyleSheet, TextInput,Image } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Button } from "react-native-elements";
-import firebase from '../../database/firebase';
+import firebase from "../../database/firebase";
 import * as ImagePicker from 'expo-image-picker';
 
-
-const AltaProtectora = (props) => {
+const ModificarUsuario = (props) => {
     DropDownPicker.setListMode("SCROLLVIEW");
 
-    const [protectora, setProtectora] = useState({
-        descripcion: "",
-        email: "",
-        nombre: "",
+    const [usuario, setUsuario] = useState({
+        alta: "",
+        usuario: "",
         contraseña: "",
+        email: "",
+        telefono : "",
+
+        nombre: "",
+        apellidos: "",
         localizacion: "",
-        direccion: "",
-        telefono: "",
-        url: ""
+        dni:"",
+        n_animales:"",
+        foto:""
     })
 
-    
+    const initialStatee = {
+        imageFirebase:"a",
+        staet :""
+
+      };
+
+    const [cosas, setState] = useState(initialStatee);
 
     const [foto, setFoto] = useState({
         existe:"",
-        
+
       });
 
     const [open, setOpen] = useState(false)
@@ -35,62 +44,36 @@ const AltaProtectora = (props) => {
                         {label: 'Cuenca', value: 'Cuenca'}])
 
     const handleChangeText = (nombre, value) => {
-        setProtectora({...protectora, [nombre]: value});
+        setUsuario({...usuario, [nombre]: value});
     }
 
-    /*useEffect(() => {
-        getProtectoraById(props.route.params.userId);
-      }, []);*/
+    const saveNewUsuario = async () => {
+        console.log(usuario.nombre);
+        
 
-
-      const getProtectoraById = async (id) => {
-        const dbRef = firebase.db.collection("protectoras").doc(id);
-        const doc = await dbRef.get();
-        const protectora = doc.data();
-        setProtectora({ ...protectora, id: doc.id });
-      }
-
-      /*const crearProtectora = async () => {
-        const dbRef = firebase.db.collection('protectoras');
-        await dbRef.add({
-            nombre: protectora.nombre,
-            email: protectora.email,
-            contraseña: protectora.contraseña,
-            direccion: protectora.direccion,
-            localizacion: protectora.localizacion,
-            url: protectora.url,
-            descripcion: protectora.descripcion,
-            telefono: protectora.telefono
-        })
-      }*/
-
-
-    const saveNewProtectora = async () => {
-        if (protectora.nombre == '' || protectora.email == '' || protectora.provincia == '' || protectora.url == ''|| foto.existe == '') {
+        if (usuario.apellidos == '' || usuario.contraseña == ''|| usuario.dni == '' || usuario.email == '' || usuario.localizacion == ""|| usuario.n_animales == ''|| protectora.nombre == ''|| protectora.usuario == '') {
             validateFields();
-        } else if (validatePasswordAndPhone(protectora.contraseña, protectora.telefono)){
-            const dbRef = firebase.db.collection('protectoras');
-            const doc = await dbRef.where("email", "==", protectora.email.trim()).get()
-            const emailRepe = doc.docs.length == 1
+        } else  {
 
-            if(emailRepe)
-                alert("El email introducido ya ha sido registrado, pruebe con otro");
-            else {
-                await dbRef.add({
-                    nombre: protectora.nombre,
-                    email: protectora.email,
-                    contraseña: protectora.contraseña,
-                    direccion: protectora.direccion,
-                    localizacion: protectora.localizacion,
-                    url: protectora.url,
-                    descripcion: protectora.descripcion,
-                    telefono: protectora.telefono,
-                    fotoModificada :protectora.nombre+protectora.telefono
+            const usuarioRef = firebase.db.collection("usuarios").doc(usuario.id);
+            console.log(usuario.id);
+            await usuarioRef.set({
+                    nombre: usuario.nombre,
+                    email: usuario.email,
+                    contraseña: usuario.contraseña,
+                    telefono: usuario.telefono,
+
+                    nombre: usuario.nombre,
+                    apellidos: usuario.apellidos,
+                    localizacion: usuario.localizacion,
+                    dni: usuario.dni,
+                    n_animales: usuario.n_animales,
+                    foto : usuario.foto
                 })
-                alert("Bienvenido " + protectora.nombre)
+                alert("Datos cambiados correctamente")
             }
         }
-    }
+
 
     const uploadImage = uri => {
         return new Promise((resolve, reject) => {
@@ -102,7 +85,7 @@ const AltaProtectora = (props) => {
               resolve(xhr.response);
             }
           };
-    
+
           xhr.open("GET", uri);
           xhr.responseType = "blob";
           xhr.send();
@@ -111,14 +94,14 @@ const AltaProtectora = (props) => {
 
 
     const openGallery = async () => {
-    if(protectora.nombre != "" && protectora.telefono.length == 9 && !isNaN(protectora.telefono)){
+
         const resultPermission =true; 
         if (resultPermission) {
           const resultImagePicker = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
             aspect: [4, 3]
           });
-        
+
           if (resultImagePicker.cancelled === false) {
             const imageUri = resultImagePicker.uri;
             uploadImage(imageUri)
@@ -126,11 +109,10 @@ const AltaProtectora = (props) => {
                 let ref = firebase
                 .st
                 .ref()
-                .child(`imagesProtectora/${protectora.nombre+protectora.telefono}`);
+                .child(`imagesUsuario/${protectora.foto}`);
                 ref
                   .put(resolve)
                   .then(resolve => {
-                    console.log(protectora.id);
                     console.log("Imagen subida correctamente");
                     setFoto({
                         existe: "Si"
@@ -147,44 +129,85 @@ const AltaProtectora = (props) => {
                 console.log(error);
               });
           }
-          
         }
-    }else{alert ("Primero debe introducir el nombre de la protectora y el número de teléfono");}
       };
+
+      const getUsuarioById = async (id) => {
+        const dbRef = firebase.db.collection("usuarios").doc(id);
+        const doc = await dbRef.get();
+        const usuario = doc.data();
+        setUsuario({ ...usuario, id: doc.id });
+        firebase
+        .st
+        .ref(`imagesUsuario/${usuario.foto}`)
+        .getDownloadURL().then(function(url) {
+        console.log(url);
+        setState({
+         imageFirebase: url,
+         staet: "Existe"
+
+      });
+    });
+      };
+
+
+      const checkImage = () => {
+        const { imageFirebase } = cosas;
+        if (cosas != "") {
+          return (
+            <Image
+              style={{ width: 300, height: 300 }}
+              source={{ uri: imageFirebase }}
+            />
+          );
+        }
+        return null;
+      }
+
+      useEffect(() => {
+        getUsuarioById(props.route.params.userId);
+        console.log(props.route.params.userId);
+      }, []);
+
 
     const validateFields = () => {
         let textoAlerta = "Complete el campo: ";
-        if (protectora.nombre == ''){
+        if (usuario.nombre == ''){
             textoAlerta += "\n - Nombre de protectora"; 
-        } if (protectora.contraseña == ''){
-            textoAlerta += "\n - Contraseña ";  
-        } if (protectora.email == ''){
+        } if (usuario.contraseña.length < 4 || usuario.contraseña.length > 8){
+            textoAlerta += "\n - La contraseña debe tener entre 4-8 caracteres ";  
+        } if (usuario.email == ''){
             textoAlerta += "\n - Mail "; 
-        } if (protectora.localizacion == ''){
+        } if (usuario.localizacion == ''){
             textoAlerta += "\n - Localización "; 
-        } if (protectora.direccion == ''){
-            textoAlerta += "\n - Direccion ";  
-        } if (foto.existe == ''){
+        } if (usuario.n_animales == ''){
+            textoAlerta += "\n - Número de animales ";  
+        } if (usuario.existe == ''){
             textoAlerta += "\n - Foto "; 
-        } if (protectora.url == ''){
-            textoAlerta += "\n - URL de tu web ";  
-        } if (protectora.telefono == ''){
+        } if (usuario.dni == ''){
+            textoAlerta += "\n - DNI ";  
+        } if (usuario.telefono == ''){
             textoAlerta += "\n - Telefono ";  
-        }else if (protectora.telefono.length != 9 || isNaN(protectora.telefono)){
+        }else if (usuario.telefono.length != 9 || isNaN(usuario.telefono)){
             textoAlerta += "\n - El teléfono debe contener 9 números ";  
         }
         alert (textoAlerta); 
     }
 
     return(
+
+
         <ScrollView style={styles.container}> 
-            <Text style={styles.title}> Protectora </Text>
+        {checkImage()}
+        <Button style={{position: 'fixed',  right: 0}} title="Selecciona una imagen" onPress={() =>  openGallery()} /> 
             <Text style={{marginTop: 15, color: 'darkred'}}> * Campo obligatorio </Text>
             <View 
             style={styles.inputGroup}> 
+
                 <TextInput 
                 style={styles.inputText}
                 placeholder="* Nombre"
+                value = {usuario.nombre}
                 onChangeText={(value) => handleChangeText('nombre', value)}
                 />
             </View>
@@ -194,6 +217,7 @@ const AltaProtectora = (props) => {
                 style={styles.inputText}
                 secureTextEntry={true}
                 placeholder="* Contraseña"
+                value = {usuario.contraseña}
                 onChangeText={(value) => handleChangeText('contraseña', value)}
                 />
             </View>
@@ -202,6 +226,7 @@ const AltaProtectora = (props) => {
                 <TextInput 
                     style={styles.inputText}
                     placeholder="* Email"
+                    value = {usuario.email}
                     onChangeText={(value) => handleChangeText('email', value)}
                     />
             </View>
@@ -213,7 +238,7 @@ const AltaProtectora = (props) => {
                                 setItems={setItems}
                                 open={open}
                                 setOpen={setOpen}
-                                value={value}
+                                value = {protectora.localizacion}
                                 setValue={setValue}
                                 onChangeValue={(value) => {
                                     handleChangeText('localizacion', value);
@@ -224,16 +249,18 @@ const AltaProtectora = (props) => {
             style={styles.inputGroup}>
                 <TextInput 
                     style={styles.inputText}
-                    placeholder="* Dirección"
-                    onChangeText={(value) => handleChangeText('direccion', value)}
+                    placeholder="* DNI"
+                    value = {usuario.dni}
+                    onChangeText={(value) => handleChangeText('dni', value)}
                     />
             </View>
             <View 
             style={styles.inputGroup}>
                 <TextInput 
                     style={styles.inputText}
-                    placeholder="* URL de la página web"
-                    onChangeText={(value) => handleChangeText('url', value)}
+                    placeholder="* Número de animales"
+                    value = {usuario.n_animales}
+                    onChangeText={(value) => handleChangeText('n_animales', value)}
                     />
             </View>
             <View 
@@ -241,6 +268,7 @@ const AltaProtectora = (props) => {
                 <TextInput 
                     style={styles.inputText}
                     placeholder="* Telefono"
+                    value = {usuario.telefono}
                     onChangeText={(value) => handleChangeText('telefono', value)}
                     />
             </View>
@@ -251,6 +279,7 @@ const AltaProtectora = (props) => {
                     placeholder="Descripcion (max. 200 caracteres)"
                     maxLength = {200}
                     multiline = {true}
+                    value = {protectora.descripcion}
                     onChangeText={(value) => {
                         if (value.length == 180)
                             alert("¡Cuidado! Su descripción ya contiene 180 caracteres (max. 200)")
@@ -261,27 +290,17 @@ const AltaProtectora = (props) => {
                     />
             </View>
             <View style={{marginTop: 15}}>
-            <Button title="Selecciona una imagen" onPress={() =>  openGallery()} /> 
+
                 <Button 
                 title="Dar de alta" 
                 onPress={() => {saveNewProtectora()}}/>
             </View>
+
         </ScrollView>
+
     )
 }
 
-function validatePasswordAndPhone (password, phone) {
-    let validation = true; 
-    if (password.length < 4 || password.length > 8){
-        alert("La contraseña debe tener entre 4-8 caracteres"); 
-        validation = false; 
-    }
-    if (phone.length  != 9){
-        alert("El número de teléfono debe tener 9 dígitos"); 
-        validation = false; 
-    }
-    return validation;
-  }
 
 const styles = StyleSheet.create({
     container : {
@@ -309,4 +328,4 @@ const styles = StyleSheet.create({
         borderColor: '#cccccc'
     }
 })
-export default AltaProtectora;
+export default ModificarUsuario;

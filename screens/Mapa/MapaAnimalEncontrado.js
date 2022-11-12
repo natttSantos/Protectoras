@@ -5,9 +5,11 @@ import MapView, { Marker, Polyline } from 'react-native-maps';
 //import MapViewDirections from 'react-native-maps-directions';
 //import { GOOGLE_MAPS_KEY } from '@env';
 import { Button } from "react-native-elements";
+const carImage = require('../../images/perfilUsuario.jpg')
 import firebase from '../../database/firebase';
 import DropDownPicker from "react-native-dropdown-picker";
 import * as ImagePicker from 'expo-image-picker';
+
 
 const MapaAnimalEncontrado = (props) => {
 
@@ -26,7 +28,7 @@ const MapaAnimalEncontrado = (props) => {
     existe:"",
   });
 
-  /*const cargarImagenes = async () => {
+  const cargarImagenes = async () => {
     let i = protectoras.length
     setLoading(true);
     if(i > 0){
@@ -49,7 +51,6 @@ const MapaAnimalEncontrado = (props) => {
         setLoading(false)
     }
 }
-*/
 
 const [state, setState] = useState({
   animal:"",
@@ -65,6 +66,9 @@ const [notificacionAnimal, setNotificacionAnimal] = useState({
 
 
 const [coordenadas, setCoordenadas] = useState({
+  latitud:"",
+  longitud:""
+  
 });
 
 const handleChangeText = (nombre, value) => {
@@ -83,7 +87,7 @@ const handleChangeText = (nombre, value) => {
     const usuario = doc.data();
     console.log(usuario)
     setUsuario({ ...usuario, id: doc.id });
-    //setLoading(false);
+    setLoading(false);
   };
 
 
@@ -117,7 +121,6 @@ const handleChangeText = (nombre, value) => {
       //cargarImagenes();
   });
   }, [])
-let fechaActual = new Date();
 
   const [tipoOpen, setTipoOpen] = useState(false);
   const [tipoValue, setTipoValue] = useState(null);
@@ -139,9 +142,6 @@ let fechaActual = new Date();
 
     })
     setOrigin(current);
-    setCoordenadas(current);
-    setLoading(false);
-    
   }
 
 
@@ -205,23 +205,17 @@ if(notificacionAnimal.tipo != "" && notificacionAnimal.descripcion != ""){
   };
 
 
-  const guardarNotificacion = async () => {
+  const saveNewProtectora = async () => {
     if (notificacionAnimal.tipo =="" || notificacionAnimal.descripcion=="") {
         validateFields();
     } else {
-      await firebase.db.collection('notificacionAnimal').add({
+        const dbRef = firebase.db.collection('notificacionAnimal');
+            await dbRef.add({
                 tipo: notificacionAnimal.tipo,
                 descripcion: notificacionAnimal.descripcion,
-                latitud: coordenadas.latitude,
-                longitud: coordenadas.longitude,
-                usuario: usuario.usuario,
-                recogido: "No",
-                dia : fechaActual.getDate(),
-                mes : fechaActual.getMonth(),
-                año: fechaActual.getFullYear(),
-                horas: fechaActual.getHours(),
-                minutos: fechaActual.getMinutes(),
-
+                latitud: coordenadas.latitud,
+                longitud: coordenadas.longitud,
+                usuario: usuario.usuario
             })
             alert("Notificacion enviada correctamente")
         
@@ -262,10 +256,10 @@ const validateFields = () => {
         </View>
     )
 }
-if(!loading) {
+if(protectoras.length > 0) {
   return (
-    <ScrollView > 
-    <View style={styles.container}> 
+    <ScrollView style={styles.container}> 
+    <View> 
     <DropDownPicker
                                 style={{marginTop: 20, marginBottom: 20}}
                                 placeholder="Tipo"
@@ -284,11 +278,11 @@ if(!loading) {
                     placeholder="Descripción (max 200 caracteres)"
                     onChangeText={(value) => handleChangeText('descripcion', value)}
                     />
-                    
-                    
+                    </View>
+                    <View style={{marginTop: 15}}>
                     <Button title="Adjuntar fotografía" onPress={() =>  openGallery()} /> 
-                    
-                    
+                    </View>
+                    <View> 
       <MapView 
         style={styles.map}
         initialRegion={{
@@ -299,19 +293,20 @@ if(!loading) {
           }}
       >
                 <Marker 
-           pinColor= '#BD562A'
-          coordinate={coordenadas}
+          
+          image={carImage}
+          coordinate={origin}
           onDragEnd={(direction) => setOrigin(direction.nativeEvent.coordinate)}
         />
 
             
         
       </MapView>
-      
-      <Button 
-                title="Enviar" 
-                onPress={() => {guardarNotificacion()}}/>
       </View>
+      <Button 
+                title="Dar de alta" 
+                onPress={() => {saveNewProtectora()}}/>
+      
       </ScrollView>
   );
 } else {
@@ -328,12 +323,11 @@ if(!loading) {
 const styles = StyleSheet.create({
   container: {
     flex: 1, 
-        padding: 35,
-        height:700
+        padding: 35
   },
   map: {
-    width: 290,
-    height: 360
+    width: 500,
+    height: 300
   },
   descripcion : {
     height: 100,

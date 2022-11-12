@@ -127,7 +127,7 @@ useEffect(() => {
             <Icon name="person-circle-outline" size={35} color={'blue'} />
           )
         }}
-        initialParams={{ userId: props.route.params.userId, isUsuario: true }}/>
+        initialParams={{ userId: props.route.params.userId }}/>
     </Tab.Navigator>  
   );
 };

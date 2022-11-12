@@ -8,7 +8,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ListaAnimalesProtectora from '../Listas/ListaAnimalesProtectora.js';
 import AltaGlobal from '../Altas/AltaGlobal.js';
 import ListaSolicitudes from '../Listas/ListaSolicitudes.js';
-import MapaAnimalEncontradoProtectora from '../Mapa/MapaAnimalEncontradoProtectora.js';
 
 const SesionProtectora = (props) => {
   const initialState = {
@@ -89,23 +88,14 @@ const SesionProtectora = (props) => {
           }}
           initialParams={{ userId: props.route.params.userId, isUsuario: false}}
         />
-         <Tab.Screen name = 'Animal' component = {MapaAnimalEncontradoProtectora} 
-         options={{
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="paw-outline" size={35} color={'blue'} />
-          )
-        }}
-        initialParams={{ userId: props.route.params.userId, isUsuario:true}}
-      />
         <Tab.Screen name = 'Solicitudes' component = {ListaSolicitudes} 
           options={{
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
-              <Icon name="file-tray-full-outline" size={35} color={'blue'} />
+              <Icon name="briefcase-outline" size={35} color={'blue'} />
             )
           }}
-          initialParams={{ userId: props.route.params.userId}}
+          initialParams={{ userId: props.route.params.userId, isUsuario: false}}
         />
         <Tab.Screen name = 'Perfil' component = {PerfilProtectora} 
           options={{

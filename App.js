@@ -5,7 +5,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator()
 
- //Importamos los componentes creados: 
+ //Importamos los tres componentes creados: 
 import InicioSesion from './screens/InicioSesion'
 import RegistrarUsuario from './screens/Altas/RegistrarUsuario'
 import PrincipalScreen from './screens/PrincipalScreen'
@@ -26,8 +26,6 @@ import SesionProtectora from './screens/Sesiones/SesionProtectora';
 import FechaNacimientoAnimal from './screens/Altas/FechaNacimientoAnimal';
 import ModificarProtectora from './screens/Modificar/ModificarProtectora';
 import MapaAnimalEncontrado from './screens/Mapa/MapaAnimalEncontrado';
-import MapaAnimalEncontradoProtectora from './screens/Mapa/MapaAnimalEncontradoProtectora';
-import InformacionSolicitud from './screens/InformacionSolicitud';
 
 
 
@@ -54,12 +52,9 @@ function MyStack (){
       <Stack.Screen name="PerfilAdoptar" component={PerfilAdoptar} />
       <Stack.Screen name="ModificarProtectora" component={ModificarProtectora} />
       <Stack.Screen name="MapaAnimalEncontrado" component={MapaAnimalEncontrado} />
-      <Stack.Screen name="MapaAnimalEncontradoProtectora" component={MapaAnimalEncontradoProtectora} />
-      <Stack.Screen name="InformacionSolicitud" component={InformacionSolicitud} />
     </Stack.Navigator>
   )
 }
-
 export default function App() {
   return (
     <NavigationContainer> 

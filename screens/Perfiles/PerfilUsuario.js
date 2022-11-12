@@ -11,7 +11,7 @@ import {
   Image,
   Text
 } from "react-native";
-import _ from 'lodash';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 const PerfilUsuario = (props) => {
@@ -23,7 +23,6 @@ const PerfilUsuario = (props) => {
         contraseña: "",
         alta:""
     }
-    const isUsuario = _.isUndefined(props.isUsuario) ? props.route.params.isUsuario : props.isUsuario
     const [usuario, setUsario] = useState(initialState);
     const [loading, setLoading] = useState(true);
   
@@ -35,6 +34,7 @@ const PerfilUsuario = (props) => {
       const dbRef = firebase.db.collection("users").doc(id);
       const doc = await dbRef.get();
       const usuario = doc.data();
+      console.log(usuario)
       setUsario({ ...usuario, id: doc.id });
       setLoading(false);
     };
@@ -65,25 +65,29 @@ const PerfilUsuario = (props) => {
     <Text style = {styles.texto} >
       {"Telefono: " + usuario.telefono}
     </Text>
-    {!isUsuario ? null :
-    <View>
-      <Button
-            onPress={() => { if(usuario.alta == "No")props.navigation.navigate('AltaAdoptar', {userId: props.route.params.userId}); 
-            else alert("Ya se ha dado de alta");
-          }}
-            title="Dar de alta para adoptar"
-            color="#841584"
-          />
 
-      <Button
-            onPress={() => { if(usuario.alta == "Si")props.navigation.navigate('PerfilAdoptar', {userId: props.route.params.userId}); 
-            else alert("Primero debe sarse de alta");
-          }}
-            title="Perfil adoptar"
-            color="#841584"
-          />
-    </View>
-    }
+    <Button
+          onPress={() => { if(usuario.alta == "No")props.navigation.navigate('AltaAdoptar', {userId: props.route.params.userId}); 
+          else alert("Ya se ha dado de alta");
+        }}
+          title="Dar de alta para adoptar"
+          color="#841584"
+        />
+
+<Button
+          onPress={() => { if(usuario.alta == "Si")props.navigation.navigate('PerfilAdoptar', {userId: props.route.params.userId}); 
+          else alert("Primero debe sarse de alta");
+        }}
+          title="Perfil de Adopción"
+          color="#841584"
+        />
+
+<Button
+          onPress={() => { props.navigation.navigate('ModificarUsuario', {userId: props.route.params.userId});
+        }}
+          title="Editar Perfil"
+          color="#841584"
+        />
   </View>
 </ScrollView>
 

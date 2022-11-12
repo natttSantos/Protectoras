@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
-import _ from 'lodash'
+
 
 import {
   ScrollView,
@@ -38,41 +38,31 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
     staet :""
     
   };
-   
+
   const initialState = {
-      nombre:"",
-      tipo:"",
-      raza:"",
-      sexo:"",
-      descripcion:"",
-      foto:"",
-      fecha_nacimiento: "", 
-      id_protectora: "", 
-      adoptado: "", 
-      peso: "", 
-      edad: "", 
-      nivelActividad: "", 
-      vacunado: "", 
-      microchip: ""
-  }
+    nombre:"",
+    apellidos:"",
+    localizacion:"",
+    dni:"",
+    n_animales:"",
+
+  };
   var u = "aaa";
 
-const [animal, setAnimal] = useState(initialState);
-const [loading, setLoading] = useState(true);
-const [cosas, setState] = useState(initialStatee);
-const [protectoraAnimal, setProtectoraAnimal] = useState(""); 
+  const [animal, setAnimal] = useState(initialState);
+  const [loading, setLoading] = useState(true);
+  const [cosas, setState] = useState(initialStatee);
 
+  const initialStaate = {
+    usuario: "",
+    email: "" , 
+    telefono: "", 
+    nombre: "",
+    contraseña: "",
+    alta:""
+}
 const [usuario, setUsario] = useState("");
 const [esUsuario] = useState(props.route.params.esUsuario);
-
-//Campos Opcionales
-const [pesoOpcional, setPesoOpcional] = useState("");
-const [edadOpcional, setEdadOpcional] = useState("");
-const [nivelOpcional, setNivelOpcional] = useState("");
-const [vacunadoOpcional, setVacunadoOpcional] = useState("No");
-const [microChipOpcional, setMicroChipOpcional] = useState("No");
-
-
 
 
   const uploadImage = uri => {
@@ -170,37 +160,9 @@ const getUsuarioById = async (id) => {
      imageFirebase: url
   });
 });
-    validateOptionalFields(animal); 
-    checkMicrochip_Vacunado(animal); 
+    
   };
 
-  const validateOptionalFields = (value) => {
-    let noInfo = "No tenemos información sobre esta característica."; 
-    if(value.peso == ""){
-      setPesoOpcional(noInfo); 
-    } else {
-      setPesoOpcional(value.peso + " Kg")
-    }
-    if(value.edad == ""){
-      setEdadOpcional(noInfo); 
-    } else {
-      setEdadOpcional(value.edad + " años")
-    }
-    if(value.nivelActividad == ""){
-      setNivelOpcional(noInfo); 
-    } else {
-      setNivelOpcional(value.nivelActividad); 
-    }
-  }
-  
-const checkMicrochip_Vacunado = (value) => {
-  if(value.microchip === true){
-    setMicroChipOpcional("Si")
-  } 
-  if(value.vacunado === true){
-    setVacunadoOpcional("Si")
-  }
-}
   const updateAnimal = async () => {
     const animalRef = firebase.db.collection("animales").doc(animal.id);
     await animalRef.set({
@@ -216,38 +178,15 @@ const checkMicrochip_Vacunado = (value) => {
   };
 
   const enviarSolicitud = async () => {
-    const solicitudes = firebase.db.collection('solicitudes')
-    const solicitudAEnviar = {
-      id_animal: animal.id,
-      id_protectora: animal.id_protectora,
-      id_usuario: usuario.id,
-      solucionada: false,
-    }
-
-    const soliRepe = await solicitudes.where("id_protectora", "==", animal.id_protectora)
-    .where("id_animal", "==", animal.id)
-    .where("id_usuario", "==", usuario.id).get()
-    
-    const estaRepetido = !soliRepe.empty
-
-    if(!estaRepetido) {
-      await solicitudes.add(solicitudAEnviar)
-
-      Alert.alert("Información", "Solicitud enviada correctamente", [
-        {text: "Cerrar"}
-      ])
-    } else {
-      Alert.alert("Información", "Ya enviaste la solicitud de adopcion", [
-        {text: "Cerrar"}
-      ])
-    }
+    // await firebase.db.collection('solicitudes').add(
+    //   id_protectora: 
+    // )
   }
 
   useEffect(() => {
     getAnimalById(props.route.params.animalId);
-    getUsuarioById(props.route.params.userId);  
+    getUsuarioById(props.route.params.userId); 
   }, []);
-
 
   if (loading) {
     return (
@@ -272,7 +211,9 @@ const checkMicrochip_Vacunado = (value) => {
 
   const adoptarAnimal = () => {
     if(usuario.alta=="Si") { 
-      enviarSolicitud();
+      Alert.alert("Información", "Solicitud enviada correctamente", [
+        {text: "Cerrar"}
+    ]);
     } else {
       Alert.alert("Información", "Tienes que completar tu perfil para poder adoptar", [
         {text: "Cerrar"},
@@ -282,7 +223,6 @@ const checkMicrochip_Vacunado = (value) => {
 
   };
 
-  
 
 /*
 NO BORRAR
@@ -323,36 +263,16 @@ NO BORRAR
           {"Fecha de nacimiento: " + animal.fecha_nacimiento}
         </Text>     
         <Text style = {styles.texto} >
-          {"Edad: " + edadOpcional}
-        </Text> 
-        <Text style = {styles.texto} >
-          {"Peso: " + pesoOpcional}
-        </Text> 
-        <Text style = {styles.texto} >
-          {"Vacunado: " + vacunadoOpcional}
-        </Text> 
-        <Text style = {styles.texto} >
-          {"MicroChip: " + microChipOpcional}
-        </Text> 
-        <Text style = {styles.texto} >
-          {"Nivel Actividad: " + nivelOpcional}
-        </Text>
-        <Text style = {styles.texto} >
           {"Descripción: " + animal.descripcion}
         </Text>
 
         {esUsuario ?  
-          <><TouchableOpacity
-            style={styles.boton}
+          <TouchableOpacity  
+            style={styles.boton} 
             onPress={() => adoptarAnimal()}
-          >
-            <Text>Adoptar</Text>
-          </TouchableOpacity><TouchableOpacity
-            style={styles.boton}
-            onPress={() => props.navigation.navigate('PerfilProtectora', { protectoraId: animal.id_protectora })}
-          >
-              <Text>Contactar</Text>
-            </TouchableOpacity></>
+            >
+              <Text>Adoptar</Text>
+        </TouchableOpacity>
         : null}
       </View> 
     </ScrollView>
@@ -395,10 +315,8 @@ title : {
 },
 boton: {
   alignItems: "center",
-    fontSize : 20,
-    backgroundColor: "#E9967A",
-    marginTop : 25,
-    padding: 10
+  backgroundColor: "#DDDDDD",
+  padding: 10
 },
 texto: {
   fontSize : 16,
