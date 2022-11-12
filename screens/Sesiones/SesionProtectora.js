@@ -1,16 +1,11 @@
 import firebase from '../../database/firebase.js';
-import { Appbar, FAB, useTheme } from 'react-native-paper';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import React, { useEffect, useState } from "react";
 import Icon from 'react-native-vector-icons/Ionicons'
-import {View, ActivityIndicator} from "react-native"
+import {View, ActivityIndicator, Button} from "react-native"
 
-import { Tab } from 'react-native-elements';
 import PerfilProtectora from '../Perfiles/PerfilProtectora';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import RegistrarUsuario from '../Altas/RegistrarUsuario.js';
 import ListaAnimalesProtectora from '../Listas/ListaAnimalesProtectora.js';
-import RegistrarAnimal from '../Altas/RegistrarAnimal';
 import AltaGlobal from '../Altas/AltaGlobal.js';
 import ListaSolicitudes from '../Listas/ListaSolicitudes.js';
 import MapaAnimalEncontradoProtectora from '../Mapa/MapaAnimalEncontradoProtectora.js';
@@ -59,7 +54,6 @@ const SesionProtectora = (props) => {
     setLoading(false)
     //const animales = doc.data()
   }
-  
 
   useEffect(() => { 
     getUsuarioById(props.route.params.userId);

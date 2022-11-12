@@ -179,7 +179,7 @@ const ListaAnimales = (props) => {
  const styles = StyleSheet.create({
   container: {
       flex: 1, 
-      padding: 35, 
+      marginHorizontal: 10,
       height: 3000
   },
   image : {
