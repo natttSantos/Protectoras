@@ -21,7 +21,6 @@ const ModificarUsuario = (props) => {
         localizacion: "",
         dni:"",
         n_animales:"",
-        foto:""
     })
 
     const initialStatee = {
@@ -32,7 +31,7 @@ const ModificarUsuario = (props) => {
 
     const [cosas, setState] = useState(initialStatee);
 
-    const [foto, setFoto] = useState({
+    const [fotoModificada, setFoto] = useState({
         existe:"",
 
       });
@@ -51,13 +50,15 @@ const ModificarUsuario = (props) => {
         console.log(usuario.nombre);
         
 
-        if (usuario.apellidos == '' || usuario.contraseña == ''|| usuario.dni == '' || usuario.email == '' || usuario.localizacion == ""|| usuario.n_animales == ''|| protectora.nombre == ''|| protectora.usuario == '') {
+        if (usuario.usuario == '' || usuario.contraseña == ''|| usuario.email == '' || usuario.telefono == '' || usuario.nombre == ""|| usuario.apellidos == ''|| usuario.localizacion == ''|| usuario.dni == ''|| usuario.n_animales == '') {
             validateFields();
         } else  {
 
-            const usuarioRef = firebase.db.collection("usuarios").doc(usuario.id);
+            const usuarioRef = firebase.db.collection("users").doc(usuario.id);
             console.log(usuario.id);
             await usuarioRef.set({
+                    alta: usuario.alta,
+                    usuario: usuario.usuario,
                     nombre: usuario.nombre,
                     email: usuario.email,
                     contraseña: usuario.contraseña,
@@ -68,7 +69,6 @@ const ModificarUsuario = (props) => {
                     localizacion: usuario.localizacion,
                     dni: usuario.dni,
                     n_animales: usuario.n_animales,
-                    foto : usuario.foto
                 })
                 alert("Datos cambiados correctamente")
             }
@@ -109,7 +109,7 @@ const ModificarUsuario = (props) => {
                 let ref = firebase
                 .st
                 .ref()
-                .child(`imagesUsuario/${protectora.foto}`);
+                .child(`imagesUsuario/${props.route.params.userId}`);
                 ref
                   .put(resolve)
                   .then(resolve => {
@@ -133,13 +133,13 @@ const ModificarUsuario = (props) => {
       };
 
       const getUsuarioById = async (id) => {
-        const dbRef = firebase.db.collection("usuarios").doc(id);
+        const dbRef = firebase.db.collection("users").doc(id);
         const doc = await dbRef.get();
         const usuario = doc.data();
         setUsuario({ ...usuario, id: doc.id });
         firebase
         .st
-        .ref(`imagesUsuario/${usuario.foto}`)
+        .ref(`imagesUsuario/${props.route.params.userId}`)
         .getDownloadURL().then(function(url) {
         console.log(url);
         setState({
@@ -173,7 +173,7 @@ const ModificarUsuario = (props) => {
     const validateFields = () => {
         let textoAlerta = "Complete el campo: ";
         if (usuario.nombre == ''){
-            textoAlerta += "\n - Nombre de protectora"; 
+            textoAlerta += "\n - Nombre de Usuario"; 
         } if (usuario.contraseña.length < 4 || usuario.contraseña.length > 8){
             textoAlerta += "\n - La contraseña debe tener entre 4-8 caracteres ";  
         } if (usuario.email == ''){
@@ -196,7 +196,7 @@ const ModificarUsuario = (props) => {
 
     return(
 
-
+        
         <ScrollView style={styles.container}> 
         {checkImage()}
         <Button style={{position: 'fixed',  right: 0}} title="Selecciona una imagen" onPress={() =>  openGallery()} /> 
@@ -206,9 +206,9 @@ const ModificarUsuario = (props) => {
 
                 <TextInput 
                 style={styles.inputText}
-                placeholder="* Nombre"
-                value = {usuario.nombre}
-                onChangeText={(value) => handleChangeText('nombre', value)}
+                placeholder="* Nombre de usuario"
+                value = {usuario.usuario}
+                onChangeText={(value) => handleChangeText('usuario', value)}
                 />
             </View>
             <View 
@@ -230,6 +230,33 @@ const ModificarUsuario = (props) => {
                     onChangeText={(value) => handleChangeText('email', value)}
                     />
             </View>
+            <View 
+            style={styles.inputGroup}>
+                <TextInput 
+                    style={styles.inputText}
+                    placeholder="* Teléfono"
+                    value = {usuario.telefono}
+                    onChangeText={(value) => handleChangeText('telefono', value)}
+                    />
+            </View>
+            <View 
+            style={styles.inputGroup}>
+                <TextInput 
+                    style={styles.inputText}
+                    placeholder="* Nombre"
+                    value = {usuario.nombre}
+                    onChangeText={(value) => handleChangeText('nombre', value)}
+                    />
+            </View>
+            <View 
+            style={styles.inputGroup}>
+                <TextInput 
+                    style={styles.inputText}
+                    placeholder="* Apellidos"
+                    value = {usuario.apellidos}
+                    onChangeText={(value) => handleChangeText('apellidos', value)}
+                    />
+            </View>
             <View>
                 <DropDownPicker
                                 style={{marginTop: 15, marginBottom: 15}}
@@ -238,7 +265,7 @@ const ModificarUsuario = (props) => {
                                 setItems={setItems}
                                 open={open}
                                 setOpen={setOpen}
-                                value = {protectora.localizacion}
+                                value = {usuario.localizacion}
                                 setValue={setValue}
                                 onChangeValue={(value) => {
                                     handleChangeText('localizacion', value);
@@ -263,37 +290,11 @@ const ModificarUsuario = (props) => {
                     onChangeText={(value) => handleChangeText('n_animales', value)}
                     />
             </View>
-            <View 
-            style={styles.inputGroup}>
-                <TextInput 
-                    style={styles.inputText}
-                    placeholder="* Telefono"
-                    value = {usuario.telefono}
-                    onChangeText={(value) => handleChangeText('telefono', value)}
-                    />
-            </View>
-            <View 
-            style={styles.descripcion}>
-                <TextInput                     
-                    style={{fontSize: 17}}
-                    placeholder="Descripcion (max. 200 caracteres)"
-                    maxLength = {200}
-                    multiline = {true}
-                    value = {protectora.descripcion}
-                    onChangeText={(value) => {
-                        if (value.length == 180)
-                            alert("¡Cuidado! Su descripción ya contiene 180 caracteres (max. 200)")
-                        if (value.length == 200)
-                            alert("¡Su descripción ya contiene los 200 caracteres permitidos!")
-                        handleChangeText('descripcion', value)
-                    }}
-                    />
-            </View>
-            <View style={{marginTop: 15}}>
+            <View style={{marginTop: 15, marginBottom: 70}}>
 
                 <Button 
-                title="Dar de alta" 
-                onPress={() => {saveNewProtectora()}}/>
+                title="Actualizar datos" 
+                onPress={() => {saveNewUsuario()}}/>
             </View>
 
         </ScrollView>

@@ -16,13 +16,22 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const PerfilUsuario = (props) => {
     const initialState = {
+        
         usuario: "",
         email: "" , 
         telefono: "", 
         nombre: "",
         contraseña: "",
-        alta:""
+        alta:"",
     }
+
+    const initialStatee = {
+      imageFirebase:"a",
+      staet :""
+      
+    };
+    
+    const [cosas, setState] = useState(initialStatee);
     const [usuario, setUsario] = useState(initialState);
     const [loading, setLoading] = useState(true);
   
@@ -37,7 +46,37 @@ const PerfilUsuario = (props) => {
       console.log(usuario)
       setUsario({ ...usuario, id: doc.id });
       setLoading(false);
+      
+      firebase
+      .st
+      .ref(`imagesUsuario/${props.route.params.userId}`)
+      .getDownloadURL().then(function(url) {
+          console.log(url);
+          setState({
+          imageFirebase: url
+          });
+      });
     };
+    const checkImage = () => {
+      const { imageFirebase } = cosas;
+      if (cosas != "") {
+        return (
+          <Image
+            style={{ width: 300, height: 300 }}
+            source={require('../../images/gatitos.jpg')}
+          />
+        );
+      
+      }
+      else{  
+      
+      <Image
+        style={{ width: 300, height: 300 }}
+        source={{ uri: imageFirebase }}
+      />  
+    }
+      return null;
+    }
   
     useEffect(() => { 
       getUsuarioById(props.route.params.userId); 
@@ -55,7 +94,7 @@ const PerfilUsuario = (props) => {
  return (
   <ScrollView style={styles.container}>
   <View>
-    <Image source={require('../../images/perfilUsuario.jpg')} style={styles.image}/>
+  {checkImage()}
     <Text style = {styles.texto} >
       {"Nombre de usuario: " + usuario.usuario}
     </Text>
@@ -83,7 +122,8 @@ const PerfilUsuario = (props) => {
         />
 
 <Button
-          onPress={() => { props.navigation.navigate('ModificarUsuario', {userId: props.route.params.userId});
+          onPress={() => { if(usuario.alta == "Si")props.navigation.navigate('ModificarUsuario', {userId: props.route.params.userId}); 
+          else alert("Primero debe sarse de alta");
         }}
           title="Editar Perfil"
           color="#841584"
