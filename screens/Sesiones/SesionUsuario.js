@@ -1,16 +1,9 @@
 import firebase from '../../database/firebase.js';
-import { Appbar, FAB, useTheme } from 'react-native-paper';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import React, { useEffect, useState } from "react";
 import Icon from 'react-native-vector-icons/Ionicons'
 
-import { Tab } from 'react-native-elements';
 import PerfilUsuario from '../Perfiles/PerfilUsuario.js';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import RegistrarUsuario from '../Altas/RegistrarUsuario.js';
-import UserDetailScreen from '../UserDetailScreen.js';
-import Home from '../Home.js';
-import RegistrarAnimal from '../Altas/RegistrarAnimal';
 import AltaGlobal from '../Altas/AltaGlobal.js';
 import ListaProtectoras from '../Listas/ListaProtectoras.js';
 import ListaAnimales from '../Listas/ListaAnimales.js';
@@ -77,7 +70,6 @@ const getUsuarioById = async (id) => {
   const dbRef = firebase.db.collection("users").doc(id);
   const doc = await dbRef.get();
   const usuario = doc.data();
-  console.log(usuario)
   setUsuario({ ...usuario, id: doc.id });
   setLoading(false);
 };
@@ -135,7 +127,7 @@ useEffect(() => {
             <Icon name="person-circle-outline" size={35} color={'blue'} />
           )
         }}
-        initialParams={{ userId: props.route.params.userId }}/>
+        initialParams={{ userId: props.route.params.userId, canEdit: true }}/>
     </Tab.Navigator>  
   );
 };

@@ -27,6 +27,7 @@ import FechaNacimientoAnimal from './screens/Altas/FechaNacimientoAnimal';
 import ModificarProtectora from './screens/Modificar/ModificarProtectora';
 import ModificarUsuario from './screens/Modificar/ModificarUsuario';
 import MapaAnimalEncontrado from './screens/Mapa/MapaAnimalEncontrado';
+import InformacionSolicitud from './screens/InformacionSolicitud';
 
 
 
@@ -55,6 +56,7 @@ function MyStack (){
       <Stack.Screen name="ModificarProtectora" component={ModificarProtectora} />
       <Stack.Screen name="ModificarUsuario" component={ModificarUsuario} />
       <Stack.Screen name="MapaAnimalEncontrado" component={MapaAnimalEncontrado} />
+      <Stack.Screen name="InformacionSolicitud" component={InformacionSolicitud} />
     </Stack.Navigator>
   )
 }
