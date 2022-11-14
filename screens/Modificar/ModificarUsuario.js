@@ -50,7 +50,7 @@ const ModificarUsuario = (props) => {
         console.log(usuario.nombre);
         
 
-        if (usuario.usuario == '' || usuario.contraseña == ''|| usuario.email == '' || usuario.telefono == '' || usuario.nombre == ""|| usuario.apellidos == ''|| usuario.localizacion == ''|| usuario.dni == ''|| usuario.n_animales == '') {
+        if (usuario.usuario == '' || usuario.contraseña.length < 4 || usuario.contraseña.length > 8 || usuario.email == '' || usuario.telefono == '' || usuario.nombre == ""|| usuario.apellidos == ''|| usuario.localizacion == ''|| usuario.dni == ''|| usuario.n_animales == '') {
             validateFields();
         } else  {
 
