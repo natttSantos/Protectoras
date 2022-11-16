@@ -74,45 +74,55 @@ const SesionProtectora = (props) => {
         <Tab.Screen name = 'Home' component = {ListaAnimalesProtectora} 
           options={{
             headerShown: false,
-            tabBarIcon: ({ color, size }) => (
-              <Icon name="home-outline" size={35} color={'blue'} />
-            )
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName = focused ? "home" : "home-outline";
+  
+              return <Icon name={iconName} size={35} color={'blue'} />
+            }
           }}
           initialParams={{ animales: animales, userId: props.route.params.userId}}
         />
         <Tab.Screen name = 'Add' component = {AltaGlobal} 
           options={{
             headerShown: false,
-            tabBarIcon: ({ color, size }) => (
-              <Icon name="add-circle-outline" size={35} color={'blue'} />
-            )
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName = focused ? "add-circle" : "add-circle-outline";
+  
+              return <Icon name={iconName} size={35} color={'blue'} />
+            }
           }}
           initialParams={{ userId: props.route.params.userId, isUsuario: false}}
         />
               <Tab.Screen name = 'Animal' component = {MapaAnimalEncontradoProtectora} 
          options={{
           headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="paw-outline" size={35} color={'blue'} />
-          )
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName = focused ? "paw" : "paw-outline";
+
+            return <Icon name={iconName} size={35} color={'blue'} />
+          }
         }}
         initialParams={{ userId: props.route.params.userId, isUsuario:true}}
       />
         <Tab.Screen name = 'Solicitudes' component = {ListaSolicitudes} 
           options={{
             headerShown: false,
-            tabBarIcon: ({ color, size }) => (
-              <Icon name="file-tray-full-outline" size={35} color={'blue'} />
-            )
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName = focused ? "file-tray-full" : "file-tray-full-outline";
+  
+              return <Icon name={iconName} size={35} color={'blue'} />
+            }
           }}
           initialParams={{ userId: props.route.params.userId, isUsuario: false}}
         />
         <Tab.Screen name = 'Perfil' component = {PerfilProtectora} 
           options={{
             headerShown: false,
-            tabBarIcon: ({ color, size }) => (
-              <Icon name="person-circle-outline" size={35} color={'blue'} />
-            )
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName = focused ? "person-circle" : "person-circle-outline";
+  
+              return <Icon name={iconName} size={35} color={'blue'} />
+            }
           }}
           initialParams={{ protectoraId: props.route.params.userId }}/>
       </Tab.Navigator>  
