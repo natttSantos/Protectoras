@@ -27,24 +27,28 @@ const AltaGlobal = (props) => {
     <ScrollView  style={styles.container}>
     <View>
         <Text style={styles.title}> Selecciona el registro </Text>
-         <TouchableOpacity 
-                    onPress={() => {
-                      props.navigation.navigate('AltaProtectora', {userId: props.route.params.userId}) 
-                    }}
-                    style={styles.button}>
-                        <Text style={styles.buttonText}>
-                            Dar de alta protectora
-                        </Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-                    onPress={() => {
-                      validateTypeOfUser();    
-                    }}
-                    style={styles.button}>
-                        <Text style={styles.buttonText}>
-                            Dar de alta animal
-                        </Text>
-        </TouchableOpacity>
+         
+        {props.route.params.isUsuario ? 
+          <TouchableOpacity 
+                      onPress={() => {
+                        props.navigation.navigate('AltaProtectora', {userId: props.route.params.userId}) 
+                      }}
+                      style={styles.button}>
+                          <Text style={styles.buttonText}>
+                              Dar de alta protectora
+                          </Text>
+          </TouchableOpacity> 
+        :
+          <TouchableOpacity 
+                      onPress={() => {
+                        validateTypeOfUser();    
+                      }}
+                      style={styles.button}>
+                          <Text style={styles.buttonText}>
+                              Dar de alta animal
+                          </Text>
+          </TouchableOpacity>
+        }
     </View>
     </ScrollView>
   );
