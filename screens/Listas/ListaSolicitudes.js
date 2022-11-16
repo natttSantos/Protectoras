@@ -1,11 +1,13 @@
 import firebase from '../../database/firebase.js';
 import React, { useState, useEffect } from 'react';
 import {ScrollView, View, StyleSheet, Alert, Text} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons'
 import Solicitud from '../../components/Solicitud.js';
-
+import InformacionSolicitud from '../InformacionSolicitud.js';
+import { onPress } from 'deprecated-react-native-prop-types/DeprecatedTextPropTypes.js';
 
 const ListaSolicitudes = (props) => {
-    
+
     const [solicitudes, setSolicitudes] = useState([])
 
     const getAllSolicitudes = (id_protectora) => {
@@ -33,8 +35,7 @@ const ListaSolicitudes = (props) => {
         }, {merge: true})
 
         await firebase.db.collection('solicitudes').doc(solicitud.id).set({
-            solucionada: true,
-            aceptada: true
+            solucionada: true
         }, {merge: true})
     }
 
@@ -51,13 +52,9 @@ const ListaSolicitudes = (props) => {
 
     const declinar = (declinarIndex) => {
         Alert.alert("Información", "¿Está seguro que quiere denegar la solicitud de adopción?", [
-            {text: "Confirmar",
-             
+            {text: "Confirmar", 
             onPress: async () => {
-                await firebase.db.collection('solicitudes').doc(solicitudes[declinarIndex].id).set({
-                    solucionada: true,
-                    aceptada: false
-                }, {merge: true})
+                await firebase.db.collection('solicitudes').doc(solicitudes[declinarIndex].id).delete()
                 setSolicitudes(solicitudes.filter((solicitud, index) => index != declinarIndex))
             }}, 
             {text: "Cancelar"}
@@ -67,7 +64,6 @@ const ListaSolicitudes = (props) => {
     const verInformacion = (index) => {
         props.navigation.navigate('InformacionSolicitud', {id_animal: solicitudes[index].id_animal, id_usuario: solicitudes[index].id_usuario})
     }
-
     useEffect(() => {
         getAllSolicitudes(props.route.params.userId)
     }, [])
