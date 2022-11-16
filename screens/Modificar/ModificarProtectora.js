@@ -282,7 +282,7 @@ const ModificarProtectora = (props) => {
                     }}
                     />
             </View>
-            <View style={{marginTop: 15}}>
+            <View style={{marginTop: 15, marginBottom: 80}}>
 
                 <Button 
                 title="Dar de alta" 
