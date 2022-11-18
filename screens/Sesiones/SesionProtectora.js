@@ -9,8 +9,11 @@ import ListaAnimalesProtectora from '../Listas/ListaAnimalesProtectora.js';
 import AltaGlobal from '../Altas/AltaGlobal.js';
 import ListaSolicitudes from '../Listas/ListaSolicitudes.js';
 import MapaAnimalEncontradoProtectora from '../Mapa/MapaAnimalEncontradoProtectora.js';
+import { useIsFocused } from '@react-navigation/native';
 
 const SesionProtectora = (props) => {
+  const isFocused = useIsFocused()
+
   const initialState = {
     nombre:"",
     email:"",
@@ -22,16 +25,16 @@ const SesionProtectora = (props) => {
   };
   const Tab = createBottomTabNavigator(); 
 
-  const [usuario, setUsuario] = useState(initialState);
+  //const [usuario, setUsuario] = useState(initialState);
   const [animales, setAnimales] = useState([])
   const [loading, setLoading] = useState(true);
 
-  const getUsuarioById = async (id) => {
-    const dbRef = firebase.db.collection("protectoras").doc(id);
-    const doc = await dbRef.get();
-    const usuario = doc.data();
-    setUsuario({ ...usuario, id: doc.id });
-  };
+  // const getUsuarioById = async (id) => {
+  //   const dbRef = firebase.db.collection("protectoras").doc(id);
+  //   const doc = await dbRef.get();
+  //   const usuario = doc.data();
+  //   setUsuario({ ...usuario, id: doc.id });
+  // };
 
   const getAllAnimalesDeProtectora = async (id) => {
     const animales = []
@@ -52,13 +55,18 @@ const SesionProtectora = (props) => {
 
     setAnimales(animales)
     setLoading(false)
-    //const animales = doc.data()
   }
 
+  // useEffect(() => { 
+  //   getUsuarioById(props.route.params.userId);
+  // }, []);
+
   useEffect(() => { 
-    getUsuarioById(props.route.params.userId);
-    getAllAnimalesDeProtectora(props.route.params.userId);
-  }, []);
+    if(isFocused) {
+      setLoading(true)
+      getAllAnimalesDeProtectora(props.route.params.userId);
+    }
+  }, [isFocused]);
 
   if (loading) {
     return (

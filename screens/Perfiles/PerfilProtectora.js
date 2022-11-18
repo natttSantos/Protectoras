@@ -35,6 +35,7 @@ const PerfilProtectora = (props) => {
 
   const [cosas, setState] = useState(initialStatee);
   const [loading, setLoading] = useState(true);
+  const [cambios, setcambios] = useState(false);
   const [protectora, setProtectora] = useState(initialState);
 
   const getProtectoraById = async (id) => {
@@ -70,7 +71,7 @@ const PerfilProtectora = (props) => {
 
   useEffect(() => {
     getProtectoraById(props.route.params.protectoraId);
-  }, []);
+  }, [cambios]);
   
   if(loading) {
     return(

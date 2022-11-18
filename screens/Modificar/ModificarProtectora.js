@@ -1,6 +1,6 @@
 import { style } from "deprecated-react-native-prop-types/DeprecatedTextPropTypes";
 import React, {useEffect, useState} from "react";
-import { ScrollView, View, Text, StyleSheet, TextInput,Image } from "react-native";
+import { ScrollView, View, Text, StyleSheet, TextInput, Image } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Button } from "react-native-elements";
 import firebase from "../../database/firebase";
@@ -45,13 +45,11 @@ const ModificarProtectora = (props) => {
     }
 
     const saveNewProtectora = async () => {
-        console.log(protectora.nombre);
         if (protectora.nombre == '' || protectora.email == ''|| protectora.email == '' || protectora.provincia == '' || protectora.telefono == ""|| protectora.url == ''|| protectora.direccion == ''|| protectora.descripcion == '') {
             validateFields();
         } else  {
 
             const protectoraRef = firebase.db.collection("protectoras").doc(protectora.id);
-            console.log(protectora.id);
             await protectoraRef.set({
                     nombre: protectora.nombre,
                     email: protectora.email,
@@ -65,12 +63,12 @@ const ModificarProtectora = (props) => {
                 })
                 alert("Datos cambiados correctamente")
             }
+            props.navigation.goBack()
         }
 
 
     const uploadImage = uri => {
         return new Promise((resolve, reject) => {
-          console.log(resolve + " " + reject);
           let xhr = new XMLHttpRequest();
           xhr.onerror = reject;
           xhr.onreadystatechange = () => {
@@ -106,7 +104,6 @@ const ModificarProtectora = (props) => {
                 ref
                   .put(resolve)
                   .then(resolve => {
-                    console.log("Imagen subida correctamente");
                     setFoto({
                         existe: "Si"
                      });
@@ -134,7 +131,6 @@ const ModificarProtectora = (props) => {
         .st
         .ref(`imagesProtectora/${protectora.fotoModificada}`)
         .getDownloadURL().then(function(url) {
-        console.log(url);
         setState({
          imageFirebase: url,
          staet: "Existe"
@@ -159,7 +155,6 @@ const ModificarProtectora = (props) => {
 
       useEffect(() => {
         getProtectoraById(props.route.params.userId);
-        console.log(props.route.params.userId);
       }, []);
 
 
@@ -285,7 +280,7 @@ const ModificarProtectora = (props) => {
             <View style={{marginTop: 15, marginBottom: 80}}>
 
                 <Button 
-                title="Dar de alta" 
+                title="Actualizar" 
                 onPress={() => {saveNewProtectora()}}/>
             </View>
 
