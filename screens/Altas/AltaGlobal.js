@@ -1,50 +1,33 @@
-import firebase from '../../database/firebase.js';
-import { Appbar, FAB, useTheme } from 'react-native-paper';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import React, { useEffect, useState } from "react";
-import { ScrollView, View, Text, StyleSheet, TextInput,TouchableOpacity, Alert } from "react-native";
-import { style } from 'deprecated-react-native-prop-types/DeprecatedViewPropTypes.js';
-
+import React, { useEffect, useState }from "react";
+import { ScrollView, View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 const AltaGlobal = (props) => {
-
-  const validateTypeOfUser = () =>{
-    if (props.route.params.isUsuario == true){
-        showAlert();   
-    }else {
-      props.navigation.navigate('RegistrarAnimal', {userId: props.route.params.userId})    
-    }          
-    
-  }
-
-
-  const showAlert = () => {
-    Alert.alert("Error", "No eres una protectora! Regístrate como tal para dar de alta un animal", [
-        {text: "Cerrar"}
-    ]);
-}
   return (
     <ScrollView  style={styles.container}>
     <View>
         <Text style={styles.title}> Selecciona el registro </Text>
-         <TouchableOpacity 
-                    onPress={() => {
-                      props.navigation.navigate('AltaProtectora', {userId: props.route.params.userId}) 
-                    }}
-                    style={styles.button}>
-                        <Text style={styles.buttonText}>
-                            Dar de alta protectora
-                        </Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-                    onPress={() => {
-                      validateTypeOfUser();    
-                    }}
-                    style={styles.button}>
-                        <Text style={styles.buttonText}>
-                            Dar de alta animal
-                        </Text>
-        </TouchableOpacity>
+         
+        {props.route.params.isUsuario ? 
+          <TouchableOpacity 
+                      onPress={() => {
+                        props.navigation.navigate('AltaProtectora', {userId: props.route.params.userId}) 
+                      }}
+                      style={styles.button}>
+                          <Text style={styles.buttonText}>
+                              Dar de alta protectora
+                          </Text>
+          </TouchableOpacity> 
+        :
+          <TouchableOpacity 
+                      onPress={() => {
+                        props.navigation.navigate('RegistrarAnimal', {userId: props.route.params.userId})    
+                      }}
+                      style={styles.button}>
+                          <Text style={styles.buttonText}>
+                              Dar de alta animal
+                          </Text>
+          </TouchableOpacity>
+        }
     </View>
     </ScrollView>
   );

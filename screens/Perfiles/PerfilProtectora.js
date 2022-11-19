@@ -35,6 +35,7 @@ const PerfilProtectora = (props) => {
 
   const [cosas, setState] = useState(initialStatee);
   const [loading, setLoading] = useState(true);
+  const [cambios, setcambios] = useState(false);
   const [protectora, setProtectora] = useState(initialState);
 
   const getProtectoraById = async (id) => {
@@ -70,7 +71,7 @@ const PerfilProtectora = (props) => {
 
   useEffect(() => {
     getProtectoraById(props.route.params.protectoraId);
-  }, []);
+  }, [cambios]);
   
   if(loading) {
     return(
@@ -104,18 +105,17 @@ return (
         <BotonAbrirURL url={protectora.url}>
           Página web
         </BotonAbrirURL>
-        <Button title="Modificar" onPress={() => {
-                      props.navigation.navigate('ModificarProtectora', {userId: props.route.params.protectoraId})
-                    }} />
+        <View style={{marginBottom: 50}}>
         <TouchableOpacity 
                     onPress={() => {
-                      props.navigation.navigate('ModificarProtectora', {userId: props.route.params.userId}) 
+                      props.navigation.navigate('ModificarProtectora', {userId: props.route.params.protectoraId}) 
                     }}
-                    style={styles.button}>
+                    style={styles.boton}>
                         <Text style={styles.buttonText}>
-                            Dar de alta protectora
+                            MODIFICAR
                         </Text>
         </TouchableOpacity>
+        </View>
       </View>
       
     </ScrollView>
