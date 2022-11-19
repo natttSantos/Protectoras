@@ -29,31 +29,6 @@ const MapaAnimalEncontradoProtectora = (props) => {
     existe:"",
   });
 
-  /*const cargarImagenes = async () => {
-    let i = protectoras.length
-    setLoading(true);
-    if(i > 0){
-        await protectoras.map(async (protectora, index) => {
-          console.log(protectora.nombre);
-            await firebase
-            .st
-            .ref(`imagesProtectora/${protectora.fotoModificada}`)
-            .getDownloadURL().then(function(url) {
-                i--
-                imagenesAux[index] = url
-                setImagenes(...imagenes, imagenesAux)
-                if(i == 0) setLoading(false)
-            });
-            console.log("si entro")
-        })
-    }
-    else {
-        console.log("no entro")
-        setLoading(false)
-    }
-}
-*/
-
 const [state, setState] = useState({
   animal:"",
   descripcion:"",
@@ -78,18 +53,16 @@ const handleChangeText = (nombre, value) => {
 }; 
 
 
-  const [origin, setOrigin] = useState({
-    latitude: 39.484242,
-    longitude:  -0.377869,
+  const [posicionMapa, setposicionMapa] = useState({
+    latitude: 39.391199,
+    longitude:-2.038701,
   });
 
   const getUsuarioById = async (id) => {
     const dbRef = firebase.db.collection("users").doc(id);
     const doc = await dbRef.get();
     const usuario = doc.data();
-    console.log(usuario)
     setUsuario({ ...usuario, id: doc.id });
-    //setLoading(false);
   };
 
   const [notificacionCargar, setCargarNotificacion] = useState(initialStatee);
@@ -204,7 +177,7 @@ const [cosas, setFotoAnimal] = useState(initialStatee);
       longitud: location.coords.longitude
 
     })
-    setOrigin(current);
+    setposicionMapa(current);
     setLoading(false);
     setCoordenadas(current);
   }
@@ -224,13 +197,7 @@ const [cosas, setFotoAnimal] = useState(initialStatee);
         alert("Notificacion enviada correctamente")
 }
 
-
-
-
-
-
-
-  const saveNewProtectora = async () => {
+  const animalRecogido = async () => {
     if (notificacionAnimal.tipo =="" || notificacionAnimal.descripcion=="") {
         validateFields();
     } else {
@@ -320,8 +287,8 @@ if(!loading) {
       <MapView 
         style={styles.map}
         initialRegion={{
-            latitude: origin.latitude,
-            longitude: origin.longitude,
+            latitude: posicionMapa.latitude,
+            longitude: posicionMapa.longitude,
             latitudeDelta: 0.09,
             longitudeDelta: 0.04
           }}
@@ -329,7 +296,7 @@ if(!loading) {
                 <Marker 
           pinColor= '#BD562A'
           coordinate={coordenadas}
-          onDragEnd={(direction) => setOrigin(direction.nativeEvent.coordinate)}
+          onDragEnd={(direction) => setposicionMapa(direction.nativeEvent.coordinate)}
         />
           {notificacionesAnimalEncontrado.map((notificacionAnimalActual, index) => {
               if(notificacionAnimalActual.recogido =="No")
@@ -347,9 +314,6 @@ if(!loading) {
 
       </MapView>
       {checkImage()}
-      <Button 
-                title="Enviar" 
-                onPress={() => {saveNewProtectora()}}/>
       </View>
       </ScrollView>
   );

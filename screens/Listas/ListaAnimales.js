@@ -51,9 +51,7 @@ const ListaAnimales = (props) => {
         const index = animales.findIndex(animalin => animalin == animal)
         imagenesAux.push(imagenes[index])
       })
-
       setImagenesACargar(imagenesAux)
-      
     }
 
       useEffect(() => {

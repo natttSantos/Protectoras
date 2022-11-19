@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
-
+import MapView, { Marker, Polyline } from 'react-native-maps';
+import * as Location from 'expo-location';
 
 import {
   ScrollView,
@@ -64,6 +65,27 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
 const [usuario, setUsario] = useState("");
 const [esUsuario] = useState(props.route.params.esUsuario);
 
+async function getLocationPermission() {
+  let { status } = await Location.requestForegroundPermissionsAsync();
+  if(status !== 'granted') {
+    alert('Permission denied');
+    return;
+  }
+  let location = await Location.getCurrentPositionAsync({});
+  const current = {
+    latitude: location.coords.latitude,
+    longitude: location.coords.longitude
+  }
+  setCoordenadas({
+    latitud: location.coords.latitude,
+    longitud: location.coords.longitude
+
+  })
+  setposicionMapa(current);
+  setCoordenadas(current);
+  setLoading(false);
+  
+}
 
   const uploadImage = uri => {
     return new Promise((resolve, reject) => {
@@ -141,7 +163,6 @@ const getUsuarioById = async (id) => {
   const doc = await dbRef.get();
   const usuario = doc.data();
   setUsario({...usuario, id: doc.id});
-  setLoading(false);
 };
 
 
@@ -150,7 +171,6 @@ const getUsuarioById = async (id) => {
     const doc = await dbRef.get();
     const animal = doc.data();
     setAnimal({ ...animal, id: doc.id });
-    setLoading(false);
 
     firebase
     .st
@@ -172,6 +192,8 @@ const getUsuarioById = async (id) => {
       sexo: animal.sexo,
       fecha_nacimiento: animal.fecha_nacimiento,
       descripcion: animal.descripcion,
+      latitud : animal.latitud,
+      longitud: animal.longitud,
     });
     setAnimal(initialState);
     props.navigation.navigate("ListaAnimales");
@@ -186,15 +208,17 @@ const getUsuarioById = async (id) => {
   useEffect(() => {
     getAnimalById(props.route.params.animalId);
     getUsuarioById(props.route.params.userId); 
+    getLocationPermission();
   }, []);
 
-  if (loading) {
-    return (
-      <View style={styles.loader}>
-        <ActivityIndicator size="large" color="#9E9E9E" />
-      </View>
-    );
-  }
+  const [coordenadas, setCoordenadas] = useState({
+  });
+
+  const [posicionMapa, setposicionMapa] = useState({
+    latitude: 39.391199,
+    longitude:-2.038701,
+  });
+
 
    const checkImage = () => {
     const { imageFirebase } = cosas;
@@ -244,11 +268,19 @@ NO BORRAR
 
 
 
-  return (
-    
-    <ScrollView style={styles.container}>
-    
+if(loading) {
+  return(
       <View>
+          <ActivityIndicator />
+      </View>
+  )
+}
+if(!loading) {
+return (
+    
+    <ScrollView >
+    
+      <View style={styles.container}>
        {checkImage()}
         <Text style = {styles.texto} >
           {"Nombre: " + animal.nombre}
@@ -266,6 +298,30 @@ NO BORRAR
           {"Descripción: " + animal.descripcion}
         </Text>
 
+        <MapView 
+        style={styles.map}
+        initialRegion={{
+            latitude: posicionMapa.latitude,
+            longitude: posicionMapa.longitude,
+            latitudeDelta: 0.09,
+            longitudeDelta: 0.04
+          }}
+      >
+                <Marker 
+           pinColor= '#BD562A'
+          coordinate={coordenadas}
+          onDragEnd={(direction) => setposicionMapa(direction.nativeEvent.coordinate)}
+        />
+
+              <Marker 
+           pinColor= '#6BE795'
+           coordinate={{
+            longitude: animal.longitud,
+            latitude: animal.latitud
+         }}
+        />
+        </MapView>
+
         {esUsuario ?  
           <TouchableOpacity  
             style={styles.boton} 
@@ -277,6 +333,7 @@ NO BORRAR
       </View> 
     </ScrollView>
   );
+        }
 };
 
 const styles = StyleSheet.create({
@@ -285,6 +342,7 @@ const styles = StyleSheet.create({
     padding: 25,
     marginTop: 5,
     marginBottom: 5,
+    height: 750
   },
   loader: {
     left: 0,
@@ -324,7 +382,11 @@ texto: {
   borderBottomWidth: 1,
   borderBottomColor: "#cccccc",
   marginBottom: 5
-}
+},
+  map: {
+    width: 290,
+    height: 150
+  },
 });
 
 export default PerfilAnimal;

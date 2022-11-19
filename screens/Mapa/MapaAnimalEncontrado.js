@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import * as Location from 'expo-location';
-import { StyleSheet, Text, View,ActivityIndicator,ScrollView,TextInput } from 'react-native';
+import { StyleSheet, Text, View,ActivityIndicator,ScrollView,TextInput,Alert } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 //import MapViewDirections from 'react-native-maps-directions';
 //import { GOOGLE_MAPS_KEY } from '@env';
@@ -26,31 +26,6 @@ const MapaAnimalEncontrado = (props) => {
     existe:"",
   });
 
-  /*const cargarImagenes = async () => {
-    let i = protectoras.length
-    setLoading(true);
-    if(i > 0){
-        await protectoras.map(async (protectora, index) => {
-          console.log(protectora.nombre);
-            await firebase
-            .st
-            .ref(`imagesProtectora/${protectora.fotoModificada}`)
-            .getDownloadURL().then(function(url) {
-                i--
-                imagenesAux[index] = url
-                setImagenes(...imagenes, imagenesAux)
-                if(i == 0) setLoading(false)
-            });
-            console.log("si entro")
-        })
-    }
-    else {
-        console.log("no entro")
-        setLoading(false)
-    }
-}
-*/
-
 const [state, setState] = useState({
   animal:"",
   descripcion:"",
@@ -67,23 +42,25 @@ const [notificacionAnimal, setNotificacionAnimal] = useState({
 const [coordenadas, setCoordenadas] = useState({
 });
 
+const [state1, setState1] = useState({
+  
+});
+
 const handleChangeText = (nombre, value) => {
   setNotificacionAnimal({...notificacionAnimal, [nombre]: value}); 
 }; 
 
 
-  const [origin, setOrigin] = useState({
+  const [posicionMapa, setposicionMapa] = useState({
     latitude: 39.391199,
-    longitude:  -2.038701,
+    longitude:-2.038701,
   });
 
   const getUsuarioById = async (id) => {
     const dbRef = firebase.db.collection("users").doc(id);
     const doc = await dbRef.get();
     const usuario = doc.data();
-    console.log(usuario)
     setUsuario({ ...usuario, id: doc.id });
-    //setLoading(false);
   };
 
 
@@ -114,7 +91,6 @@ const handleChangeText = (nombre, value) => {
           })
       });
       setProtectoras(listaProtectoras)
-      //cargarImagenes();
   });
   }, [])
 let fechaActual = new Date();
@@ -138,7 +114,7 @@ let fechaActual = new Date();
       longitud: location.coords.longitude
 
     })
-    setOrigin(current);
+    setposicionMapa(current);
     setCoordenadas(current);
     setLoading(false);
     
@@ -228,6 +204,13 @@ if(notificacionAnimal.tipo != "" && notificacionAnimal.descripcion != ""){
     }
 }
 
+
+const cancelar = () => {
+  if(true)
+  setState1(null);
+  return null
+}
+
 const validateFields = () => {
   let textoAlerta = "Complete el campo: ";
   if (notificacionAnimal.tipo == ''){
@@ -265,8 +248,9 @@ const validateFields = () => {
 if(!loading) {
   return (
     <ScrollView > 
-    <View style={styles.container}> 
-    <DropDownPicker
+    <View style={styles.container}>
+       
+    <DropDownPicker name="eleccion"
                                 style={{marginTop: 20, marginBottom: 20}}
                                 placeholder="Tipo"
                                 items={tipo}
@@ -278,22 +262,23 @@ if(!loading) {
                                 onChangeValue={(value) => {
                                     handleChangeText('tipo', value);
                                   }}
+                                  
                             />
-                            <TextInput 
+                            <TextInput  
                     style={styles.descripcion}
                     placeholder="Descripción (max 200 caracteres)"
-                    onChangeText={(value) => handleChangeText('descripcion', value)}
+                    value={state1.value}
+                    onChangeText={(value) =>{ handleChangeText('descripcion', value)
+                    setState1({value: value})}}
                     />
-                    
-                    
                     <Button title="Adjuntar fotografía" onPress={() =>  openGallery()} /> 
                     
                     
       <MapView 
         style={styles.map}
         initialRegion={{
-            latitude: origin.latitude,
-            longitude: origin.longitude,
+            latitude: posicionMapa.latitude,
+            longitude: posicionMapa.longitude,
             latitudeDelta: 0.09,
             longitudeDelta: 0.04
           }}
@@ -301,13 +286,39 @@ if(!loading) {
                 <Marker 
            pinColor= '#BD562A'
           coordinate={coordenadas}
-          onDragEnd={(direction) => setOrigin(direction.nativeEvent.coordinate)}
+          onDragEnd={(direction) => setposicionMapa(direction.nativeEvent.coordinate)}
         />
 
             
         
       </MapView>
       
+      <Button 
+                title="Cancelar" 
+                onPress={() => 
+                  Alert.alert("Información", "¿Está seguro que desea cancelar el avistamiento?", [
+                    {text: "Confirmar", 
+                    onPress: () => {
+                      {
+                        //props.navigation.navigate('MapaAnimalEncontrado', {userId: props.route.params.userId})
+                        console.log("no va???")
+                       // this.setTipoValue({value:""})
+                        setNotificacionAnimal({
+                          tipo:"",
+                          descripcion:""
+                        })
+                        setFoto({existe:"No"})
+                      }
+                      setState1({value:''})
+                    }}, 
+                    {text: "Cancelar"}
+                ])
+                
+                
+                
+                }/>
+
+
       <Button 
                 title="Enviar" 
                 onPress={() => {guardarNotificacion()}}/>

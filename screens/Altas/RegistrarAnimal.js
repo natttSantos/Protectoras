@@ -44,7 +44,7 @@ const RegistrarAnimal = (props) => {
       { label: "Perro", value: "Perro" },
       { label: "Gato", value: "Gato" },
     ]);
-
+    const [protectora, setProtectora] = useState();
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState(null)
     const [items, setItems] = useState([{label: 'Perro', value: 'Perro'},
@@ -55,6 +55,11 @@ const RegistrarAnimal = (props) => {
         setState({...state, [nombre]: value}); 
     }; 
     
+
+    useEffect(() => {
+      getProtectoraById(props.route.params.userId);
+    }, []);
+
     const saveNewUser =  async () => {
       
         if (state.nombre == '' || state.raza == '' || state.descripcion == '' || foto.existe == ''|| state.tipo == '' || state.sexo =='' || props.route.params.valueFecha == undefined){
@@ -68,12 +73,22 @@ const RegistrarAnimal = (props) => {
                 descripcion: state.descripcion,
                 fecha_nacimiento: props.route.params.valueFecha,
                 id_protectora: props.route.params.userId, 
-                adoptado: false
+                adoptado: false,
+                latitud: protectora.latitud,
+                longitud: protectora.longitud,
             })
             mensajeExito(); 
             props.navigation.navigate('SesionProtectora', {userId: props.route.params.userId}); 
         }
     } 
+
+    const getProtectoraById = async (id) => {
+      const dbRef = firebase.db.collection("protectoras").doc(id);
+      const doc = await dbRef.get();
+      const protectora = doc.data();
+      setProtectora({ ...protectora, id: doc.id });
+    };
+
     const mensajeExito = () =>{
         if(state.sexo == "Masculino"){
             alert (state.nombre + " ha sido registrado!");     
