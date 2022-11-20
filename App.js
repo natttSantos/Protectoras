@@ -26,7 +26,7 @@ import SesionProtectora from './screens/Sesiones/SesionProtectora';
 import FechaNacimientoAnimal from './screens/Altas/FechaNacimientoAnimal';
 import ModificarProtectora from './screens/Modificar/ModificarProtectora';
 import MapaAnimalEncontrado from './screens/Mapa/MapaAnimalEncontrado';
-
+import FiltradoAnimales from './screens/Listas/FiltradoAnimales';
 
 
 function MyStack (){
@@ -35,6 +35,7 @@ function MyStack (){
       <Stack.Screen name="PrincipalScreen" component={PrincipalScreen} options={{headerShown: false}}/>
       <Stack.Screen name="AltaProtectora" component={AltaProtectora} />
       <Stack.Screen name="ListaAnimales" component={ListaAnimales} />
+      <Stack.Screen name="FiltradoAnimales" component={FiltradoAnimales} />
       <Stack.Screen name="ListaProtectoras" component={ListaProtectoras}/>
       <Stack.Screen name="InicioSesion" component={InicioSesion} />
       <Stack.Screen name="RegistrarUsuario" component={RegistrarUsuario} />

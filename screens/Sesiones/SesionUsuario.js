@@ -29,6 +29,7 @@ const SesionUsuario = (props) => {
 
 
 const [usuario, setUsuario] = useState(initialState);
+const [nombreUsuario, setNombreUsuario] = useState([])
 const [loading, setLoading] = useState(true);
 const [protectoras, setProtectoras] = useState([]);
 const [animales, setAnimales] = useState([]);
@@ -77,8 +78,9 @@ const getUsuarioById = async (id) => {
   const dbRef = firebase.db.collection("users").doc(id);
   const doc = await dbRef.get();
   const usuario = doc.data();
-  console.log(usuario)
   setUsuario({ ...usuario, id: doc.id });
+  setNombreUsuario(usuario.usuario)
+  console.log(usuario.usuario)
   setLoading(false);
 };
 
@@ -98,7 +100,7 @@ useEffect(() => {
             <Icon name="home-outline" size={35} color={'blue'} />
           )
         }}
-        initialParams={{ userId: props.route.params.userId, isUsuario:true, animales:animales}}
+        initialParams={{userId: props.route.params.userId, userName: nombreUsuario, isUsuario:true, animales:animales}}
       />
       <Tab.Screen name = 'Search' component = {ListaProtectoras} 
          options={{

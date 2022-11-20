@@ -3,6 +3,7 @@ import {ScrollView, View, StyleSheet, Text, TouchableOpacity}  from 'react-nativ
 import {Avatar, ListItem} from "react-native-elements";
 import { ActivityIndicator } from "react-native-paper";
 import firebase from "../../database/firebase";
+import DropDownPicker from "react-native-dropdown-picker";
  
 const ListaAnimales = (props) => {
 
@@ -15,10 +16,9 @@ const ListaAnimales = (props) => {
       gatoPressed: false
     })
 
+  
     const [animales, setAnimales] = useState([]);
-    const [animalesACargar, setAnimalesACargar] = useState([]);
     const [imagenes, setImagenes] = useState([]);
-    const [imagenesACargar, setImagenesACargar] = useState([]);
 
     const cargarImagenes = async () => {
         let i = animales.length
@@ -33,7 +33,6 @@ const ListaAnimales = (props) => {
                 i--;
                 imagenesAux[index] = url;
                 setImagenes(...imagenes, imagenesAux);
-                setImagenesACargar(...imagenesACargar, imagenesAux)
                 if (i == 0) 
                   setLoading(false);
               });
@@ -44,15 +43,22 @@ const ListaAnimales = (props) => {
         }
     }
 
+    const cargarAnimalesDeFiltrado = () => {
+      if(props.route.params.filtrado != undefined){
+        setAnimales(props.route.params.animalesFiltrado); 
+        console.log("Se han aplicado filtros" + props.route.params.animalesFiltrado.length); 
+      }
+    }
+
     const actualizarImagenes = () => {
       const imagenesAux = []
 
-      animalesACargar.map((animal) => {
+      animales.map((animal) => {
         const index = animales.findIndex(animalin => animalin == animal)
         imagenesAux.push(imagenes[index])
       })
 
-      setImagenesACargar(imagenesAux)
+      setImagenes(imagenesAux)
       
     }
 
@@ -61,54 +67,47 @@ const ListaAnimales = (props) => {
             const listaAnimales = []
 
             querySnapshot.docs.forEach((doc) => {
-                const {nombre, descripcion, tipo} = doc.data()
+                const {nombre, descripcion, tipo, raza, sexo, fecha_nacimiento, id_protectora, 
+                adoptado, peso, edad, nivelActividad, vacunado, microchip} = doc.data()
                 listaAnimales.push({
                     id: doc.id,
                     nombre,
+                    tipo,
+                    raza,
+                    sexo,
                     descripcion,
-                    tipo
+                    fecha_nacimiento, 
+                    id_protectora, 
+                    adoptado, 
+                    peso, 
+                    edad, 
+                    nivelActividad, 
+                    vacunado, 
+                    microchip
                 })
             });
             setAnimales(listaAnimales)
         })
       }, [])
 
-      useEffect(() => {
-        if(estado.gatoPressed)
-          setAnimalesACargar(animales.filter(animal => animal.tipo === 'Gato'))
-        else if(estado.perroPressed)
-          setAnimalesACargar(animales.filter(animal => animal.tipo == 'Perro'))
-        else
-          setAnimalesACargar(animales)
-      }, [estado])
-
       
     useEffect(() => {
+      cargarAnimalesDeFiltrado(); 
+    }, [animales])
+
+    useEffect(() => {
       setLoading(true)
+      
       if(imagenes.length != 0) {
         actualizarImagenes()
         setLoading(false)
-      }
-    }, [animalesACargar])
+      } 
+    }, [animales])
 
     useEffect(() => {
       cargarImagenes()
-      setAnimalesACargar(animales)
     }, [animales])
       
-
-    const handleColorChange = (animal) => {
-      if(animal == 'perro'){
-        if(estado.gatoPressed && !estado.perroPressed)
-          setEstado({ ...estado, ['perroPressed']: !estado.perroPressed, ['gatoPressed']: !estado.gatoPressed});
-        else
-          setEstado({ ...estado, ['perroPressed']: !estado.perroPressed});}
-      else { 
-        if(estado.perroPressed && !estado.gatoPressed)
-          setEstado({ ...estado, ['gatoPressed']: !estado.gatoPressed, ['perroPressed']: !estado.perroPressed});
-        else
-          setEstado({ ...estado, ['gatoPressed']: !estado.gatoPressed});}
-    };
 
     if(loading) {
       return(
@@ -118,30 +117,24 @@ const ListaAnimales = (props) => {
       )
   }
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView 
+    style={styles.container}>
       <Text style={styles.titulo}>
         Lista Animales
       </Text>
       <View style={styles.container}>
-      <View style ={{flexDirection:'row', justifyContent: 'space-between', width:150}}>
       <TouchableOpacity
-          onPress={() => {handleColorChange('perro')}}
-          style={[styles.button, estado.perroPressed ? {backgroundColor: 'blue'} : {backgroundColor: 'white'}]}>
+          onPress={() => props.navigation.navigate('FiltradoAnimales', {animales: animales})}
+          style={styles.button}>
             <Text style={styles.buttonText}>
-                PERRO
+                Filtrar
             </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {handleColorChange('gato')}}
-          style={[styles.button, estado.gatoPressed ? {backgroundColor: 'blue'} : {backgroundColor: 'white'}]}>
-            <Text style={styles.buttonText}>
-                GATO
-            </Text>
-        </TouchableOpacity>
-      </View>
+      </TouchableOpacity>
+      
 
-      { animalesACargar.map((animal, index) => {
+      
 
+      { animales.map((animal, index) => {
       return(
                       
         <ListItem key={animal.id}       
@@ -154,7 +147,7 @@ const ListaAnimales = (props) => {
         >
         <Avatar 
            style = {styles.imagen}
-           source={{uri: imagenesACargar[index]}}
+           source={{uri: imagenes[index]}}
         />
         <ListItem.Chevron />
           <ListItem.Content 
@@ -178,7 +171,7 @@ const ListaAnimales = (props) => {
 
  const styles = StyleSheet.create({
   container: {
-      flex: 1, 
+      flex: 2, 
       padding: 35, 
       height: 3000
   },
@@ -195,11 +188,20 @@ const ListaAnimales = (props) => {
     textAlign: 'right'
   },
   button : {
-    elevation: 8,
+    elevation: 3,
+    backgroundColor: "#ffebcd",
     padding: 10,
     marginTop: 20,
+    marginBottom: 20, 
+    width:100
+}, picker : {
+    width:160,
+    elevation: 8,
+    marginTop: 20,
+    marginLeft: 17, 
     marginBottom: 20
-  },
+  }, 
+
   input: {
     height: 40,
     margin: 12,
