@@ -6,7 +6,6 @@ import firebase from "../../database/firebase";
 import DropDownPicker from "react-native-dropdown-picker";
  
 const ListaAnimales = (props) => {
-
     const [loading, setLoading] = useState(true);
   
     // CÓDIGO LISTA ANIMALES //
@@ -128,7 +127,9 @@ const ListaAnimales = (props) => {
                 Filtrar
             </Text>
       </TouchableOpacity>
-      
+      <Text style ={{fontSize: 18.5, marginTop: 12, padding: 2, color: 'gray'}}>
+        {props.route.params.noHayAnimalesFiltrado}
+      </Text>
 
       
 

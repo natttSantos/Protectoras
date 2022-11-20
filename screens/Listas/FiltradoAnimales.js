@@ -87,7 +87,7 @@ const FiltradoAnimales = (props) => {
 
     const cargarFiltros = () => {
       var animalesFiltrado = []; 
-      //var noHayAnimales = No hay animales para los filtros seleccionados
+      var noHayAnimalesFiltrado = ""; 
       seleccionMultiple_Localizacion(); 
       getProtectorasFiltrado();
 
@@ -120,7 +120,11 @@ const FiltradoAnimales = (props) => {
             }
         }  
         setLoading(false);
-        props.navigation.navigate('ListaAnimales', {animalesFiltrado: animalesFiltrado, filtrado: true});
+
+        if(animalesFiltrado.length == 0){
+          noHayAnimalesFiltrado = "No hay animales para los filtros seleccionados :("; 
+        }
+        props.navigation.navigate('ListaAnimales', {animalesFiltrado: animalesFiltrado, filtrado: true, noHayAnimalesFiltrado: noHayAnimalesFiltrado});
       }, 1000);       
     }
 
