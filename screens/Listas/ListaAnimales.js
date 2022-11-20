@@ -46,7 +46,6 @@ const ListaAnimales = (props) => {
     const cargarAnimalesDeFiltrado = () => {
       if(props.route.params.filtrado != undefined){
         setAnimales(props.route.params.animalesFiltrado); 
-        console.log("Se han aplicado filtros" + props.route.params.animalesFiltrado.length); 
       }
     }
 
@@ -57,12 +56,12 @@ const ListaAnimales = (props) => {
         const index = animales.findIndex(animalin => animalin == animal)
         imagenesAux.push(imagenes[index])
       })
-
       setImagenes(imagenesAux)
       
     }
 
       useEffect(() => {
+        if(props.route.params.filtrado == undefined){
         firebase.db.collection('animales').onSnapshot((querySnapshot) => {
             const listaAnimales = []
 
@@ -87,7 +86,7 @@ const ListaAnimales = (props) => {
                 })
             });
             setAnimales(listaAnimales)
-        })
+        })}
       }, [])
 
       
@@ -97,7 +96,6 @@ const ListaAnimales = (props) => {
 
     useEffect(() => {
       setLoading(true)
-      
       if(imagenes.length != 0) {
         actualizarImagenes()
         setLoading(false)
@@ -162,7 +160,7 @@ const ListaAnimales = (props) => {
         )})
       }
 
-
+  </View>
   </ScrollView>
 
     )
