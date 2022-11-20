@@ -1,7 +1,7 @@
 import React, {useEffect, useState } from "react";
 import { ScrollView, View, Text, StyleSheet, TextInput,TouchableOpacity } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
-import { Button } from "react-native-elements";
+import { Button, CheckBox } from "react-native-elements";
 import firebase from '../../database/firebase';
 import DatePicker from 'react-native-modern-datepicker';
 import * as ImagePicker from 'expo-image-picker';
@@ -24,7 +24,12 @@ const RegistrarAnimal = (props) => {
       foto:"",
       fecha_nacimiento: "", 
       id_protectora: "", 
-      adoptado: ""
+      adoptado: "", 
+      peso: "", 
+      edad: "", 
+      nivelActividad: "", 
+      vacunado: "", 
+      microchip: ""
       
     });
     const drop = DropDownPicker.setListMode("SCROLLVIEW");
@@ -45,10 +50,16 @@ const RegistrarAnimal = (props) => {
       { label: "Gato", value: "Gato" },
     ]);
     const [protectora, setProtectora] = useState();
-    const [open, setOpen] = useState(false)
-    const [value, setValue] = useState(null)
-    const [items, setItems] = useState([{label: 'Perro', value: 'Perro'},
-                        {label: 'Gato', value: 'Gato'}])
+    const [nivelOpen, setNivelOpen] = useState(false);
+    const [nivelValue, setNivelValue] = useState(null);
+    const [nivel, setNivel] = useState([
+      { label: "Activo", value: "Activo" },
+      { label: "Medio", value: "Medio" },
+      { label: "Tranquilo", value: "Tranquilo" },
+    ]);                
+
+    const [vacunado, setVacunado] = useState(false)
+    const [microChip, setMicroChip] = useState(false)
                      
 
     const handleChangeText = (nombre, value) => {
@@ -58,7 +69,7 @@ const RegistrarAnimal = (props) => {
 
     useEffect(() => {
       getProtectoraById(props.route.params.userId);
-    }, []);
+    }, [protectora]);
 
     const saveNewUser =  async () => {
       
@@ -74,6 +85,11 @@ const RegistrarAnimal = (props) => {
                 fecha_nacimiento: props.route.params.valueFecha,
                 id_protectora: props.route.params.userId, 
                 adoptado: false,
+                peso: state.peso, 
+                edad: state.edad, 
+                nivelActividad: state.nivelActividad, 
+                vacunado: vacunado, 
+                microchip: microChip,
                 latitud: protectora.latitud,
                 longitud: protectora.longitud,
             })
@@ -189,28 +205,29 @@ const RegistrarAnimal = (props) => {
     return(
         <ScrollView style={styles.container}> 
             <Text style={styles.title}> Registrar Animal</Text>
-            <View> 
+            <View style={styles.container}> 
                 <TextInput 
-                style={{
-                    height: 40,
-                    borderColor: "black",
-                    marginTop: 40,
-                    marginBottom: 20,
-                    paddingLeft: 10,
-                    paddingRight: 10,
-                    fontSize: 18,
-                    width: "100%",
-                    borderWidth: 1,
-                }}
-                placeholder="Nombre"
+                style={styles.inputs}
+                placeholder="* Nombre"
                 onChangeText={(value) => handleChangeText('nombre', value)}
                 />
             
               <Text style={{fontSize: 18, marginBottom: 10}}> {props.route.params.valueFecha}</Text>   
-              <Button title="Seleccione una fecha Nacimiento" onPress={() => props.navigation.navigate('FechaNacimientoAnimal', {userId: props.route.params.userId})} />      
-                <DropDownPicker
-                                style={{marginTop: 20, marginBottom: 20}}
-                                placeholder="Tipo"
+              <Button title="* Seleccione una fecha Nacimiento" onPress={() => props.navigation.navigate('FechaNacimientoAnimal', {userId: props.route.params.userId})} />      
+              <TextInput 
+                    style={styles.inputs}
+                    placeholder="Edad (en años)"
+                    onChangeText={(value) => handleChangeText('edad', value)}
+                    />
+              <TextInput 
+                    style={styles.inputs}
+                    placeholder="Peso (en kg)"
+                    onChangeText={(value) => handleChangeText('peso', value)}
+                    />
+              
+              <DropDownPicker
+                                style={{marginTop: 20, marginBottom: 30}}
+                                placeholder="* Tipo"
                                 items={tipo}
                                 setItems={setTipo}
                                 open={tipoOpen}
@@ -221,16 +238,15 @@ const RegistrarAnimal = (props) => {
                                     handleChangeText('tipo', value);
                                   }}
                             />
-            
-                <TextInput 
+            <TextInput 
                     style={styles.inputs}
-                    placeholder="Raza"
+                    placeholder="* Raza"
                     onChangeText={(value) => handleChangeText('raza', value)}
                     />
             
             <DropDownPicker
                                 style={{marginTop: 10, marginBottom: 15}}
-                                placeholder="Sexo"
+                                placeholder="* Sexo"
                                 items={sexo}
                                 setItems={setSexo}
                                 open={sexoOpen}
@@ -241,14 +257,39 @@ const RegistrarAnimal = (props) => {
                                     handleChangeText('sexo', value);
                                   }}
                             />
-
+                <CheckBox
+                  title="Vacunado"
+                  checked={vacunado}
+                  checkedColor="blue"
+                  onPress={() => setVacunado(!vacunado)}           
+                />
+                <CheckBox
+                  title="MicroChip"
+                  checked={microChip}
+                  checkedColor="blue"
+                  onPress={() => setMicroChip(!microChip)}
+                />
+                 <DropDownPicker
+                                style={{marginTop: 35, marginBottom: 15}}
+                                placeholder="Nivel Actividad"
+                                items={nivel}
+                                setItems={setNivel}
+                                open={nivelOpen}
+                                setOpen={setNivelOpen}
+                                value={nivelValue}
+                                setValue={setNivelValue}
+                                onChangeValue={(value) => {
+                                    handleChangeText('nivelActividad', value);
+                                  }}
+                            />
+                
                 <TextInput 
                     style={styles.descripcion}
-                    placeholder="Descripción (max 200 caracteres)"
+                    placeholder="* Descripción (max 200 caracteres)"
                     onChangeText={(value) => handleChangeText('descripcion', value)}
                     />
 
-        <Button title="Selecciona una imagen" onPress={() =>  openGallery()} />      
+        <Button title="* Selecciona una imagen" onPress={() =>  openGallery()} />      
 
                 <TouchableOpacity 
                     onPress={() => {saveNewUser()}}
@@ -264,8 +305,9 @@ const RegistrarAnimal = (props) => {
 
 const styles = StyleSheet.create({
     container : {
-        flex: 1, 
-        padding: 35
+      flex: 2, 
+      padding: 35, 
+      height: 1150
     },
     descripcion : {
         height: 60, 
