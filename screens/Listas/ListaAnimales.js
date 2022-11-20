@@ -162,7 +162,7 @@ const ListaAnimales = (props) => {
         )})
       }
 
-  </View>
+
   </ScrollView>
 
     )

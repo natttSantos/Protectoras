@@ -1,24 +1,26 @@
 import { style } from "deprecated-react-native-prop-types/DeprecatedTextPropTypes";
 import React, {useEffect, useState} from "react";
-import { ScrollView, View, Text, StyleSheet, TextInput, Image } from "react-native";
+import { ScrollView, View, Text, StyleSheet, TextInput,Image } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Button } from "react-native-elements";
 import firebase from "../../database/firebase";
 import * as ImagePicker from 'expo-image-picker';
 
-const ModificarProtectora = (props) => {
+const ModificarUsuario = (props) => {
     DropDownPicker.setListMode("SCROLLVIEW");
 
-    const [protectora, setProtectora] = useState({
-        descripcion: "",
-        email: "",
-        nombre: "",
+    const [usuario, setUsuario] = useState({
+        alta: "",
+        usuario: "",
         contraseña: "",
+        email: "",
+        telefono : "",
+
+        nombre: "",
+        apellidos: "",
         localizacion: "",
-        direccion: "",
-        telefono: "",
-        url: "",
-        fotoModificada:""
+        dni:"",
+        n_animales:"",
     })
 
     const initialStatee = {
@@ -29,7 +31,7 @@ const ModificarProtectora = (props) => {
 
     const [cosas, setState] = useState(initialStatee);
 
-    const [foto, setFoto] = useState({
+    const [fotoModificada, setFoto] = useState({
         existe:"",
 
       });
@@ -41,34 +43,41 @@ const ModificarProtectora = (props) => {
                         {label: 'Cuenca', value: 'Cuenca'}])
 
     const handleChangeText = (nombre, value) => {
-        setProtectora({...protectora, [nombre]: value});
+        setUsuario({...usuario, [nombre]: value});
     }
 
-    const saveNewProtectora = async () => {
-        if (protectora.nombre == '' || protectora.email == ''|| protectora.email == '' || protectora.provincia == '' || protectora.telefono == ""|| protectora.url == ''|| protectora.direccion == ''|| protectora.descripcion == '') {
+    const saveNewUsuario = async () => {
+        console.log(usuario.nombre);
+        
+
+        if (usuario.usuario == '' || usuario.contraseña.length < 4 || usuario.contraseña.length > 8 || usuario.email == '' || usuario.telefono == '' || usuario.nombre == ""|| usuario.apellidos == ''|| usuario.localizacion == ''|| usuario.dni == ''|| usuario.n_animales == '') {
             validateFields();
         } else  {
 
-            const protectoraRef = firebase.db.collection("protectoras").doc(protectora.id);
-            await protectoraRef.set({
-                    nombre: protectora.nombre,
-                    email: protectora.email,
-                    contraseña: protectora.contraseña,
-                    direccion: protectora.direccion,
-                    localizacion: protectora.localizacion,
-                    url: protectora.url,
-                    descripcion: protectora.descripcion,
-                    telefono: protectora.telefono,
-                    fotoModificada : protectora.fotoModificada
+            const usuarioRef = firebase.db.collection("users").doc(usuario.id);
+            console.log(usuario.id);
+            await usuarioRef.set({
+                    alta: usuario.alta,
+                    usuario: usuario.usuario,
+                    nombre: usuario.nombre,
+                    email: usuario.email,
+                    contraseña: usuario.contraseña,
+                    telefono: usuario.telefono,
+
+                    nombre: usuario.nombre,
+                    apellidos: usuario.apellidos,
+                    localizacion: usuario.localizacion,
+                    dni: usuario.dni,
+                    n_animales: usuario.n_animales,
                 })
                 alert("Datos cambiados correctamente")
             }
-            props.navigation.goBack()
         }
 
 
     const uploadImage = uri => {
         return new Promise((resolve, reject) => {
+          console.log(resolve + " " + reject);
           let xhr = new XMLHttpRequest();
           xhr.onerror = reject;
           xhr.onreadystatechange = () => {
@@ -100,10 +109,11 @@ const ModificarProtectora = (props) => {
                 let ref = firebase
                 .st
                 .ref()
-                .child(`imagesProtectora/${protectora.fotoModificada}`);
+                .child(`imagesUsuario/${props.route.params.userId}`);
                 ref
                   .put(resolve)
                   .then(resolve => {
+                    console.log("Imagen subida correctamente");
                     setFoto({
                         existe: "Si"
                      });
@@ -122,15 +132,16 @@ const ModificarProtectora = (props) => {
         }
       };
 
-      const getProtectoraById = async (id) => {
-        const dbRef = firebase.db.collection("protectoras").doc(id);
+      const getUsuarioById = async (id) => {
+        const dbRef = firebase.db.collection("users").doc(id);
         const doc = await dbRef.get();
-        const protectora = doc.data();
-        setProtectora({ ...protectora, id: doc.id });
+        const usuario = doc.data();
+        setUsuario({ ...usuario, id: doc.id });
         firebase
         .st
-        .ref(`imagesProtectora/${protectora.fotoModificada}`)
+        .ref(`imagesUsuario/${props.route.params.userId}`)
         .getDownloadURL().then(function(url) {
+        console.log(url);
         setState({
          imageFirebase: url,
          staet: "Existe"
@@ -154,29 +165,30 @@ const ModificarProtectora = (props) => {
       }
 
       useEffect(() => {
-        getProtectoraById(props.route.params.userId);
+        getUsuarioById(props.route.params.userId);
+        console.log(props.route.params.userId);
       }, []);
 
 
     const validateFields = () => {
         let textoAlerta = "Complete el campo: ";
-        if (protectora.nombre == ''){
-            textoAlerta += "\n - Nombre de protectora"; 
-        } if (protectora.contraseña.length < 4 || protectora.contraseña.length > 8){
+        if (usuario.nombre == ''){
+            textoAlerta += "\n - Nombre de Usuario"; 
+        } if (usuario.contraseña.length < 4 || usuario.contraseña.length > 8){
             textoAlerta += "\n - La contraseña debe tener entre 4-8 caracteres ";  
-        } if (protectora.email == ''){
+        } if (usuario.email == ''){
             textoAlerta += "\n - Mail "; 
-        } if (protectora.localizacion == ''){
+        } if (usuario.localizacion == ''){
             textoAlerta += "\n - Localización "; 
-        } if (protectora.direccion == ''){
-            textoAlerta += "\n - Direccion ";  
-        } if (protectora.existe == ''){
+        } if (usuario.n_animales == ''){
+            textoAlerta += "\n - Número de animales ";  
+        } if (usuario.existe == ''){
             textoAlerta += "\n - Foto "; 
-        } if (protectora.url == ''){
-            textoAlerta += "\n - URL de tu web ";  
-        } if (protectora.telefono == ''){
+        } if (usuario.dni == ''){
+            textoAlerta += "\n - DNI ";  
+        } if (usuario.telefono == ''){
             textoAlerta += "\n - Telefono ";  
-        }else if (protectora.telefono.length != 9 || isNaN(protectora.telefono)){
+        }else if (usuario.telefono.length != 9 || isNaN(usuario.telefono)){
             textoAlerta += "\n - El teléfono debe contener 9 números ";  
         }
         alert (textoAlerta); 
@@ -184,7 +196,7 @@ const ModificarProtectora = (props) => {
 
     return(
 
-
+        
         <ScrollView style={styles.container}> 
         {checkImage()}
         <Button style={{position: 'fixed',  right: 0}} title="Selecciona una imagen" onPress={() =>  openGallery()} /> 
@@ -194,9 +206,9 @@ const ModificarProtectora = (props) => {
 
                 <TextInput 
                 style={styles.inputText}
-                placeholder="* Nombre"
-                value = {protectora.nombre}
-                onChangeText={(value) => handleChangeText('nombre', value)}
+                placeholder="* Nombre de usuario"
+                value = {usuario.usuario}
+                onChangeText={(value) => handleChangeText('usuario', value)}
                 />
             </View>
             <View 
@@ -205,7 +217,7 @@ const ModificarProtectora = (props) => {
                 style={styles.inputText}
                 secureTextEntry={true}
                 placeholder="* Contraseña"
-                value = {protectora.contraseña}
+                value = {usuario.contraseña}
                 onChangeText={(value) => handleChangeText('contraseña', value)}
                 />
             </View>
@@ -214,8 +226,35 @@ const ModificarProtectora = (props) => {
                 <TextInput 
                     style={styles.inputText}
                     placeholder="* Email"
-                    value = {protectora.email}
+                    value = {usuario.email}
                     onChangeText={(value) => handleChangeText('email', value)}
+                    />
+            </View>
+            <View 
+            style={styles.inputGroup}>
+                <TextInput 
+                    style={styles.inputText}
+                    placeholder="* Teléfono"
+                    value = {usuario.telefono}
+                    onChangeText={(value) => handleChangeText('telefono', value)}
+                    />
+            </View>
+            <View 
+            style={styles.inputGroup}>
+                <TextInput 
+                    style={styles.inputText}
+                    placeholder="* Nombre"
+                    value = {usuario.nombre}
+                    onChangeText={(value) => handleChangeText('nombre', value)}
+                    />
+            </View>
+            <View 
+            style={styles.inputGroup}>
+                <TextInput 
+                    style={styles.inputText}
+                    placeholder="* Apellidos"
+                    value = {usuario.apellidos}
+                    onChangeText={(value) => handleChangeText('apellidos', value)}
                     />
             </View>
             <View>
@@ -226,7 +265,7 @@ const ModificarProtectora = (props) => {
                                 setItems={setItems}
                                 open={open}
                                 setOpen={setOpen}
-                                value = {protectora.localizacion}
+                                value = {usuario.localizacion}
                                 setValue={setValue}
                                 onChangeValue={(value) => {
                                     handleChangeText('localizacion', value);
@@ -237,51 +276,25 @@ const ModificarProtectora = (props) => {
             style={styles.inputGroup}>
                 <TextInput 
                     style={styles.inputText}
-                    placeholder="* Dirección"
-                    value = {protectora.direccion}
-                    onChangeText={(value) => handleChangeText('direccion', value)}
+                    placeholder="* DNI"
+                    value = {usuario.dni}
+                    onChangeText={(value) => handleChangeText('dni', value)}
                     />
             </View>
             <View 
             style={styles.inputGroup}>
                 <TextInput 
                     style={styles.inputText}
-                    placeholder="* URL de la página web"
-                    value = {protectora.url}
-                    onChangeText={(value) => handleChangeText('url', value)}
+                    placeholder="* Número de animales"
+                    value = {usuario.n_animales}
+                    onChangeText={(value) => handleChangeText('n_animales', value)}
                     />
             </View>
-            <View 
-            style={styles.inputGroup}>
-                <TextInput 
-                    style={styles.inputText}
-                    placeholder="* Telefono"
-                    value = {protectora.telefono}
-                    onChangeText={(value) => handleChangeText('telefono', value)}
-                    />
-            </View>
-            <View 
-            style={styles.descripcion}>
-                <TextInput                     
-                    style={{fontSize: 17}}
-                    placeholder="Descripcion (max. 200 caracteres)"
-                    maxLength = {200}
-                    multiline = {true}
-                    value = {protectora.descripcion}
-                    onChangeText={(value) => {
-                        if (value.length == 180)
-                            alert("¡Cuidado! Su descripción ya contiene 180 caracteres (max. 200)")
-                        if (value.length == 200)
-                            alert("¡Su descripción ya contiene los 200 caracteres permitidos!")
-                        handleChangeText('descripcion', value)
-                    }}
-                    />
-            </View>
-            <View style={{marginTop: 15, marginBottom: 80}}>
+            <View style={{marginTop: 15, marginBottom: 70}}>
 
                 <Button 
-                title="Actualizar" 
-                onPress={() => {saveNewProtectora()}}/>
+                title="Actualizar datos" 
+                onPress={() => {saveNewUsuario()}}/>
             </View>
 
         </ScrollView>
@@ -316,4 +329,4 @@ const styles = StyleSheet.create({
         borderColor: '#cccccc'
     }
 })
-export default ModificarProtectora;
+export default ModificarUsuario;

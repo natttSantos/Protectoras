@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
-import _ from 'lodash'
+import MapView, { Marker, Polyline } from 'react-native-maps';
+import * as Location from 'expo-location';
 
 import {
   ScrollView,
@@ -38,42 +39,53 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
     staet :""
     
   };
-   
+
   const initialState = {
-      nombre:"",
-      tipo:"",
-      raza:"",
-      sexo:"",
-      descripcion:"",
-      foto:"",
-      fecha_nacimiento: "", 
-      id_protectora: "", 
-      adoptado: "", 
-      peso: "", 
-      edad: "", 
-      nivelActividad: "", 
-      vacunado: "", 
-      microchip: ""
-  }
+    nombre:"",
+    apellidos:"",
+    localizacion:"",
+    dni:"",
+    n_animales:"",
+
+  };
   var u = "aaa";
 
-const [animal, setAnimal] = useState(initialState);
-const [loading, setLoading] = useState(true);
-const [cosas, setState] = useState(initialStatee);
-const [protectoraAnimal, setProtectoraAnimal] = useState(""); 
+  const [animal, setAnimal] = useState(initialState);
+  const [loading, setLoading] = useState(true);
+  const [cosas, setState] = useState(initialStatee);
 
+  const initialStaate = {
+    usuario: "",
+    email: "" , 
+    telefono: "", 
+    nombre: "",
+    contraseña: "",
+    alta:""
+}
 const [usuario, setUsario] = useState("");
 const [esUsuario] = useState(props.route.params.esUsuario);
 
-//Campos Opcionales
-const [pesoOpcional, setPesoOpcional] = useState("");
-const [edadOpcional, setEdadOpcional] = useState("");
-const [nivelOpcional, setNivelOpcional] = useState("");
-const [vacunadoOpcional, setVacunadoOpcional] = useState("No");
-const [microChipOpcional, setMicroChipOpcional] = useState("No");
+async function getLocationPermission() {
+  let { status } = await Location.requestForegroundPermissionsAsync();
+  if(status !== 'granted') {
+    alert('Permission denied');
+    return;
+  }
+  let location = await Location.getCurrentPositionAsync({});
+  const current = {
+    latitude: location.coords.latitude,
+    longitude: location.coords.longitude
+  }
+  setCoordenadas({
+    latitud: location.coords.latitude,
+    longitud: location.coords.longitude
 
-
-
+  })
+  setposicionMapa(current);
+  setCoordenadas(current);
+  setLoading(false);
+  
+}
 
   const uploadImage = uri => {
     return new Promise((resolve, reject) => {
@@ -151,7 +163,6 @@ const getUsuarioById = async (id) => {
   const doc = await dbRef.get();
   const usuario = doc.data();
   setUsario({...usuario, id: doc.id});
-  setLoading(false);
 };
 
 
@@ -160,7 +171,6 @@ const getUsuarioById = async (id) => {
     const doc = await dbRef.get();
     const animal = doc.data();
     setAnimal({ ...animal, id: doc.id });
-    setLoading(false);
 
     firebase
     .st
@@ -170,37 +180,9 @@ const getUsuarioById = async (id) => {
      imageFirebase: url
   });
 });
-    validateOptionalFields(animal); 
-    checkMicrochip_Vacunado(animal); 
+    
   };
 
-  const validateOptionalFields = (value) => {
-    let noInfo = "No tenemos información sobre esta característica."; 
-    if(value.peso == ""){
-      setPesoOpcional(noInfo); 
-    } else {
-      setPesoOpcional(value.peso + " Kg")
-    }
-    if(value.edad == ""){
-      setEdadOpcional(noInfo); 
-    } else {
-      setEdadOpcional(value.edad + " años")
-    }
-    if(value.nivelActividad == ""){
-      setNivelOpcional(noInfo); 
-    } else {
-      setNivelOpcional(value.nivelActividad); 
-    }
-  }
-  
-const checkMicrochip_Vacunado = (value) => {
-  if(value.microchip === true){
-    setMicroChipOpcional("Si")
-  } 
-  if(value.vacunado === true){
-    setVacunadoOpcional("Si")
-  }
-}
   const updateAnimal = async () => {
     const animalRef = firebase.db.collection("animales").doc(animal.id);
     await animalRef.set({
@@ -210,51 +192,33 @@ const checkMicrochip_Vacunado = (value) => {
       sexo: animal.sexo,
       fecha_nacimiento: animal.fecha_nacimiento,
       descripcion: animal.descripcion,
+      latitud : animal.latitud,
+      longitud: animal.longitud,
     });
     setAnimal(initialState);
     props.navigation.navigate("ListaAnimales");
   };
 
   const enviarSolicitud = async () => {
-    const solicitudes = firebase.db.collection('solicitudes')
-    const solicitudAEnviar = {
-      id_animal: animal.id,
-      id_protectora: animal.id_protectora,
-      id_usuario: usuario.id
-    }
-
-    const soliRepe = await solicitudes.where("id_protectora", "==", animal.id_protectora)
-    .where("id_animal", "==", animal.id)
-    .where("id_usuario", "==", usuario.id).get()
-    
-    const estaRepetido = !soliRepe.empty
-
-    if(!estaRepetido) {
-      await solicitudes.add(solicitudAEnviar)
-
-      Alert.alert("Información", "Solicitud enviada correctamente", [
-        {text: "Cerrar"}
-      ])
-    } else {
-      Alert.alert("Información", "Ya enviaste la solicitud de adopcion", [
-        {text: "Cerrar"}
-      ])
-    }
+    // await firebase.db.collection('solicitudes').add(
+    //   id_protectora: 
+    // )
   }
 
   useEffect(() => {
     getAnimalById(props.route.params.animalId);
-    getUsuarioById(props.route.params.userId);  
+    getUsuarioById(props.route.params.userId); 
+    getLocationPermission();
   }, []);
 
+  const [coordenadas, setCoordenadas] = useState({
+  });
 
-  if (loading) {
-    return (
-      <View style={styles.loader}>
-        <ActivityIndicator size="large" color="#9E9E9E" />
-      </View>
-    );
-  }
+  const [posicionMapa, setposicionMapa] = useState({
+    latitude: 39.391199,
+    longitude:-2.038701,
+  });
+
 
    const checkImage = () => {
     const { imageFirebase } = cosas;
@@ -271,7 +235,9 @@ const checkMicrochip_Vacunado = (value) => {
 
   const adoptarAnimal = () => {
     if(usuario.alta=="Si") { 
-      enviarSolicitud();
+      Alert.alert("Información", "Solicitud enviada correctamente", [
+        {text: "Cerrar"}
+    ]);
     } else {
       Alert.alert("Información", "Tienes que completar tu perfil para poder adoptar", [
         {text: "Cerrar"},
@@ -281,7 +247,6 @@ const checkMicrochip_Vacunado = (value) => {
 
   };
 
-  
 
 /*
 NO BORRAR
@@ -303,11 +268,19 @@ NO BORRAR
 
 
 
-  return (
-    
-    <ScrollView style={styles.container}>
-    
+if(loading) {
+  return(
       <View>
+          <ActivityIndicator />
+      </View>
+  )
+}
+if(!loading) {
+return (
+    
+    <ScrollView >
+    
+      <View style={styles.container}>
        {checkImage()}
         <Text style = {styles.texto} >
           {"Nombre: " + animal.nombre}
@@ -322,23 +295,32 @@ NO BORRAR
           {"Fecha de nacimiento: " + animal.fecha_nacimiento}
         </Text>     
         <Text style = {styles.texto} >
-          {"Edad: " + edadOpcional}
-        </Text> 
-        <Text style = {styles.texto} >
-          {"Peso: " + pesoOpcional}
-        </Text> 
-        <Text style = {styles.texto} >
-          {"Vacunado: " + vacunadoOpcional}
-        </Text> 
-        <Text style = {styles.texto} >
-          {"MicroChip: " + microChipOpcional}
-        </Text> 
-        <Text style = {styles.texto} >
-          {"Nivel Actividad: " + nivelOpcional}
-        </Text>
-        <Text style = {styles.texto} >
           {"Descripción: " + animal.descripcion}
         </Text>
+
+        <MapView 
+        style={styles.map}
+        initialRegion={{
+            latitude: posicionMapa.latitude,
+            longitude: posicionMapa.longitude,
+            latitudeDelta: 0.09,
+            longitudeDelta: 0.04
+          }}
+      >
+                <Marker 
+           pinColor= '#BD562A'
+          coordinate={coordenadas}
+          onDragEnd={(direction) => setposicionMapa(direction.nativeEvent.coordinate)}
+        />
+
+              <Marker 
+           pinColor= '#6BE795'
+           coordinate={{
+            longitude: animal.longitud,
+            latitude: animal.latitud
+         }}
+        />
+        </MapView>
 
         {esUsuario ?  
           <TouchableOpacity  
@@ -348,15 +330,10 @@ NO BORRAR
               <Text>Adoptar</Text>
         </TouchableOpacity>
         : null}
-        <TouchableOpacity  
-            style={styles.boton} 
-            onPress={() => props.navigation.navigate('PerfilProtectora', {protectoraId: animal.id_protectora})}
-            >
-              <Text>Contactar</Text>
-        </TouchableOpacity>
       </View> 
     </ScrollView>
   );
+        }
 };
 
 const styles = StyleSheet.create({
@@ -365,6 +342,7 @@ const styles = StyleSheet.create({
     padding: 25,
     marginTop: 5,
     marginBottom: 5,
+    height: 750
   },
   loader: {
     left: 0,
@@ -395,10 +373,8 @@ title : {
 },
 boton: {
   alignItems: "center",
-    fontSize : 20,
-    backgroundColor: "#E9967A",
-    marginTop : 25,
-    padding: 10
+  backgroundColor: "#DDDDDD",
+  padding: 10
 },
 texto: {
   fontSize : 16,
@@ -406,7 +382,11 @@ texto: {
   borderBottomWidth: 1,
   borderBottomColor: "#cccccc",
   marginBottom: 5
-}
+},
+  map: {
+    width: 290,
+    height: 150
+  },
 });
 
 export default PerfilAnimal;

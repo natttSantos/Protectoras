@@ -25,11 +25,9 @@ const ListaProtectoras = (props) => {
                     setImagenes(...imagenes, imagenesAux)
                     if(i == 0) setLoading(false)
                 });
-                console.log("si entro")
             })
         }
         else {
-            console.log("no entro")
             setLoading(false)
         }
     }

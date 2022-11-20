@@ -50,16 +50,19 @@ export default function Solicitud(props) {
                 <Image style={styles.imagen} source={{uri: imagen}} />
             </View>
             <View style= {styles.soliContainer}>
-                <Text style={styles.solicitud}> 
+                <Text style={styles.solicitud}
+                onPress ={() => props.verInformacion()}> 
                     {usuario.usuario} quiere adoptar a {animal.nombre} 
                 </Text>
                 <View style={styles.buttonGroup}>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                    onPress={() => props.aceptar()}>
                         <Icon name="checkmark-circle"
                         size={30}
                         style={[styles.button, {color: 'green'}]} />
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                    onPress={() => props.declinar()}>
                         <Icon name="close-circle"
                         size={30}
                         style={[styles.button, {color: 'red'}]} />
@@ -108,7 +111,7 @@ const styles = StyleSheet.create({
     solicitud: {
         width: '70%',
         fontSize: 16,
-        left: 0
+        textAlign: 'center' 
     },
     imagen: {
         width: 80,

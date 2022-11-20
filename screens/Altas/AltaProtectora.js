@@ -1,15 +1,16 @@
 import { style } from "deprecated-react-native-prop-types/DeprecatedTextPropTypes";
 import React, {useEffect, useState} from "react";
-import { ScrollView, View, Text, StyleSheet, TextInput } from "react-native";
+import { ScrollView, View, Text, StyleSheet, TextInput,ActivityIndicator } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Button } from "react-native-elements";
 import firebase from '../../database/firebase';
 import * as ImagePicker from 'expo-image-picker';
+import * as Location from 'expo-location';
 
 
 const AltaProtectora = (props) => {
     DropDownPicker.setListMode("SCROLLVIEW");
-
+    const [loading, setLoading] = useState(true);
     const [protectora, setProtectora] = useState({
         descripcion: "",
         email: "",
@@ -38,9 +39,9 @@ const AltaProtectora = (props) => {
         setProtectora({...protectora, [nombre]: value});
     }
 
-    /*useEffect(() => {
-        getProtectoraById(props.route.params.userId);
-      }, []);*/
+    useEffect(() => {
+        getLocationPermission();
+      }, []);
 
 
       const getProtectoraById = async (id) => {
@@ -49,21 +50,6 @@ const AltaProtectora = (props) => {
         const protectora = doc.data();
         setProtectora({ ...protectora, id: doc.id });
       }
-
-      /*const crearProtectora = async () => {
-        const dbRef = firebase.db.collection('protectoras');
-        await dbRef.add({
-            nombre: protectora.nombre,
-            email: protectora.email,
-            contraseña: protectora.contraseña,
-            direccion: protectora.direccion,
-            localizacion: protectora.localizacion,
-            url: protectora.url,
-            descripcion: protectora.descripcion,
-            telefono: protectora.telefono
-        })
-      }*/
-
 
     const saveNewProtectora = async () => {
         if (protectora.nombre == '' || protectora.email == '' || protectora.provincia == '' || protectora.url == ''|| foto.existe == '') {
@@ -83,6 +69,8 @@ const AltaProtectora = (props) => {
                     direccion: protectora.direccion,
                     localizacion: protectora.localizacion,
                     url: protectora.url,
+                    latitud: coordenadas.latitude,
+                    longitud: coordenadas.longitude,
                     descripcion: protectora.descripcion,
                     telefono: protectora.telefono,
                     fotoModificada :protectora.nombre+protectora.telefono
@@ -91,6 +79,29 @@ const AltaProtectora = (props) => {
             }
         }
     }
+
+    const [coordenadas, setCoordenadas] = useState({
+    });
+
+    async function getLocationPermission() {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if(status !== 'granted') {
+          alert('Permission denied');
+          return;
+        }
+        let location = await Location.getCurrentPositionAsync({});
+        const current = {
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude
+        }
+        setCoordenadas({
+          latitud: location.coords.latitude,
+          longitud: location.coords.longitude
+    
+        })
+        setCoordenadas(current);
+        setLoading(false);
+      }
 
     const uploadImage = uri => {
         return new Promise((resolve, reject) => {
@@ -102,7 +113,6 @@ const AltaProtectora = (props) => {
               resolve(xhr.response);
             }
           };
-    
           xhr.open("GET", uri);
           xhr.responseType = "blob";
           xhr.send();
@@ -147,7 +157,6 @@ const AltaProtectora = (props) => {
                 console.log(error);
               });
           }
-          
         }
     }else{alert ("Primero debe introducir el nombre de la protectora y el número de teléfono");}
       };
@@ -175,7 +184,14 @@ const AltaProtectora = (props) => {
         }
         alert (textoAlerta); 
     }
-
+    if(loading) {
+        return(
+            <View>
+                <ActivityIndicator />
+            </View>
+        )
+    }
+    if(!loading) {
     return(
         <ScrollView style={styles.container}> 
             <Text style={styles.title}> Protectora </Text>
@@ -268,6 +284,7 @@ const AltaProtectora = (props) => {
             </View>
         </ScrollView>
     )
+  }
 }
 
 function validatePasswordAndPhone (password, phone) {
@@ -283,7 +300,7 @@ function validatePasswordAndPhone (password, phone) {
     return validation;
   }
 
-  const styles = StyleSheet.create({
+const styles = StyleSheet.create({
     container : {
         flex: 1, 
         padding: 35

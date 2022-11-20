@@ -1,16 +1,9 @@
 import firebase from '../../database/firebase.js';
-import { Appbar, FAB, useTheme } from 'react-native-paper';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import React, { useEffect, useState } from "react";
 import Icon from 'react-native-vector-icons/Ionicons'
 
-import { Tab } from 'react-native-elements';
 import PerfilUsuario from '../Perfiles/PerfilUsuario.js';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import RegistrarUsuario from '../Altas/RegistrarUsuario.js';
-import UserDetailScreen from '../UserDetailScreen.js';
-import Home from '../Home.js';
-import RegistrarAnimal from '../Altas/RegistrarAnimal';
 import AltaGlobal from '../Altas/AltaGlobal.js';
 import ListaProtectoras from '../Listas/ListaProtectoras.js';
 import ListaAnimales from '../Listas/ListaAnimales.js';
@@ -96,27 +89,33 @@ useEffect(() => {
       <Tab.Screen name = 'Home' component = {ListaAnimales} 
          options={{
           headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="home-outline" size={35} color={'blue'} />
-          )
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName = focused ? "home" : "home-outline";
+
+            return <Icon name={iconName} size={35} color={'blue'} />
+          }
         }}
         initialParams={{userId: props.route.params.userId, userName: nombreUsuario, isUsuario:true, animales:animales}}
       />
       <Tab.Screen name = 'Search' component = {ListaProtectoras} 
          options={{
           headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="search-outline" size={35} color={'blue'} />
-          )
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName = focused ? "search" : "search-outline";
+
+            return <Icon name={iconName} size={35} color={'blue'} />
+          }
         }}
         initialParams={{ userId: props.route.params.userId, isUsuario:true, protectoras:protectoras}}
       />
       <Tab.Screen name = 'Animal' component = {MapaAnimalEncontrado} 
          options={{
           headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="paw-outline" size={35} color={'blue'} />
-          )
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName = focused ? "paw" : "paw-outline";
+
+            return <Icon name={iconName} size={35} color={'blue'} />
+          }
         }}
         initialParams={{ userId: props.route.params.userId, isUsuario:true}}
       />
@@ -124,20 +123,24 @@ useEffect(() => {
       <Tab.Screen name = 'Add' component = {AltaGlobal} 
          options={{
           headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="add-circle-outline" size={35} color={'blue'} />
-          )
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName = focused ? "add-circle" : "add-circle-outline";
+
+            return <Icon name={iconName} size={35} color={'blue'} />
+          }
         }}
         initialParams={{ userId: props.route.params.userId, isUsuario:true}}
       />
       <Tab.Screen name = 'Perfil' component = {PerfilUsuario} 
         options={{
           headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="person-circle-outline" size={35} color={'blue'} />
-          )
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName = focused ? "person-circle" : "person-circle-outline";
+
+            return <Icon name={iconName} size={35} color={'blue'} />
+          }
         }}
-        initialParams={{ userId: props.route.params.userId }}/>
+        initialParams={{ userId: props.route.params.userId, canEdit: true }}/>
     </Tab.Navigator>  
   );
 };
