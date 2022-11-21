@@ -56,13 +56,13 @@ export default function Solicitud(props) {
                 </Text>
                 <View style={styles.buttonGroup}>
                     <TouchableOpacity
-                    onPress={() => props.aceptar()}>
+                    onPress={() => props.aceptar(animal.nombre)}>
                         <Icon name="checkmark-circle"
                         size={30}
                         style={[styles.button, {color: 'green'}]} />
                     </TouchableOpacity>
                     <TouchableOpacity
-                    onPress={() => props.declinar()}>
+                    onPress={() => props.declinar(animal.nombre)}>
                         <Icon name="close-circle"
                         size={30}
                         style={[styles.button, {color: 'red'}]} />
