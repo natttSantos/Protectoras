@@ -12,22 +12,52 @@ const Stack = createNativeStackNavigator();
 const RootStack = () => {
     return(
         <NavigationContainer>
-            <Stack.Navigator>
+            <Stack.Navigator initialRouteName='PrincipalScreen' >
                 <Stack.Screen
                     name="PrincipalScreen"
                     component={PrincipalScreen}
+                    options={{
+                        headerStyle: {
+                            backgroundColor: '#ffb743'
+                        },
+                        headerTintColor: '#fff',
+                        headerTransparent: false,
+                        headerTitle: ''
+                    }}
                 />
                 <Stack.Screen 
                     name="InicioSesion"
                     component={InicioSesion}
+                    options={{ 
+                        headerStyle: {
+                            backgroundColor: '#ffb743'
+                        },
+                        headerTintColor: '#fff',
+                        headerTitle: 'Inicia sesión' 
+                    }}
                 />
                 <Stack.Screen
                     name="RegistrarUsuario"
                     component={RegistrarUsuario}
+                    options={{
+                        headerStyle: {
+                            backgroundColor: '#ffb743'
+                        },
+                        headerTintColor: '#fff',
+                        headerTitle: 'Registro' 
+                    }}
                 />
                 <Stack.Screen
                     name="AltaProtectora"
                     component={AltaProtectora}
+                    options={{ 
+                        headerSytle: {
+                            backgroundColor: 'transparent'
+                        },
+                        headerTransparent: false,
+                        headerTintColor: '#5b1d66',
+                        headerTitle: 'AltaProtectora' 
+                    }}
                 />
             </Stack.Navigator>
         </NavigationContainer>
