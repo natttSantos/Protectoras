@@ -79,6 +79,7 @@ export default function App() {
     AsyncStorage
       .getItem('getPetCredentials')
       .then((result) => {
+        console.log(result)
         if (result !== null) {
           setStoredCredentials(result)
         }
@@ -99,7 +100,11 @@ export default function App() {
     )
   }
 
-  return <RootStack/>
+  return (
+    <CredentialsContext.Provider value={{storedCredentials, setStoredCredentials}}>
+        <RootStack/>
+    </CredentialsContext.Provider>
+  )
 }
 
 const styles = StyleSheet.create({

@@ -1,6 +1,9 @@
-import React, {useState} from "react";
+import React, {useState, useContext} from "react";
 import { View, Button, TextInput, Text,StyleSheet, ScrollView, ProgressViewIOSComponent, Alert, TouchableOpacity} from "react-native";
 import firebase from '../database/firebase';
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { CredentialsContext } from "../components/CredentialsContext";
 
 const InicioSesion = (props) => {
 
@@ -19,6 +22,21 @@ const InicioSesion = (props) => {
         ]);
     }
 
+    const {storedCredentials, setStoredCredentials} = useContext(CredentialsContext);
+
+    const persistLogin = (credentials, status) => {
+        if (status === 'success') 
+        {
+            AsyncStorage.setItem('getPetCredentials', credentials.id)
+            .then(() => {
+                setStoredCredentials(credentials.id)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        }
+    }
+
     const validateUser = async () => {
         const usuarios = firebase.db.collection("users");
         const snapshot = await usuarios.where("email", "==", state.email).get();
@@ -28,7 +46,8 @@ const InicioSesion = (props) => {
         if (!snapshot.empty) {
             const usuario = snapshot.docs[0]
             if (usuario.get("contraseña") == state.contraseña){
-                props.navigation.navigate('SesionUsuario', {userId: usuario.id})
+                //props.navigation.navigate('SesionUsuario', {userId: usuario.id})
+                persistLogin(usuario, 'success');
             } else { showAlert(); }
         }
         else {
