@@ -54,7 +54,7 @@ const InicioSesion = (props) => {
                 const protectora = snapshot2.docs[0]
                 if(protectora.get('contraseña') == state.contraseña) {
                     //props.navigation.navigate('SesionProtectora', {userId: protectora.id})
-                    persistLogin(protectora, null);
+                    persistLogin(protectora, '');
                 } else { showAlert(); }
             }
         }

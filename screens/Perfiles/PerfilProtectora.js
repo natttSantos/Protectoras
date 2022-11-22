@@ -84,7 +84,7 @@ const PerfilProtectora = (props) => {
   }
 
   useEffect(() => {
-    getProtectoraById(storedCredentials);
+    getProtectoraById(props.route.params.protectoraId);
   }, [cambios]);
   
   if(loading) {
@@ -116,20 +116,23 @@ return (
         <Text style = {styles.texto} >
           {"Descripción: " + protectora.descripcion}
         </Text>
-        <TouchableOpacity
-            onPress={clearLogin}
-            style={styles.boton}
-          >
-            <Text style={styles.buttonText}>
-                            Cerrar sesión
-                        </Text>
-         </TouchableOpacity>
         <BotonAbrirURL url={protectora.url}>
           Página web
         </BotonAbrirURL>
         <View style={{marginBottom: 50}}>
-        {!storedCredentials ? 
-          <TouchableOpacity 
+        {props.route.params.protectoraId ? 
+
+          <>
+          
+          <TouchableOpacity
+              onPress={clearLogin}
+              style={styles.boton}
+            >
+              <Text style={styles.buttonText}>
+                              Cerrar sesión
+                          </Text>
+          </TouchableOpacity>
+            <TouchableOpacity 
                       onPress={() => {
                         props.navigation.navigate('ModificarProtectora', {userId: storedCredentials}) 
                       }}
@@ -138,6 +141,7 @@ return (
                               MODIFICAR
                           </Text>
           </TouchableOpacity>
+          </>
         : null}
         </View>
       </View>
