@@ -54,7 +54,7 @@ const ListaProtectoras = (props) => {
                         return (
                             <ListItem key={protectora.id}
                                 bottomDivider
-                                onPress={() => {props.navigation.navigate('PerfilProtectora', {protectoraId: protectora.id})}}>
+                                onPress={() => {props.navigation.navigate('PerfilProtectora', {protectoraId: protectora.id, isUsuario: props.route.params.isUsuario})}}>
                                 <Avatar 
                                 style = {styles.imagen}
                                 source={{uri: imagenes[index]}}
