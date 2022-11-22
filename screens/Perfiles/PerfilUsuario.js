@@ -33,7 +33,7 @@ const PerfilUsuario = (props) => {
     staet: ""
   };
 
-  const { storedCredentials, setstoredCredentials } = useContext(CredentialsContext);
+  const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
 
   const [cosas, setState] = useState(initialStatee);
   const [usuario, setUsario] = useState(initialState);
@@ -98,7 +98,7 @@ const PerfilUsuario = (props) => {
     console.log('presionado')
     AsyncStorage.removeItem('getPetCredentials')
     .then(() =>{
-      setstoredCredentials.id(null);
+      setStoredCredentials(null);
     })
     .catch((error) =>{console.log(error)})
   }
