@@ -134,7 +134,8 @@ const SesionProtectora = (props) => {
               return <Icon name={iconName} size={35} color={'blue'} />
             }
           }}
-          initialParams={{ protectoraId: storedCredentials }}/>
+
+          initialParams={{ protectoraId: storedCredentials, isUsuario: false }}/>
       </Tab.Navigator>  
     );
 };

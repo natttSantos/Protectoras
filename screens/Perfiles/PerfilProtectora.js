@@ -128,15 +128,17 @@ return (
           Página web
         </BotonAbrirURL>
         <View style={{marginBottom: 50}}>
-        <TouchableOpacity 
-                    onPress={() => {
-                      props.navigation.navigate('ModificarProtectora', {userId: storedCredentials}) 
-                    }}
-                    style={styles.boton}>
-                        <Text style={styles.buttonText}>
-                            MODIFICAR
-                        </Text>
-        </TouchableOpacity>
+        {!storedCredentials ? 
+          <TouchableOpacity 
+                      onPress={() => {
+                        props.navigation.navigate('ModificarProtectora', {userId: storedCredentials}) 
+                      }}
+                      style={styles.boton}>
+                          <Text style={styles.buttonText}>
+                              MODIFICAR
+                          </Text>
+          </TouchableOpacity>
+        : null}
         </View>
       </View>
       
