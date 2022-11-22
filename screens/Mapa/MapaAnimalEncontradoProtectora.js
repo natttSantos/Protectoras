@@ -12,6 +12,7 @@ import * as ImagePicker from 'expo-image-picker';
 
 
 const MapaAnimalEncontradoProtectora = (props) => {
+  DropDownPicker.setListMode("SCROLLVIEW");
 
 
   const [loading, setLoading] = useState(true);
@@ -302,6 +303,7 @@ if(!loading) {
               if(notificacionAnimalActual.recogido =="No")
               return (
                       <Marker 
+                      key={index}
                          title={notificacionAnimalActual.nombre}
                          pinColor= '#6BE795'
                          coordinate={{

@@ -39,7 +39,7 @@ const ListaSolicitudes = (props) => {
         }, {merge: true})
     }
 
-    const aceptar = (aceptarIndex) => {
+    const aceptar = (aceptarIndex, nombreAnimal) => {
         Alert.alert("Información", "¿Está seguro que quiere aceptar la solicitud de adopción?", [
             {text: "Confirmar", 
             onPress: () => {
@@ -48,9 +48,17 @@ const ListaSolicitudes = (props) => {
             }}, 
             {text: "Cancelar"}
         ])
+
+        const mensajeAdopcion = "¡Tu solicitud de adopción de " + nombreAnimal + " ha sido aceptada!"
+
+        firebase.db.collection('notificaciones').add({
+            id_usuario: solicitudes[aceptarIndex].id_usuario,
+            mensaje: mensajeAdopcion,
+            leido: false
+        })
     }
 
-    const declinar = (declinarIndex) => {
+    const declinar = (declinarIndex, nombreAnimal) => {
         Alert.alert("Información", "¿Está seguro que quiere denegar la solicitud de adopción?", [
             {text: "Confirmar", 
             onPress: async () => {
@@ -59,6 +67,14 @@ const ListaSolicitudes = (props) => {
             }}, 
             {text: "Cancelar"}
         ])
+
+        const mensajeAdopcion = "Tu solicitud de adopción de " + nombreAnimal + " ha sido denegada"
+
+        firebase.db.collection('notificaciones').add({
+            id_usuario: solicitudes[declinarIndex].id_usuario,
+            mensaje: mensajeAdopcion,
+            leido: false
+        })
     }
 
     const verInformacion = (index) => {
@@ -76,7 +92,7 @@ const ListaSolicitudes = (props) => {
                     key={solicitud.id}
                     style={styles.container}>
                         <Solicitud solicitud={solicitud} verInformacion={() => verInformacion(index)}
-                        declinar={() => declinar(index)} aceptar={() => aceptar(index)}/>
+                        declinar={(nombreAnimal) => declinar(index, nombreAnimal)} aceptar={(nombreAnimal) => aceptar(index, nombreAnimal)}/>
                     </View>
                 )
             })}

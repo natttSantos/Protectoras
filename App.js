@@ -35,6 +35,7 @@ import ModificarUsuario from './screens/Modificar/ModificarUsuario';
 import MapaAnimalEncontrado from './screens/Mapa/MapaAnimalEncontrado';
 import MapaAnimalEncontradoProtectora from './screens/Mapa/MapaAnimalEncontradoProtectora';
 import InformacionSolicitud from './screens/InformacionSolicitud';
+import Notificaciones from './screens/Notificaciones/Notificaciones';
 
 
 import FiltradoAnimales from './screens/Listas/FiltradoAnimales';
@@ -67,6 +68,7 @@ function MyStack (){
       <Stack.Screen name="MapaAnimalEncontrado" component={MapaAnimalEncontrado} />
       <Stack.Screen name="InformacionSolicitud" component={InformacionSolicitud} />
       <Stack.Screen name="MapaAnimalEncontradoProtectora" component={MapaAnimalEncontradoProtectora} />
+      <Stack.Screen name="Notificaciones" component={Notificaciones} />
     </Stack.Navigator>
   )
 }
