@@ -9,7 +9,7 @@ import * as ImagePicker from 'expo-image-picker';
 
 
 
-const RegistrarAnimal = (props) => {
+const RegistrarAnimalPropietario = (props) => {
 
   const [foto, setFoto] = useState({
     existe:"",
@@ -23,7 +23,7 @@ const RegistrarAnimal = (props) => {
       descripcion:"",
       foto:"",
       fecha_nacimiento: "", 
-      id_protectora: "", 
+      id_propietario: "", 
       adoptado: "", 
       peso: "", 
       edad: "", 
@@ -49,7 +49,8 @@ const RegistrarAnimal = (props) => {
       { label: "Perro", value: "Perro" },
       { label: "Gato", value: "Gato" },
     ]);
-    const [protectora, setProtectora] = useState();
+    
+    const [usuario, setUsuario] = useState();
     const [nivelOpen, setNivelOpen] = useState(false);
     const [nivelValue, setNivelValue] = useState(null);
     const [nivel, setNivel] = useState([
@@ -60,7 +61,7 @@ const RegistrarAnimal = (props) => {
 
     const [vacunado, setVacunado] = useState(false)
     const [microChip, setMicroChip] = useState(false)
-                     
+       
 
     const handleChangeText = (nombre, value) => {
         setState({...state, [nombre]: value}); 
@@ -68,8 +69,8 @@ const RegistrarAnimal = (props) => {
     
 
     useEffect(() => {
-      getProtectoraById(props.route.params.userId);
-    }, [protectora]);
+      getUsuarioById(props.route.params.userId);
+    }, [usuario]);
 
     const saveNewUser =  async () => {
       
@@ -83,26 +84,24 @@ const RegistrarAnimal = (props) => {
                 sexo: state.sexo, 
                 descripcion: state.descripcion,
                 fecha_nacimiento: props.route.params.valueFecha,
-                id_protectora: props.route.params.userId, 
+                id_propietario: props.route.params.userId, 
                 adoptado: false,
                 peso: state.peso, 
                 edad: state.edad, 
                 nivelActividad: state.nivelActividad, 
                 vacunado: vacunado, 
                 microchip: microChip,
-                latitud: protectora.latitud,
-                longitud: protectora.longitud,
             })
             mensajeExito(); 
-            props.navigation.navigate('SesionProtectora', {userId: props.route.params.userId}); 
+            props.navigation.navigate('SesionUsuario', {userId: props.route.params.userId}); 
         }
     } 
 
-    const getProtectoraById = async (id) => {
-      const dbRef = firebase.db.collection("protectoras").doc(id);
+    const getUsuarioById = async (id) => {
+      const dbRef = firebase.db.collection("users").doc(id);
       const doc = await dbRef.get();
-      const protectora = doc.data();
-      setProtectora({ ...protectora, id: doc.id });
+      const usuario = doc.data();
+      setUsuario({ ...usuario, id: doc.id });
     };
 
     const mensajeExito = () =>{
@@ -348,4 +347,4 @@ const styles = StyleSheet.create({
         textTransform: "uppercase"    
       }
 })
-export default RegistrarAnimal;
+export default RegistrarAnimalPropietario;
