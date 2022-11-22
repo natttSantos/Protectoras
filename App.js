@@ -3,6 +3,12 @@ import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack'; 
 
+import AppLoading from 'expo-app-loading';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {useState} from 'react';
+import { CredentialsContext } from './components/CredentialsContext';
+import RootStack from './navigators/RootStack';
+
 const Stack = createNativeStackNavigator()
 
  //Importamos los tres componentes creados: 
@@ -67,11 +73,43 @@ function MyStack (){
   )
 }
 export default function App() {
+  
+  const [appReady, setAppReady] = useState(false);
+  const [storedCredentials, setStoredCredentials] = useState(""); 
+  const [type, setType] = useState("");
+
+  const checkLogInCredentials = () => {
+    AsyncStorage
+      .getItem('getPetCredentials')
+      .then((result) => {
+        console.log(result)
+        if (result !== null) {
+          setStoredCredentials(result.split(',')[0])
+          setType(result.split(',')[1])
+        }
+        else { 
+          setStoredCredentials(null)
+          setType(null)
+        }
+      })
+      .catch(error => console.log(error)) 
+  }
+
+  if (!appReady) {
+    return (
+      <AppLoading 
+        startAsync={checkLogInCredentials}
+        onFinish={() => setAppReady(true)}
+        onError={console.warn}
+      />
+    )
+  }
+
   return (
-    <NavigationContainer> 
-      <MyStack/>  
-    </NavigationContainer>
-  );
+    <CredentialsContext.Provider value={{storedCredentials, setStoredCredentials, type, setType}}>
+        <RootStack/>
+    </CredentialsContext.Provider>
+  )
 }
 
 const styles = StyleSheet.create({
