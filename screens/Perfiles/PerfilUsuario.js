@@ -53,7 +53,7 @@ const PerfilUsuario = (props) => {
 
     firebase
       .st
-      .ref(`imagesUsuario/${storedCredentials.id}`)
+      .ref(`imagesUsuario/${storedCredentials}`)
       .getDownloadURL().then(function (url) {
         console.log(url);
         setState({
@@ -83,7 +83,7 @@ const PerfilUsuario = (props) => {
   }
 
   useEffect(() => {
-    getUsuarioById(storedCredentials.id);
+    getUsuarioById(storedCredentials);
   }, []);
 
   if (loading) {
@@ -131,7 +131,7 @@ const PerfilUsuario = (props) => {
             <Button
               onPress={() => {
                 if (usuario.alta == "No")
-                  props.navigation.navigate('AltaAdoptar', { userId: storedCredentials.id });
+                  props.navigation.navigate('AltaAdoptar', { userId: storedCredentials });
                 else
                   alert("Ya se ha dado de alta");
               }}
@@ -141,7 +141,7 @@ const PerfilUsuario = (props) => {
             <Button
               onPress={() => {
                 if (usuario.alta == "Si")
-                  props.navigation.navigate('PerfilAdoptar', { userId: storedCredentials.id });
+                  props.navigation.navigate('PerfilAdoptar', { userId: storedCredentials });
                 else
                   alert("Primero debe sarse de alta");
               }}
@@ -151,7 +151,7 @@ const PerfilUsuario = (props) => {
             <Button
               onPress={() => {
                 if (usuario.alta == "Si")
-                  props.navigation.navigate('ModificarUsuario', { userId: storedCredentials.id });
+                  props.navigation.navigate('ModificarUsuario', { userId: storedCredentials });
                 else
                   alert("Primero debe sarse de alta");
               }}
