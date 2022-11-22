@@ -23,18 +23,17 @@ const InicioSesion = (props) => {
     }
 
     const {storedCredentials, setStoredCredentials} = useContext(CredentialsContext);
+    const {type, setType} = useContext(CredentialsContext);
 
     const persistLogin = (credentials, status) => {
-        if (status === 'success') 
-        {
-            AsyncStorage.setItem('getPetCredentials', credentials.id)
-            .then(() => {
-                setStoredCredentials(credentials.id)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-        }
+        AsyncStorage.setItem('getPetCredentials', credentials.id + ',' + status)
+        .then(() => {
+            setStoredCredentials(credentials.id)
+            setType(status)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     }
 
     const validateUser = async () => {
@@ -47,14 +46,15 @@ const InicioSesion = (props) => {
             const usuario = snapshot.docs[0]
             if (usuario.get("contraseña") == state.contraseña){
                 //props.navigation.navigate('SesionUsuario', {userId: usuario.id})
-                persistLogin(usuario, 'success');
+                persistLogin(usuario, 'usuario');
             } else { showAlert(); }
         }
         else {
             if (!snapshot2.empty) {
                 const protectora = snapshot2.docs[0]
                 if(protectora.get('contraseña') == state.contraseña) {
-                    props.navigation.navigate('SesionProtectora', {userId: protectora.id})
+                    //props.navigation.navigate('SesionProtectora', {userId: protectora.id})
+                    persistLogin(protectora, null);
                 } else { showAlert(); }
             }
         }

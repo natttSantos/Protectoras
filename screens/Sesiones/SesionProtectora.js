@@ -1,5 +1,5 @@
 import firebase from '../../database/firebase.js';
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Icon from 'react-native-vector-icons/Ionicons'
 import {View, ActivityIndicator, Button} from "react-native"
 
@@ -10,9 +10,11 @@ import AltaGlobal from '../Altas/AltaGlobal.js';
 import ListaSolicitudes from '../Listas/ListaSolicitudes.js';
 import MapaAnimalEncontradoProtectora from '../Mapa/MapaAnimalEncontradoProtectora.js';
 import { useIsFocused } from '@react-navigation/native';
+import { CredentialsContext } from '../../components/CredentialsContext';
 
 const SesionProtectora = (props) => {
   const isFocused = useIsFocused()
+  const {storedCredentials, setStoredCredentials} = useContext(CredentialsContext);
 
   const initialState = {
     nombre:"",
@@ -64,7 +66,7 @@ const SesionProtectora = (props) => {
   useEffect(() => { 
     if(isFocused) {
       setLoading(true)
-      getAllAnimalesDeProtectora(props.route.params.userId);
+      getAllAnimalesDeProtectora(storedCredentials);
     }
   }, [isFocused]);
 
@@ -88,7 +90,7 @@ const SesionProtectora = (props) => {
               return <Icon name={iconName} size={35} color={'blue'} />
             }
           }}
-          initialParams={{ animales: animales, userId: props.route.params.userId}}
+          initialParams={{ animales: animales, userId: storedCredentials}}
         />
         <Tab.Screen name = 'Add' component = {AltaGlobal} 
           options={{
@@ -99,7 +101,7 @@ const SesionProtectora = (props) => {
               return <Icon name={iconName} size={35} color={'blue'} />
             }
           }}
-          initialParams={{ userId: props.route.params.userId, isUsuario: false}}
+          initialParams={{ userId: storedCredentials, isUsuario: false}}
         />
               <Tab.Screen name = 'Animal' component = {MapaAnimalEncontradoProtectora} 
          options={{
@@ -110,7 +112,7 @@ const SesionProtectora = (props) => {
             return <Icon name={iconName} size={35} color={'blue'} />
           }
         }}
-        initialParams={{ userId: props.route.params.userId, isUsuario:true}}
+        initialParams={{ userId: storedCredentials, isUsuario:true}}
       />
         <Tab.Screen name = 'Solicitudes' component = {ListaSolicitudes} 
           options={{
@@ -121,7 +123,7 @@ const SesionProtectora = (props) => {
               return <Icon name={iconName} size={35} color={'blue'} />
             }
           }}
-          initialParams={{ userId: props.route.params.userId, isUsuario: false}}
+          initialParams={{ userId: storedCredentials, isUsuario: false}}
         />
         <Tab.Screen name = 'Perfil' component = {PerfilProtectora} 
           options={{
@@ -132,7 +134,7 @@ const SesionProtectora = (props) => {
               return <Icon name={iconName} size={35} color={'blue'} />
             }
           }}
-          initialParams={{ protectoraId: props.route.params.userId }}/>
+          initialParams={{ protectoraId: storedCredentials }}/>
       </Tab.Navigator>  
     );
 };

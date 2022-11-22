@@ -28,7 +28,7 @@ const SesionUsuario = (props) => {
   const Tab = createBottomTabNavigator(); 
 
   const {storedCredentials, setStoredCredentials} = useContext(CredentialsContext);
-
+  const {type, setType} = useContext(CredentialsContext);
 const [usuario, setUsuario] = useState(initialState);
 const [nombreUsuario, setNombreUsuario] = useState([])
 const [loading, setLoading] = useState(true);
@@ -113,6 +113,7 @@ const alVolver = () => {
 
   useEffect(() => { 
     console.log(storedCredentials)
+    console.log(type)
     getUsuarioById(storedCredentials); 
     getProtectoras(); 
     getAllNotificaciones(storedCredentials)

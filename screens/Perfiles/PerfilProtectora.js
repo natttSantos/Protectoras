@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useContext } from "react";
 import {
   ScrollView,
   View,
@@ -14,6 +14,9 @@ import { TextInput } from "react-native-gesture-handler";
 import { TouchableOpacity } from "react-native";
 
 import firebase from "../../database/firebase";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { CredentialsContext } from "../../components/CredentialsContext";
 
 const PerfilProtectora = (props) => {
 
@@ -33,10 +36,21 @@ const PerfilProtectora = (props) => {
     
   };
 
+  const {storedCredentials, setStoredCredentials} = useContext(CredentialsContext)
+
   const [cosas, setState] = useState(initialStatee);
   const [loading, setLoading] = useState(true);
   const [cambios, setcambios] = useState(false);
   const [protectora, setProtectora] = useState(initialState);
+
+  const clearLogin = () => {
+    console.log('presionado')
+    AsyncStorage.removeItem('getPetCredentials')
+    .then(() =>{
+      setStoredCredentials(null);
+    })
+    .catch((error) =>{console.log(error)})
+  }
 
   const getProtectoraById = async (id) => {
     const dbRef = firebase.db.collection("protectoras").doc(id);
@@ -70,7 +84,7 @@ const PerfilProtectora = (props) => {
   }
 
   useEffect(() => {
-    getProtectoraById(props.route.params.protectoraId);
+    getProtectoraById(storedCredentials);
   }, [cambios]);
   
   if(loading) {
@@ -102,13 +116,21 @@ return (
         <Text style = {styles.texto} >
           {"Descripción: " + protectora.descripcion}
         </Text>
+        <TouchableOpacity
+            onPress={clearLogin}
+            style={styles.boton}
+          >
+            <Text style={styles.buttonText}>
+                            Cerrar sesión
+                        </Text>
+         </TouchableOpacity>
         <BotonAbrirURL url={protectora.url}>
           Página web
         </BotonAbrirURL>
         <View style={{marginBottom: 50}}>
         <TouchableOpacity 
                     onPress={() => {
-                      props.navigation.navigate('ModificarProtectora', {userId: props.route.params.protectoraId}) 
+                      props.navigation.navigate('ModificarProtectora', {userId: storedCredentials}) 
                     }}
                     style={styles.boton}>
                         <Text style={styles.buttonText}>

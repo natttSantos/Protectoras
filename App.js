@@ -76,6 +76,7 @@ export default function App() {
   
   const [appReady, setAppReady] = useState(false);
   const [storedCredentials, setStoredCredentials] = useState(""); 
+  const [type, setType] = useState("");
 
   const checkLogInCredentials = () => {
     AsyncStorage
@@ -83,10 +84,12 @@ export default function App() {
       .then((result) => {
         console.log(result)
         if (result !== null) {
-          setStoredCredentials(result)
+          setStoredCredentials(result.split(',')[0])
+          setType(result.split(',')[1])
         }
         else { 
           setStoredCredentials(null)
+          setType(null)
         }
       })
       .catch(error => console.log(error)) 
@@ -103,7 +106,7 @@ export default function App() {
   }
 
   return (
-    <CredentialsContext.Provider value={{storedCredentials, setStoredCredentials}}>
+    <CredentialsContext.Provider value={{storedCredentials, setStoredCredentials, type, setType}}>
         <RootStack/>
     </CredentialsContext.Provider>
   )
