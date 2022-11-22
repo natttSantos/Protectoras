@@ -340,11 +340,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1, 
         padding: 35,
-        height:700
+        height:700,
+        marginBottom: 80
   },
   map: {
     width: 290,
-    height: 360
+    height: 360,
+    marginTop: 10,
+    marginBottom: 20
   },
   descripcion : {
     height: 100,
