@@ -85,9 +85,9 @@ const SesionProtectora = (props) => {
           options={{
             headerShown: false,
             tabBarIcon: ({ focused, color, size }) => {
-              let iconName = focused ? "home" : "home-outline";
+              let colorA = focused ? "#5B1D66" : "#FFB743";
   
-              return <Icon name={iconName} size={35} color={'blue'} />
+              return <Icon name="home-outline" size={35} color={colorA} />
             }
           }}
           initialParams={{ animales: animales, userId: storedCredentials}}

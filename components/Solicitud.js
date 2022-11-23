@@ -4,8 +4,10 @@ import {Image, View, StyleSheet, TouchableOpacity, Text, ActivityIndicator} from
 import Icon from 'react-native-vector-icons/Ionicons'
 
 export default function Solicitud(props) {
+    const defaultFoto = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fobjetivoligar.com%2Fperfil-sin-foto%2F&psig=AOvVaw0Sij3Yu__NpHdO4z-cOSD1&ust=1669302737538000&source=images&cd=vfe&ved=0CA8QjRxqFwoTCLDFt7fLxPsCFQAAAAAdAAAAABAE"
 
-    const [imagen, setImagen] = useState("")
+    const [imagenAnimal, setImagenAnimal] = useState("")
+    const [imagenUsuario, setImagenUsuario] = useState("")
     const [loading, setLoading] = useState(true)
     const [animal, setAnimal] = useState({
         nombre: ""
@@ -21,7 +23,7 @@ export default function Solicitud(props) {
         await firebase
               .st
               .ref(`images/${nombre}`)
-              .getDownloadURL().then(function(url) {setImagen(url); setLoading(false)})
+              .getDownloadURL().then(function(url) {setImagenAnimal(url); setLoading(false)})
               
         setAnimal({nombre: nombre})
     }
@@ -29,6 +31,11 @@ export default function Solicitud(props) {
     const getNombreDeUsuario = async (id_usuario) => {
         const usuarioDado = await firebase.db.collection('users').doc(id_usuario).get()
         const {usuario} = usuarioDado.data()
+
+        await firebase
+              .st
+              .ref(`imagesUsuario/${id_usuario}`)
+              .getDownloadURL().then(function(url) {setImagenUsuario(url); setLoading(false)})
         
         setUsuario({usuario: usuario})
     }
@@ -47,25 +54,30 @@ export default function Solicitud(props) {
         <View
         style={styles.container}>
             <View style={styles.imagenContainer}>
-                <Image style={styles.imagen} source={{uri: imagen}} />
+                <Image style={styles.imagen} source={{uri: imagenAnimal}} />
+                <Image style={styles.imagenPeque} source={imagenUsuario != "" ? {uri: imagenUsuario} : {uri: defaultFoto}} />
             </View>
             <View style= {styles.soliContainer}>
-                <Text style={styles.solicitud}
-                onPress ={() => props.verInformacion()}> 
-                    {usuario.usuario} quiere adoptar a {animal.nombre} 
-                </Text>
+                <View style={styles.textContainer}>
+                    <Text style={styles.solicitud}
+                    onPress ={() => props.verInformacion()}> 
+                        {usuario.usuario} quiere adoptar a {animal.nombre} 
+                    </Text>
+                </View>
                 <View style={styles.buttonGroup}>
                     <TouchableOpacity
-                    onPress={() => props.aceptar(animal.nombre)}>
-                        <Icon name="checkmark-circle"
-                        size={30}
-                        style={[styles.button, {color: 'green'}]} />
+                    onPress={() => props.declinar(animal.nombre)}>
+                        <View
+                        style={styles.botonDeclinar}>
+                            <Image source={require('../images/Cruz.png')}/>
+                        </View>
                     </TouchableOpacity>
                     <TouchableOpacity
-                    onPress={() => props.declinar(animal.nombre)}>
-                        <Icon name="close-circle"
-                        size={30}
-                        style={[styles.button, {color: 'red'}]} />
+                    onPress={() => props.aceptar(animal.nombre)}>
+                        <View
+                        style={styles.botonAceptar}>
+                            <Image source={require('../images/Tick.png')}/>
+                        </View>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -76,46 +88,78 @@ export default function Solicitud(props) {
 
 const styles = StyleSheet.create({
     container: {
+        borderColor: '#5B1D66',
+        borderWidth: 2,
+        borderRadius: 20,
         flexDirection: 'row',
-        height: 80,
+        height: 140,
+        width: 320,
         marginTop: 10,
         flex: 1
     },
     imagenContainer: {
-        backgroundColor: '#33FFEC',
-        borderRadius: 80/2,
-        marginRight: 10,
+        marginHorizontal: 10,
+        width: 110,
         alignItems: 'center',
-        width: 80,
-        height: 80,
+        flexDirection: 'row',
     },
     soliContainer: {
-        backgroundColor: '#33FFEC',
         borderRadius: 25,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
         flex: 1,
         paddingHorizontal: 10,
         paddingVertical: 5,
         minHeight: 30,
     },
+    textContainer: {
+        height: '50%',
+        width: '100%',
+        justifyContent: 'center',
+        flex: 1,
+    },
     buttonGroup: {
         flexDirection: 'row',
         justifyContent: 'space-evenly',
+        alignItems: 'center',
         flex: 1,
+        width: '100%',
     },
-    button: {
+    botonDeclinar: {
         marginRight: 10,
+        height: 40,
+        width: 50,
+        borderRadius: 10,
+        backgroundColor: '#5B1D66',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    botonAceptar: {
+        marginRight: 10,
+        height: 40,
+        width: 80,
+        borderRadius: 10,
+        backgroundColor: '#FFB743',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     solicitud: {
-        width: '70%',
         fontSize: 16,
-        textAlign: 'center' 
+        fontWeight: 'bold',
+        textAlign: 'left',
+        textAlignVertical: 'bottom'
     },
     imagen: {
-        width: 80,
-        height: 80,
-        borderRadius: 80/2
+        width: 90,
+        height: 90,
+        borderRadius: 90/2
+    },
+    imagenPeque: {
+        width: 50,
+        height: 50,
+        borderRadius: 50/2,
+        bottom: 25,
+        right: 30,
+        borderColor:'#FFFFFF',
+        borderWidth: 2
     }
 });
