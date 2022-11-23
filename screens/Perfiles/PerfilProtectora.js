@@ -37,6 +37,7 @@ const PerfilProtectora = (props) => {
   };
 
   const {storedCredentials, setStoredCredentials} = useContext(CredentialsContext)
+  const {type, setType} = useContext(CredentialsContext)
 
   const [cosas, setState] = useState(initialStatee);
   const [loading, setLoading] = useState(true);
@@ -120,7 +121,7 @@ return (
           Página web
         </BotonAbrirURL>
         <View style={{marginBottom: 50}}>
-        {props.route.params.protectoraId ? 
+        {!type ? 
 
           <>
           
