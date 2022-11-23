@@ -87,7 +87,7 @@ const InicioSesion = (props) => {
                         handleChangeText("contraseña", "")
                     }}
                     style={styles.botonCircularAmarillo}>
-                        <Text style={styles.buttonText}>
+                        <Text style={styles.botonTexto}>
                             Enviar
                         </Text>
                 </TouchableOpacity>
@@ -103,26 +103,14 @@ const styles = StyleSheet.create({
         backgroundColor: colors.amarillo,
         marginTop: 80
     },
-    inputGroup: {
-        fontSize: 20, 
-        flex: 1,
-        padding: 0,
-        marginBottom: 15, 
-        borderBottomWidth: 2, 
-        borderBottomColor: '#cccccc'
-    }, textFieldCircular: {
+    textFieldCircular: {
         width:320,
         height:50,
-        borderWidth: 1,
         borderRadius: 25,
-        borderColor: "#ffb743",
-        backgroundColor: "#FFFFFF",
+        backgroundColor: colors.blanco,
         fontSize: 16,
         padding: 15,
         marginBottom: 10
-      },
-      title : {
-        fontSize: 20
       },
       botonCircularAmarillo : {
         backgroundColor: colors.amarillo,
@@ -131,9 +119,9 @@ const styles = StyleSheet.create({
         width:217,
         height:47,
         borderRadius: 25,
-        marginBottom: 100,
+        marginBottom: 100
       },
-      buttonText: {
+      botonTexto: {
         fontSize: 20,
         color: colors.blanco,
         fontWeight: "bold",
