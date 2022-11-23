@@ -38,6 +38,9 @@ import AltaGlobal from '../screens/Altas/AltaGlobal';
 import Notificaciones from '../screens/Notificaciones/Notificaciones';
 import ListaSolicitudes from '../screens/Listas/ListaSolicitudes';
 
+//Bibliotecas colores CSS
+import {colors} from '../components/Color';
+
 const Stack = createNativeStackNavigator();
 
 const RootStack = () => {
@@ -188,10 +191,16 @@ const RootStack = () => {
                                 component={InicioSesion}
                                 options={{ 
                                     headerStyle: {
-                                        backgroundColor: '#ffb743'
+                                        backgroundColor: colors.amarillo
                                     },
-                                    headerTintColor: '#fff',
-                                    headerTitle: 'Inicia sesión' 
+                                    headerTintColor: colors.moradoPrincipal,
+                                    headerTransparent: true,
+                                    headerTitle: 'Inicia sesión',
+                                    headerTitleStyle: {
+                                        fontSize: 32,
+                                        fontWeight: 'bold',
+                                    } 
+                                    
                                 }}
                                 />
                                 <Stack.Screen

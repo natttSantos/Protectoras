@@ -16,7 +16,6 @@ import { TouchableOpacity } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CredentialsContext } from "../../components/CredentialsContext";
 
-
 const PerfilUsuario = (props) => {
   const initialState = {
 
@@ -34,6 +33,7 @@ const PerfilUsuario = (props) => {
   };
 
   const { storedCredentials, setStoredCredentials } = useContext(CredentialsContext);
+  const {type, setType} = useContext(CredentialsContext);
 
   const [cosas, setState] = useState(initialStatee);
   const [usuario, setUsario] = useState(initialState);
@@ -83,7 +83,10 @@ const PerfilUsuario = (props) => {
   }
 
   useEffect(() => {
-    getUsuarioById(storedCredentials);
+    console.log(props.route.params.userId)
+    if (props.route.params.userId === undefined ) {
+      getUsuarioById(storedCredentials);
+    } else {getUsuarioById(props.route.params.userId)}
   }, []);
 
   if (loading) {
@@ -117,18 +120,15 @@ const PerfilUsuario = (props) => {
         <Text style={styles.texto} >
           {"Telefono: " + usuario.telefono}
         </Text>
-        <TouchableOpacity
+        {props.route.params.canEdit ?
+          <>
+          <TouchableOpacity
             onPress={clearLogin}
             style={styles.button}
           >
-            <Text style={styles.buttonText}>
-                            Cerrar sesión
-                        </Text>
-          
-        </TouchableOpacity>
-        {props.route.params.canEdit ?
-          <>
-            <Button
+            <Text style={styles.buttonText}> Cerrar sesión </Text>
+          </TouchableOpacity>
+          <Button
               onPress={() => {
                 if (usuario.alta == "No")
                   props.navigation.navigate('AltaAdoptar', { userId: storedCredentials });
@@ -137,8 +137,8 @@ const PerfilUsuario = (props) => {
               }}
               title="Dar de alta para adoptar"
               color="#841584" 
-            />
-            <Button
+          />
+          <Button
               onPress={() => {
                 if (usuario.alta == "Si")
                   props.navigation.navigate('PerfilAdoptar', { userId: storedCredentials });
@@ -147,8 +147,8 @@ const PerfilUsuario = (props) => {
               }}
               title="Perfil de Adopción"
               color="#841584" 
-            />
-            <Button
+          />
+          <Button
               onPress={() => {
                 if (usuario.alta == "Si")
                   props.navigation.navigate('ModificarUsuario', { userId: storedCredentials });
@@ -157,13 +157,11 @@ const PerfilUsuario = (props) => {
               }}
               title="Editar Perfil"
               color="#841584" 
-            />
-          </>
-          : null}
-          
+          />
+        </>
+        : null}
       </View>
     </ScrollView>
-
   );
 
 
