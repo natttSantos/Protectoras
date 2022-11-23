@@ -3,7 +3,7 @@ import { View, Button, TextInput, StyleSheet, ScrollView, Text, Alert, Touchable
 import firebase from '../../database/firebase.js';
 
 //Bibliotecas colores CSS
-
+import {colors} from '../../components/Color';
 const RegistrarUsuario = (props) => {
     
     const [state, setState] = useState({ //STATE ES UN OBJETO CON NOMBRE, EMAIL Y TLF
@@ -120,27 +120,27 @@ const styles = StyleSheet.create({
     container : {
         flex: 1, 
         padding: 35,
-        backgroundColor: '#ffb743',
+        backgroundColor: colors.amarillo,
         marginTop: 50
     },
     titulo : {
         fontSize: 32,
         fontWeight: 'bold',
         marginBottom: 30,
-        color: '#5b1d66'
+        color: colors.moradoPrincipal
     },
     textFieldCircular: {
         width:320,
         height:50,
         borderRadius: 25,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: colors.blanco,
         fontSize: 16,
         padding: 15,
         marginBottom: 12
       },
       botonCircularAmarillo : {
-        backgroundColor: '#ffb743',
-        borderColor: '#FFFFFF',
+        backgroundColor: colors.amarillo,
+        borderColor: colors.blanco,
         borderWidth: 2,
         width:217,
         height:47,
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
       },
       botonTexto: {
         fontSize: 20,
-        color: '#FFFFFF',
+        color: colors.blanco,
         fontWeight: "bold",
         alignSelf: "center",
         marginTop: 5
