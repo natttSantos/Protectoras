@@ -245,7 +245,8 @@ const checkMicrochip_Vacunado = (value) => {
     const solicitudAEnviar = {
       id_animal: animal.id,
       id_protectora: animal.id_protectora,
-      id_usuario: usuario.id
+      id_usuario: usuario.id,
+      solucionada: false
     }
 
     const soliRepe = await solicitudes.where("id_protectora", "==", animal.id_protectora)

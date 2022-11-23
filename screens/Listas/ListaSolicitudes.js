@@ -1,30 +1,33 @@
 import firebase from '../../database/firebase.js';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {ScrollView, View, StyleSheet, Alert, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import Solicitud from '../../components/Solicitud.js';
 import InformacionSolicitud from '../InformacionSolicitud.js';
 import { onPress } from 'deprecated-react-native-prop-types/DeprecatedTextPropTypes.js';
+import { CredentialsContext } from '../../components/CredentialsContext';
 
 const ListaSolicitudes = (props) => {
 
     const [solicitudes, setSolicitudes] = useState([])
+    const {storedCredentials, setStoredCredentials} = useContext(CredentialsContext);
 
-    const getAllSolicitudes = (id_protectora) => {
-        firebase.db.collection('solicitudes').where("id_protectora", "==", id_protectora).
+    const getAllSolicitudes = (storedCredentials) => {
+        firebase.db.collection('solicitudes').where("id_protectora", "==", storedCredentials).
         where("solucionada", "==", false).onSnapshot(querySnapshot => {
             const solicitudesAux = []
 
             querySnapshot.docs.forEach(doc => {
-                const {id_usuario, id_protectora, id_animal} = doc.data()
+                const {id_usuario, storedCredentials, id_animal} = doc.data()
                 solicitudesAux.push({
                     id: doc.id,
                     id_usuario: id_usuario,
-                    id_protectora: id_protectora,
+                    id_protectora: storedCredentials,
                     id_animal: id_animal
                 })
             })
             setSolicitudes(solicitudesAux)
+            console.log(solicitudesAux.length)
         })
     }
 
@@ -81,12 +84,14 @@ const ListaSolicitudes = (props) => {
         props.navigation.navigate('InformacionSolicitud', {id_animal: solicitudes[index].id_animal, id_usuario: solicitudes[index].id_usuario})
     }
     useEffect(() => {
-        getAllSolicitudes(props.route.params.userId)
+        console.log(storedCredentials)
+        getAllSolicitudes(storedCredentials)
     }, [])
 
     return (
         <ScrollView>
             {solicitudes.map((solicitud, index) => {
+                console.log(solicitud.id)
                 return (
                     <View
                     key={solicitud.id}
