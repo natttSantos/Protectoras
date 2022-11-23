@@ -1,8 +1,9 @@
-import React, {useEffect, useState } from "react";
+import React, {useEffect, useState, useContext } from "react";
 import { ScrollView, View, Text, StyleSheet, TextInput } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Button } from "react-native-elements";
 import firebase from '../../database/firebase';
+import { CredentialsContext } from "../../components/CredentialsContext";
 
 
 const AltaAdoptar = (props) => {
@@ -16,8 +17,9 @@ const AltaAdoptar = (props) => {
     };
     const drop = DropDownPicker.setListMode("SCROLLVIEW");
 
+    const {storedCredentials, setStoredCredentials} = useContext(CredentialsContext);
     useEffect(() => {
-        getUsuarioById(props.route.params.userId);
+        getUsuarioById(storedCredentials);
       }, []);
 
       const getUsuarioById = async (id) => {

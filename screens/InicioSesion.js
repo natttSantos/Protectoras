@@ -1,6 +1,9 @@
-import React, {useState} from "react";
+import React, {useState, useContext} from "react";
 import { View, Button, TextInput, Text,StyleSheet, ScrollView, ProgressViewIOSComponent, Alert, TouchableOpacity} from "react-native";
 import firebase from '../database/firebase';
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { CredentialsContext } from "../components/CredentialsContext";
 
 const InicioSesion = (props) => {
 
@@ -19,6 +22,20 @@ const InicioSesion = (props) => {
         ]);
     }
 
+    const {storedCredentials, setStoredCredentials} = useContext(CredentialsContext);
+    const {type, setType} = useContext(CredentialsContext);
+
+    const persistLogin = (credentials, status) => {
+        AsyncStorage.setItem('getPetCredentials', credentials.id + ',' + status)
+        .then(() => {
+            setStoredCredentials(credentials.id)
+            setType(status)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    }
+
     const validateUser = async () => {
         const usuarios = firebase.db.collection("users");
         const snapshot = await usuarios.where("email", "==", state.email).get();
@@ -28,14 +45,16 @@ const InicioSesion = (props) => {
         if (!snapshot.empty) {
             const usuario = snapshot.docs[0]
             if (usuario.get("contraseña") == state.contraseña){
-                props.navigation.navigate('SesionUsuario', {userId: usuario.id})
+                //props.navigation.navigate('SesionUsuario', {userId: usuario.id})
+                persistLogin(usuario, 'usuario');
             } else { showAlert(); }
         }
         else {
             if (!snapshot2.empty) {
                 const protectora = snapshot2.docs[0]
                 if(protectora.get('contraseña') == state.contraseña) {
-                    props.navigation.navigate('SesionProtectora', {userId: protectora.id})
+                    //props.navigation.navigate('SesionProtectora', {userId: protectora.id})
+                    persistLogin(protectora, '');
                 } else { showAlert(); }
             }
         }
