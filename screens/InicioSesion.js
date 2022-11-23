@@ -5,6 +5,9 @@ import firebase from '../database/firebase';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CredentialsContext } from "../components/CredentialsContext";
 
+//Bibliotecas colores CSS
+import {colors} from '../components/Color';
+
 const InicioSesion = (props) => {
 
     const [state, setState] = useState({ //STATE ES UN OBJETO CON NOMBRE, EMAIL Y TLF
@@ -64,39 +67,41 @@ const InicioSesion = (props) => {
     };
 
     return (
-        <ScrollView style={styles.container}>
-            <View>
+            <View style={styles.container}>
                 <TextInput 
-                style={styles.inputText}           
+                style={styles.textFieldCircular}           
                 placeholder="Email"     
                 onChangeText={(value) => handleChangeText('email', value)}
                 />
                 <TextInput 
                 secureTextEntry={true}
-                style={styles.inputText}
+                style={styles.textFieldCircular}
                 placeholder="Contraseña"
                 onChangeText={(value) => handleChangeText('contraseña', value)}
                 />
+                <View style= {{  position: 'absolute', bottom: 0, alignSelf: 'center'}}> 
                 <TouchableOpacity 
                     onPress={() => {
                         validateUser(state.value)
                         handleChangeText("email", "")
                         handleChangeText("contraseña", "")
                     }}
-                    style={styles.button}>
+                    style={styles.botonCircularAmarillo}>
                         <Text style={styles.buttonText}>
-                            Iniciar sesión
+                            Enviar
                         </Text>
                 </TouchableOpacity>
+                </View>
             </View>
-        </ScrollView>
     ) 
 }
 
 const styles = StyleSheet.create({
     container : {
         flex: 1, 
-        padding: 35
+        padding: 35,
+        backgroundColor: colors.amarillo,
+        marginTop: 80
     },
     inputGroup: {
         fontSize: 20, 
@@ -105,31 +110,35 @@ const styles = StyleSheet.create({
         marginBottom: 15, 
         borderBottomWidth: 2, 
         borderBottomColor: '#cccccc'
-    }, inputText: {
-        height: 40,
-        borderColor: "gray",
-        marginTop: 10,
-        paddingLeft: 10,
-        paddingRight: 10,
-        fontSize: 18,
-        width: "100%",
+    }, textFieldCircular: {
+        width:320,
+        height:50,
         borderWidth: 1,
+        borderRadius: 25,
+        borderColor: "#ffb743",
+        backgroundColor: "#FFFFFF",
+        fontSize: 16,
+        padding: 15,
+        marginBottom: 10
       },
       title : {
         fontSize: 20
       },
-      button : {
-        elevation: 8,
-        backgroundColor: "#6c91c2",
-        padding: 10,
-        marginTop: 20,
+      botonCircularAmarillo : {
+        backgroundColor: colors.amarillo,
+        borderColor: colors.blanco,
+        borderWidth: 2,
+        width:217,
+        height:47,
+        borderRadius: 25,
+        marginBottom: 100,
       },
       buttonText: {
-        fontSize: 18,
-        colors: "#ffffff",
+        fontSize: 20,
+        color: colors.blanco,
         fontWeight: "bold",
         alignSelf: "center",
-        textTransform: "uppercase"    
+        marginTop: 5
       }
 
     })
