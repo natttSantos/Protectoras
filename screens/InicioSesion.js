@@ -68,6 +68,7 @@ const InicioSesion = (props) => {
 
     return (
             <View style={styles.container}>
+                <Text style={styles.titulo}> Inicia sesión </Text>
                 <TextInput 
                 style={styles.textFieldCircular}           
                 placeholder="Email"     
@@ -101,7 +102,13 @@ const styles = StyleSheet.create({
         flex: 1, 
         padding: 35,
         backgroundColor: colors.amarillo,
-        marginTop: 80
+        marginTop: 50
+    },
+    titulo : {
+        fontSize: 32,
+        fontWeight: 'bold',
+        marginBottom: 30,
+        color: colors.moradoPrincipal
     },
     textFieldCircular: {
         width:320,
@@ -110,7 +117,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.blanco,
         fontSize: 16,
         padding: 15,
-        marginBottom: 10
+        marginBottom: 12
       },
       botonCircularAmarillo : {
         backgroundColor: colors.amarillo,
