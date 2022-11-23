@@ -240,7 +240,7 @@ const checkImage = () => {
           {"Avistado por: "+notificacionCargar.usuario+" el " +notificacionCargar.dia +"/" + notificacionCargar.mes +"/" + notificacionCargar.año+ " a las " +notificacionCargar.horas +":"+notificacionCargar.minutos  }
         </Text>
         <Text style = {styles.texto} >
-          {"Nombre: " + notificacionCargar.tipo}
+          {"Animal: " + notificacionCargar.tipo}
         </Text>
         <Text style = {styles.texto} >
           {"Descripcion: " + notificacionCargar.descripcion}

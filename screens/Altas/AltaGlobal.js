@@ -8,7 +8,8 @@ const AltaGlobal = (props) => {
         <Text style={styles.title}> Selecciona el registro </Text>
          
         {props.route.params.isUsuario ? 
-          <TouchableOpacity 
+          <View>
+            <TouchableOpacity 
                       onPress={() => {
                         props.navigation.navigate('AltaProtectora', {userId: props.route.params.userId}) 
                       }}
@@ -16,7 +17,18 @@ const AltaGlobal = (props) => {
                           <Text style={styles.buttonText}>
                               Dar de alta protectora
                           </Text>
-          </TouchableOpacity> 
+            </TouchableOpacity> 
+            <TouchableOpacity 
+                      onPress={() => {
+                        props.navigation.navigate('RegistrarAnimalPropietario', {userId: props.route.params.userId}) 
+                      }}
+                      style={styles.button}>
+                          <Text style={styles.buttonText}>
+                              Registrar animal en adopción
+                          </Text>
+            </TouchableOpacity> 
+          </View>
+          
         :
           <TouchableOpacity 
                       onPress={() => {

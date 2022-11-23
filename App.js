@@ -3,6 +3,12 @@ import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack'; 
 
+import AppLoading from 'expo-app-loading';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {useState} from 'react';
+import { CredentialsContext } from './components/CredentialsContext';
+import RootStack from './navigators/RootStack';
+
 const Stack = createNativeStackNavigator()
 
  //Importamos los tres componentes creados: 
@@ -19,6 +25,7 @@ import AltaAdoptar from './screens/Altas/AltaAdoptar';
 import UserDetailScreen from './screens/UserDetailScreen';
 import Home from './screens/Home';
 import RegistrarAnimal from './screens/Altas/RegistrarAnimal';
+import RegistrarAnimalPropietario from './screens/Altas/RegistrarAnimalPropietario';
 import AltaGlobal from './screens/Altas/AltaGlobal';
 import PerfilAdoptar from './screens/Perfiles/PerfilAdoptar';
 import SesionUsuario from './screens/Sesiones/SesionUsuario';
@@ -51,6 +58,7 @@ function MyStack (){
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="AltaGlobal" component={AltaGlobal} />
       <Stack.Screen name="RegistrarAnimal" component={RegistrarAnimal} />
+      <Stack.Screen name="RegistrarAnimalPropietario" component={RegistrarAnimalPropietario} />
       <Stack.Screen name="FechaNacimientoAnimal" component={FechaNacimientoAnimal} />
       <Stack.Screen name="PerfilUsuario" component={PerfilUsuario} />
       <Stack.Screen name="PerfilProtectora" component={PerfilProtectora} />
@@ -67,11 +75,43 @@ function MyStack (){
   )
 }
 export default function App() {
+  
+  const [appReady, setAppReady] = useState(false);
+  const [storedCredentials, setStoredCredentials] = useState(""); 
+  const [type, setType] = useState("");
+
+  const checkLogInCredentials = () => {
+    AsyncStorage
+      .getItem('getPetCredentials')
+      .then((result) => {
+        console.log(result)
+        if (result !== null) {
+          setStoredCredentials(result.split(',')[0])
+          setType(result.split(',')[1])
+        }
+        else { 
+          setStoredCredentials(null)
+          setType(null)
+        }
+      })
+      .catch(error => console.log(error)) 
+  }
+
+  if (!appReady) {
+    return (
+      <AppLoading 
+        startAsync={checkLogInCredentials}
+        onFinish={() => setAppReady(true)}
+        onError={console.warn}
+      />
+    )
+  }
+
   return (
-    <NavigationContainer> 
-      <MyStack/>  
-    </NavigationContainer>
-  );
+    <CredentialsContext.Provider value={{storedCredentials, setStoredCredentials, type, setType}}>
+        <RootStack/>
+    </CredentialsContext.Provider>
+  )
 }
 
 const styles = StyleSheet.create({
