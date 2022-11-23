@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, LogBox, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack'; 
 
@@ -8,6 +8,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState} from 'react';
 import { CredentialsContext } from './components/CredentialsContext';
 import RootStack from './navigators/RootStack';
+
+LogBox.ignoreAllLogs();
 
 const Stack = createNativeStackNavigator()
 
@@ -25,6 +27,7 @@ import AltaAdoptar from './screens/Altas/AltaAdoptar';
 import UserDetailScreen from './screens/UserDetailScreen';
 import Home from './screens/Home';
 import RegistrarAnimal from './screens/Altas/RegistrarAnimal';
+import RegistrarAnimalPropietario from './screens/Altas/RegistrarAnimalPropietario';
 import AltaGlobal from './screens/Altas/AltaGlobal';
 import PerfilAdoptar from './screens/Perfiles/PerfilAdoptar';
 import SesionUsuario from './screens/Sesiones/SesionUsuario';
@@ -57,6 +60,7 @@ function MyStack (){
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="AltaGlobal" component={AltaGlobal} />
       <Stack.Screen name="RegistrarAnimal" component={RegistrarAnimal} />
+      <Stack.Screen name="RegistrarAnimalPropietario" component={RegistrarAnimalPropietario} />
       <Stack.Screen name="FechaNacimientoAnimal" component={FechaNacimientoAnimal} />
       <Stack.Screen name="PerfilUsuario" component={PerfilUsuario} />
       <Stack.Screen name="PerfilProtectora" component={PerfilProtectora} />

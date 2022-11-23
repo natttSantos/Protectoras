@@ -53,6 +53,15 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
   const [animal, setAnimal] = useState(initialState);
   const [loading, setLoading] = useState(true);
   const [cosas, setState] = useState(initialStatee);
+  const [protectoraAnimal, setProtectoraAnimal] = useState(""); 
+  
+  
+  //Campos Opcionales
+  const [pesoOpcional, setPesoOpcional] = useState("");
+  const [edadOpcional, setEdadOpcional] = useState("");
+  const [nivelOpcional, setNivelOpcional] = useState("");
+  const [vacunadoOpcional, setVacunadoOpcional] = useState("No");
+  const [microChipOpcional, setMicroChipOpcional] = useState("No");
 
   const initialStaate = {
     usuario: "",
@@ -166,22 +175,54 @@ const getUsuarioById = async (id) => {
 };
 
 
-  const getAnimalById = async (id) => {
-    const dbRef = firebase.db.collection("animales").doc(id);
-    const doc = await dbRef.get();
-    const animal = doc.data();
-    setAnimal({ ...animal, id: doc.id });
+const getAnimalById = async (id) => {
+  const dbRef = firebase.db.collection("animales").doc(id);
+  const doc = await dbRef.get();
+  const animal = doc.data();
+  setAnimal({ ...animal, id: doc.id });
 
-    firebase
-    .st
-    .ref(`images/${animal.nombre}`)
-    .getDownloadURL().then(function(url) {
-    setState({
-     imageFirebase: url
-  });
+
+  firebase
+  .st
+  .ref(`images/${animal.nombre}`)
+  .getDownloadURL().then(function(url) {
+  setState({
+   imageFirebase: url
 });
-    
-  };
+});
+  validateOptionalFields(animal); 
+  checkMicrochip_Vacunado(animal); 
+};
+
+
+
+  const validateOptionalFields = (value) => {
+    let noInfo = "No tenemos información sobre esta característica."; 
+    if(value.peso == ""){
+      setPesoOpcional(noInfo); 
+    } else {
+      setPesoOpcional(value.peso + " Kg")
+    }
+    if(value.edad == ""){
+      setEdadOpcional(noInfo); 
+    } else {
+      setEdadOpcional(value.edad + " años")
+    }
+    if(value.nivelActividad == ""){
+      setNivelOpcional(noInfo); 
+    } else {
+      setNivelOpcional(value.nivelActividad); 
+    }
+  }
+  
+const checkMicrochip_Vacunado = (value) => {
+  if(value.microchip === true){
+    setMicroChipOpcional("Si")
+  } 
+  if(value.vacunado === true){
+    setVacunadoOpcional("Si")
+  }
+}
 
   const updateAnimal = async () => {
     const animalRef = firebase.db.collection("animales").doc(animal.id);
@@ -200,9 +241,31 @@ const getUsuarioById = async (id) => {
   };
 
   const enviarSolicitud = async () => {
-    // await firebase.db.collection('solicitudes').add(
-    //   id_protectora: 
-    // )
+    const solicitudes = firebase.db.collection('solicitudes')
+    const solicitudAEnviar = {
+      id_animal: animal.id,
+      id_protectora: animal.id_protectora,
+      id_usuario: usuario.id,
+      solucionada: false
+    }
+
+    const soliRepe = await solicitudes.where("id_protectora", "==", animal.id_protectora)
+    .where("id_animal", "==", animal.id)
+    .where("id_usuario", "==", usuario.id).get()
+    
+    const estaRepetido = !soliRepe.empty
+
+    if(!estaRepetido) {
+      await solicitudes.add(solicitudAEnviar)
+
+      Alert.alert("Información", "Solicitud enviada correctamente", [
+        {text: "Cerrar"}
+      ])
+    } else {
+      Alert.alert("Información", "Ya enviaste la solicitud de adopcion", [
+        {text: "Cerrar"}
+      ])
+    }
   }
 
   useEffect(() => {
@@ -235,9 +298,7 @@ const getUsuarioById = async (id) => {
 
   const adoptarAnimal = () => {
     if(usuario.alta=="Si") { 
-      Alert.alert("Información", "Solicitud enviada correctamente", [
-        {text: "Cerrar"}
-    ]);
+      enviarSolicitud();
     } else {
       Alert.alert("Información", "Tienes que completar tu perfil para poder adoptar", [
         {text: "Cerrar"},
@@ -282,7 +343,7 @@ return (
     
       <View style={styles.container}>
        {checkImage()}
-        <Text style = {styles.texto} >
+       <Text style = {styles.texto} >
           {"Nombre: " + animal.nombre}
         </Text>
         <Text style = {styles.texto} >
@@ -295,9 +356,23 @@ return (
           {"Fecha de nacimiento: " + animal.fecha_nacimiento}
         </Text>     
         <Text style = {styles.texto} >
+          {"Edad: " + edadOpcional}
+        </Text> 
+        <Text style = {styles.texto} >
+          {"Peso: " + pesoOpcional}
+        </Text> 
+        <Text style = {styles.texto} >
+          {"Vacunado: " + vacunadoOpcional}
+        </Text> 
+        <Text style = {styles.texto} >
+          {"MicroChip: " + microChipOpcional}
+        </Text> 
+        <Text style = {styles.texto} >
+          {"Nivel Actividad: " + nivelOpcional}
+        </Text>
+        <Text style = {styles.texto} >
           {"Descripción: " + animal.descripcion}
         </Text>
-
         <MapView 
         style={styles.map}
         initialRegion={{
@@ -330,6 +405,14 @@ return (
               <Text>Adoptar</Text>
         </TouchableOpacity>
         : null}
+        {esUsuario ?  
+        <TouchableOpacity  
+            style={styles.boton} 
+            onPress={() => props.navigation.navigate('PerfilProtectora', {protectoraId: animal.id_protectora})}
+            >
+              <Text>Contactar</Text>
+        </TouchableOpacity>
+        : null}
       </View> 
     </ScrollView>
   );
@@ -342,7 +425,7 @@ const styles = StyleSheet.create({
     padding: 25,
     marginTop: 5,
     marginBottom: 5,
-    height: 750
+    height: 1000
   },
   loader: {
     left: 0,

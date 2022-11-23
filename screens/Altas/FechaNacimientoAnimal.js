@@ -18,7 +18,14 @@ const FechaNacimientoAnimal = (props) => {
             onChangeText={(date) => handleChangeText('fecha', date.toDateString())}
             onDateChange={setChosenDate}
         />
-        <Button title="Confirmar" onPress={() => props.navigation.navigate('RegistrarAnimal', {userId: props.route.params.userId, valueFecha: chosenDate})} />      
+        <Button title="Confirmar" onPress={() => {
+          if(props.route.params.esProtectora == "No"){
+            props.navigation.navigate('RegistrarAnimalPropietario', {userId: props.route.params.userId, valueFecha: chosenDate})}
+          else{
+            props.navigation.navigate('RegistrarAnimal', {userId: props.route.params.userId, valueFecha: chosenDate})}
+
+          }
+          }/>      
     </View>
 
   
