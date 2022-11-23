@@ -227,7 +227,7 @@ const FiltradoAnimales = (props) => {
           onPress={() => {handleColorChangeLocalizacion('comunidadValenciana')}}
           style={[styles.buttonLocalizacion, estado.comunidadValencianaPressed ? {backgroundColor: 'blue'} : {backgroundColor: 'white'}]}>
             <Text style={styles.buttonText}>
-                Comunidad Valenciana
+                 Valencia
             </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -289,7 +289,7 @@ const FiltradoAnimales = (props) => {
   }, 
   buttonLocalizacion : {
     elevation: 8,
-    width:130,
+    width:85,
     height: 60, 
     padding: 6,
     marginTop: 20,
