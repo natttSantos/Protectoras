@@ -1,7 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, LogBox, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack'; 
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { useFonts } from 'expo-font';
 
 import AppLoading from 'expo-app-loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -77,6 +78,10 @@ function MyStack (){
   )
 }
 export default function App() {
+  useFonts({
+    InterRegular: require('./assets/fonts/Inter-Regular.ttf'),
+    DMSans: require('./assets/fonts/DMSans-Bold.ttf'),
+  })
   
   const [appReady, setAppReady] = useState(false);
   const [storedCredentials, setStoredCredentials] = useState(""); 

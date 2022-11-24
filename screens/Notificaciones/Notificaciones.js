@@ -42,11 +42,13 @@ const styles = StyleSheet.create({
     notisNoLeidas: {
         fontWeight: 'bold',
         fontSize: 18,
+        fontFamily: 'DMSans',
         marginVertical: 10
     },
     notisLeidas: {
         fontSize: 18,
-        marginVertical: 10
+        marginVertical: 10,
+        fontFamily: 'DMSans',
     }
 })
 export default Notificaciones;

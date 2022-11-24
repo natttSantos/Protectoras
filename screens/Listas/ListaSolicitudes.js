@@ -1,16 +1,16 @@
 import firebase from '../../database/firebase.js';
 import React, { useState, useEffect, useContext } from 'react';
-import {ScrollView, View, StyleSheet, Alert, Text} from 'react-native';
+import {ScrollView, View, StyleSheet, Alert, Modal, TouchableOpacity, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import Solicitud from '../../components/Solicitud.js';
-import InformacionSolicitud from '../InformacionSolicitud.js';
-import { onPress } from 'deprecated-react-native-prop-types/DeprecatedTextPropTypes.js';
 import { CredentialsContext } from '../../components/CredentialsContext';
+import { ImageBackground } from 'react-native';
 
 const ListaSolicitudes = (props) => {
 
     const [solicitudes, setSolicitudes] = useState([])
     const {storedCredentials, setStoredCredentials} = useContext(CredentialsContext);
+    const [modalVisible, setModalVisible] = useState(false);
 
     const getAllSolicitudes = (storedCredentials) => {
         firebase.db.collection('solicitudes').where("id_protectora", "==", storedCredentials).
@@ -27,27 +27,35 @@ const ListaSolicitudes = (props) => {
                 })
             })
             setSolicitudes(solicitudesAux)
-            console.log(solicitudesAux.length)
         })
     }
 
-    const aceptarSolicitud = async(solicitud) => {
+    const aceptarSolicitud = async (solicitud, nombreAnimal) => {
         await firebase.db.collection('animales').doc(solicitud.id_animal).set({
             adoptado: true,
             id_adoptante: solicitud.id_usuario
         }, {merge: true})
 
-        await firebase.db.collection('solicitudes').doc(solicitud.id).set({
-            solucionada: true
-        }, {merge: true})
+        const solicitudesASolucionar = await firebase.db.collection('solicitudes').where("id_animal", "==", solicitud.id_animal).get()
+        solicitudesASolucionar.docs.map(doc => {
+            if(doc.ref.id != solicitud.id) {
+                firebase.db.collection('notificaciones').add({
+                    id_usuario: doc.data().id_usuario,
+                    mensaje: "Tu solicitud de adopción de " + nombreAnimal + " ha sido rechazada ",
+                    leido: false
+                })
+            }
+            doc.ref.set({
+                solucionada: true
+            }, {merge: true})
+        })
     }
 
     const aceptar = (aceptarIndex, nombreAnimal) => {
         Alert.alert("Información", "¿Está seguro que quiere aceptar la solicitud de adopción?", [
             {text: "Confirmar", 
             onPress: () => {
-                aceptarSolicitud(solicitudes[aceptarIndex]);
-                setSolicitudes(solicitudes.filter((solicitud, index) => index != aceptarIndex))
+                aceptarSolicitud(solicitudes[aceptarIndex], nombreAnimal);
             }}, 
             {text: "Cancelar"}
         ])
@@ -80,23 +88,50 @@ const ListaSolicitudes = (props) => {
         })
     }
 
-    const verInformacion = (index) => {
-        props.navigation.navigate('InformacionSolicitud', {id_animal: solicitudes[index].id_animal, id_usuario: solicitudes[index].id_usuario})
+    const verInformacionUsuario = (index) => {
+        props.navigation.navigate('PerfilUsuario', {userId: solicitudes[index].id_usuario})
     }
+
+    const verInformacionAnimal = (index) => {
+        props.navigation.navigate('PerfilAnimal', {animalId: solicitudes[index].id_animal})
+    }
+
     useEffect(() => {
-        console.log(storedCredentials)
         getAllSolicitudes(storedCredentials)
     }, [])
 
     return (
         <ScrollView>
+            <View style={styles.centeredView}>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                    setModalVisible(!modalVisible);
+                    }}
+                >
+                    <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>Hello World!</Text>
+                        <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => setModalVisible(!modalVisible)}
+                        >
+                        <Text style={styles.textStyle}>Hide Modal</Text>
+                        </TouchableOpacity>
+                    </View>
+                    </View>
+                </Modal>
+            </View>
             {solicitudes.map((solicitud, index) => {
-                console.log(solicitud.id)
                 return (
                     <View
                     key={solicitud.id}
                     style={styles.container}>
-                        <Solicitud solicitud={solicitud} verInformacion={() => verInformacion(index)}
+                        <Solicitud solicitud={solicitud} verInformacionUsuario={() => verInformacionUsuario(index)}
+                        verInformacionAnimal={() => verInformacionAnimal(index)}
                         declinar={(nombreAnimal) => declinar(index, nombreAnimal)} aceptar={(nombreAnimal) => aceptar(index, nombreAnimal)}/>
                     </View>
                 )
@@ -107,6 +142,28 @@ const ListaSolicitudes = (props) => {
 
 
 const styles = StyleSheet.create({
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+      },
+      modalView: {
+        margin: 20,
+        width: '100%',
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+      },
     container: {
         flexDirection: 'row',
         marginHorizontal: 20,

@@ -1,7 +1,7 @@
 import firebase from '../../database/firebase.js';
 import React, { useEffect, useState, useContext } from "react";
 import Icon from 'react-native-vector-icons/Ionicons'
-import {View, ActivityIndicator, Button} from "react-native"
+import {View, ActivityIndicator, Image} from "react-native"
 
 import PerfilProtectora from '../Perfiles/PerfilProtectora';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -80,7 +80,16 @@ const SesionProtectora = (props) => {
 
     return (
 
-      <Tab.Navigator>
+      <Tab.Navigator
+      screenOptions={{
+        "tabBarShowLabel": false,
+        "tabBarStyle": [
+          {
+            "display": "flex"
+          },
+          null
+        ]
+      }}>
         <Tab.Screen name = 'Home' component = {ListaAnimalesProtectora} 
           options={{
             headerShown: false,
@@ -96,20 +105,21 @@ const SesionProtectora = (props) => {
           options={{
             headerShown: false,
             tabBarIcon: ({ focused, color, size }) => {
-              let iconName = focused ? "add-circle" : "add-circle-outline";
+              let colorA = focused ? "#5B1D66" : "#FFB743";
   
-              return <Icon name={iconName} size={35} color={'blue'} />
+              return <Icon name={'add-circle-outline'} size={35} color={colorA} />
             }
           }}
           initialParams={{ userId: storedCredentials, isUsuario: false}}
         />
-              <Tab.Screen name = 'Animal' component = {MapaAnimalEncontradoProtectora} 
+        <Tab.Screen name = 'Animal' component = {MapaAnimalEncontradoProtectora} 
          options={{
           headerShown: false,
+          tabBarShowLabel: false,
           tabBarIcon: ({ focused, color, size }) => {
-            let iconName = focused ? "paw" : "paw-outline";
+            let colorA = focused ? "#5B1D66" : "#FFB743";
 
-            return <Icon name={iconName} size={35} color={'blue'} />
+            return <Icon name={"paw-outline"} size={35} color={colorA} />
           }
         }}
         initialParams={{ userId: storedCredentials, isUsuario:true}}
@@ -118,9 +128,9 @@ const SesionProtectora = (props) => {
           options={{
             headerShown: false,
             tabBarIcon: ({ focused, color, size }) => {
-              let iconName = focused ? "file-tray-full" : "file-tray-full-outline";
+              let colorA = focused ? "#5B1D66" : "#FFB743";
   
-              return <Icon name={iconName} size={35} color={'blue'} />
+              return <Icon name={"mail-outline"} size={35} color={colorA} />
             }
           }}
           initialParams={{ userId: storedCredentials, isUsuario: false}}
@@ -129,9 +139,9 @@ const SesionProtectora = (props) => {
           options={{
             headerShown: false,
             tabBarIcon: ({ focused, color, size }) => {
-              let iconName = focused ? "person-circle" : "person-circle-outline";
+              let colorA = focused ? "#5B1D66" : "#FFB743";
   
-              return <Icon name={iconName} size={35} color={'blue'} />
+              return <Icon name={"person-circle-outline"} size={35} color={colorA} />
             }
           }}
 

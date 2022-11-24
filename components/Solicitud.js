@@ -4,8 +4,7 @@ import {Image, View, StyleSheet, TouchableOpacity, Text, ActivityIndicator} from
 import Icon from 'react-native-vector-icons/Ionicons'
 
 export default function Solicitud(props) {
-    const defaultFoto = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fobjetivoligar.com%2Fperfil-sin-foto%2F&psig=AOvVaw0Sij3Yu__NpHdO4z-cOSD1&ust=1669302737538000&source=images&cd=vfe&ved=0CA8QjRxqFwoTCLDFt7fLxPsCFQAAAAAdAAAAABAE"
-
+    const defaultFoto = ""
     const [imagenAnimal, setImagenAnimal] = useState("")
     const [imagenUsuario, setImagenUsuario] = useState("")
     const [loading, setLoading] = useState(true)
@@ -30,14 +29,14 @@ export default function Solicitud(props) {
 
     const getNombreDeUsuario = async (id_usuario) => {
         const usuarioDado = await firebase.db.collection('users').doc(id_usuario).get()
-        const {usuario} = usuarioDado.data()
+        const {nombre} = usuarioDado.data()
+
+        setUsuario({usuario: nombre})
 
         await firebase
-              .st
-              .ref(`imagesUsuario/${id_usuario}`)
-              .getDownloadURL().then(function(url) {setImagenUsuario(url); setLoading(false)})
-        
-        setUsuario({usuario: usuario})
+            .st
+            .ref(`imagesUsuario/${id_usuario}`)
+            .getDownloadURL().then((function(url) {setImagenUsuario(url); setLoading(false)}), () => setImagenUsuario(""))
     }
 
     useEffect(() => {
@@ -54,8 +53,14 @@ export default function Solicitud(props) {
         <View
         style={styles.container}>
             <View style={styles.imagenContainer}>
-                <Image style={styles.imagen} source={{uri: imagenAnimal}} />
-                <Image style={styles.imagenPeque} source={imagenUsuario != "" ? {uri: imagenUsuario} : {uri: defaultFoto}} />
+                <TouchableOpacity
+                onPress={() => props.verInformacionAnimal()}>
+                    <Image style={styles.imagen} source={{uri: imagenAnimal}} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                onPress={() => props.verInformacionUsuario()}>
+                    <Image style={styles.imagenPeque} source={imagenUsuario != "" ? {uri: imagenUsuario} : require('../images/UsuarioSinFoto.jpg')} />
+                </TouchableOpacity>
             </View>
             <View style= {styles.soliContainer}>
                 <View style={styles.textContainer}>
