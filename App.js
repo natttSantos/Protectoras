@@ -10,8 +10,6 @@ import React, {useState} from 'react';
 import { CredentialsContext } from './components/CredentialsContext';
 import RootStack from './navigators/RootStack';
 
-LogBox.ignoreAllLogs();
-
 const Stack = createNativeStackNavigator()
 
  //Importamos los tres componentes creados: 
