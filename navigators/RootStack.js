@@ -193,43 +193,31 @@ const RootStack = () => {
                                     headerStyle: {
                                         backgroundColor: colors.amarillo
                                     },
-                                    headerTintColor: colors.moradoPrincipal,
                                     headerTransparent: true,
-                                    headerTitle: '',
-                                    headerTitleStyle: {
-                                        fontSize: 32,
-                                        fontWeight: 'bold',
-                                    } 
-                                    
+                                    headerTitle: '',                                    
                                     }}
                                 />
                                 <Stack.Screen
                                     name="RegistrarUsuario"
                                     component={RegistrarUsuario}
-                                    options={{
+                                    options={{ 
                                         headerStyle: {
-                                            backgroundColor: colors.amarillo
+                                        backgroundColor: colors.amarillo
                                         },
-                                        headerTintColor: colors.moradoPrincipal,
                                         headerTransparent: true,
-                                        headerTitle: '',
-                                        headerTitleStyle: {
-                                            fontSize: 32,
-                                            fontWeight: 'bold',
-                                        } 
-                                    }}
+                                        headerTitle: '',                                    
+                                        }}
                                 />
                                 <Stack.Screen
                                     name="AltaProtectora"
                                     component={AltaProtectora}
                                     options={{ 
-                                        headerSytle: {
-                                            backgroundColor: 'transparent'
+                                        headerStyle: {
+                                            backgroundColor: colors.blanco
                                         },
-                                        headerTransparent: false,
-                                        headerTintColor: '#5b1d66',
-                                        headerTitle: 'Dar de alta tu protectora' 
-                                    }}
+                                        headerTransparent: true,
+                                        headerTitle: '',                                    
+                                        }}
                                 />
                             </>
                             )

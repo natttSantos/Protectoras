@@ -8,6 +8,11 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 
 
+//Bibliotecas colores CSS
+import {colors} from '../../components/Color';
+import { numberOfLines } from "deprecated-react-native-prop-types/DeprecatedTextInputPropTypes";
+import { color } from "react-native-elements/dist/helpers";
+
 const AltaProtectora = (props) => {
     DropDownPicker.setListMode("SCROLLVIEW");
     const [loading, setLoading] = useState(true);
@@ -194,13 +199,14 @@ const AltaProtectora = (props) => {
     if(!loading) {
     return(
         <ScrollView style={styles.container}> 
-            <Text style={styles.title}> Protectora </Text>
+            <Text style={styles.titulo}> Da de alta tu protectora </Text>
             <Text style={{marginTop: 15, color: 'darkred'}}> * Campo obligatorio </Text>
             <View 
             style={styles.inputGroup}> 
                 <TextInput 
                 style={styles.inputText}
                 placeholder="* Nombre"
+                placeholderTextColor={colors.moradoSecundario}
                 onChangeText={(value) => handleChangeText('nombre', value)}
                 />
             </View>
@@ -210,6 +216,7 @@ const AltaProtectora = (props) => {
                 style={styles.inputText}
                 secureTextEntry={true}
                 placeholder="* Contraseña"
+                placeholderTextColor={colors.moradoSecundario}
                 onChangeText={(value) => handleChangeText('contraseña', value)}
                 />
             </View>
@@ -218,6 +225,7 @@ const AltaProtectora = (props) => {
                 <TextInput 
                     style={styles.inputText}
                     placeholder="* Email"
+                    placeholderTextColor={colors.moradoSecundario}
                     onChangeText={(value) => handleChangeText('email', value)}
                     />
             </View>
@@ -241,6 +249,7 @@ const AltaProtectora = (props) => {
                 <TextInput 
                     style={styles.inputText}
                     placeholder="* Dirección"
+                    placeholderTextColor={colors.moradoSecundario}
                     onChangeText={(value) => handleChangeText('direccion', value)}
                     />
             </View>
@@ -249,6 +258,7 @@ const AltaProtectora = (props) => {
                 <TextInput 
                     style={styles.inputText}
                     placeholder="* URL de la página web"
+                    placeholderTextColor={colors.moradoSecundario}
                     onChangeText={(value) => handleChangeText('url', value)}
                     />
             </View>
@@ -257,6 +267,7 @@ const AltaProtectora = (props) => {
                 <TextInput 
                     style={styles.inputText}
                     placeholder="* Telefono"
+                    placeholderTextColor={colors.moradoSecundario}
                     onChangeText={(value) => handleChangeText('telefono', value)}
                     />
             </View>
@@ -265,6 +276,7 @@ const AltaProtectora = (props) => {
                 <TextInput                     
                     style={{fontSize: 17}}
                     placeholder="Descripcion (max. 200 caracteres)"
+                    placeholderTextColor={colors.moradoSecundario}
                     maxLength = {200}
                     multiline = {true}
                     onChangeText={(value) => {
@@ -303,7 +315,9 @@ function validatePasswordAndPhone (password, phone) {
 const styles = StyleSheet.create({
     container : {
         flex: 1, 
-        padding: 35
+        padding: 35,
+        backgroundColor: colors.blanco,
+        marginTop: 50
     },
     inputGroup: {
         fontSize: 20, 
@@ -311,14 +325,21 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         marginTop: 10, 
         borderBottomWidth: 2, 
-        borderBottomColor: '#cccccc'
+        borderBottomColor: '#cccccc',
     }, 
     inputText: {
-        fontSize: 17
+        fontSize: 17,
+        
     },
-    title : {
-        fontSize: 40,
-        fontWeight: "bold"
+    titulo : {
+        fontSize: 32,
+        fontWeight: 'bold',
+        color: colors.moradoPrincipal,
+        fontFamily: 'DMSans',
+        marginBottom: 10,
+        multiline: true
+
+        
     },
     descripcion : {
         height: 100,

@@ -108,7 +108,8 @@ const styles = StyleSheet.create({
         fontSize: 32,
         fontWeight: 'bold',
         marginBottom: 30,
-        color: colors.moradoPrincipal
+        color: colors.moradoPrincipal,
+        fontFamily: 'DMSans'
     },
     textFieldCircular: {
         width:320,
