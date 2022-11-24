@@ -1,8 +1,9 @@
 import React, {useState} from "react";
 import { View, Button, TextInput, StyleSheet, ScrollView, Text, Alert, TouchableOpacity} from "react-native";
-import { color } from "react-native-elements/dist/helpers/index.js";
 import firebase from '../../database/firebase.js';
 
+//Bibliotecas colores CSS
+import {colors} from '../../components/Color';
 const RegistrarUsuario = (props) => {
     
     const [state, setState] = useState({ //STATE ES UN OBJETO CON NOMBRE, EMAIL Y TLF
@@ -78,81 +79,81 @@ const RegistrarUsuario = (props) => {
     }
 
     return (
-        <ScrollView style={styles.container}>
-            <View>
-                <Text style={styles.title}> Registro </Text>
+            <View style={styles.container}>
+                <Text style={styles.titulo}> Registro </Text>
                 <TextInput 
-                    style={styles.inputText}
+                    style={styles.textFieldCircular}
                     placeholder="Nombre de usuario" 
                     onChangeText={(value) => handleChangeText('usuario', value)}
                 />
                 <TextInput 
-                    style={styles.inputText}
+                    style={styles.textFieldCircular}
                     placeholder="Email " 
                     onChangeText={(value) => handleChangeText('email', value)}
                 />
                 <TextInput 
-                    style={styles.inputText}
+                    style={styles.textFieldCircular}
                     secureTextEntry
                     placeholder="Contraseña (entre 4-8 caracteres)" 
                     onChangeText={(value) => handleChangeText('contraseña', value)}
                 />
                 <TextInput
-                    style={styles.inputText}
+                    style={styles.textFieldCircular}
                     keyboardType="numeric"
                     placeholder="Teléfono" 
                     onChangeText={(value) => handleChangeText('telefono', value)}
                 />
-                <TouchableOpacity 
-                    onPress={() => saveNewUser()}
-                    style={styles.button}>
-                        <Text style={styles.buttonText}>
-                            Registrar usuario
-                        </Text>
-                </TouchableOpacity>
+                <View style= {{  position: 'absolute', bottom: 0, alignSelf: 'center'}}>                    
+                    <TouchableOpacity 
+                        onPress={() => saveNewUser()}
+                        style={styles.botonCircularAmarillo}>
+                            <Text style={styles.botonTexto}>
+                                Registrar
+                            </Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-        </ScrollView>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
+    container : {
         flex: 1, 
-        padding: 35
-    }, 
-    inputGroup: {
-        fontSize: 20, 
-        flex: 1,
-        padding: 0,
-        marginBottom: 15, 
-        borderBottomWidth: 2, 
-        borderBottomColor: '#cccccc'
-    }, inputText: {
-        height: 40,
-        borderColor: "gray",
-        marginTop: 10,
-        paddingLeft: 10,
-        paddingRight: 10,
-        fontSize: 18,
-        width: "100%",
-        borderWidth: 1,
+        padding: 35,
+        backgroundColor: colors.amarillo,
+        marginTop: 50
     },
-      title: {
-        fontSize: 40,
+    titulo : {
+        fontSize: 32,
         fontWeight: 'bold',
-    },button : {
-        elevation: 8,
-        backgroundColor: "#6c91c2",
-        padding: 10,
-        marginTop: 20,
+        marginBottom: 30,
+        color: colors.moradoPrincipal
     },
-      buttonText: {
-        fontSize: 18,
-        colors: "#ffffff",
+    textFieldCircular: {
+        width:320,
+        height:50,
+        borderRadius: 25,
+        backgroundColor: colors.blanco,
+        fontSize: 16,
+        padding: 15,
+        marginBottom: 12
+      },
+      botonCircularAmarillo : {
+        backgroundColor: colors.amarillo,
+        borderColor: colors.blanco,
+        borderWidth: 2,
+        width:217,
+        height:47,
+        borderRadius: 25,
+        marginBottom: 100
+      },
+      botonTexto: {
+        fontSize: 20,
+        color: colors.blanco,
         fontWeight: "bold",
         alignSelf: "center",
-        textTransform: "uppercase"    
-    }
+        marginTop: 5
+      }
 })
 
 

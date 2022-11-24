@@ -195,23 +195,28 @@ const RootStack = () => {
                                     },
                                     headerTintColor: colors.moradoPrincipal,
                                     headerTransparent: true,
-                                    headerTitle: 'Inicia sesión',
+                                    headerTitle: '',
                                     headerTitleStyle: {
                                         fontSize: 32,
                                         fontWeight: 'bold',
                                     } 
                                     
-                                }}
+                                    }}
                                 />
                                 <Stack.Screen
                                     name="RegistrarUsuario"
                                     component={RegistrarUsuario}
                                     options={{
                                         headerStyle: {
-                                            backgroundColor: '#ffb743'
+                                            backgroundColor: colors.amarillo
                                         },
-                                        headerTintColor: '#fff',
-                                        headerTitle: 'Registro' 
+                                        headerTintColor: colors.moradoPrincipal,
+                                        headerTransparent: true,
+                                        headerTitle: '',
+                                        headerTitleStyle: {
+                                            fontSize: 32,
+                                            fontWeight: 'bold',
+                                        } 
                                     }}
                                 />
                                 <Stack.Screen
