@@ -10,6 +10,7 @@ import React, {useState} from 'react';
 import { CredentialsContext } from './components/CredentialsContext';
 import RootStack from './navigators/RootStack';
 
+
 const Stack = createNativeStackNavigator()
 
  //Importamos los tres componentes creados: 
@@ -43,10 +44,11 @@ import Notificaciones from './screens/Notificaciones/Notificaciones';
 import FiltradoAnimales from './screens/Listas/FiltradoAnimales';
 
 
+
 function MyStack (){
   return (
     <Stack.Navigator>
-      <Stack.Screen name="PrincipalScreen" component={PrincipalScreen} options={{headerShown: false}}/>
+      <Stack.Screen name="PrincipalScreen" component={PrincipalScreen}/>
       <Stack.Screen name="AltaProtectora" component={AltaProtectora} />
       <Stack.Screen name="ListaAnimales" component={ListaAnimales} />
       <Stack.Screen name="FiltradoAnimales" component={FiltradoAnimales} />
