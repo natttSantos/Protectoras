@@ -182,7 +182,7 @@ const RootStack = () => {
                                             backgroundColor: '#ffb743'
                                         },
                                         headerTintColor: '#fff',
-                                        headerTransparent: false,
+                                        headerTransparent: true,
                                         headerTitle: ''
                                     }}
                                 />
