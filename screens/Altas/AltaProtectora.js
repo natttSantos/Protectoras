@@ -1,6 +1,6 @@
 import { style } from "deprecated-react-native-prop-types/DeprecatedTextPropTypes";
 import React, {useEffect, useState} from "react";
-import { ScrollView, View, Text, StyleSheet, TextInput,ActivityIndicator } from "react-native";
+import { ScrollView, View, Text, StyleSheet, TextInput,ActivityIndicator, TouchableOpacity } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Button } from "react-native-elements";
 import firebase from '../../database/firebase';
@@ -10,7 +10,7 @@ import * as Location from 'expo-location';
 
 //Bibliotecas colores CSS
 import {colors} from '../../components/Color';
-import { numberOfLines } from "deprecated-react-native-prop-types/DeprecatedTextInputPropTypes";
+import { numberOfLines, placeholderTextColor } from "deprecated-react-native-prop-types/DeprecatedTextInputPropTypes";
 import { color } from "react-native-elements/dist/helpers";
 
 const AltaProtectora = (props) => {
@@ -198,9 +198,8 @@ const AltaProtectora = (props) => {
     }
     if(!loading) {
     return(
-        <ScrollView style={styles.container}> 
-            <Text style={styles.titulo}> Da de alta tu protectora </Text>
-            <Text style={{marginTop: 15, color: 'darkred'}}> * Campo obligatorio </Text>
+        <View style={styles.container}> 
+            <Text style={styles.titulo}> Da de alta tu protectora </Text>  
             <View 
             style={styles.inputGroup}> 
                 <TextInput 
@@ -209,9 +208,6 @@ const AltaProtectora = (props) => {
                 placeholderTextColor={colors.moradoSecundario}
                 onChangeText={(value) => handleChangeText('nombre', value)}
                 />
-            </View>
-            <View 
-            style={styles.inputGroup}> 
                 <TextInput 
                 style={styles.inputText}
                 secureTextEntry={true}
@@ -219,19 +215,14 @@ const AltaProtectora = (props) => {
                 placeholderTextColor={colors.moradoSecundario}
                 onChangeText={(value) => handleChangeText('contraseña', value)}
                 />
-            </View>
-            <View 
-            style={styles.inputGroup}>
                 <TextInput 
                     style={styles.inputText}
                     placeholder="* Email"
                     placeholderTextColor={colors.moradoSecundario}
                     onChangeText={(value) => handleChangeText('email', value)}
                     />
-            </View>
-            <View>
                 <DropDownPicker
-                                style={{marginTop: 15, marginBottom: 15}}
+                                style={styles.dropDownPicker}
                                 placeholder="* Seleccione una localizacion"
                                 items={items}
                                 setItems={setItems}
@@ -243,38 +234,26 @@ const AltaProtectora = (props) => {
                                     handleChangeText('localizacion', value);
                                   }}
                             />
-            </View>
-            <View 
-            style={styles.inputGroup}>
                 <TextInput 
                     style={styles.inputText}
                     placeholder="* Dirección"
                     placeholderTextColor={colors.moradoSecundario}
                     onChangeText={(value) => handleChangeText('direccion', value)}
                     />
-            </View>
-            <View 
-            style={styles.inputGroup}>
                 <TextInput 
                     style={styles.inputText}
                     placeholder="* URL de la página web"
                     placeholderTextColor={colors.moradoSecundario}
                     onChangeText={(value) => handleChangeText('url', value)}
                     />
-            </View>
-            <View 
-            style={styles.inputGroup}>
                 <TextInput 
                     style={styles.inputText}
                     placeholder="* Telefono"
                     placeholderTextColor={colors.moradoSecundario}
                     onChangeText={(value) => handleChangeText('telefono', value)}
                     />
-            </View>
-            <View 
-            style={styles.descripcion}>
                 <TextInput                     
-                    style={{fontSize: 17}}
+                    style={styles.descripcion}
                     placeholder="Descripcion (max. 200 caracteres)"
                     placeholderTextColor={colors.moradoSecundario}
                     maxLength = {200}
@@ -288,13 +267,28 @@ const AltaProtectora = (props) => {
                     }}
                     />
             </View>
-            <View style={{marginTop: 15}}>
-            <Button title="Selecciona una imagen" onPress={() =>  openGallery()} /> 
-                <Button 
-                title="Dar de alta" 
-                onPress={() => {saveNewProtectora()}}/>
-            </View>
-        </ScrollView>
+            <View> 
+                <TouchableOpacity 
+                    onPress={() => 
+                        openGallery()
+                    }
+                    style={styles.botonCircularBlancoMorado}>
+                        <Text style={styles.botonTextoMorado}>
+                            Añadir imagen de perfil
+                        </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity 
+                    onPress={() => 
+                        saveNewProtectora()
+                    }
+                    style={styles.botonCircularAmarillo}>
+                        <Text style={styles.botonTextoAmarillo}>
+                            Enviar
+                        </Text>
+                </TouchableOpacity>
+            </View> 
+        </View>
     )
   }
 }
@@ -320,31 +314,77 @@ const styles = StyleSheet.create({
         marginTop: 50
     },
     inputGroup: {
-        fontSize: 20, 
-        padding: 0,
         marginBottom: 10,
         marginTop: 10, 
-        borderBottomWidth: 2, 
-        borderBottomColor: '#cccccc',
     }, 
     inputText: {
-        fontSize: 17,
+        fontSize: 16,
+        color: colors.moradoPrincipal,
+        borderBottomWidth: 1,
+        borderBottomColor: colors.moradoPrincipal,
+        marginBottom: 10,
+        marginTop: 10
         
     },
     titulo : {
-        fontSize: 32,
+        fontSize: 27,
         fontWeight: 'bold',
         color: colors.moradoPrincipal,
         fontFamily: 'DMSans',
-        marginBottom: 10,
-        multiline: true
+        marginBottom: 10
 
         
     },
     descripcion : {
         height: 100,
         borderWidth: 2,
-        borderColor: '#cccccc'
-    }
+        borderColor: colors.moradoPrincipal,
+        multiline: true,
+        textAlignVertical: "top",
+        color: colors.moradoPrincipal,
+        fontSize: 16,
+        padding: 10,
+        marginBottom: 10
+    },
+    dropDownPicker : {
+        marginBottom: 15,
+        marginTop: 15,
+        borderRadius: 25,
+        borderColor: colors.moradoPrincipal,
+        borderWidth: 2
+    },
+    botonCircularAmarillo : {
+        backgroundColor: colors.amarillo,
+        borderColor: colors.blanco,
+        borderWidth: 2,
+        width:300,
+        height:50,
+        borderRadius: 25,
+        alignSelf: "center"
+      },
+    botonCircularBlancoMorado : {
+        backgroundColor: colors.blanco,
+        borderColor: colors.moradoPrincipal,
+        borderWidth: 2,
+        width:300,
+        height:50,
+        borderRadius: 25,
+        alignSelf: "center",
+        marginBottom: 20
+      },
+    botonTextoAmarillo: {
+        fontSize: 20,
+        color: colors.blanco,
+        fontWeight: "bold",
+        alignSelf: "center",
+        marginTop: 5
+      },
+    botonTextoMorado: {
+        fontSize: 20,
+        color: colors.moradoPrincipal,
+        fontWeight: "bold",
+        alignSelf: "center",
+        marginTop: 5
+      }
 })
 export default AltaProtectora;
