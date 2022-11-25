@@ -225,7 +225,13 @@ const AltaProtectora = (props) => {
                     <DropDownPicker
                                     style={styles.dropDownPicker}
                                     placeholder="* Seleccione una localizacion"
+                                    placeholderStyle={{
+                                        color: colors.moradoSecundario
+                                      }}
                                     items={items}
+                                    listItemLabelStyle={{
+                                        color: colors.moradoSecundario
+                                    }}
                                     setItems={setItems}
                                     open={open}
                                     setOpen={setOpen}
@@ -353,13 +359,16 @@ const styles = StyleSheet.create({
         marginTop: 15,
         borderRadius: 25,
         borderColor: colors.moradoPrincipal,
-        borderWidth: 2
+        borderWidth: 2,
+        fontStyle : {
+            color: colors.amarillo
+        }
     },
     botonCircularAmarillo : {
         backgroundColor: colors.amarillo,
         borderColor: colors.blanco,
         borderWidth: 2,
-        width:300,
+        width:260,
         height:50,
         borderRadius: 25,
         alignSelf: "center"
@@ -368,7 +377,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.blanco,
         borderColor: colors.moradoPrincipal,
         borderWidth: 2,
-        width:300,
+        width:260,
         height:50,
         borderRadius: 25,
         alignSelf: "center",
@@ -384,7 +393,6 @@ const styles = StyleSheet.create({
     botonTextoMorado: {
         fontSize: 20,
         color: colors.moradoPrincipal,
-        fontWeight: "bold",
         alignSelf: "center",
         marginTop: 5
       }
