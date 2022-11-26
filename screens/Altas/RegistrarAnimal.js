@@ -1,5 +1,5 @@
 import React, {useEffect, useState } from "react";
-import { ScrollView, View, Text, StyleSheet, TextInput,TouchableOpacity } from "react-native";
+import { ScrollView, View, Text, StyleSheet, TextInput,TouchableOpacity, Image } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Button, CheckBox } from "react-native-elements";
 import firebase from '../../database/firebase';
@@ -204,131 +204,180 @@ const RegistrarAnimal = (props) => {
      
 
     return(
-        <ScrollView style={styles.container}> 
-            <Text style={styles.titulo}> Registrar Animal</Text>
-            <View style={styles.container}> 
-                <TextInput 
-                style={styles.textField}
-                placeholder="* Nombre"
-                placeholderTextColor={colors.moradoSecundario}
-                onChangeText={(value) => handleChangeText('nombre', value)}
-                />
-            <View style={style.botonesHorizontales}>
+      <ScrollView style={styles.container} contentContainerStyle={{justifyContent: 'space-evenly'}}> 
+          <Text style={styles.titulo}> Registrar Animal</Text>
+          <TextInput 
+            style={styles.textField}
+            placeholder="* Nombre"
+            placeholderTextColor={colors.moradoSecundario}
+            onChangeText={(value) => handleChangeText('nombre', value)}
+          />
+          <View style={styles.botonesHorizontales}>
+            <View>
+              <Text style={styles.caracteristicas}> Gato </Text>
               <TouchableOpacity style={styles.botonPropiedades}>
-                <Text>
-                  Hola
-                </Text>
+                  <Image
+                    source={require('../../images/Gato.png')}
+                    style={styles.image}
+                  />
+                </TouchableOpacity>
+            </View>
+            <View>
+              <Text style={styles.caracteristicas}> Perro </Text>
+              <TouchableOpacity style={styles.botonPropiedades}>
+                <Image
+                  source={require('../../images/Perro.png')}
+                  style={styles.image}
+                />
               </TouchableOpacity>
             </View>
-              <Text style={{fontSize: 18, marginBottom: 10}}> {props.route.params.valueFecha}</Text>   
-              <Button title="* Seleccione una fecha Nacimiento" onPress={() => props.navigation.navigate('FechaNacimientoAnimal', {userId: props.route.params.userId, esProtectora: "No"})} />      
-              <TextInput 
-                    style={styles.inputs}
-                    placeholder="Edad (en años)"
-                    onChangeText={(value) => handleChangeText('edad', value)}
-                    />
-              <TextInput 
-                    style={styles.inputs}
-                    placeholder="Peso (en kg)"
-                    onChangeText={(value) => handleChangeText('peso', value)}
-                    />
-              
-              <DropDownPicker
-                                style={{marginTop: 20, marginBottom: 30}}
-                                placeholder="* Tipo"
-                                items={tipo}
-                                setItems={setTipo}
-                                open={tipoOpen}
-                                setOpen={setTipoOpen}
-                                value={tipoValue}
-                                setValue={setTipoValue}
-                                onChangeValue={(value) => {
-                                    handleChangeText('tipo', value);
-                                  }}
-                            />
-            <TextInput 
-                    style={styles.inputs}
-                    placeholder="* Raza"
-                    onChangeText={(value) => handleChangeText('raza', value)}
-                    />
-            
-            <DropDownPicker
-                                style={{marginTop: 10, marginBottom: 15}}
-                                placeholder="* Sexo"
-                                items={sexo}
-                                setItems={setSexo}
-                                open={sexoOpen}
-                                setOpen={setSexoOpen}
-                                value={sexoValue}
-                                setValue={setSexoValue}
-                                onChangeValue={(value) => {
-                                    handleChangeText('sexo', value);
-                                  }}
-                            />
-                <CheckBox
-                  title="Vacunado"
-                  checked={vacunado}
-                  checkedColor="blue"
-                  onPress={() => setVacunado(!vacunado)}           
-                />
-                <CheckBox
-                  title="MicroChip"
-                  checked={microChip}
-                  checkedColor="blue"
-                  onPress={() => setMicroChip(!microChip)}
-                />
-                 <DropDownPicker
-                                style={{marginTop: 35, marginBottom: 15}}
-                                placeholder="Nivel Actividad"
-                                items={nivel}
-                                setItems={setNivel}
-                                open={nivelOpen}
-                                setOpen={setNivelOpen}
-                                value={nivelValue}
-                                setValue={setNivelValue}
-                                onChangeValue={(value) => {
-                                    handleChangeText('nivelActividad', value);
-                                  }}
-                            />
-                
-                <TextInput 
-                    style={styles.descripcion}
-                    placeholder="* Descripción (max 200 caracteres)"
-                    onChangeText={(value) => handleChangeText('descripcion', value)}
-                    />
-
-        <Button title="* Selecciona una imagen" onPress={() =>  openGallery()} />      
-
-                <TouchableOpacity 
-                    onPress={() => {saveNewUser()}}
-                    style={styles.button}>
-                        <Text style={styles.buttonText}>
-                            Dar de alta
-                        </Text>
+          </View>
+          <TouchableOpacity 
+            onPress={() => props.navigation.navigate('FechaNacimientoAnimal', {userId: props.route.params.userId, esProtectora: "No"})}
+            style={styles.fechaNacimiento}>
+            <View style={styles.botonFechaNacimiento}>
+              <Text style={styles.texto}> * Fecha de nacimiento </Text>
+              <Image
+                source={require('../../images/Calendario.png')}
+                style={styles.image}
+              />
+            </View>
+          </TouchableOpacity>   
+          <TextInput 
+            style={styles.textField}
+            placeholder="Edad (en años)"
+            placeholderTextColor={colors.moradoSecundario}
+            onChangeText={(value) => handleChangeText('edad', value)}
+          />
+          <TextInput 
+            style={styles.textField}
+            placeholder="Peso (en kg)"
+            placeholderTextColor={colors.moradoSecundario}
+            onChangeText={(value) => handleChangeText('peso', value)}
+          />
+          <DropDownPicker
+            style={{marginTop: 20, marginBottom: 30}}
+            placeholder="* Tipo"
+            items={tipo}
+            setItems={setTipo}
+            open={tipoOpen}
+            setOpen={setTipoOpen}
+            value={tipoValue}
+            setValue={setTipoValue}
+            onChangeValue={(value) => {
+                handleChangeText('tipo', value);
+              }}
+          />
+          <TextInput 
+            style={styles.textField}
+            placeholder="* Raza"
+            placeholderTextColor={colors.moradoSecundario}
+            onChangeText={(value) => handleChangeText('raza', value)}
+          />
+          <View style={styles.botonesHorizontales}>
+            <View>
+              <Text style={styles.caracteristicas}> Macho </Text>
+              <TouchableOpacity style={styles.botonPropiedades}>
+                  <Image
+                    source={require('../../images/Macho.png')}
+                    style={styles.image}
+                  />
                 </TouchableOpacity>
-        </View> 
-        </ScrollView>
+            </View>
+            <View>
+              <Text style={styles.caracteristicas}> Hembra </Text>
+              <TouchableOpacity style={styles.botonPropiedades}>
+                <Image
+                  source={require('../../images/Hembra.png')}
+                  style={styles.image}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <DropDownPicker
+            style={{marginTop: 10, marginBottom: 15}}
+            placeholder="* Sexo"
+            items={sexo}
+            setItems={setSexo}
+            open={sexoOpen}
+            setOpen={setSexoOpen}
+            value={sexoValue}
+            setValue={setSexoValue}
+            onChangeValue={(value) => {
+                handleChangeText('sexo', value);
+              }}
+          />
+              <CheckBox
+                title="Vacunado"
+                checked={vacunado}
+                checkedColor="blue"
+                onPress={() => setVacunado(!vacunado)}           
+              />
+              <CheckBox
+                title="MicroChip"
+                checked={microChip}
+                checkedColor="blue"
+                onPress={() => setMicroChip(!microChip)}
+              />
+                <DropDownPicker
+                              style={{marginTop: 35, marginBottom: 15}}
+                              placeholder="Nivel Actividad"
+                              items={nivel}
+                              setItems={setNivel}
+                              open={nivelOpen}
+                              setOpen={setNivelOpen}
+                              value={nivelValue}
+                              setValue={setNivelValue}
+                              onChangeValue={(value) => {
+                                  handleChangeText('nivelActividad', value);
+                                }}
+                          />
+              
+              <TextInput 
+                  style={styles.descripcion}
+                  placeholder="* Descripción (max 200 caracteres)"
+                  onChangeText={(value) => handleChangeText('descripcion', value)}
+                  />
+
+      <Button title="* Selecciona una imagen" onPress={() =>  openGallery()} />      
+
+              <TouchableOpacity 
+                  onPress={() => {saveNewUser()}}
+                  style={styles.button}>
+                      <Text style={styles.buttonText}>
+                          Dar de alta
+                      </Text>
+              </TouchableOpacity>
+      </ScrollView>
     )
 }
 
 const styles = StyleSheet.create({
     container : {
       flex: 1, 
-      padding: 15,
-      backgroundColor: colors.blanco,
-      //height: 1150
+      padding: 35,
+      backgroundColor: colors.blanco
     },
     textField: {
+      marginTop: 20,
       borderWidth: 1,
       borderBottomColor: colors.moradoPrincipal,
       borderRightColor: colors.blanco,
       borderLeftColor: colors.blanco,
       borderTopColor: colors.blanco,
       fontSize: 16,
-      color: colors.moradoSecundario
+      color: colors.moradoPrincipal,
+      fontFamily: 'InterRegular'
+    },
+    texto: {
+      fontFamily: 'InterRegular',
+      color: colors.moradoSecundario,
+      fontSize: 16
     },
     botonesHorizontales : {
-      marginTop: 10
+      marginTop: 20,
+      flexDirection: 'row',
+      justifyContent: 'space-evenly',
     },
     botonPropiedades: {
       width: 63,
@@ -336,7 +385,32 @@ const styles = StyleSheet.create({
       borderRadius: 19,
       borderColor: colors.amarillo,
       backgroundColor: colors.blanco,
-      borderWidth: 2
+      borderWidth: 2,
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    botonFechaNacimiento: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginLeft: 5,
+      marginRight: 15
+    },
+    fechaNacimiento: {
+      marginTop: 20,
+      height: 49,
+      borderRadius: 24.5,
+      borderColor: colors.moradoPrincipal,
+      borderWidth: 1,
+      justifyContent: 'center'
+    },
+    image: {
+      width: 22,
+      height: 22
+    },
+    caracteristicas: {
+      fontFamily: 'InterRegular',
+      color: colors.amarillo,
+      alignSelf: 'center'
     },
     descripcion : {
         height: 60, 
@@ -351,8 +425,9 @@ const styles = StyleSheet.create({
     titulo : {
         fontSize: 32,
         fontWeight: "bold",
-        marginBottom: 30,
-        color: colors.moradoPrincipal
+        marginBottom: 10,
+        color: colors.moradoPrincipal,
+        fontFamily: "DMSans"
     },
     inputs : {
         height: 40,
