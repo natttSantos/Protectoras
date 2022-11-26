@@ -143,9 +143,9 @@ useEffect(() => {
          options={{
           headerShown: false,
           tabBarIcon: ({ focused, color, size }) => {
-            let iconName = focused ? "home" : "home-outline";
-
-            return <Icon name={iconName} size={35} color={'blue'} />
+            let colorA = focused ? "#5B1D66" : "#FFB743";
+  
+              return <Icon name={'home-outline'} size={35} color={colorA} />
           }
         }}
         initialParams={{userId: storedCredentials, userName: nombreUsuario, isUsuario:true, animales:animales}}
@@ -154,9 +154,9 @@ useEffect(() => {
          options={{
           headerShown: false,
           tabBarIcon: ({ focused, color, size }) => {
-            let iconName = focused ? "search" : "search-outline";
-
-            return <Icon name={iconName} size={35} color={'blue'} />
+            let colorA = focused ? "#5B1D66" : "#FFB743";
+  
+              return <Icon name={'search-outline'} size={35} color={colorA} />
           }
         }}
         initialParams={{ userId: storedCredentials, isUsuario:true, protectoras:protectoras}}
@@ -165,9 +165,9 @@ useEffect(() => {
          options={{
           headerShown: false,
           tabBarIcon: ({ focused, color, size }) => {
-            let iconName = focused ? "paw" : "paw-outline";
-
-            return <Icon name={iconName} size={35} color={'blue'} />
+            let colorA = focused ? "#5B1D66" : "#FFB743";
+  
+              return <Icon name={'paw-outline'} size={35} color={colorA} />
           }
         }}
         initialParams={{ userId: storedCredentials, isUsuario:true}}
@@ -177,9 +177,9 @@ useEffect(() => {
          options={{
           headerShown: false,
           tabBarIcon: ({ focused, color, size }) => {
-            let iconName = focused ? "add-circle" : "add-circle-outline";
-
-            return <Icon name={iconName} size={35} color={'blue'} />
+            let colorA = focused ? "#5B1D66" : "#FFB743";
+  
+              return <Icon name={'add-circle-outline'} size={35} color={colorA} />
           }
         }}
         initialParams={{ userId: storedCredentials, isUsuario:true}}
@@ -187,10 +187,11 @@ useEffect(() => {
       <Tab.Screen name = 'Perfil' component = {PerfilUsuario} 
         options={{
           headerShown: false,
+          tabBarShowLabel: false,
           tabBarIcon: ({ focused, color, size }) => {
-            let iconName = focused ? "person-circle" : "person-circle-outline";
-
-            return <Icon name={iconName} size={35} color={'blue'} />
+            let colorA = focused ? "#5B1D66" : "#FFB743";
+  
+              return <Icon name={'person-circle-outline'} size={35} color={colorA} />
           }
         }}
         initialParams={{ userId: storedCredentials, canEdit: true }}/>
