@@ -6,7 +6,8 @@ import firebase from '../../database/firebase';
 import DatePicker from 'react-native-modern-datepicker';
 import * as ImagePicker from 'expo-image-picker';
 
-
+import { colors } from '../../components/Color';
+import { style } from "deprecated-react-native-prop-types/DeprecatedTextPropTypes";
 
 
 const RegistrarAnimal = (props) => {
@@ -204,14 +205,21 @@ const RegistrarAnimal = (props) => {
 
     return(
         <ScrollView style={styles.container}> 
-            <Text style={styles.title}> Registrar Animal</Text>
+            <Text style={styles.titulo}> Registrar Animal</Text>
             <View style={styles.container}> 
                 <TextInput 
-                style={styles.inputs}
+                style={styles.textField}
                 placeholder="* Nombre"
+                placeholderTextColor={colors.moradoSecundario}
                 onChangeText={(value) => handleChangeText('nombre', value)}
                 />
-            
+            <View style={style.botonesHorizontales}>
+              <TouchableOpacity style={styles.botonPropiedades}>
+                <Text>
+                  Hola
+                </Text>
+              </TouchableOpacity>
+            </View>
               <Text style={{fontSize: 18, marginBottom: 10}}> {props.route.params.valueFecha}</Text>   
               <Button title="* Seleccione una fecha Nacimiento" onPress={() => props.navigation.navigate('FechaNacimientoAnimal', {userId: props.route.params.userId, esProtectora: "No"})} />      
               <TextInput 
@@ -305,9 +313,30 @@ const RegistrarAnimal = (props) => {
 
 const styles = StyleSheet.create({
     container : {
-      flex: 2, 
-      padding: 35, 
-      height: 1150
+      flex: 1, 
+      padding: 15,
+      backgroundColor: colors.blanco,
+      //height: 1150
+    },
+    textField: {
+      borderWidth: 1,
+      borderBottomColor: colors.moradoPrincipal,
+      borderRightColor: colors.blanco,
+      borderLeftColor: colors.blanco,
+      borderTopColor: colors.blanco,
+      fontSize: 16,
+      color: colors.moradoSecundario
+    },
+    botonesHorizontales : {
+      marginTop: 10
+    },
+    botonPropiedades: {
+      width: 63,
+      height: 38,
+      borderRadius: 19,
+      borderColor: colors.amarillo,
+      backgroundColor: colors.blanco,
+      borderWidth: 2
     },
     descripcion : {
         height: 60, 
@@ -318,9 +347,12 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 10,
         borderColor: 'black'
-    }, title : {
-        fontSize: 40,
-        fontWeight: "bold"
+    }, 
+    titulo : {
+        fontSize: 32,
+        fontWeight: "bold",
+        marginBottom: 30,
+        color: colors.moradoPrincipal
     },
     inputs : {
         height: 40,
