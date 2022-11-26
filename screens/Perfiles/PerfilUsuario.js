@@ -1,6 +1,7 @@
 
 import firebase from '../../database/firebase.js';
 import React, { useEffect, useState, useContext } from "react";
+import { Appbar} from 'react-native-paper';
 import {
   ScrollView,
   Button,
@@ -12,13 +13,16 @@ import {
   Text
 } from "react-native";
 import { TouchableOpacity } from 'react-native';
+import {colors} from '../../components/Color';
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CredentialsContext } from "../../components/CredentialsContext";
+import { color } from 'react-native-elements/dist/helpers/index.js';
 
 const PerfilUsuario = (props) => {
-  const initialState = {
+  
 
+  const initialState = {
     usuario: "",
     email: "",
     telefono: "",
@@ -26,6 +30,14 @@ const PerfilUsuario = (props) => {
     contraseña: "",
     alta: "",
   }
+  const initialStatePerfilAdoptar = {
+    nombre:"",
+    apellidos:"",
+    localizacion:"",
+    dni:"",
+    n_animales:"",
+    
+  };
 
   const initialStatee = {
     imageFirebase: "a",
@@ -37,6 +49,7 @@ const PerfilUsuario = (props) => {
 
   const [cosas, setState] = useState(initialStatee);
   const [usuario, setUsario] = useState(initialState);
+  const [perfilAdoptar, setPerfilAdoptar] = useState(initialStatePerfilAdoptar);
   const [loading, setLoading] = useState(true);
 
   const handleTextChange = (value, prop) => {
@@ -50,7 +63,9 @@ const PerfilUsuario = (props) => {
     console.log(usuario)
     setUsario({ ...usuario, id: doc.id });
     setLoading(false);
-
+    if (usuario.alta == "Si"){
+      setPerfilAdoptar({ ...usuario, id: doc.id });
+    }
     firebase
       .st
       .ref(`imagesUsuario/${storedCredentials}`)
@@ -61,12 +76,13 @@ const PerfilUsuario = (props) => {
         });
       });
   };
+
   const checkImage = () => {
     const { imageFirebase } = cosas;
     if (cosas != "") {
       return (
         <Image
-          style={{ width: 300, height: 300 }}
+          style={styles.image}
           source={require('../../images/gatitos.jpg')}
         />
       );
@@ -75,7 +91,7 @@ const PerfilUsuario = (props) => {
     else {
 
       <Image
-        style={{ width: 300, height: 300 }}
+        style={styles.image}
         source={{ uri: imageFirebase }}
       />
     }
@@ -108,60 +124,60 @@ const PerfilUsuario = (props) => {
 
   //<Image source={require('../images/perfilUsuario.jpg')} style={styles.image}/>
   return (
-    <ScrollView style={styles.container}>
-      <View>
-        {checkImage()}
-        <Text style={styles.texto} >
-          {"Nombre de usuario: " + usuario.usuario}
-        </Text>
-        <Text style={styles.texto} >
-          {"Email: " + usuario.email}
-        </Text>
-        <Text style={styles.texto} >
-          {"Telefono: " + usuario.telefono}
-        </Text>
-        {props.route.params.canEdit ?
-          <>
-          <TouchableOpacity
-            onPress={clearLogin}
-            style={styles.button}
-          >
-            <Text style={styles.buttonText}> Cerrar sesión </Text>
-          </TouchableOpacity>
-          <Button
-              onPress={() => {
-                if (usuario.alta == "No")
-                  props.navigation.navigate('AltaAdoptar', { userId: storedCredentials });
-                else
-                  alert("Ya se ha dado de alta");
-              }}
-              title="Dar de alta para adoptar"
-              color="#841584" 
-          />
-          <Button
-              onPress={() => {
-                if (usuario.alta == "Si")
-                  props.navigation.navigate('PerfilAdoptar', { userId: storedCredentials });
-                else
-                  alert("Primero debe sarse de alta");
-              }}
-              title="Perfil de Adopción"
-              color="#841584" 
-          />
-          <Button
-              onPress={() => {
+    <View style={styles.container}>
+
+    <Appbar.Header style={styles.appBar}>
+        <Appbar.Content title="" />
+        <Appbar.Action icon="lead-pencil" size={40} onPress={() => {
                 if (usuario.alta == "Si")
                   props.navigation.navigate('ModificarUsuario', { userId: storedCredentials });
                 else
                   alert("Primero debe sarse de alta");
-              }}
-              title="Editar Perfil"
-              color="#841584" 
-          />
+              }} />
+        <Appbar.Action icon="logout" size={40} onPress={clearLogin} />
+  </Appbar.Header>
+
+
+      <View style={styles.textContainerGmailTlf}>
+        {checkImage()}
+        <Text style={styles.textoNombreUsuario} >{usuario.usuario}</Text>
+        <Text style={styles.textoGmailTlf}>{usuario.email}</Text>
+        <Text style={styles.textoGmailTlf}>{usuario.telefono}</Text>
+        </View>
+
+        <View style={styles.containerPerfilAdopcion}>
+        <Text style={styles.tituloPerfilAdopcionEnunciado}>Perfil de adopción</Text>
+        <Text style={styles.textoPerfilAdopcionEnunciado}>Nombre</Text>
+        <Text style={styles.textoPerfilAdopcion}>{perfilAdoptar.nombre}</Text>
+        <Text style={styles.textoPerfilAdopcionEnunciado}>Apellidos</Text>
+        <Text style={styles.textoPerfilAdopcion}>{perfilAdoptar.apellidos}</Text>
+        <Text style={styles.textoPerfilAdopcionEnunciado}>DNI</Text>
+        <Text style={styles.textoPerfilAdopcion}>{perfilAdoptar.dni} </Text>
+        <Text style={styles.textoPerfilAdopcionEnunciado}>Número de animales</Text>
+        <Text style={styles.textoPerfilAdopcion}>{perfilAdoptar.n_animales} </Text>
+        <Text style={styles.textoPerfilAdopcionEnunciado}>Localización</Text>
+        <Text style={styles.textoPerfilAdopcion}>{perfilAdoptar.localizacion} </Text>
+        <View style= {styles.textContainer}>
+        {props.route.params.canEdit ?
+          <>
+           <TouchableOpacity 
+                   onPress={() => {
+                    if (usuario.alta == "No")
+                      props.navigation.navigate('AltaAdoptar', { userId: storedCredentials });
+                    else
+                      alert("Ya se ha dado de alta");
+                  }}
+                    style={styles.botonCircularMorado}>
+                        <Text style={styles.botonTexto}>
+                        Dar de alta para adoptar
+                        </Text>
+                </TouchableOpacity>
         </>
         : null}
+        </View>
+        </View>
       </View>
-    </ScrollView>
+    
   );
 
 
@@ -169,36 +185,111 @@ const PerfilUsuario = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 35,
+        flex: 1, 
+        backgroundColor: colors.amarillo
   },
   image: {
-    height: 250,
-    width: 250,
-    marginBottom: 15
+        width: 150,
+        height: 150,
+        alignSelf: "center", 
+        top: -30, 
+        position: "absolute", 
+        borderRadius: 75
   },
-  texto: {
+  textContainer: {
+    height: '50%',
+    width: '100%',
+    justifyContent: 'center',
+    position: "absolute", 
+    alignSelf: 'center', 
+    bottom: -180,
+    flex: 1
+},
+textContainerGmailTlf: {
+  height: '50%',
+  width: '100%',
+  justifyContent: 'center',
+  position: "absolute", 
+  alignSelf: 'center', 
+  bottom: 365, 
+  flex: 1
+},
+  textoGmailTlf: {
     fontSize: 18,
+    alignSelf: "center", 
     padding: 5,
-    borderBottomWidth: 1,
-    borderBottomColor: "#cccccc",
-    marginBottom: 10
+    color: colors.blanco,
+    fontWeight: 'bold', 
+    marginBottom: 4
   },
-  button: {
-    alignItems: "center",
-    padding: 10,
-    marginTop: 25,
-    backgroundColor: "#6c91c2",
+  textoNombreUsuario: {
+    fontSize: 26,
+    alignSelf: "center", 
+    color: colors.blanco,
+    fontWeight: 'bold', 
+    marginBottom: 4, 
+    marginTop: -50
   },
-  buttonText: {
-    fontSize: 18,
-    colors: "#ffffff",
-    fontWeight: "bold",
-    alignSelf: "center",
-    textTransform: "uppercase"
-  }
+  containerPerfilAdopcion: {
+    height: '70%',
+    width: '100%',
+    justifyContent: 'center',
+    position: "absolute", 
+    backgroundColor: colors.blanco,
+    borderRadius: 35, 
+    alignSelf: 'center', 
+    bottom: -40, 
+    flex: 1
+  },
+  tituloPerfilAdopcionEnunciado: {
+    fontSize: 24, 
+    fontWeight: 'bold', 
+    color: "#5B1D66",
+    padding: 60,
+    marginTop: -200, 
+    marginBottom: -90
+  },
+  textoPerfilAdopcionEnunciado: {
+    fontSize: 16, 
+    color: "#AD8EB3",
+    padding: 60,
+    marginBottom: -110
+  },
+  textoPerfilAdopcion: {
+    fontSize: 16, 
+    padding: 60,
+    marginBottom: -100
+  },
+  botonCircularMorado : {
+        backgroundColor: colors.moradoPrincipal,
+        borderColor: colors.blanco,
+        borderWidth: 2,
+        width:300,
+        height:47,
+        borderRadius: 25,
+        marginBottom: -100, 
+        alignSelf: "center",
+        marginTop: -350
+      },
+      botonTexto: {
+        fontSize: 20,
+        color: colors.blanco,
+        fontWeight: "bold",
+        alignSelf: "center",
+        marginTop: 5
+      }, 
+  appBar: {
+    flex: 1, 
+    justifyContent: "space-between",
+    borderEndColor: colors.amarillo,
+    borderBottomEndRadius: 10,  
+    backgroundColor: colors.amarillo,
+    padding: 20,
+    margin: 10,
+  },
 
 });
+
 
 
 
