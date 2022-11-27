@@ -55,7 +55,7 @@ export default function Solicitud(props) {
             <View style={styles.imagenContainer}>
                 <TouchableOpacity
                 onPress={() => props.verInformacionAnimal()}>
-                    <Image style={styles.imagen} source={{uri: imagenAnimal}} />
+                    <Image style={styles.imagen} source={imagenAnimal != "" ? {uri: imagenAnimal} : require('../images/UsuarioSinFoto.jpg')} />
                 </TouchableOpacity>
                 <TouchableOpacity
                 onPress={() => props.verInformacionUsuario()}>

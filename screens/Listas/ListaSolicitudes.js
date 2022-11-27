@@ -5,12 +5,16 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import Solicitud from '../../components/Solicitud.js';
 import { CredentialsContext } from '../../components/CredentialsContext';
 import { ImageBackground } from 'react-native';
+import {colors} from '../../components/Color';
 
 const ListaSolicitudes = (props) => {
 
     const [solicitudes, setSolicitudes] = useState([])
     const {storedCredentials, setStoredCredentials} = useContext(CredentialsContext);
-    const [modalVisible, setModalVisible] = useState(false);
+    const [modal, setModal] = useState({
+        visible: false,
+        aceptar: false
+    });
 
     const getAllSolicitudes = (storedCredentials) => {
         firebase.db.collection('solicitudes').where("id_protectora", "==", storedCredentials).
@@ -52,21 +56,25 @@ const ListaSolicitudes = (props) => {
     }
 
     const aceptar = (aceptarIndex, nombreAnimal) => {
-        Alert.alert("Información", "¿Está seguro que quiere aceptar la solicitud de adopción?", [
-            {text: "Confirmar", 
-            onPress: () => {
-                aceptarSolicitud(solicitudes[aceptarIndex], nombreAnimal);
-            }}, 
-            {text: "Cancelar"}
-        ])
+        setModal({
+            visible: !modal.visible,
+            aceptar: true
+        });
+        // Alert.alert("Información", "¿Está seguro que quiere aceptar la solicitud de adopción?", [
+        //     {text: "Confirmar", 
+        //     onPress: () => {
+        //         aceptarSolicitud(solicitudes[aceptarIndex], nombreAnimal);
+        //     }}, 
+        //     {text: "Cancelar"}
+        //])
 
-        const mensajeAdopcion = "¡Tu solicitud de adopción de " + nombreAnimal + " ha sido aceptada!"
+        // const mensajeAdopcion = "¡Tu solicitud de adopción de " + nombreAnimal + " ha sido aceptada!"
 
-        firebase.db.collection('notificaciones').add({
-            id_usuario: solicitudes[aceptarIndex].id_usuario,
-            mensaje: mensajeAdopcion,
-            leido: false
-        })
+        // firebase.db.collection('notificaciones').add({
+        //     id_usuario: solicitudes[aceptarIndex].id_usuario,
+        //     mensaje: mensajeAdopcion,
+        //     leido: false
+        // })
     }
 
     const declinar = (declinarIndex, nombreAnimal) => {
@@ -106,22 +114,30 @@ const ListaSolicitudes = (props) => {
                 <Modal
                     animationType="slide"
                     transparent={true}
-                    visible={modalVisible}
+                    visible={modal.visible}
                     onRequestClose={() => {
                     Alert.alert("Modal has been closed.");
-                    setModalVisible(!modalVisible);
+                    setModalVisible(!modal.visible);
                     }}
                 >
                     <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Text style={styles.modalText}>Hello World!</Text>
-                        <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => setModalVisible(!modalVisible)}
-                        >
-                        <Text style={styles.textStyle}>Hide Modal</Text>
-                        </TouchableOpacity>
-                    </View>
+                        <View style={styles.modalView}>
+                            <View style={{flex: 4}}>
+                                <Text style={styles.texto}>¿Estás seguro de {modal.aceptar ? "aceptar" : "rechazar"} la solicitud?</Text>
+                            </View>
+                            <View style={styles.buttonGroup}>
+                                <TouchableOpacity>
+                                    <View style={styles.botonSi}>
+                                        <Text style={styles.texto}>si</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity>
+                                    <View style={styles.botonNo}>
+                                        <Text style={styles.texto}>no</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
                     </View>
                 </Modal>
             </View>
@@ -150,8 +166,9 @@ const styles = StyleSheet.create({
       },
       modalView: {
         margin: 20,
-        width: '100%',
-        backgroundColor: "white",
+        width: '90%',
+        height: 170,
+        backgroundColor: colors.amarillo,
         borderRadius: 20,
         padding: 35,
         alignItems: "center",
@@ -190,12 +207,36 @@ const styles = StyleSheet.create({
         minHeight: 30,
     },
     buttonGroup: {
+        flex: 2,
         flexDirection: 'row',
         justifyContent: 'space-evenly',
+        alignItems: 'center',
         flex: 1,
+        width: '100%',
     },
-    button: {
+    botonNo: {
         marginRight: 10,
+        height: 40,
+        width: 120,
+        borderRadius: 10,
+        borderColor: colors.moradoPrincipal,
+        borderWidth: 2,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    botonSi: {
+        marginRight: 10,
+        height: 40,
+        width: 120,
+        borderRadius: 10,
+        backgroundColor: colors.moradoPrincipal,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    texto: {
+        fontFamily: 'DMSans',
+        fontSize: 20,
+        color: colors.blanco,
     },
     solicitud: {
         width: '50%',
