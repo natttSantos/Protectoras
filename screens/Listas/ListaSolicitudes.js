@@ -147,17 +147,22 @@ const ListaSolicitudes = (props) => {
                     </View>
                 </View>
             </Modal>
-            {solicitudes.map((solicitud, index) => {
-                return (
-                    <View
-                    key={solicitud.id}
-                    style={styles.container}>
-                        <Solicitud solicitud={solicitud} verInformacionUsuario={() => verInformacionUsuario(index)}
-                        verInformacionAnimal={() => verInformacionAnimal(index)}
-                        declinar={(nombreAnimal) => declinarClick(index, nombreAnimal)} aceptar={(nombreAnimal) => aceptarClick(index, nombreAnimal)}/>
-                    </View>
-                )
-            })}
+            <View style={styles.tituloContainer}>
+                <Text style={styles.titulo}>Solicitudes de adopción</Text>
+            </View>
+            <View style={styles.solicitudContainer}>
+                {solicitudes.map((solicitud, index) => {
+                    return (
+                        <View
+                        key={solicitud.id}
+                        style={styles.container}>
+                            <Solicitud solicitud={solicitud} verInformacionUsuario={() => verInformacionUsuario(index)}
+                            verInformacionAnimal={() => verInformacionAnimal(index)}
+                            declinar={(nombreAnimal) => declinarClick(index, nombreAnimal)} aceptar={(nombreAnimal) => aceptarClick(index, nombreAnimal)}/>
+                        </View>
+                    )
+                })}
+            </View>
         </ScrollView>
     )
 }
@@ -169,8 +174,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         marginTop: 22
-      },
-      modalView: {
+    },
+    modalView: {
         margin: 20,
         width: '90%',
         height: 170,
@@ -180,37 +185,25 @@ const styles = StyleSheet.create({
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: {
-          width: 0,
-          height: 2
+            width: 0,
+            height: 2
         },
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5
-      },
-    container: {
-        flexDirection: 'row',
+    },
+    tituloContainer: {
         marginHorizontal: 20,
-        marginTop: 10,
-        flex: 1
+        marginTop: 64,
+        marginBottom: 26
     },
-    imagenContainer: {
-        backgroundColor: '#33FFEC',
-        borderRadius: 60/2,
-        marginRight: 10,
-        alignItems: 'center',
-        width: 60,
-        height: 60,
+    solicitudContainer: {
+        marginHorizontal: 20,
     },
-    soliContainer: {
-        backgroundColor: '#33FFEC',
-        borderRadius: 25,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flex: 1,
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        minHeight: 30,
+    titulo: {
+        fontFamily: 'DMSans',
+        fontSize: 32,
+        color: colors.moradoPrincipal
     },
     buttonGroup: {
         flex: 2,

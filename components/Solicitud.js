@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         height: 140,
         width: 320,
-        marginTop: 10,
+        marginBottom: 20,
         flex: 1
     },
     imagenContainer: {
