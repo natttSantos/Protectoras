@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import { View, Button, TextInput, StyleSheet, ScrollView, Text, Alert, TouchableOpacity} from "react-native";
+import React, {useState, useEffect} from "react";
+import { View, Button, TextInput, StyleSheet, ScrollView, Text, Alert, TouchableOpacity, Image} from "react-native";
 import firebase from '.././database/firebase.js';
 
 //Bibliotecas colores CSS
@@ -16,9 +16,9 @@ const Donaciones = (props) => {
     }); 
 
 
-    const [protectora, setProtectora] = useState(initialState);
+    const [protectora, setProtectora] = useState();
     const [cambios, setcambios] = useState(false);
-    const [usuario, setUsario] = useState(initialState);
+    const [usuario, setUsario] = useState();
 
 
     useEffect(() => {
