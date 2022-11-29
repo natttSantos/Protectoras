@@ -115,6 +115,7 @@ const RootStack = () => {
                                         <Stack.Screen
                                             name="SesionProtectora"
                                             component={SesionProtectora}
+                                            options={{headerShown: false}}
                                         />
                                         <Stack.Screen
                                             name="AltaAdoptar"

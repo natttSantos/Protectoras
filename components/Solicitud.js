@@ -55,7 +55,7 @@ export default function Solicitud(props) {
             <View style={styles.imagenContainer}>
                 <TouchableOpacity
                 onPress={() => props.verInformacionAnimal()}>
-                    <Image style={styles.imagen} source={{uri: imagenAnimal}} />
+                    <Image style={styles.imagen} source={imagenAnimal != "" ? {uri: imagenAnimal} : require('../images/UsuarioSinFoto.jpg')} />
                 </TouchableOpacity>
                 <TouchableOpacity
                 onPress={() => props.verInformacionUsuario()}>
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         height: 140,
         width: 320,
-        marginTop: 10,
+        marginBottom: 20,
         flex: 1
     },
     imagenContainer: {

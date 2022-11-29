@@ -5,12 +5,18 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import Solicitud from '../../components/Solicitud.js';
 import { CredentialsContext } from '../../components/CredentialsContext';
 import { ImageBackground } from 'react-native';
+import {colors} from '../../components/Color';
 
 const ListaSolicitudes = (props) => {
 
     const [solicitudes, setSolicitudes] = useState([])
     const {storedCredentials, setStoredCredentials} = useContext(CredentialsContext);
-    const [modalVisible, setModalVisible] = useState(false);
+    const [modal, setModal] = useState({
+        visible: false,
+        aceptar: false,
+        nombreAnimal: "",
+        indexSeleccionado: -1
+    });
 
     const getAllSolicitudes = (storedCredentials) => {
         firebase.db.collection('solicitudes').where("id_protectora", "==", storedCredentials).
@@ -45,45 +51,56 @@ const ListaSolicitudes = (props) => {
                     leido: false
                 })
             }
-            doc.ref.set({
-                solucionada: true
-            }, {merge: true})
+            doc.ref.delete()
         })
     }
 
-    const aceptar = (aceptarIndex, nombreAnimal) => {
-        Alert.alert("Información", "¿Está seguro que quiere aceptar la solicitud de adopción?", [
-            {text: "Confirmar", 
-            onPress: () => {
-                aceptarSolicitud(solicitudes[aceptarIndex], nombreAnimal);
-            }}, 
-            {text: "Cancelar"}
-        ])
-        const mensajeAdopcion = "¡Tu solicitud de adopción de " + nombreAnimal + " ha sido aceptada!"
-        firebase.db.collection('notificaciones').add({
-            id_usuario: solicitudes[aceptarIndex].id_usuario,
-            mensaje: mensajeAdopcion,
-            leido: false
-        })
+    const aceptarClick = (aceptarIndex, nombreAnimal) => {
+        setModal({
+            visible: !modal.visible,
+            aceptar: true,
+            nombreAnimal: nombreAnimal,
+            indexSeleccionado: aceptarIndex
+        });
     }
 
-    const declinar = (declinarIndex, nombreAnimal) => {
-        Alert.alert("Información", "¿Está seguro que quiere denegar la solicitud de adopción?", [
-            {text: "Confirmar", 
-            onPress: async () => {
-                await firebase.db.collection('solicitudes').doc(solicitudes[declinarIndex].id).delete()
-                setSolicitudes(solicitudes.filter((solicitud, index) => index != declinarIndex))
-            }}, 
-            {text: "Cancelar"}
-        ])
+    const aceptar = () => {
 
-        const mensajeAdopcion = "Tu solicitud de adopción de " + nombreAnimal + " ha sido denegada"
+        aceptarSolicitud(solicitudes[modal.indexSeleccionado], modal.nombreAnimal);
+
+        const mensajeAdopcion = "¡Tu solicitud de adopción de " + modal.nombreAnimal + " ha sido aceptada!"
 
         firebase.db.collection('notificaciones').add({
-            id_usuario: solicitudes[declinarIndex].id_usuario,
+            id_usuario: solicitudes[modal.indexSeleccionado].id_usuario,
             mensaje: mensajeAdopcion,
             leido: false
         })
+
+        setModal({...modal, visible: !modal.visible})
+    }
+
+    const declinarClick = (declinarIndex, nombreAnimal) => {
+        setModal({
+            visible: !modal.visible,
+            aceptar: false,
+            nombreAnimal: nombreAnimal,
+            indexSeleccionado: declinarIndex
+        });
+    }
+
+    const declinar = async () => {
+        await firebase.db.collection('solicitudes').doc(solicitudes[modal.indexSeleccionado].id).delete()
+        setSolicitudes(solicitudes.filter((solicitud, index) => index != modal.indexSeleccionado))
+
+        const mensajeAdopcion = "Tu solicitud de adopción de " + modal.nombreAnimal + " ha sido denegada"
+
+        firebase.db.collection('notificaciones').add({
+            id_usuario: solicitudes[modal.indexSeleccionado].id_usuario,
+            mensaje: mensajeAdopcion,
+            leido: false
+        })
+
+        setModal({...modal, visible: !modal.visible})
     }
 
     const verInformacionUsuario = (index) => {
@@ -100,40 +117,52 @@ const ListaSolicitudes = (props) => {
 
     return (
         <ScrollView>
-            <View style={styles.centeredView}>
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                    setModalVisible(!modalVisible);
-                    }}
-                >
-                    <View style={styles.centeredView}>
+            <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modal.visible}
+            onRequestClose={() => {
+                setModal({...modal, visible: !modal.visible});
+            }}
+            >
+                <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Text style={styles.modalText}>Hello World!</Text>
-                        <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => setModalVisible(!modalVisible)}
-                        >
-                        <Text style={styles.textStyle}>Hide Modal</Text>
-                        </TouchableOpacity>
+                        <View style={{flex: 4}}>
+                            <Text style={styles.texto}>¿Estás seguro de {modal.aceptar ? "aceptar" : "rechazar"} la solicitud de adopción?</Text>
+                        </View>
+                        <View style={styles.buttonGroup}>
+                            <TouchableOpacity
+                            onPress={modal.aceptar ? () => aceptar() : () => declinar()}>
+                                <View style={styles.botonSi}>
+                                    <Text style={styles.texto}>si</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                            onPress={() => setModal({...modal, visible: !modal.visible})}>
+                                <View style={styles.botonNo}>
+                                    <Text style={styles.texto}>no</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                    </View>
-                </Modal>
+                </View>
+            </Modal>
+            <View style={styles.tituloContainer}>
+                <Text style={styles.titulo}>Solicitudes de adopción</Text>
             </View>
-            {solicitudes.map((solicitud, index) => {
-                return (
-                    <View
-                    key={solicitud.id}
-                    style={styles.container}>
-                        <Solicitud solicitud={solicitud} verInformacionUsuario={() => verInformacionUsuario(index)}
-                        verInformacionAnimal={() => verInformacionAnimal(index)}
-                        declinar={(nombreAnimal) => declinar(index, nombreAnimal)} aceptar={(nombreAnimal) => aceptar(index, nombreAnimal)}/>
-                    </View>
-                )
-            })}
+            <View style={styles.solicitudContainer}>
+                {solicitudes.map((solicitud, index) => {
+                    return (
+                        <View
+                        key={solicitud.id}
+                        style={styles.container}>
+                            <Solicitud solicitud={solicitud} verInformacionUsuario={() => verInformacionUsuario(index)}
+                            verInformacionAnimal={() => verInformacionAnimal(index)}
+                            declinar={(nombreAnimal) => declinarClick(index, nombreAnimal)} aceptar={(nombreAnimal) => aceptarClick(index, nombreAnimal)}/>
+                        </View>
+                    )
+                })}
+            </View>
         </ScrollView>
     )
 }
@@ -145,55 +174,68 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         marginTop: 22
-      },
-      modalView: {
+    },
+    modalView: {
         margin: 20,
-        width: '100%',
-        backgroundColor: "white",
+        width: '90%',
+        height: 170,
+        backgroundColor: colors.amarillo,
         borderRadius: 20,
         padding: 35,
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: {
-          width: 0,
-          height: 2
+            width: 0,
+            height: 2
         },
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5
-      },
-    container: {
-        flexDirection: 'row',
+    },
+    tituloContainer: {
         marginHorizontal: 20,
-        marginTop: 10,
-        flex: 1
+        marginTop: 64,
+        marginBottom: 26
     },
-    imagenContainer: {
-        backgroundColor: '#33FFEC',
-        borderRadius: 60/2,
-        marginRight: 10,
-        alignItems: 'center',
-        width: 60,
-        height: 60,
+    solicitudContainer: {
+        marginHorizontal: 20,
     },
-    soliContainer: {
-        backgroundColor: '#33FFEC',
-        borderRadius: 25,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flex: 1,
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        minHeight: 30,
+    titulo: {
+        fontFamily: 'DMSans',
+        fontSize: 32,
+        color: colors.moradoPrincipal
     },
     buttonGroup: {
+        flex: 2,
         flexDirection: 'row',
         justifyContent: 'space-evenly',
+        alignItems: 'center',
         flex: 1,
+        width: '100%',
     },
-    button: {
+    botonNo: {
         marginRight: 10,
+        height: 40,
+        width: 120,
+        borderRadius: 10,
+        borderColor: colors.moradoPrincipal,
+        borderWidth: 2,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    botonSi: {
+        marginRight: 10,
+        height: 40,
+        width: 120,
+        borderRadius: 10,
+        backgroundColor: colors.moradoPrincipal,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    texto: {
+        fontFamily: 'DMSans',
+        fontSize: 20,
+        color: colors.blanco,
     },
     solicitud: {
         width: '50%',
