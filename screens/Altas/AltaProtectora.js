@@ -256,13 +256,13 @@ const AltaProtectora = (props) => {
                                 />
                             <TextInput 
                                 style={styles.inputText}
-                                placeholder="* Telefono"
+                                placeholder="* Teléfono"
                                 placeholderTextColor={colors.moradoSecundario}
                                 onChangeText={(value) => handleChangeText('telefono', value)}
                                 />
                             <TextInput                     
                                 style={styles.descripcion}
-                                placeholder="Descripcion (max. 200 caracteres)"
+                                placeholder="Descripción (max. 200 caracteres)"
                                 placeholderTextColor={colors.moradoSecundario}
                                 maxLength = {200}
                                 multiline = {true}
