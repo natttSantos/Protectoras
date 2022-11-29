@@ -340,13 +340,12 @@ const styles = StyleSheet.create({
         color: colors.moradoPrincipal,
         fontFamily: 'DMSans',
         marginBottom: 10
-
-        
     },
     descripcion : {
         height: 100,
         borderWidth: 2,
         borderColor: colors.moradoPrincipal,
+        borderRadius: 15,
         multiline: true,
         textAlignVertical: "top",
         color: colors.moradoPrincipal,
