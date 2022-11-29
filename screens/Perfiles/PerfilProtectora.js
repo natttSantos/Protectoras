@@ -12,9 +12,8 @@ import {
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { TouchableOpacity } from "react-native";
-
 import firebase from "../../database/firebase";
-
+import Donaciones from "../Donaciones"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CredentialsContext } from "../../components/CredentialsContext";
 
@@ -144,6 +143,17 @@ return (
           </TouchableOpacity>
           </>
         : null}
+        {type ? 
+        <TouchableOpacity 
+                      onPress={() => {
+                        props.navigation.navigate('Donaciones', {userId: storedCredentials,  protectoraId:props.route.params.protectoraId}) 
+                      }}
+                      style={styles.boton}>
+                          <Text style={styles.buttonText}>
+                              Donar
+                          </Text>
+          </TouchableOpacity>
+          : null}
         </View>
       </View>
       

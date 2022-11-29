@@ -59,9 +59,7 @@ const ListaSolicitudes = (props) => {
             }}, 
             {text: "Cancelar"}
         ])
-
         const mensajeAdopcion = "¡Tu solicitud de adopción de " + nombreAnimal + " ha sido aceptada!"
-
         firebase.db.collection('notificaciones').add({
             id_usuario: solicitudes[aceptarIndex].id_usuario,
             mensaje: mensajeAdopcion,
