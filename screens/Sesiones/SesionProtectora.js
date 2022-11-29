@@ -82,6 +82,7 @@ const SesionProtectora = (props) => {
 
       <Tab.Navigator
       screenOptions={{
+        headerShown: false,
         "tabBarShowLabel": false,
         "tabBarStyle": [
           {
@@ -92,7 +93,6 @@ const SesionProtectora = (props) => {
       }}>
         <Tab.Screen name = 'Home' component = {ListaAnimalesProtectora} 
           options={{
-            headerShown: false,
             tabBarIcon: ({ focused, color, size }) => {
               let colorA = focused ? "#5B1D66" : "#FFB743";
   
@@ -103,7 +103,6 @@ const SesionProtectora = (props) => {
         />
         <Tab.Screen name = 'Add' component = {AltaGlobal} 
           options={{
-            headerShown: false,
             tabBarIcon: ({ focused, color, size }) => {
               let colorA = focused ? "#5B1D66" : "#FFB743";
   
@@ -114,7 +113,6 @@ const SesionProtectora = (props) => {
         />
         <Tab.Screen name = 'Animal' component = {MapaAnimalEncontradoProtectora} 
          options={{
-          headerShown: false,
           tabBarShowLabel: false,
           tabBarIcon: ({ focused, color, size }) => {
             let colorA = focused ? "#5B1D66" : "#FFB743";
@@ -126,7 +124,6 @@ const SesionProtectora = (props) => {
       />
         <Tab.Screen name = 'Solicitudes' component = {ListaSolicitudes} 
           options={{
-            headerShown: false,
             tabBarIcon: ({ focused, color, size }) => {
               let colorA = focused ? "#5B1D66" : "#FFB743";
   
@@ -137,7 +134,6 @@ const SesionProtectora = (props) => {
         />
         <Tab.Screen name = 'Perfil' component = {PerfilProtectora} 
           options={{
-            headerShown: false,
             tabBarIcon: ({ focused, color, size }) => {
               let colorA = focused ? "#5B1D66" : "#FFB743";
   

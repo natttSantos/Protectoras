@@ -7,6 +7,7 @@ import firebase from '../../database/firebase';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 
+import KeyboardAvoidingWrapper from "../../components/KeyboardAvoiding";
 
 //Bibliotecas colores CSS
 import {colors} from '../../components/Color';
@@ -198,105 +199,105 @@ const AltaProtectora = (props) => {
     }
     if(!loading) {
     return(
-        <View style={styles.container}> 
-            <ScrollView>
-                <Text style={styles.titulo}> Da de alta tu protectora </Text>  
-                <View 
-                style={styles.inputGroup}> 
-                    <TextInput 
-                    style={styles.inputText}
-                    placeholder="* Nombre"
-                    placeholderTextColor={colors.moradoSecundario}
-                    onChangeText={(value) => handleChangeText('nombre', value)}
-                    />
-                    <TextInput 
-                    style={styles.inputText}
-                    secureTextEntry={true}
-                    placeholder="* Contraseña"
-                    placeholderTextColor={colors.moradoSecundario}
-                    onChangeText={(value) => handleChangeText('contraseña', value)}
-                    />
-                    <TextInput 
-                        style={styles.inputText}
-                        placeholder="* Email"
-                        placeholderTextColor={colors.moradoSecundario}
-                        onChangeText={(value) => handleChangeText('email', value)}
-                        />
-                    <DropDownPicker
-                                    style={styles.dropDownPicker}
-                                    placeholder="* Seleccione una localizacion"
-                                    placeholderStyle={{
-                                        color: colors.moradoSecundario
-                                      }}
-                                    items={items}
-                                    listItemLabelStyle={{
-                                        color: colors.moradoSecundario
-                                    }}
-                                    setItems={setItems}
-                                    open={open}
-                                    setOpen={setOpen}
-                                    value={value}
-                                    setValue={setValue}
-                                    onChangeValue={(value) => {
-                                        handleChangeText('localizacion', value);
-                                    }}
+            <KeyboardAvoidingWrapper>
+                <View style={styles.container}> 
+                        <Text style={styles.titulo}> Da de alta tu protectora </Text>  
+                        <View 
+                        style={styles.inputGroup}> 
+                            <TextInput 
+                            style={styles.inputText}
+                            placeholder="* Nombre"
+                            placeholderTextColor={colors.moradoSecundario}
+                            onChangeText={(value) => handleChangeText('nombre', value)}
+                            />
+                            <TextInput 
+                            style={styles.inputText}
+                            secureTextEntry={true}
+                            placeholder="* Contraseña"
+                            placeholderTextColor={colors.moradoSecundario}
+                            onChangeText={(value) => handleChangeText('contraseña', value)}
+                            />
+                            <TextInput 
+                                style={styles.inputText}
+                                placeholder="* Email"
+                                placeholderTextColor={colors.moradoSecundario}
+                                onChangeText={(value) => handleChangeText('email', value)}
                                 />
-                    <TextInput 
-                        style={styles.inputText}
-                        placeholder="* Dirección"
-                        placeholderTextColor={colors.moradoSecundario}
-                        onChangeText={(value) => handleChangeText('direccion', value)}
-                        />
-                    <TextInput 
-                        style={styles.inputText}
-                        placeholder="* URL de la página web"
-                        placeholderTextColor={colors.moradoSecundario}
-                        onChangeText={(value) => handleChangeText('url', value)}
-                        />
-                    <TextInput 
-                        style={styles.inputText}
-                        placeholder="* Telefono"
-                        placeholderTextColor={colors.moradoSecundario}
-                        onChangeText={(value) => handleChangeText('telefono', value)}
-                        />
-                    <TextInput                     
-                        style={styles.descripcion}
-                        placeholder="Descripcion (max. 200 caracteres)"
-                        placeholderTextColor={colors.moradoSecundario}
-                        maxLength = {200}
-                        multiline = {true}
-                        onChangeText={(value) => {
-                            if (value.length == 180)
-                                alert("¡Cuidado! Su descripción ya contiene 180 caracteres (max. 200)")
-                            if (value.length == 200)
-                                alert("¡Su descripción ya contiene los 200 caracteres permitidos!")
-                            handleChangeText('descripcion', value)
-                        }}
-                        />
-                </View>
-                <View> 
-                    <TouchableOpacity 
-                        onPress={() => 
-                            openGallery()
-                        }
-                        style={styles.botonCircularBlancoMorado}>
-                            <Text style={styles.botonTextoMorado}>
-                                Añadir imagen de perfil
-                            </Text>
-                    </TouchableOpacity>
+                            <DropDownPicker
+                                            style={styles.dropDownPicker}
+                                            placeholder="* Seleccione una localizacion"
+                                            placeholderStyle={{
+                                                color: colors.moradoSecundario
+                                                }}
+                                            items={items}
+                                            listItemLabelStyle={{
+                                                color: colors.moradoSecundario
+                                            }}
+                                            setItems={setItems}
+                                            open={open}
+                                            setOpen={setOpen}
+                                            value={value}
+                                            setValue={setValue}
+                                            onChangeValue={(value) => {
+                                                handleChangeText('localizacion', value);
+                                            }}
+                                        />
+                            <TextInput 
+                                style={styles.inputText}
+                                placeholder="* Dirección"
+                                placeholderTextColor={colors.moradoSecundario}
+                                onChangeText={(value) => handleChangeText('direccion', value)}
+                                />
+                            <TextInput 
+                                style={styles.inputText}
+                                placeholder="* URL de la página web"
+                                placeholderTextColor={colors.moradoSecundario}
+                                onChangeText={(value) => handleChangeText('url', value)}
+                                />
+                            <TextInput 
+                                style={styles.inputText}
+                                placeholder="* Telefono"
+                                placeholderTextColor={colors.moradoSecundario}
+                                onChangeText={(value) => handleChangeText('telefono', value)}
+                                />
+                            <TextInput                     
+                                style={styles.descripcion}
+                                placeholder="Descripcion (max. 200 caracteres)"
+                                placeholderTextColor={colors.moradoSecundario}
+                                maxLength = {200}
+                                multiline = {true}
+                                onChangeText={(value) => {
+                                    if (value.length == 180)
+                                        alert("¡Cuidado! Su descripción ya contiene 180 caracteres (max. 200)")
+                                    if (value.length == 200)
+                                        alert("¡Su descripción ya contiene los 200 caracteres permitidos!")
+                                    handleChangeText('descripcion', value)
+                                }}
+                                />
+                        </View>
+                        <View> 
+                            <TouchableOpacity 
+                                onPress={() => 
+                                    openGallery()
+                                }
+                                style={styles.botonCircularBlancoMorado}>
+                                    <Text style={styles.botonTextoMorado}>
+                                        Añadir imagen de perfil
+                                    </Text>
+                            </TouchableOpacity>
 
-                    <TouchableOpacity 
-                        onPress={() => 
-                            saveNewProtectora()
-                        }
-                        style={styles.botonCircularAmarillo}>
-                            <Text style={styles.botonTextoAmarillo}>
-                                Enviar
-                            </Text>
-                    </TouchableOpacity>
-                </View> 
-            </ScrollView>
-        </View>
+                            <TouchableOpacity 
+                                onPress={() => 
+                                    saveNewProtectora()
+                                }
+                                style={styles.botonCircularAmarillo}>
+                                    <Text style={styles.botonTextoAmarillo}>
+                                        Enviar
+                                    </Text>
+                            </TouchableOpacity>
+                        </View> 
+                </View>
+            </KeyboardAvoidingWrapper>
     )
   }
 }
