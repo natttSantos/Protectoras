@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
         width: 100,
         height: 100,
         alignSelf: "center", 
-        top: -20, 
+        top: -50, 
         position: "absolute", 
         borderRadius: 75
   },
@@ -264,7 +264,7 @@ textContainerGmailTlf: {
     color: colors.blanco,
     fontWeight: 'bold', 
     marginBottom: 4, 
-    marginTop: -50
+    marginTop: -160
   },
   textoSinPerfilAdopcion: {
     fontSize: 18, 
@@ -274,14 +274,14 @@ textContainerGmailTlf: {
     marginBottom: 200
   },
   containerPerfilAdopcion: {
-    height: '61%',
+    height: '68%',
     width: '100%',
     justifyContent: 'center',
     position: "absolute", 
     backgroundColor: colors.blanco,
     borderRadius: 35, 
     alignSelf: 'center', 
-    bottom: -30, 
+    bottom: -26, 
     flex: 1
   },
   tituloPerfilAdopcionEnunciado: {
@@ -312,7 +312,7 @@ textContainerGmailTlf: {
         borderRadius: 25,
         marginBottom: -100, 
         alignSelf: "center",
-        marginTop: -350
+        marginTop: -330
       },
       botonTexto: {
         fontSize: 18,
@@ -326,8 +326,8 @@ textContainerGmailTlf: {
     justifyContent: "space-between",
     elevation: 0, 
     backgroundColor: colors.amarillo,
-    padding: 30,
-    margin: 50,
+    padding: 50,
+    marginTop: 52
   },
 
 });
