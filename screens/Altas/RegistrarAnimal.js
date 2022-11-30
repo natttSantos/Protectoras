@@ -204,151 +204,167 @@ const RegistrarAnimal = (props) => {
      
 
     return(
-      <ScrollView style={styles.container} contentContainerStyle={{justifyContent: 'space-evenly'}}> 
-          <Text style={styles.titulo}> Registrar Animal</Text>
-          <TextInput 
-            style={styles.textField}
-            placeholder="* Nombre"
-            placeholderTextColor={colors.moradoSecundario}
-            onChangeText={(value) => handleChangeText('nombre', value)}
-          />
-          <View style={styles.botonesHorizontales}>
-            <View>
-              <Text style={styles.caracteristicas}> Gato </Text>
-              <TouchableOpacity style={styles.botonPropiedades}>
+      <View style={styles.container}>
+        <ScrollView contentContainerStyle={{justifyContent: 'space-around'}}> 
+            <Text style={styles.titulo}> Registrar Animal</Text>
+            <TextInput 
+              style={styles.textField}
+              placeholder="* Nombre"
+              placeholderTextColor={colors.moradoSecundario}
+              onChangeText={(value) => handleChangeText('nombre', value)}
+            />
+            <View style={styles.botonesHorizontales}>
+              <View>
+                <Text style={styles.caracteristicas}> Gato </Text>
+                <TouchableOpacity style={styles.botonPropiedades}>
+                    <Image
+                      source={require('../../images/Gato.png')}
+                      style={styles.image}
+                    />
+                  </TouchableOpacity>
+              </View>
+              <View>
+                <Text style={styles.caracteristicas}> Perro </Text>
+                <TouchableOpacity style={styles.botonPropiedades}>
                   <Image
-                    source={require('../../images/Gato.png')}
+                    source={require('../../images/Perro.png')}
                     style={styles.image}
                   />
                 </TouchableOpacity>
+              </View>
             </View>
-            <View>
-              <Text style={styles.caracteristicas}> Perro </Text>
-              <TouchableOpacity style={styles.botonPropiedades}>
+            <TouchableOpacity 
+              onPress={() => props.navigation.navigate('FechaNacimientoAnimal', {userId: props.route.params.userId, esProtectora: "No"})}
+              style={styles.fechaNacimiento}>
+              <View style={styles.botonFechaNacimiento}>
+                <Text style={styles.texto}> * Fecha de nacimiento </Text>
                 <Image
-                  source={require('../../images/Perro.png')}
+                  source={require('../../images/Calendario.png')}
                   style={styles.image}
                 />
-              </TouchableOpacity>
-            </View>
-          </View>
-          <TouchableOpacity 
-            onPress={() => props.navigation.navigate('FechaNacimientoAnimal', {userId: props.route.params.userId, esProtectora: "No"})}
-            style={styles.fechaNacimiento}>
-            <View style={styles.botonFechaNacimiento}>
-              <Text style={styles.texto}> * Fecha de nacimiento </Text>
-              <Image
-                source={require('../../images/Calendario.png')}
-                style={styles.image}
-              />
-            </View>
-          </TouchableOpacity>   
-          <TextInput 
-            style={styles.textField}
-            placeholder="Edad (en años)"
-            placeholderTextColor={colors.moradoSecundario}
-            onChangeText={(value) => handleChangeText('edad', value)}
-          />
-          <TextInput 
-            style={styles.textField}
-            placeholder="Peso (en kg)"
-            placeholderTextColor={colors.moradoSecundario}
-            onChangeText={(value) => handleChangeText('peso', value)}
-          />
-          <DropDownPicker
-            style={{marginTop: 20, marginBottom: 30}}
-            placeholder="* Tipo"
-            items={tipo}
-            setItems={setTipo}
-            open={tipoOpen}
-            setOpen={setTipoOpen}
-            value={tipoValue}
-            setValue={setTipoValue}
-            onChangeValue={(value) => {
-                handleChangeText('tipo', value);
-              }}
-          />
-          <TextInput 
-            style={styles.textField}
-            placeholder="* Raza"
-            placeholderTextColor={colors.moradoSecundario}
-            onChangeText={(value) => handleChangeText('raza', value)}
-          />
-          <View style={styles.botonesHorizontales}>
-            <View>
-              <Text style={styles.caracteristicas}> Macho </Text>
-              <TouchableOpacity style={styles.botonPropiedades}>
+              </View>
+            </TouchableOpacity>   
+            <TextInput 
+              style={styles.textField}
+              placeholder="Edad (en años)"
+              placeholderTextColor={colors.moradoSecundario}
+              onChangeText={(value) => handleChangeText('edad', value)}
+            />
+            <TextInput 
+              style={styles.textField}
+              placeholder="Peso (en kg)"
+              placeholderTextColor={colors.moradoSecundario}
+              onChangeText={(value) => handleChangeText('peso', value)}
+            />
+            <DropDownPicker
+              style={{marginTop: 30}}
+              placeholder="* Tipo"
+              items={tipo}
+              setItems={setTipo}
+              open={tipoOpen}
+              setOpen={setTipoOpen}
+              value={tipoValue}
+              setValue={setTipoValue}
+              onChangeValue={(value) => {
+                  handleChangeText('tipo', value);
+                }}
+            />
+            <TextInput 
+              style={styles.textField}
+              placeholder="* Raza"
+              placeholderTextColor={colors.moradoSecundario}
+              onChangeText={(value) => handleChangeText('raza', value)}
+            />
+            <View style={styles.botonesHorizontales}>
+              <View>
+                <Text style={styles.caracteristicas}> Macho </Text>
+                <TouchableOpacity style={styles.botonPropiedades}>
+                    <Image
+                      source={require('../../images/Macho.png')}
+                      style={styles.image}
+                    />
+                  </TouchableOpacity>
+              </View>
+              <View>
+                <Text style={styles.caracteristicas}> Hembra </Text>
+                <TouchableOpacity style={styles.botonPropiedades}>
                   <Image
-                    source={require('../../images/Macho.png')}
-                    style={styles.image}
+                    source={require('../../images/Hembra.png')}
+                    style={styles.imageHembra}
                   />
                 </TouchableOpacity>
+              </View>
             </View>
-            <View>
-              <Text style={styles.caracteristicas}> Hembra </Text>
-              <TouchableOpacity style={styles.botonPropiedades}>
-                <Image
-                  source={require('../../images/Hembra.png')}
-                  style={styles.image}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-          <DropDownPicker
-            style={{marginTop: 10, marginBottom: 15}}
-            placeholder="* Sexo"
-            items={sexo}
-            setItems={setSexo}
-            open={sexoOpen}
-            setOpen={setSexoOpen}
-            value={sexoValue}
-            setValue={setSexoValue}
-            onChangeValue={(value) => {
-                handleChangeText('sexo', value);
+            <DropDownPicker
+              style={{marginTop: 30, marginBottom: 15}}
+              placeholder="* Sexo"
+              items={sexo}
+              setItems={setSexo}
+              open={sexoOpen}
+              setOpen={setSexoOpen}
+              value={sexoValue}
+              setValue={setSexoValue}
+              onChangeValue={(value) => {
+                  handleChangeText('sexo', value);
+                }}
+            />
+            <CheckBox
+              title="Vacunado"
+              checked={vacunado}
+              checkedColor="blue"
+              onPress={() => setVacunado(!vacunado)}           
+            />
+            <CheckBox
+              title="MicroChip"
+              checked={microChip}
+              checkedColor="blue"
+              onPress={() => setMicroChip(!microChip)}
+            />
+            <DropDownPicker
+              style={{marginTop: 20, marginBottom: 15}}
+              placeholder="Nivel Actividad"
+              items={nivel}
+              setItems={setNivel}
+              open={nivelOpen}
+              setOpen={setNivelOpen}
+              value={nivelValue}
+              setValue={setNivelValue}
+              onChangeValue={(value) => {
+                handleChangeText('nivelActividad', value);
               }}
-          />
-              <CheckBox
-                title="Vacunado"
-                checked={vacunado}
-                checkedColor="blue"
-                onPress={() => setVacunado(!vacunado)}           
-              />
-              <CheckBox
-                title="MicroChip"
-                checked={microChip}
-                checkedColor="blue"
-                onPress={() => setMicroChip(!microChip)}
-              />
-                <DropDownPicker
-                              style={{marginTop: 35, marginBottom: 15}}
-                              placeholder="Nivel Actividad"
-                              items={nivel}
-                              setItems={setNivel}
-                              open={nivelOpen}
-                              setOpen={setNivelOpen}
-                              value={nivelValue}
-                              setValue={setNivelValue}
-                              onChangeValue={(value) => {
-                                  handleChangeText('nivelActividad', value);
-                                }}
-                          />
-              
-              <TextInput 
-                  style={styles.descripcion}
-                  placeholder="* Descripción (max 200 caracteres)"
-                  onChangeText={(value) => handleChangeText('descripcion', value)}
-                  />
-
-      <Button title="* Selecciona una imagen" onPress={() =>  openGallery()} />      
-
-              <TouchableOpacity 
-                  onPress={() => {saveNewUser()}}
-                  style={styles.button}>
-                      <Text style={styles.buttonText}>
-                          Dar de alta
-                      </Text>
-              </TouchableOpacity>
-      </ScrollView>
+            />
+            <TextInput 
+              style={styles.descripcion}
+              placeholder="* Descripción (max 200 caracteres)"
+              placeholderTextColor={colors.moradoSecundario}
+              multiline={true}
+              maxLength={200}
+              onChangeText={(value) => {
+                if (value.length == 180)
+                    alert("¡Cuidado! Su descripción ya contiene 180 caracteres (max. 200)")
+                if (value.length == 200)
+                    alert("¡Su descripción ya contiene los 200 caracteres permitidos!")
+                handleChangeText('descripcion', value)
+              }}
+            />
+            <TouchableOpacity 
+              onPress={() => 
+                openGallery()
+              }
+              style={styles.botonCircularBlancoMorado}>
+                <Text style={styles.botonTextoMorado}>
+                    Añadir imagen de perfil
+                </Text>
+            </TouchableOpacity>   
+            <TouchableOpacity 
+                    onPress={() => {saveNewUser()}}
+                    style={styles.botonCircularAmarillo}>
+                        <Text style={styles.botonTextoAmarillo}>
+                            Dar de alta
+                        </Text>
+            </TouchableOpacity>
+        </ScrollView>
+      </View>
     )
 }
 
@@ -391,9 +407,39 @@ const styles = StyleSheet.create({
     },
     botonFechaNacimiento: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
-      marginLeft: 5,
-      marginRight: 15
+      marginLeft: 25
+    },
+    botonCircularBlancoMorado : {
+      backgroundColor: colors.blanco,
+      borderColor: colors.moradoPrincipal,
+      borderWidth: 2,
+      width:260,
+      height:50,
+      borderRadius: 25,
+      alignSelf: "center",
+      marginBottom: 20
+    },
+    botonTextoMorado: {
+      fontSize: 20,
+      color: colors.moradoPrincipal,
+      alignSelf: "center",
+      marginTop: 5
+    },
+    botonCircularAmarillo : {
+      backgroundColor: colors.amarillo,
+      borderColor: colors.blanco,
+      borderWidth: 2,
+      width:260,
+      height:50,
+      borderRadius: 25,
+      alignSelf: "center"
+    },
+    botonTextoAmarillo: {
+      fontSize: 20,
+      color: colors.blanco,
+      fontWeight: "bold",
+      alignSelf: "center",
+      marginTop: 5
     },
     fechaNacimiento: {
       marginTop: 20,
@@ -404,8 +450,16 @@ const styles = StyleSheet.create({
       justifyContent: 'center'
     },
     image: {
+      flex: 1,
       width: 22,
-      height: 22
+      height: 22,
+      resizeMode: 'contain'
+    },
+    imageHembra: {
+      flex: 1,
+      resizeMode: 'contain',
+      width: 16,
+      height: 20
     },
     caracteristicas: {
       fontFamily: 'InterRegular',
@@ -413,14 +467,17 @@ const styles = StyleSheet.create({
       alignSelf: 'center'
     },
     descripcion : {
-        height: 60, 
-        marginTop: 30,
+        height: 120,
         marginBottom: 30,
-        fontSize: 18,
-        borderWidth: 1,
-        paddingLeft: 10,
-        paddingRight: 10,
-        borderColor: 'black'
+        fontSize: 16,
+        borderWidth: 2,
+        padding: 10,
+        borderColor: colors.moradoPrincipal,
+        borderRadius: 15,
+        color: colors.moradoPrincipal,
+        multiline: true,
+        fontFamily: 'InterRegular',
+        textAlignVertical: 'top'
     }, 
     titulo : {
         fontSize: 32,
@@ -428,31 +485,6 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         color: colors.moradoPrincipal,
         fontFamily: "DMSans"
-    },
-    inputs : {
-        height: 40,
-        borderColor: "black",
-        marginTop: 10,
-        marginBottom: 20,
-        paddingLeft: 10,
-        paddingRight: 10,
-        fontSize: 18,  
-        width: "100%",
-        borderWidth: 1
-    }, 
-    
-    button : {
-        elevation: 8,
-        marginTop: 40,
-        backgroundColor: "#6c91c2",
-        padding: 10
-      },
-      buttonText: {
-        fontSize: 18,
-        colors: "#ffffff",
-        fontWeight: "bold",
-        alignSelf: "center",
-        textTransform: "uppercase"    
-      }
+    }
 })
 export default RegistrarAnimal;

@@ -21,7 +21,8 @@ import ModificarUsuario from '../screens/Modificar/ModificarUsuario';
 import MapaAnimalEncontrado from '../screens/Mapa/MapaAnimalEncontrado';
 import FiltradoAnimales from '../screens/Listas/FiltradoAnimales';
 import RegistrarAnimalPropietario from '../screens/Altas/RegistrarAnimalPropietario';
-
+import Donaciones from '../screens/Donaciones'
+import FechaExpiracion from '../screens/FechaExpiracion';
 
 //Stack de protectora
 import SesionProtectora from '../screens/Sesiones/SesionProtectora';
@@ -108,6 +109,14 @@ const RootStack = () => {
                                         <Stack.Screen
                                             name="FechaNacimientoAnimal"
                                             component={FechaNacimientoAnimal}
+                                        />
+                                        <Stack.Screen
+                                            name="Donaciones"
+                                            component={Donaciones}
+                                        />
+                                         <Stack.Screen
+                                            name="FechaExpiracion"
+                                            component={FechaExpiracion}
                                         />
                                     </>
                                 ) : (

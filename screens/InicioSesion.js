@@ -80,7 +80,7 @@ const InicioSesion = (props) => {
                 placeholder="Contraseña"
                 onChangeText={(value) => handleChangeText('contraseña', value)}
                 />
-                <View style= {{  position: 'absolute', bottom: 0, alignSelf: 'center'}}> 
+                <View> 
                 <TouchableOpacity 
                     onPress={() => {
                         validateUser(state.value)
@@ -127,7 +127,9 @@ const styles = StyleSheet.create({
         width:217,
         height:47,
         borderRadius: 25,
-        marginBottom: 100
+        marginBottom: 100,        
+        marginTop: 30,
+        alignSelf: 'center'
       },
       botonTexto: {
         fontSize: 20,

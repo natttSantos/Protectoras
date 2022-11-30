@@ -82,18 +82,17 @@ const PerfilUsuario = (props) => {
     if (cosas != "") {
       return (
         <Image
-          style={styles.image}
-          source={require('../../images/gatitos.jpg')}
-        />
+        style={styles.image}
+        source={{ uri: imageFirebase }}
+      />
       );
 
     }
     else {
-
       <Image
-        style={styles.image}
-        source={{ uri: imageFirebase }}
-      />
+          style={styles.image}
+          source={require('../../images/gatitos.jpg')}
+        />
     }
     return null;
   }
@@ -128,13 +127,13 @@ const PerfilUsuario = (props) => {
 
     <Appbar.Header style={styles.appBar}>
         <Appbar.Content title="" />
-        <Appbar.Action icon="lead-pencil" size={40} onPress={() => {
+        <Appbar.Action icon="lead-pencil" size={30} onPress={() => {
                 if (usuario.alta == "Si")
                   props.navigation.navigate('ModificarUsuario', { userId: storedCredentials });
                 else
                   alert("Primero debe sarse de alta");
               }} />
-        <Appbar.Action icon="logout" size={40} onPress={clearLogin} />
+        <Appbar.Action icon="logout" size={30} onPress={clearLogin} />
   </Appbar.Header>
 
 
@@ -189,10 +188,10 @@ const styles = StyleSheet.create({
         backgroundColor: colors.amarillo
   },
   image: {
-        width: 150,
-        height: 150,
+        width: 100,
+        height: 100,
         alignSelf: "center", 
-        top: -30, 
+        top: -20, 
         position: "absolute", 
         borderRadius: 75
   },
@@ -211,11 +210,11 @@ textContainerGmailTlf: {
   justifyContent: 'center',
   position: "absolute", 
   alignSelf: 'center', 
-  bottom: 365, 
+  bottom: 280, 
   flex: 1
 },
   textoGmailTlf: {
-    fontSize: 18,
+    fontSize: 14,
     alignSelf: "center", 
     padding: 5,
     color: colors.blanco,
@@ -223,7 +222,7 @@ textContainerGmailTlf: {
     marginBottom: 4
   },
   textoNombreUsuario: {
-    fontSize: 26,
+    fontSize: 24,
     alignSelf: "center", 
     color: colors.blanco,
     fontWeight: 'bold', 
@@ -238,25 +237,25 @@ textContainerGmailTlf: {
     backgroundColor: colors.blanco,
     borderRadius: 35, 
     alignSelf: 'center', 
-    bottom: -40, 
+    bottom: -30, 
     flex: 1
   },
   tituloPerfilAdopcionEnunciado: {
-    fontSize: 24, 
+    fontSize: 21, 
     fontWeight: 'bold', 
     color: "#5B1D66",
     padding: 60,
-    marginTop: -200, 
-    marginBottom: -90
+    marginTop: -165, 
+    marginBottom: -100
   },
   textoPerfilAdopcionEnunciado: {
-    fontSize: 16, 
+    fontSize: 14, 
     color: "#AD8EB3",
     padding: 60,
     marginBottom: -110
   },
   textoPerfilAdopcion: {
-    fontSize: 16, 
+    fontSize: 14, 
     padding: 60,
     marginBottom: -100
   },
@@ -264,15 +263,15 @@ textContainerGmailTlf: {
         backgroundColor: colors.moradoPrincipal,
         borderColor: colors.blanco,
         borderWidth: 2,
-        width:300,
-        height:47,
+        width:260,
+        height:42,
         borderRadius: 25,
         marginBottom: -100, 
         alignSelf: "center",
         marginTop: -350
       },
       botonTexto: {
-        fontSize: 20,
+        fontSize: 18,
         color: colors.blanco,
         fontWeight: "bold",
         alignSelf: "center",
