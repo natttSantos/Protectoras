@@ -52,9 +52,9 @@ const Donaciones = (props) => {
         setState({...state, [nombre]: value}); 
     }; 
     const saveDonacion =  async () => {
-        if (state.nombre == '' || state.apellidos == '' || state.cvv == '' || props.route.params.valueFecha == undefined||state.dineroDonado==''||state.numeroTarjeta){
+        if (state.nombre == '' || state.apellidos == '' || state.cvv == '' || props.route.params.valueFecha == undefined||state.dineroDonado==''||state.numeroTarjeta==""){
             validateNullFields(); 
-        }
+        }else{
             await firebase.db.collection('donaciones').add({
                 nombre: state.nombre, 
                 apellidos: state.apellidos,
@@ -64,7 +64,7 @@ const Donaciones = (props) => {
                 fechaExpiracion: props.route.params.valueFecha,
                 protectora : protectora.id,
             })
-            alert ("Donación completada"); 
+            alert ("Donación completada"); }
         
     } 
 
@@ -74,21 +74,18 @@ const Donaciones = (props) => {
             textoAlerta += "\n - Nombre"; 
         } if (state.apellidos == ''){
             textoAlerta += "\n - Apellidos "; 
-        } if (state.numeroTarjeta == ''||isNaN(state.numeroTarjeta) || state.cvv.length > 12|| state.cvv.length < 19){
-            textoAlerta += "\n - Número de tarjera (entre 13 y 18 dígitos)"; 
+        }if (state.numeroTarjeta == ''|| isNaN(state.numeroTarjeta) || (state.cvv.length < 12 && state.cvv.length > 19)){
+            textoAlerta += "\n - Número de tarjeta (entre 13 y 18 dígitos)"; 
         }
         if (props.route.params.valueFecha == undefined){
             textoAlerta += "\n - Fecha de expiración "; 
         }
-        if (state.cvv == '' && isNaN(state.cvv) || state.cvv.length == 3){
+        if (state.cvv == '' || isNaN(state.cvv) || state.cvv.length != 3){
             textoAlerta += "\n - CVV (son 3 dígitos)"; 
         }
-        if (state.dineroDonado == '' && isNaN(state.dineroDonado)){
+        if (state.dineroDonado == '' || isNaN(state.dineroDonado)){
             textoAlerta += "\n - Debe poner una cantidad de dinero con dígitos "; 
         }
-        if (props.route.params.valueFecha == undefined){
-          textoAlerta += "\n - Fecha Nacimiento "; 
-      }
         alert (textoAlerta); 
     }
 
@@ -133,7 +130,7 @@ const Donaciones = (props) => {
                     onChangeText={(value) => handleChangeText('dineroDonado', value)}
                 />
                 
-                <View style= {{  position: 'absolute', bottom: 0, alignSelf: 'center'}}>                    
+                <View style= {{  position: 'absolute', bottom: 0, alignSelf: 'center',padding: -100}}>                    
                     <TouchableOpacity 
                         onPress={() => saveDonacion()}
                         style={styles.botonCircularAmarillo}>
@@ -151,7 +148,8 @@ const styles = StyleSheet.create({
         flex: 1, 
         padding: 35,
         backgroundColor: colors.amarillo,
-        marginTop: 50
+        marginTop: 50,
+        height:600
     },
     titulo : {
         fontSize: 32,
