@@ -62,11 +62,10 @@ const PerfilProtectora = (props) => {
     .st
     .ref(`imagesProtectora/${protectora.fotoModificada}`)
     .getDownloadURL().then(function(url) {
-    setState({
-     imageFirebase: url
-  });
-});
-
+        setState({
+        imageFirebase: url
+      });
+    });
   };
 
 

@@ -1,7 +1,7 @@
 import firebase from '../../database/firebase.js';
 import React, { useEffect, useState, useContext } from "react";
 import Icon from 'react-native-vector-icons/Ionicons'
-import {View, ActivityIndicator, Image} from "react-native"
+import {View, ActivityIndicator, Image, StyleSheet} from "react-native"
 
 import PerfilProtectora from '../Perfiles/PerfilProtectora';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -79,7 +79,6 @@ const SesionProtectora = (props) => {
   }
 
     return (
-
       <Tab.Navigator
       screenOptions={{
         headerShown: false,
@@ -94,9 +93,10 @@ const SesionProtectora = (props) => {
         <Tab.Screen name = 'Home' component = {ListaAnimalesProtectora} 
           options={{
             tabBarIcon: ({ focused, color, size }) => {
-              let colorA = focused ? "#5B1D66" : "#FFB743";
-  
-              return <Icon name="home-outline" size={35} color={colorA} />
+              return <Image 
+                style={styles.image}
+                source={ focused ? require('../../images/LogoSeleccionado.png') : require('../../images/Logo.png')}
+              />
             }
           }}
           initialParams={{ animales: animales, userId: storedCredentials}}
@@ -117,7 +117,7 @@ const SesionProtectora = (props) => {
           tabBarIcon: ({ focused, color, size }) => {
             let colorA = focused ? "#5B1D66" : "#FFB743";
 
-            return <Icon name={"paw-outline"} size={35} color={colorA} />
+            return <Icon name={"location-outline"} size={35} color={colorA} />
           }
         }}
         initialParams={{ userId: storedCredentials, isUsuario:true}}
@@ -146,5 +146,13 @@ const SesionProtectora = (props) => {
     );
 };
 
+const styles = StyleSheet.create({
+  image: {
+    flex: 1,
+    width: 22,
+    height: 22,
+    resizeMode: 'contain'
+  }
+})
 
 export default SesionProtectora;
