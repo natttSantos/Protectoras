@@ -326,8 +326,8 @@ textContainerGmailTlf: {
     justifyContent: "space-between",
     elevation: 0, 
     backgroundColor: colors.amarillo,
-    padding: 20,
-    margin: -4,
+    padding: 30,
+    margin: 50,
   },
 
 });
