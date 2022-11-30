@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import MapView, { Marker, Polyline } from 'react-native-maps';
@@ -14,7 +14,6 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
 import { TouchableOpacity } from "react-native";
 
 import firebase from "../../database/firebase";
@@ -71,6 +70,7 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
     contraseña: "",
     alta:""
 }
+
 const [usuario, setUsario] = useState("");
 const [esUsuario] = useState(props.route.params.esUsuario);
 
@@ -168,7 +168,7 @@ async function getLocationPermission() {
 */
 
 const getUsuarioById = async (id) => {
-  const dbRef = firebase.db.collection("users").doc(id);
+  const dbRef = props.route.params.esUsuario ? firebase.db.collection("users").doc(id) : firebase.db.collection("protectoras").doc(id);
   const doc = await dbRef.get();
   const usuario = doc.data();
   setUsario({...usuario, id: doc.id});
@@ -288,7 +288,7 @@ const checkMicrochip_Vacunado = (value) => {
     if (cosas != "") {
       return (
         <Image
-          style={{ width: 300, height: 300 }}
+          style={styles.imagen}
           source={{ uri: imageFirebase }}
         />
       );
@@ -338,83 +338,81 @@ if(loading) {
 }
 if(!loading) {
 return (
-    
-    <ScrollView >
-    
-      <View style={styles.container}>
-       {checkImage()}
-       <Text style = {styles.texto} >
+     <><View style={styles.imagenContainer}>
+    {checkImage()}
+  </View>
+  <ScrollView style={styles.container}>
+      <View style={styles.perfilContainer}>
+        <Text>
           {"Nombre: " + animal.nombre}
         </Text>
-        <Text style = {styles.texto} >
+        <Text>
           {"Raza: " + animal.raza}
         </Text>
-        <Text style = {styles.texto} >
+        <Text>
           {"Sexo: " + animal.sexo}
-        </Text>    
-        <Text style = {styles.texto} >
+        </Text>
+        <Text>
           {"Fecha de nacimiento: " + animal.fecha_nacimiento}
-        </Text>     
-        <Text style = {styles.texto} >
+        </Text>
+        <Text>
           {"Edad: " + edadOpcional}
-        </Text> 
-        <Text style = {styles.texto} >
+        </Text>
+        <Text>
           {"Peso: " + pesoOpcional}
-        </Text> 
-        <Text style = {styles.texto} >
+        </Text>
+        <Text>
           {"Vacunado: " + vacunadoOpcional}
-        </Text> 
-        <Text style = {styles.texto} >
+        </Text>
+        <Text>
           {"MicroChip: " + microChipOpcional}
-        </Text> 
-        <Text style = {styles.texto} >
+        </Text>
+        <Text>
           {"Nivel Actividad: " + nivelOpcional}
         </Text>
-        <Text style = {styles.texto} >
+        <Text>
           {"Descripción: " + animal.descripcion}
         </Text>
-        <MapView 
-        style={styles.map}
-        initialRegion={{
+        <MapView
+          style={styles.map}
+          initialRegion={{
             latitude: posicionMapa.latitude,
             longitude: posicionMapa.longitude,
             latitudeDelta: 0.09,
             longitudeDelta: 0.04
           }}
-      >
-                <Marker 
-           pinColor= '#BD562A'
-          coordinate={coordenadas}
-          onDragEnd={(direction) => setposicionMapa(direction.nativeEvent.coordinate)}
-        />
+        >
+          <Marker
+            pinColor='#BD562A'
+            coordinate={coordenadas}
+            onDragEnd={(direction) => setposicionMapa(direction.nativeEvent.coordinate)} />
 
-              <Marker 
-           pinColor= '#6BE795'
-           coordinate={{
-            longitude: animal.longitud,
-            latitude: animal.latitud
-         }}
-        />
+          <Marker
+            pinColor='#6BE795'
+            coordinate={{
+              longitude: animal.longitud,
+              latitude: animal.latitud
+            }} />
         </MapView>
 
-        {esUsuario ?  
-          <TouchableOpacity  
-            style={styles.boton} 
+        {esUsuario ?
+          <TouchableOpacity
+            style={styles.boton}
             onPress={() => adoptarAnimal()}
-            >
-              <Text>Adoptar</Text>
-        </TouchableOpacity>
-        : null}
-        {esUsuario ?  
-        <TouchableOpacity  
-            style={styles.boton} 
-            onPress={() => props.navigation.navigate('PerfilProtectora', {protectoraId: animal.id_protectora})}
-            >
-              <Text>Contactar</Text>
-        </TouchableOpacity>
-        : null}
-      </View> 
-    </ScrollView>
+          >
+            <Text>Adoptar</Text>
+          </TouchableOpacity>
+          : null}
+        {esUsuario ?
+          <TouchableOpacity
+            style={styles.boton}
+            onPress={() => props.navigation.navigate('PerfilProtectora', { protectoraId: animal.id_protectora })}
+          >
+            <Text>Contactar</Text>
+          </TouchableOpacity>
+          : null}
+      </View>
+    </ScrollView></>
   );
         }
 };
@@ -422,10 +420,28 @@ return (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 25,
-    marginTop: 5,
-    marginBottom: 5,
-    height: 1000
+    shadowColor: "#000000",
+    shadowOffset: {
+      width: 2,
+      height: 12,
+    },
+    shadowOpacity: 0.88,
+    shadowRadius: 16.00
+  },
+  perfilContainer: {
+    width: '100%',
+    marginBottom: 10,
+    backgroundColor: '#ffffff',
+    borderRadius: 20,
+  },
+  imagenContainer: {
+    flex: 1,
+    height: 410,
+    width: '100%'
+  },
+  imagen: {
+    height: 410,
+    width: '100%'
   },
   loader: {
     left: 0,
