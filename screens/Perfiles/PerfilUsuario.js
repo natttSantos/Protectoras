@@ -247,7 +247,7 @@ textContainerGmailTlf: {
   justifyContent: 'center',
   position: "absolute", 
   alignSelf: 'center', 
-  bottom: 280, 
+  bottom: 258, 
   flex: 1
 },
   textoGmailTlf: {
@@ -274,7 +274,7 @@ textContainerGmailTlf: {
     marginBottom: 200
   },
   containerPerfilAdopcion: {
-    height: '70%',
+    height: '61%',
     width: '100%',
     justifyContent: 'center',
     position: "absolute", 
@@ -327,7 +327,7 @@ textContainerGmailTlf: {
     elevation: 0, 
     backgroundColor: colors.amarillo,
     padding: 20,
-    margin: 10,
+    margin: -4,
   },
 
 });

@@ -56,6 +56,12 @@ const RootStack = () => {
                                         <Stack.Screen
                                             name="SesionUsuario"
                                             component={SesionUsuario}
+                                            options={{
+                                                
+                                                headerTintColor: '#fff',
+                                                headerTransparent: true,
+                                                headerTitle: ''
+                                            }}
                                         />
                                         <Stack.Screen
                                             name="PerfilUsuario"

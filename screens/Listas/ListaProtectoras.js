@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
       padding: 10,
     },container: {
         flex: 1,
-        padding: 35,
+        padding: 20,
       },
     titulo: {
         margin: 12,
