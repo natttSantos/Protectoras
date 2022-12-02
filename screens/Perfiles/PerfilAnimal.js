@@ -3,6 +3,7 @@ import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import * as Location from 'expo-location';
+import { colors } from '../../components/Color'
 
 import {
   ScrollView,
@@ -52,7 +53,7 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
   const [animal, setAnimal] = useState(initialState);
   const [loading, setLoading] = useState(true);
   const [cosas, setState] = useState(initialStatee);
-  const [protectoraAnimal, setProtectoraAnimal] = useState(""); 
+  const [fotoProtectora, setfotoProtectora] = useState(""); 
   
   
   //Campos Opcionales
@@ -172,6 +173,11 @@ const getUsuarioById = async (id) => {
   const doc = await dbRef.get();
   const usuario = doc.data();
   setUsario({...usuario, id: doc.id});
+
+  if(!props.route.params.esUsuario) {
+    firebase.st.ref(`imagesProtectora/${usuario.fotoModificada}`).getDownloadURL().then(
+      (url) => setfotoProtectora(url), (error) => alert(error))
+  }
 };
 
 
@@ -179,6 +185,8 @@ const getAnimalById = async (id) => {
   const dbRef = firebase.db.collection("animales").doc(id);
   const doc = await dbRef.get();
   const animal = doc.data();
+  if(props.route.params.esUsuario) 
+    await getImagenProtectora(animal.id_protectora)
   setAnimal({ ...animal, id: doc.id });
 
 
@@ -193,6 +201,14 @@ const getAnimalById = async (id) => {
   validateOptionalFields(animal); 
   checkMicrochip_Vacunado(animal); 
 };
+
+const getImagenProtectora = async (id_protectora) => {
+  const protectora = await firebase.db.collection('protectoras').doc(id_protectora).get()
+  const {fotoModificada} = protectora.data()
+
+  firebase.st.ref(`imagesProtectora/${fotoModificada}`).getDownloadURL().then(
+    (url) => setfotoProtectora(url), (error) => alert('error'))
+}
 
 
 
@@ -270,7 +286,7 @@ const checkMicrochip_Vacunado = (value) => {
 
   useEffect(() => {
     getAnimalById(props.route.params.animalId);
-    getUsuarioById(props.route.params.userId); 
+    getUsuarioById(props.route.params.userId);
     getLocationPermission();
   }, []);
 
@@ -343,73 +359,117 @@ return (
   </View>
   <ScrollView style={styles.container}>
       <View style={styles.perfilContainer}>
-        <Text>
-          {"Nombre: " + animal.nombre}
-        </Text>
-        <Text>
-          {"Raza: " + animal.raza}
-        </Text>
-        <Text>
-          {"Sexo: " + animal.sexo}
-        </Text>
-        <Text>
-          {"Fecha de nacimiento: " + animal.fecha_nacimiento}
-        </Text>
-        <Text>
-          {"Edad: " + edadOpcional}
-        </Text>
-        <Text>
-          {"Peso: " + pesoOpcional}
-        </Text>
-        <Text>
-          {"Vacunado: " + vacunadoOpcional}
-        </Text>
-        <Text>
-          {"MicroChip: " + microChipOpcional}
-        </Text>
-        <Text>
-          {"Nivel Actividad: " + nivelOpcional}
-        </Text>
-        <Text>
-          {"Descripción: " + animal.descripcion}
-        </Text>
-        <MapView
-          style={styles.map}
-          initialRegion={{
-            latitude: posicionMapa.latitude,
-            longitude: posicionMapa.longitude,
-            latitudeDelta: 0.09,
-            longitudeDelta: 0.04
-          }}
-        >
-          <Marker
-            pinColor='#BD562A'
-            coordinate={coordenadas}
-            onDragEnd={(direction) => setposicionMapa(direction.nativeEvent.coordinate)} />
+        <View style={styles.nombreContainer}>
+          <Text style={styles.textoNombre}>
+            {animal.nombre}
+          </Text>
+          <Image source={{uri: fotoProtectora}} style={styles.imagenProtectora} />
+        </View>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{marginVertical: 10}}>
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoTexto}>
+            {animal.raza}
+            </Text>
+          </View>
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoTexto}>
+              {animal.sexo}
+            </Text>
+          </View>
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoTexto}>
+              {animal.fecha_nacimiento}
+            </Text>
+          </View>
+          {edadOpcional == "" ? null :
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoTexto}>
+              {edadOpcional}
+            </Text>
+          </View>
+          }
+          {pesoOpcional == "" ? null :
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoTexto}>
+              {pesoOpcional}
+            </Text>
+          </View>
+          }
+          {vacunadoOpcional == "No" ? null :
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoTexto}>
+              {"Vacunado"}
+            </Text>
+          </View>
+          }
+          {microChipOpcional == "No" ? null :
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoTexto}>
+              {"MicroChip"}
+            </Text>
+          </View>
+          }
+          {nivelOpcional == "" ? null :
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoTexto}>
+              {nivelOpcional == "Medio" ? "Nivel Actividad Medio" : nivelOpcional}
+            </Text>
+          </View>
+          }
+        </ScrollView>
+        <View style={{padding: 20}}>
+          <Text style={[styles.textoNombre, {fontSize: 24}]}>
+            Descripción
+          </Text>
+        </View>
+        <View style={styles.descripcionContainer}>
+          <Text style={styles.descripcionTexto}>
+            {animal.descripcion}
+          </Text>
+        </View>
+        <View style={styles.mapaContainer}>
+          <MapView
+            style={styles.map}
+            initialRegion={{
+              latitude: posicionMapa.latitude,
+              longitude: posicionMapa.longitude,
+              latitudeDelta: 0.09,
+              longitudeDelta: 0.04
+            }}
+          >
+            <Marker
+              pinColor='#BD562A'
+              coordinate={coordenadas}
+              onDragEnd={(direction) => setposicionMapa(direction.nativeEvent.coordinate)} />
 
-          <Marker
-            pinColor='#6BE795'
-            coordinate={{
-              longitude: animal.longitud,
-              latitude: animal.latitud
-            }} />
-        </MapView>
+            <Marker
+              pinColor='#6BE795'
+              coordinate={{
+                longitude: animal.longitud,
+                latitude: animal.latitud
+              }} />
+          </MapView>
+        </View>
 
         {esUsuario ?
+        <View style={{width: '100%', alignItems: 'center', marginBottom: 20}}>
           <TouchableOpacity
             style={styles.boton}
             onPress={() => adoptarAnimal()}
           >
-            <Text>Adoptar</Text>
+            <Text style={styles.texto}>Solicitar adopción</Text>
           </TouchableOpacity>
+        </View>
           : null}
         {esUsuario ?
+        <View style={{width: '100%', alignItems: 'center', marginBottom: 20}}>
           <TouchableOpacity
-            style={styles.boton}
+            style={[styles.boton, {backgroundColor: colors.amarillo}]}
             onPress={() => props.navigation.navigate('PerfilProtectora', { protectoraId: animal.id_protectora })}
           >
-            <Text>Contactar</Text>
+            <Text style={styles.texto}>Contactar</Text>
           </TouchableOpacity>
+        </View>
           : null}
       </View>
     </ScrollView></>
@@ -419,24 +479,17 @@ return (
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    shadowColor: "#000000",
-    shadowOffset: {
-      width: 2,
-      height: 12,
-    },
-    shadowOpacity: 0.88,
-    shadowRadius: 16.00
+    flex: 5
   },
   perfilContainer: {
     width: '100%',
-    marginBottom: 10,
     backgroundColor: '#ffffff',
-    borderRadius: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
   imagenContainer: {
     flex: 1,
-    height: 410,
+    height: 200,
     width: '100%'
   },
   imagen: {
@@ -472,20 +525,70 @@ title : {
 },
 boton: {
   alignItems: "center",
-  backgroundColor: "#DDDDDD",
-  padding: 10
+  backgroundColor: colors.moradoPrincipal,
+  padding: 10,
+  width: 220,
+  height: 40,
+  borderRadius: 42
+
 },
 texto: {
   fontSize : 16,
-  padding : 5,
-  borderBottomWidth: 1,
-  borderBottomColor: "#cccccc",
-  marginBottom: 5
+  fontFamily: 'DMSans',
+  color: colors.blanco
 },
-  map: {
-    width: 290,
-    height: 150
-  },
+map: {
+  width: 290,
+  height: 150,
+},
+nombreContainer: {
+  padding: 20,
+  marginTop: 5,
+  flexDirection: 'row',
+  justifyContent: 'space-between'
+},
+textoNombre: {
+  fontFamily: 'DMSans',
+  fontSize: 36,
+  color: colors.moradoPrincipal
+},
+imagenProtectora: {
+  width: 48,
+  height: 48,
+  borderRadius: 24,
+  borderColor: colors.moradoPrincipal,
+  borderWidth: 2
+},
+infoContainer: {
+  width: 70,
+  height: 70,
+  borderRadius: 20,
+  backgroundColor: colors.amarillo,
+  marginLeft: 15,
+  justifyContent: 'center',
+  alignItems: 'center'
+},
+infoTexto: {
+  color: colors.blanco,
+  fontFamily: 'InterRegular',
+  fontWeight: 'bold',
+  textAlign: 'center'
+},
+descripcionContainer: {
+  marginHorizontal: 50
+},
+descripcionTexto: {
+  fontFamily: 'InterRegular',
+  fontSize: 14
+},
+mapaContainer: {
+  width: 294,
+  height: 154,
+  marginHorizontal: 40,
+  marginVertical: 30,
+  borderColor: colors.moradoPrincipal,
+  borderWidth: 2
+},
 });
 
 export default PerfilAnimal;
