@@ -4,6 +4,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { Button } from "react-native-elements";
 import firebase from '../../database/firebase';
 import { CredentialsContext } from "../../components/CredentialsContext";
+import * as ImagePicker from 'expo-image-picker';
 
 
 const AltaAdoptar = (props) => {
@@ -29,6 +30,9 @@ const AltaAdoptar = (props) => {
         setUsuario({ ...usuario, id: doc.id });
         setLoading(false);
       };
+    const [fotoModificada, setFoto] = useState({
+        existe:"",
+    });
     const [nuevosDatos, setNuevosDatos] = useState(initialState);
     const [usuario, setUsuario] = useState();
     const [loading, setLoading] = useState(true);
@@ -43,7 +47,7 @@ const AltaAdoptar = (props) => {
     }
 
     const updateUsuario = async () => {
-        if (nuevosDatos.nombre == '' || nuevosDatos.apellidos == '' || nuevosDatos.localizacion == '' || nuevosDatos.dni == ''|| nuevosDatos.n_animales == '') {
+        if (nuevosDatos.nombre == '' || nuevosDatos.apellidos == ''|| fotoModificada.existe == '' || nuevosDatos.localizacion == '' || nuevosDatos.dni == ''|| nuevosDatos.n_animales == '') {
             console.log(nuevosDatos.apellidos);
             validateFields();
         } else if (nuevosDatos.nombre != '' && nuevosDatos.apellidos != '' && nuevosDatos.localizacion != '' && nuevosDatos.dni != ''&& nuevosDatos.n_animales != ''){
@@ -62,13 +66,66 @@ const AltaAdoptar = (props) => {
           telefono: usuario.telefono,
         });
         setUsuario(initialState);
-        props.navigation.navigate('PerfilUsuario', {
-            userId: usuario.id,
-          });
+        props.navigation.navigate('SesionUsuario', {userId: usuario.id})
         }
-        
       };
 
+      const uploadImage = uri => {
+        return new Promise((resolve, reject) => {
+          console.log(resolve + " " + reject);
+          let xhr = new XMLHttpRequest();
+          xhr.onerror = reject;
+          xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+              resolve(xhr.response);
+            }
+          };
+
+          xhr.open("GET", uri);
+          xhr.responseType = "blob";
+          xhr.send();
+        });
+      };
+
+
+    const openGallery = async () => {
+
+        const resultPermission =true; 
+        if (resultPermission) {
+          const resultImagePicker = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [4, 3]
+          });
+
+          if (resultImagePicker.cancelled === false) {
+            const imageUri = resultImagePicker.uri;
+            uploadImage(imageUri)
+              .then(resolve => {
+                let ref = firebase
+                .st
+                .ref()
+                .child(`imagesUsuario/${props.route.params.userId}`);
+                ref
+                  .put(resolve)
+                  .then(resolve => {
+                    console.log("Imagen subida correctamente");
+                    setFoto({
+                        existe: "Si"
+                     });
+                     alert("Imagen subida correctamente")
+                  })
+                  .catch(error => {
+                    console.log(error);
+                    console.log(error);
+                    console.log("Error al subir la imagen");
+                  });
+              })
+              .catch(error => {
+                console.log(error);
+              });
+          }
+        }
+      };
     const validateFields = () => {
         let textoAlerta = "Complete el campo: ";
         if (nuevosDatos.nombre == ''){
@@ -83,12 +140,15 @@ const AltaAdoptar = (props) => {
             textoAlerta += "\n - Localización ";  
         } if (nuevosDatos.n_animales == ''){
             textoAlerta += "\n - Número de animales ";  
+        }if (fotoModificada.existe == ''){
+            textoAlerta += "\n - Foto ";  
         }
         alert (textoAlerta); 
     }
 
     return(
         <ScrollView style={styles.container}> 
+        
             <Text style={styles.title}> Crear Perfil Adoptar </Text>
             <View 
             style={styles.inputGroup}> 
@@ -139,6 +199,7 @@ const AltaAdoptar = (props) => {
                     onChangeText={(value) => handleChangeText('n_animales', value)}
                     />
             </View>
+            <Button style={{position: 'fixed',  right: 0}} title="Selecciona una imagen" onPress={() =>  openGallery()} /> 
             <View style={{marginTop: 15}}>
                 <Button 
                 title="Dar de alta" 

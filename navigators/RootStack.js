@@ -15,7 +15,6 @@ import ListaProtectoras from '../screens/Listas/ListaProtectoras'
 import ListaAnimales from '../screens/Listas/ListaAnimales';
 import PerfilAnimal from '../screens/Perfiles/PerfilAnimal';
 import AltaAdoptar from '../screens/Altas/AltaAdoptar';
-import PerfilAdoptar from '../screens/Perfiles/PerfilAdoptar';
 import FechaNacimientoAnimal from '../screens/Altas/FechaNacimientoAnimal';
 import ModificarUsuario from '../screens/Modificar/ModificarUsuario';
 import MapaAnimalEncontrado from '../screens/Mapa/MapaAnimalEncontrado';
@@ -57,6 +56,12 @@ const RootStack = () => {
                                         <Stack.Screen
                                             name="SesionUsuario"
                                             component={SesionUsuario}
+                                            options={{
+                                                
+                                                headerTintColor: '#fff',
+                                                headerTransparent: true,
+                                                headerTitle: ''
+                                            }}
                                         />
                                         <Stack.Screen
                                             name="PerfilUsuario"
@@ -98,10 +103,7 @@ const RootStack = () => {
                                             name="AltaAdoptar"
                                             component={AltaAdoptar}
                                         />
-                                        <Stack.Screen
-                                            name="PerfilAdoptar"
-                                            component={PerfilAdoptar}
-                                        />
+                                        
                                         <Stack.Screen
                                             name="RegistrarAnimalPropietario"
                                             component={RegistrarAnimalPropietario}
