@@ -115,6 +115,13 @@ const RootStack = () => {
                                         <Stack.Screen
                                             name="Donaciones"
                                             component={Donaciones}
+                                            options={{ 
+                                                headerStyle: {
+                                                    backgroundColor: colors.amarillo
+                                                },
+                                                headerTransparent: true,
+                                                headerTitle: '',                                    
+                                                }}
                                         />
                                          <Stack.Screen
                                             name="FechaExpiracion"
@@ -175,6 +182,7 @@ const RootStack = () => {
                                         <Stack.Screen
                                             name="PerfilAnimal"
                                             component={PerfilAnimal}
+                                            options={{headerTransparent: true, headerTitle: '', headerTintColor: colors.amarillo}}
                                         />
                                         <Stack.Screen
                                             name="PerfilUsuario"

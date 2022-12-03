@@ -2,9 +2,12 @@ import React, {useState, useEffect} from "react";
 import { View, Button, TextInput, StyleSheet, ScrollView, Text, Alert, TouchableOpacity, Image} from "react-native";
 import firebase from '.././database/firebase.js';
 
+import KeyboardAvoidingWrapper from "../components/KeyboardAvoiding.js";
+
 //Bibliotecas colores CSS
 import {colors} from '../components/Color';
 const Donaciones = (props) => {
+    
     
     const [state, setState] = useState({ //STATE ES UN OBJETO CON NOMBRE, EMAIL Y TLF
         nombre: "", 
@@ -17,6 +20,7 @@ const Donaciones = (props) => {
 
 
     const [protectora, setProtectora] = useState();
+    const [perfil, setPerfilAdoptar] = useState(); //DAMI: AÑADÍ ESTO PARA DECLARAR EL PERFIL, NO SE SI VA BIEN PERO YA NO SALE WARNING
     const [cambios, setcambios] = useState(false);
     const [usuario, setUsario] = useState();
 
@@ -34,7 +38,6 @@ const Donaciones = (props) => {
         const usuario = doc.data();
         console.log(usuario)
         setUsario({ ...usuario, id: doc.id });
-        setLoading(false);
         if (usuario.alta == "Si"){
           setPerfilAdoptar({ ...usuario, id: doc.id });
         }
@@ -45,7 +48,6 @@ const Donaciones = (props) => {
         const doc = await dbRef.get();
         const protectora = doc.data();
         setProtectora({ ...protectora, id: doc.id });
-        setLoading(false);
       }
 
     const handleChangeText = (nombre, value) => {
@@ -91,11 +93,12 @@ const Donaciones = (props) => {
 
 
     return (
+        <KeyboardAvoidingWrapper>
             <View style={styles.container}>
-                <Text style={styles.titulo}> Registro </Text>
+                <Text style={styles.titulo}> Donaciones </Text>
                 <TextInput 
                     style={styles.textFieldCircular}
-                    placeholder="Nombre" 
+                    placeholder="Nombre"
                     onChangeText={(value) => handleChangeText('nombre', value)}
                 />
                 <TextInput 
@@ -117,7 +120,7 @@ const Donaciones = (props) => {
                      onPress={() => props.navigation.navigate('FechaExpiracion', {userId: props.route.params.userId, esProtectora: "No"})}
                      style={styles.fechaNacimiento}>
                      <View style={styles.botonFechaNacimiento}>
-                        <Text style={styles.texto}> Fecha de expiración </Text>
+                        <Text style={styles.texto}> Fecha de expiración: </Text>
                         <Image
                         source={require('.././images/Calendario.png')}
                         style={styles.image}
@@ -130,7 +133,7 @@ const Donaciones = (props) => {
                     onChangeText={(value) => handleChangeText('dineroDonado', value)}
                 />
                 
-                <View style= {{  position: 'absolute', bottom: 0, alignSelf: 'center',padding: -100}}>                    
+                <View>                    
                     <TouchableOpacity 
                         onPress={() => saveDonacion()}
                         style={styles.botonCircularAmarillo}>
@@ -140,6 +143,7 @@ const Donaciones = (props) => {
                     </TouchableOpacity>
                 </View>
             </View>
+        </KeyboardAvoidingWrapper>
     )
 }
 
@@ -149,7 +153,7 @@ const styles = StyleSheet.create({
         padding: 35,
         backgroundColor: colors.amarillo,
         marginTop: 50,
-        height:600
+        height: 800
     },
     titulo : {
         fontSize: 32,
@@ -180,7 +184,8 @@ const styles = StyleSheet.create({
         width:217,
         height:47,
         borderRadius: 25,
-        marginBottom: 100
+        marginTop: 100,
+        alignSelf: 'center'
       },
       botonTexto: {
         fontSize: 20,
@@ -188,6 +193,17 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         alignSelf: "center",
         marginTop: 5
+      },
+      texto: {
+        fontSize: 20,
+        color: colors.blanco,
+        fontWeight: "bold",
+        alignSelf: "center",
+        marginBottom: 20
+      },
+      image: {
+        marginBottom: 15,
+        marginRight: 50
       }
 })
 
