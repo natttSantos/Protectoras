@@ -16,6 +16,8 @@ import firebase from "../../database/firebase";
 import Donaciones from "../Donaciones"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CredentialsContext } from "../../components/CredentialsContext";
+import {colors} from '../../components/Color';
+import { Appbar} from 'react-native-paper';
 
 const PerfilProtectora = (props) => {
 
@@ -74,12 +76,95 @@ const PerfilProtectora = (props) => {
     if (cosas != "") {
       return (
         <Image
-          style={{ width: 300, height: 300 }}
+          style={styles.image}
           source={{ uri: imageFirebase }}
         />
       );
     }
     return null;
+  }
+  const checkTipoUsuario_usuario = () => { 
+    if (props.route.params.isUsuario) {
+      return (
+        <View style={styles.container}>
+        <View style={styles.textContainerGmailTlf}>
+            {checkImage()}
+            <Text style={styles.textoNombreProte} >{protectora.nombre}</Text>
+        </View>
+      
+        <View style={styles.containerInfoProte}>
+        <View style={styles.containerprueba}>
+        <Text style={styles.textoInfoProteEnunciado}>Email</Text>
+        <Text style={styles.textoInfoProte}>{protectora.email}</Text>
+        <Text style={styles.textoInfoProteEnunciado}>Localizacion</Text>
+        <Text style={styles.textoInfoProte}>{protectora.localizacion}</Text>
+        <Text style={styles.textoInfoProteEnunciado}>Dirección</Text>
+        <Text style={styles.textoInfoProte}>{protectora.direccion} </Text>
+        <Text style={styles.textoInfoProteEnunciado}>Descripción</Text>
+        <Text style={styles.textoDescipcion}>{protectora.descripcion} </Text>
+        </View>
+        </View>
+
+        <View style={{marginTop: 630}}>
+        <BotonAbrirURL url={protectora.url}>
+          Página web
+        </BotonAbrirURL>
+        </View>
+
+        <View style={{marginTop: -470}}>
+        <TouchableOpacity 
+                      onPress={() => {
+                        props.navigation.navigate('Donaciones', {userId: storedCredentials,  protectoraId:props.route.params.protectoraId}) 
+                      }}
+                      style={styles.botonCircularMorado2}>
+                          <Text style={styles.botonTexto}>
+                              Donar
+                          </Text>
+          </TouchableOpacity>
+          </View>
+    </View>
+      )
+    } 
+  }
+  
+  const checkTipoUsuario_protectora = () => { 
+    if (!props.route.params.isUsuario) {
+      return (
+        <View style={styles.container}>
+          <Appbar.Header style={styles.appBar}>
+          <Appbar.Content title="" />
+          <Appbar.Action icon="lead-pencil" size={30} onPress={() => {
+                        props.navigation.navigate('ModificarProtectora', {userId: storedCredentials}) 
+                      }} />
+          <Appbar.Action icon="logout" size={30} onPress={clearLogin} />
+          </Appbar.Header>
+
+        <View style={styles.textContainerGmailTlf}>
+            {checkImage()}
+            <Text style={styles.textoNombreProte} >{protectora.nombre}</Text>
+        </View>
+      
+        <View style={styles.containerInfoProte}>
+        <View style={styles.containerprueba}>
+        <Text style={styles.textoInfoProteEnunciado}>Email</Text>
+        <Text style={styles.textoInfoProte}>{protectora.email}</Text>
+        <Text style={styles.textoInfoProteEnunciado}>Localizacion</Text>
+        <Text style={styles.textoInfoProte}>{protectora.localizacion}</Text>
+        <Text style={styles.textoInfoProteEnunciado}>Dirección</Text>
+        <Text style={styles.textoInfoProte}>{protectora.direccion} </Text>
+        <Text style={styles.textoInfoProteEnunciado}>Descripción</Text>
+        <Text style={styles.textoDescipcion}>{protectora.descripcion} </Text>
+        </View>
+        </View>
+
+        <View style={{marginTop: 515}}>
+        <BotonAbrirURL url={protectora.url}>
+          Página web
+        </BotonAbrirURL>
+        </View>
+    </View>
+      )
+    }
   }
 
   useEffect(() => {
@@ -96,67 +181,10 @@ const PerfilProtectora = (props) => {
 
 
 return (
-    <ScrollView style={styles.container}>
-
-      <View>
-      {checkImage()}
-        <Text style = {styles.texto} >
-          {"Nombre: " + protectora.nombre}
-        </Text>
-        <Text style = {styles.texto} >
-          {"Email: " + protectora.email}
-        </Text>
-        <Text style = {styles.texto} >
-          {"Localización: " + protectora.localizacion}
-        </Text>
-        <Text style = {styles.texto} >
-          {"Dirección: " + protectora.direccion}
-        </Text>        
-        <Text style = {styles.texto} >
-          {"Descripción: " + protectora.descripcion}
-        </Text>
-        <BotonAbrirURL url={protectora.url}>
-          Página web
-        </BotonAbrirURL>
-        <View style={{marginBottom: 50}}>
-        {!type ? 
-
-          <>
-          
-          <TouchableOpacity
-              onPress={clearLogin}
-              style={styles.boton}
-            >
-              <Text style={styles.buttonText}>
-                              Cerrar sesión
-                          </Text>
-          </TouchableOpacity>
-            <TouchableOpacity 
-                      onPress={() => {
-                        props.navigation.navigate('ModificarProtectora', {userId: storedCredentials}) 
-                      }}
-                      style={styles.boton}>
-                          <Text style={styles.buttonText}>
-                              MODIFICAR
-                          </Text>
-          </TouchableOpacity>
-          </>
-        : null}
-        {type ? 
-        <TouchableOpacity 
-                      onPress={() => {
-                        props.navigation.navigate('Donaciones', {userId: storedCredentials,  protectoraId:props.route.params.protectoraId}) 
-                      }}
-                      style={styles.boton}>
-                          <Text style={styles.buttonText}>
-                              Donar
-                          </Text>
-          </TouchableOpacity>
-          : null}
-        </View>
-      </View>
-      
-    </ScrollView>
+    <View style={styles.container}>
+        {checkTipoUsuario_protectora()}
+        {checkTipoUsuario_usuario()}
+    </View>
   );
 };
 
@@ -177,45 +205,122 @@ const BotonAbrirURL = ({ url }) => {
   }, [url]);
 
   return <TouchableOpacity  
-            style={styles.boton} 
+            style={styles.botonCircularMorado} 
             onPress={handlePress} 
             >
-              <Text>PÁGINA WEB</Text>
+              <Text style={styles.botonTexto}>Página web</Text>
           </TouchableOpacity>
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 35,
+        flex: 1, 
+        height: 2000, 
+        backgroundColor: colors.amarillo 
   },
-  image : {
-    height : 250, 
-    width : 250,
-    marginBottom : 15
+  image: {
+        width: 110,
+        height: 110,
+        alignSelf: "center", 
+        top: -50, 
+        position: "absolute", 
+        borderRadius: 75
   },
-  loader: {
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    position: "absolute",
-    alignItems: "center",
-    justifyContent: "center",
+  textContainer: {
+    height: '50%',
+    width: '100%',
+    justifyContent: 'center',
+    position: "absolute", 
+    alignSelf: 'center', 
+    bottom: -180,
+    flex: 1
+},
+textContainerGmailTlf: {
+  height: '50%',
+  width: '100%',
+  justifyContent: 'center',
+  position: "absolute", 
+  alignSelf: 'center', 
+  bottom: 258, 
+  flex: 1
+},
+  textoNombreProte: {
+    fontSize: 24,
+    alignSelf: "center", 
+    color: colors.blanco,
+    fontWeight: 'bold', 
+    marginBottom: 4, 
+    marginTop: -190
   },
-  boton: {
-    alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    marginTop : 25,
-    padding: 10
+  containerInfoProte: {
+    height: '68%',
+    width: '100%',
+    justifyContent: 'center',
+    position: "absolute", 
+    backgroundColor: colors.blanco,
+    borderRadius: 35, 
+    alignSelf: 'center', 
+    bottom: -26, 
+    flex: 1
   },
-  texto: {
-    fontSize : 16,
-    padding : 5,
-    borderBottomWidth: 1,
-    borderBottomColor: "#cccccc",
-    marginTop : 13
-  }
+  containerprueba: {
+    marginBottom: 4, 
+    marginTop: -170
+  }, 
+  textoInfoProteEnunciado: {
+    fontSize: 14, 
+    color: "#AD8EB3",
+    padding: 60,
+    marginBottom: -70
+  },
+  textoInfoProte: {
+    fontSize: 14, 
+    padding: 60,
+    marginBottom: -100, 
+    marginTop: -40
+  },
+  textoDescipcion: {
+    fontSize: 14, 
+    color: "#5B1D66",
+    padding: 60,
+    marginTop: -40, 
+    marginBottom: -70
+  },
+  botonCircularMorado : {
+        backgroundColor: colors.amarillo,
+        borderColor: colors.blanco,
+        borderWidth: 2,
+        width:260,
+        height:42,
+        borderRadius: 25,
+        alignSelf: "center",
+      },
+      botonCircularMorado2 : {
+        backgroundColor: colors.moradoPrincipal,
+        borderColor: colors.blanco,
+        borderWidth: 2,
+        width:105,
+        height:42,
+        borderRadius: 25,
+        alignSelf: "center",
+      },
+      botonTexto: {
+        fontSize: 18,
+        color: colors.blanco,
+        fontWeight: "bold",
+        alignSelf: "center",
+        marginTop: 5
+      }, 
+  appBar: {
+    flex: 1, 
+    justifyContent: "space-between",
+    elevation: 0, 
+    backgroundColor: colors.amarillo,
+    padding: 50,
+    marginTop: 52
+  },
+
 });
+
 
 export default PerfilProtectora;
