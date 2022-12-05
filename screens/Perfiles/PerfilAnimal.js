@@ -363,7 +363,11 @@ return (
           <Text style={styles.textoNombre}>
             {animal.nombre}
           </Text>
-          <Image source={{uri: fotoProtectora}} style={styles.imagenProtectora} />
+          <TouchableOpacity
+          onPress={esUsuario ? () => props.navigation.navigate('PerfilProtectora', { protectoraId: animal.id_protectora })
+                   : null}>
+            <Image source={{uri: fotoProtectora}} style={styles.imagenProtectora} />
+          </TouchableOpacity>
         </View>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{marginVertical: 10}}>
           <View style={styles.infoContainer}>
@@ -461,16 +465,6 @@ return (
           </TouchableOpacity>
         </View>
           : null}
-        {esUsuario ?
-        <View style={{width: '100%', alignItems: 'center', marginBottom: 20}}>
-          <TouchableOpacity
-            style={[styles.boton, {backgroundColor: colors.amarillo}]}
-            onPress={() => props.navigation.navigate('PerfilProtectora', { protectoraId: animal.id_protectora })}
-          >
-            <Text style={styles.texto}>Contactar</Text>
-          </TouchableOpacity>
-        </View>
-          : null}
       </View>
     </ScrollView></>
   );
@@ -560,8 +554,8 @@ imagenProtectora: {
   borderWidth: 2
 },
 infoContainer: {
-  width: 70,
-  height: 70,
+  width: 75,
+  height: 75,
   borderRadius: 20,
   backgroundColor: colors.amarillo,
   marginLeft: 15,
@@ -584,7 +578,7 @@ descripcionTexto: {
 mapaContainer: {
   width: 294,
   height: 154,
-  marginHorizontal: 40,
+  marginHorizontal: 50,
   marginVertical: 30,
   borderColor: colors.moradoPrincipal,
   borderWidth: 2
