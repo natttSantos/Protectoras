@@ -121,6 +121,8 @@ const PerfilProtectora = (props) => {
                               Donar
                           </Text>
           </TouchableOpacity>
+
+
           </View>
     </View>
       )
@@ -156,6 +158,15 @@ const PerfilProtectora = (props) => {
         <Text style={styles.textoDescipcion}>{protectora.descripcion} </Text>
         </View>
         </View>
+        <TouchableOpacity 
+                      onPress={() => {
+                        props.navigation.navigate('ListaDonaciones', {userId: storedCredentials,  protectoraId:props.route.params.protectoraId}) 
+                      }}
+                      style={styles.botonCircularMorado2}>
+                          <Text style={styles.botonTexto}>
+                              Lista
+                          </Text>
+          </TouchableOpacity>
 
         <View style={{marginTop: 515}}>
         <BotonAbrirURL url={protectora.url}>

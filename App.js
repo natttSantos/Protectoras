@@ -40,7 +40,7 @@ import InformacionSolicitud from './screens/InformacionSolicitud';
 import Notificaciones from './screens/Notificaciones/Notificaciones';
 import Donaciones from './screens/Donaciones';
 import FechaExpiracion from './screens/FechaExpiracion';
-
+import ListaDonaciones from './screens/Listas/ListaDonaciones';
 
 import FiltradoAnimales from './screens/Listas/FiltradoAnimales';
 
@@ -76,6 +76,7 @@ function MyStack (){
       <Stack.Screen name="Notificaciones" component={Notificaciones} />
       <Stack.Screen name="Donaciones" component={Donaciones} />
       <Stack.Screen name="FechaExpiracion" component={FechaExpiracion} />
+      <Stack.Screen name="ListaDonaciones" component={ListaDonaciones} />
     </Stack.Navigator>
   )
 }
