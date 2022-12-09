@@ -30,7 +30,7 @@ const Donaciones = (props) => {
         getUsuarioById(props.route.params.userId);
       }, []);
 
-
+      let fechaActual = new Date();
 
       const getUsuarioById = async (id) => {
         const dbRef = firebase.db.collection("users").doc(id);
@@ -65,6 +65,11 @@ const Donaciones = (props) => {
                 dineroDonado: state.dineroDonado,
                 fechaExpiracion: props.route.params.valueFecha,
                 protectora : protectora.id,
+                id_Usuario: props.route.params.userId,
+                leida: "No",
+                dia : fechaActual.getDate(),
+                mes : fechaActual.getMonth(),
+                año: fechaActual.getFullYear(),
             })
             alert ("Donación completada"); }
         

@@ -29,6 +29,7 @@ import RegistrarAnimal from '../screens/Altas/RegistrarAnimal';
 import MapaAnimalEncontradoProtectora from '../screens/Mapa/MapaAnimalEncontradoProtectora';
 import InformacionSolicitud from '../screens/InformacionSolicitud';
 import ListaAnimalesProtectora from '../screens/Listas/ListaAnimalesProtectora';
+import ListaDonaciones from '../screens/Listas/ListaDonaciones';
 import ModificarProtectora from '../screens/Modificar/ModificarProtectora';
 
 //Stack común para ambos tipos de usuarios
@@ -170,6 +171,10 @@ const RootStack = () => {
                                         <Stack.Screen
                                             name="ListaAnimalesProtectora"
                                             component={ListaAnimalesProtectora}
+                                        />
+                                        <Stack.Screen
+                                            name="ListaDonaciones"
+                                            component={ListaDonaciones}
                                         />
                                         <Stack.Screen
                                             name="ListaSolicitudes"

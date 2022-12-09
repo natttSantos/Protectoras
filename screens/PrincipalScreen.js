@@ -26,7 +26,10 @@ const PrincipalScreen = (props) => {
                         Regístrate
                         </Text>
                 </TouchableOpacity>
+                
                 </View>
+                
+                
                 <View style= {{position: 'absolute', bottom: 75, alignSelf: 'center'}}>
                 
                 <TouchableOpacity 
