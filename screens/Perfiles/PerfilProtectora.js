@@ -18,9 +18,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CredentialsContext } from "../../components/CredentialsContext";
 import {colors} from '../../components/Color';
 import { Appbar} from 'react-native-paper';
+import { useIsFocused } from '@react-navigation/native';
+import {Avatar, ListItem} from "react-native-elements";
+import { color } from "react-native-elements/dist/helpers";
 
 const PerfilProtectora = (props) => {
-
+  const isFocused = useIsFocused()
   const initialState = {
     nombre:"",
     email:"",
@@ -36,7 +39,9 @@ const PerfilProtectora = (props) => {
     staet :""
     
   };
-
+  const [imagenes, setImagenes] = useState([]);
+  let imagenesAux = []
+  const [animales, setAnimales] = useState([])
   const {storedCredentials, setStoredCredentials} = useContext(CredentialsContext)
   const {type, setType} = useContext(CredentialsContext)
 
@@ -70,7 +75,46 @@ const PerfilProtectora = (props) => {
     });
   };
 
+  const cargarImagenes = async () => {
+    let i = animales.length
 
+    if(i > 0){
+        await animales.map(async (animal, index) => {
+            await firebase
+            .st
+            .ref(`images/${animal.nombre}`)
+            .getDownloadURL().then(function(url) {
+                i--
+                imagenesAux[index] = url
+                setImagenes(...imagenes, imagenesAux)
+                if(i == 0) setLoading(false)
+            });
+        })
+    }
+    else {
+        setLoading(false)
+    }
+}
+  const getAllAnimalesDeProtectora = async (id) => {
+    const animales = []
+
+    const dbRef = firebase.db.collection('animales').where("id_protectora", "==", id)
+    const docs = await dbRef.get()
+    docs.forEach(doc => {
+        const {nombre, sexo,descripcion, raza} = doc.data()
+        animales.push({
+            id: doc.id,
+            id_protectora: id,
+            nombre,
+            raza,
+            descripcion,
+            sexo
+        })
+    })
+
+    setAnimales(animales)
+    setLoading(false)
+  }
   const checkImage = () => {
     const { imageFirebase } = cosas;
     if (cosas != "") {
@@ -83,9 +127,45 @@ const PerfilProtectora = (props) => {
     }
     return null;
   }
-  const checkTipoUsuario_usuario = () => { 
+  const cargarListaAnimales = () => {
+    if(animales.length > 0) {
+      return(
+          <View style={styles.containerListaAnimales}>
+                  <Text style={styles.titulo}> Animales en esta protectora</Text>
+                  {animales.map((animal, index) => {
+                      return (
+                          <ListItem key={animal.id}
+                              bottomDivider
+                              onPress={() => {props.navigation.navigate('PerfilAnimal', {animalId: animal.id, userId: props.route.params.userId, esUsuario: false})}}>
+                              <Avatar 
+                              style = {styles.imagen}
+                              source={{uri: imagenes[index]}}
+                              />
+                              <ListItem.Content 
+                              style = {styles.lista}
+                              >
+                                  <ListItem.Title> {animal.nombre} </ListItem.Title>
+                                  <ListItem.Subtitle> {animal.raza} </ListItem.Subtitle>
+                                  <ListItem.Subtitle> {animal.sexo} </ListItem.Subtitle>
+                              </ListItem.Content>
+                          </ListItem>);
+                  })}
+              </View>
+      )
+  } else {
+      return (
+          <View>
+              <Text>
+                  NO HAY ANIMALES
+              </Text>
+          </View>
+      )
+  }
+  }
+  const checkTipoUsuario_usuario = () => { //SESION USUARIO
     if (props.route.params.isUsuario) {
       return (
+        <ScrollView style={styles.container}>
         <View style={styles.container}>
         <View style={styles.textContainerGmailTlf}>
             {checkImage()}
@@ -93,7 +173,9 @@ const PerfilProtectora = (props) => {
         </View>
       
         <View style={styles.containerInfoProte}>
-        <View style={styles.containerprueba}>
+        <View style={{marginTop: -2150, padding: 40,marginBottom: -350}}><Text style={styles.titulo}>Datos</Text></View>
+        
+        <View style={styles.containerInfoProteCUADRADO}>
         <Text style={styles.textoInfoProteEnunciado}>Email</Text>
         <Text style={styles.textoInfoProte}>{protectora.email}</Text>
         <Text style={styles.textoInfoProteEnunciado}>Localizacion</Text>
@@ -105,13 +187,13 @@ const PerfilProtectora = (props) => {
         </View>
         </View>
 
-        <View style={{marginTop: 630}}>
+        <View style={{marginTop: 708}}>
         <BotonAbrirURL url={protectora.url}>
           Página web
         </BotonAbrirURL>
         </View>
 
-        <View style={{marginTop: -470}}>
+        <View style={{marginTop: -537}}>
         <TouchableOpacity 
                       onPress={() => {
                         props.navigation.navigate('Donaciones', {userId: storedCredentials,  protectoraId:props.route.params.protectoraId}) 
@@ -121,16 +203,16 @@ const PerfilProtectora = (props) => {
                               Donar
                           </Text>
           </TouchableOpacity>
-
-
           </View>
-    </View>
+          </View>
+          {cargarListaAnimales()}
+    </ScrollView>
       )
     } 
   }
   
   const checkTipoUsuario_protectora = () => { 
-    if (!props.route.params.isUsuario) {
+    if (!props.route.params.isUsuario) { //SESION PROTECTORA
       return (
         <View style={styles.container}>
           <Appbar.Header style={styles.appBar}>
@@ -181,8 +263,16 @@ const PerfilProtectora = (props) => {
     }
   }
 
+  useEffect(() => { 
+    if(isFocused) {
+      setLoading(true)
+      getAllAnimalesDeProtectora(props.route.params.protectoraId);
+    }
+  }, [isFocused]);
+
   useEffect(() => {
-    getProtectoraById(props.route.params.protectoraId);
+    cargarImagenes(); 
+    getProtectoraById(props.route.params.protectoraId); 
   }, [cambios]);
   
   if(loading) {
@@ -219,7 +309,7 @@ const BotonAbrirURL = ({ url }) => {
   }, [url]);
 
   return <TouchableOpacity  
-            style={styles.botonCircularMorado} 
+            style={styles.botonCircularAmarillo} 
             onPress={handlePress} 
             >
               <Text style={styles.botonTexto}>Página web</Text>
@@ -229,9 +319,14 @@ const BotonAbrirURL = ({ url }) => {
 const styles = StyleSheet.create({
   container: {
         flex: 1, 
-        height: 2000, 
         backgroundColor: colors.amarillo 
   },
+  containerListaAnimales: {
+    flex: 2, 
+    padding: 15, 
+    height: 1000, 
+    marginTop: 500 
+},
   image: {
         width: 110,
         height: 110,
@@ -255,7 +350,7 @@ textContainerGmailTlf: {
   justifyContent: 'center',
   position: "absolute", 
   alignSelf: 'center', 
-  bottom: 258, 
+  bottom: 60, 
   flex: 1
 },
   textoNombreProte: {
@@ -263,18 +358,31 @@ textContainerGmailTlf: {
     alignSelf: "center", 
     color: colors.blanco,
     fontWeight: 'bold', 
-    marginBottom: 4, 
-    marginTop: -190
+    top: 12
   },
   containerInfoProte: {
-    height: '68%',
+    height: 2000, 
     width: '100%',
     justifyContent: 'center',
     position: "absolute", 
     backgroundColor: colors.blanco,
     borderRadius: 35, 
     alignSelf: 'center', 
-    bottom: -26, 
+    top: 220, 
+    flex: 1
+  },
+  containerInfoProteCUADRADO: {
+    height: 450, 
+    width: 350,
+    justifyContent: 'center',
+    position: "absolute", 
+    borderColor: colors.moradoPrincipal, 
+    borderWidth: 3,
+    borderRadius: 35, 
+    alignSelf: 'center', 
+    top: 200, 
+    marginBottom: 4, 
+    marginTop: -170, 
     flex: 1
   },
   containerprueba: {
@@ -300,7 +408,7 @@ textContainerGmailTlf: {
     marginTop: -40, 
     marginBottom: -70
   },
-  botonCircularMorado : {
+  botonCircularAmarillo : {
         backgroundColor: colors.amarillo,
         borderColor: colors.blanco,
         borderWidth: 2,
@@ -341,6 +449,12 @@ textContainerGmailTlf: {
     backgroundColor: colors.amarillo,
     padding: 50,
     marginTop: 52
+  },
+  titulo: {
+    fontSize: 24, 
+    fontWeight: 'bold', 
+    color: "#5B1D66",
+    padding: 40
   },
 
 });
