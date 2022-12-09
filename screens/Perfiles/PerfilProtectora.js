@@ -158,17 +158,20 @@ const PerfilProtectora = (props) => {
         <Text style={styles.textoDescipcion}>{protectora.descripcion} </Text>
         </View>
         </View>
+
+        <View style={{marginTop: 60}}>
         <TouchableOpacity 
                       onPress={() => {
                         props.navigation.navigate('ListaDonaciones', {userId: storedCredentials,  protectoraId:props.route.params.protectoraId}) 
                       }}
-                      style={styles.botonCircularMorado2}>
+                      style={styles.botonListaDonaciones}>
                           <Text style={styles.botonTexto}>
-                              Lista
+                              Lista donaciones
                           </Text>
           </TouchableOpacity>
+          </View>
 
-        <View style={{marginTop: 515}}>
+        <View style={{marginTop: 400}}>
         <BotonAbrirURL url={protectora.url}>
           Página web
         </BotonAbrirURL>
@@ -311,6 +314,15 @@ textContainerGmailTlf: {
         borderColor: colors.blanco,
         borderWidth: 2,
         width:105,
+        height:42,
+        borderRadius: 25,
+        alignSelf: "center",
+      },
+      botonListaDonaciones : {
+        backgroundColor: colors.moradoPrincipal,
+        borderColor: colors.blanco,
+        borderWidth: 2,
+        width:170,
         height:42,
         borderRadius: 25,
         alignSelf: "center",
