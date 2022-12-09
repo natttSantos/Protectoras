@@ -337,7 +337,6 @@ const styles = StyleSheet.create({
     },
     titulo : {
         fontSize: 27,
-        fontWeight: 'bold',
         color: colors.moradoPrincipal,
         fontFamily: 'DMSans',
         marginBottom: 10

@@ -216,20 +216,24 @@ const RegistrarAnimal = (props) => {
             <View style={styles.botonesHorizontales}>
               <View>
                 <Text style={styles.caracteristicas}> Gato </Text>
-                <TouchableOpacity style={styles.botonPropiedades}>
+                <TouchableOpacity 
+                  style={styles.botonPropiedades}
+                  onPress={() => setTipo("Gato", "Gato")}>
                     <Image
                       source={require('../../images/Gato.png')}
                       style={styles.image}
                     />
-                  </TouchableOpacity>
+                </TouchableOpacity>
               </View>
               <View>
                 <Text style={styles.caracteristicas}> Perro </Text>
-                <TouchableOpacity style={styles.botonPropiedades}>
-                  <Image
-                    source={require('../../images/Perro.png')}
-                    style={styles.image}
-                  />
+                <TouchableOpacity
+                   style={styles.botonPropiedades}
+                   onPress={() => setTipo("Perro", "Perro")}>
+                    <Image
+                      source={require('../../images/Perro.png')}
+                      style={styles.image}
+                    />
                 </TouchableOpacity>
               </View>
             </View>
@@ -257,10 +261,17 @@ const RegistrarAnimal = (props) => {
               onChangeText={(value) => handleChangeText('peso', value)}
             />
             <DropDownPicker
-              style={{marginTop: 30}}
+              style={styles.dropDownPicker}
               placeholder="* Tipo"
+              placeholderStyle={{
+                color: colors.moradoSecundario
+              }}
               items={tipo}
               setItems={setTipo}
+              listItemLabelStyle={{
+                color: colors.moradoSecundario
+              }}
+              selectedItemLabelStyle={{color: colors.moradoPrincipal, fontWeight: 'bold'}}
               open={tipoOpen}
               setOpen={setTipoOpen}
               value={tipoValue}
@@ -405,6 +416,15 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center'
     },
+    dropDownPicker : {
+      marginTop: 30,
+      borderRadius: 25,
+      borderColor: colors.moradoPrincipal,
+      borderWidth: 2,
+      fontStyle : {
+          color: colors.amarillo
+      }
+    },
     botonFechaNacimiento: {
       flexDirection: 'row',
       marginLeft: 25
@@ -480,11 +500,10 @@ const styles = StyleSheet.create({
         textAlignVertical: 'top'
     }, 
     titulo : {
+        fontFamily: "DMSans",
         fontSize: 32,
-        fontWeight: "bold",
-        marginBottom: 10,
         color: colors.moradoPrincipal,
-        fontFamily: "DMSans"
+        marginTop: 40
     }
 })
 export default RegistrarAnimal;
