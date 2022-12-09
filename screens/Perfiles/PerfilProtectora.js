@@ -223,12 +223,12 @@ const PerfilProtectora = (props) => {
           <Appbar.Action icon="logout" size={30} onPress={clearLogin} />
           </Appbar.Header>
 
-        <View style={styles.textContainerGmailTlf}>
+        <View style={styles.textContainerGmailTlf_desdeProte}>
             {checkImage()}
-            <Text style={styles.textoNombreProte} >{protectora.nombre}</Text>
+            <View style={{marginTop: -210}}><Text style={styles.textoNombreProte} >{protectora.nombre}</Text></View>
         </View>
       
-        <View style={styles.containerInfoProte}>
+        <View style={styles.containerInfoProte_desdeProte}>
         <View style={styles.containerprueba}>
         <Text style={styles.textoInfoProteEnunciado}>Email</Text>
         <Text style={styles.textoInfoProte}>{protectora.email}</Text>
@@ -241,7 +241,7 @@ const PerfilProtectora = (props) => {
         </View>
         </View>
 
-        <View style={{marginTop: 60}}>
+        <View style={{marginTop: 20}}>
         <TouchableOpacity 
                       onPress={() => {
                         props.navigation.navigate('ListaDonaciones', {userId: storedCredentials,  protectoraId:props.route.params.protectoraId}) 
@@ -352,16 +352,35 @@ textContainerGmailTlf: {
   alignSelf: 'center', 
   bottom: 60, 
   flex: 1
+},textContainerGmailTlf_desdeProte: {
+  height: '50%',
+  width: '100%',
+  justifyContent: 'center',
+  position: "absolute", 
+  alignSelf: 'center', 
+  padding: 50,
+  marginTop: 70
 },
   textoNombreProte: {
     fontSize: 24,
     alignSelf: "center", 
     color: colors.blanco,
-    fontWeight: 'bold', 
-    top: 12
+    fontWeight: 'bold',
+    top: 10
   },
   containerInfoProte: {
     height: 2000, 
+    width: '100%',
+    justifyContent: 'center',
+    position: "absolute", 
+    backgroundColor: colors.blanco,
+    borderRadius: 35, 
+    alignSelf: 'center', 
+    top: 220, 
+    flex: 1
+  },
+  containerInfoProte_desdeProte: {
+    height: 540, 
     width: '100%',
     justifyContent: 'center',
     position: "absolute", 
