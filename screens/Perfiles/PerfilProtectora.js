@@ -225,7 +225,7 @@ const PerfilProtectora = (props) => {
 
         <View style={styles.textContainerGmailTlf_desdeProte}>
             {checkImage()}
-            <View style={{marginTop: -210}}><Text style={styles.textoNombreProte} >{protectora.nombre}</Text></View>
+            <View style={{marginTop: -225}}><Text style={styles.textoNombreProte} >{protectora.nombre}</Text></View>
         </View>
       
         <View style={styles.containerInfoProte_desdeProte}>
@@ -241,7 +241,7 @@ const PerfilProtectora = (props) => {
         </View>
         </View>
 
-        <View style={{marginTop: 20}}>
+        <View style={{marginTop: 60}}>
         <TouchableOpacity 
                       onPress={() => {
                         props.navigation.navigate('ListaDonaciones', {userId: storedCredentials,  protectoraId:props.route.params.protectoraId}) 
@@ -359,7 +359,7 @@ textContainerGmailTlf: {
   position: "absolute", 
   alignSelf: 'center', 
   padding: 50,
-  marginTop: 70
+  marginTop: 100
 },
   textoNombreProte: {
     fontSize: 24,
@@ -388,6 +388,7 @@ textContainerGmailTlf: {
     borderRadius: 35, 
     alignSelf: 'center', 
     top: 220, 
+    marginTop: 40,  //esteeeee!!
     flex: 1
   },
   containerInfoProteCUADRADO: {
@@ -406,7 +407,7 @@ textContainerGmailTlf: {
   },
   containerprueba: {
     marginBottom: 4, 
-    marginTop: -170
+    marginTop: -220
   }, 
   textoInfoProteEnunciado: {
     fontSize: 14, 
