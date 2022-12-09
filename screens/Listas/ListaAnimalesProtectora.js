@@ -107,13 +107,12 @@ const styles = StyleSheet.create({
         padding: 10
     }, 
     titulo: {
+        fontFamily: 'DMSans',
         fontSize: 32,
-        fontWeight: 'bold',
         marginBottom: 30,
         marginTop: 40,
         marginLeft: 30,
         color: colors.moradoPrincipal,
-        fontFamily: 'DMSans'
     }
 })
 export default ListaAnimalesProtectora;

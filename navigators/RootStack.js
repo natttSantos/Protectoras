@@ -57,7 +57,6 @@ const RootStack = () => {
                                             name="SesionUsuario"
                                             component={SesionUsuario}
                                             options={{
-                                                
                                                 headerTintColor: '#fff',
                                                 headerTransparent: true,
                                                 headerTitle: ''
@@ -142,6 +141,7 @@ const RootStack = () => {
                                         <Stack.Screen
                                             name="RegistrarAnimal"
                                             component={RegistrarAnimal}
+                                            options={{headerTransparent: true, headerTitle: '', headerTintColor: colors.moradoPrincipal}}
                                         />
                                         <Stack.Screen
                                             name="AltaGlobal"
