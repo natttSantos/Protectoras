@@ -47,7 +47,6 @@ const PerfilProtectora = (props) => {
 
   const [cosas, setState] = useState(initialStatee);
   const [loading, setLoading] = useState(true);
-  const [cambios, setcambios] = useState(false);
   const [protectora, setProtectora] = useState(initialState);
 
   const clearLogin = () => {
@@ -94,6 +93,7 @@ const PerfilProtectora = (props) => {
     else {
         setLoading(false)
     }
+    console.log("num animales ->"+animales.length); 
 }
   const getAllAnimalesDeProtectora = async (id) => {
     const animales = []
@@ -101,9 +101,10 @@ const PerfilProtectora = (props) => {
     const dbRef = firebase.db.collection('animales').where("id_protectora", "==", id)
     const docs = await dbRef.get()
     docs.forEach(doc => {
-        const {nombre, sexo,descripcion, raza} = doc.data()
+        const {nombre, sexo,descripcion, raza, edad} = doc.data()
         animales.push({
             id: doc.id,
+            edad, 
             id_protectora: id,
             nombre,
             raza,
@@ -131,24 +132,25 @@ const PerfilProtectora = (props) => {
     if(animales.length > 0) {
       return(
           <View style={styles.containerListaAnimales}>
-                  <Text style={styles.titulo}> Animales en esta protectora</Text>
+                  <View style = {{marginTop : -90}}><Text style={styles.titulo}> Animales en esta protectora</Text></View>
                   {animales.map((animal, index) => {
                       return (
+                          <View style = {styles.listaCUADRADO1}>
                           <ListItem key={animal.id}
-                              bottomDivider
+                              style = {styles.listaCUADRADO}
                               onPress={() => {props.navigation.navigate('PerfilAnimal', {animalId: animal.id, userId: props.route.params.userId, esUsuario: false})}}>
-                              <Avatar 
+                              <Image 
                               style = {styles.imagen}
                               source={{uri: imagenes[index]}}
                               />
-                              <ListItem.Content 
-                              style = {styles.lista}
-                              >
-                                  <ListItem.Title> {animal.nombre} </ListItem.Title>
-                                  <ListItem.Subtitle> {animal.raza} </ListItem.Subtitle>
-                                  <ListItem.Subtitle> {animal.sexo} </ListItem.Subtitle>
+                              <ListItem.Content>
+                                  <ListItem.Title style = {styles.tituloNombreAnimal}> {animal.nombre} </ListItem.Title>
+                                  <ListItem.Subtitle style = {styles.tituloDataAnimal}> {animal.raza} </ListItem.Subtitle>
+                                  <ListItem.Subtitle style = {styles.tituloDataAnimal}> {animal.sexo} </ListItem.Subtitle>
+                                  <ListItem.Subtitle style = {styles.tituloDataAnimal}> {animal.edad} años </ListItem.Subtitle>
                               </ListItem.Content>
-                          </ListItem>);
+                          </ListItem>
+                          </View>);
                   })}
               </View>
       )
@@ -275,7 +277,7 @@ const PerfilProtectora = (props) => {
   useEffect(() => {
     cargarImagenes(); 
     getProtectoraById(props.route.params.protectoraId); 
-  }, [cambios]);
+  }, [animales]);
   
   if(loading) {
     return(
@@ -324,10 +326,10 @@ const styles = StyleSheet.create({
         backgroundColor: colors.amarillo 
   },
   containerListaAnimales: {
-    flex: 2, 
-    padding: 15, 
-    height: 1000, 
-    marginTop: 500 
+    flex: 1, 
+    padding: 10, 
+    height: 1500, 
+    marginTop: 600 
 },
   image: {
         width: 110,
@@ -390,7 +392,7 @@ textContainerGmailTlf: {
     borderRadius: 35, 
     alignSelf: 'center', 
     top: 220, 
-    marginTop: 40,  //esteeeee!!
+    marginTop: 40,  
     flex: 1
   },
   containerInfoProteCUADRADO: {
@@ -478,6 +480,32 @@ textContainerGmailTlf: {
     color: "#5B1D66",
     padding: 40
   },
+  tituloNombreAnimal: {
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
+  tituloDataAnimal: {
+    fontSize: 14
+  },
+  imagen: {
+    width: 70,
+    height: 70,
+    borderRadius: 50
+},
+listaCUADRADO1: {
+  margin: 12,
+  borderColor: colors.moradoPrincipal, 
+  borderWidth: 3,
+  borderRadius: 35, 
+  height: 160, 
+  width: 340, 
+},
+listaCUADRADO: { 
+  height: 160, 
+  width: 310, 
+  alignSelf: 'center', 
+  justifyContent: 'center',
+},
 
 });
 
