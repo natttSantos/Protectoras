@@ -173,9 +173,10 @@ const PerfilProtectora = (props) => {
         </View>
       
         <View style={styles.containerInfoProte}>
-        <View style={{marginTop: -2150, padding: 40,marginBottom: -350}}><Text style={styles.titulo}>Datos</Text></View>
+        <View style={{marginTop: -2180, padding: 40,marginBottom: -350}}><Text style={styles.titulo}>Datos</Text></View>
         
         <View style={styles.containerInfoProteCUADRADO}>
+        <View style={{top: -25}}>
         <Text style={styles.textoInfoProteEnunciado}>Email</Text>
         <Text style={styles.textoInfoProte}>{protectora.email}</Text>
         <Text style={styles.textoInfoProteEnunciado}>Localizacion</Text>
@@ -184,6 +185,7 @@ const PerfilProtectora = (props) => {
         <Text style={styles.textoInfoProte}>{protectora.direccion} </Text>
         <Text style={styles.textoInfoProteEnunciado}>Descripción</Text>
         <Text style={styles.textoDescipcion}>{protectora.descripcion} </Text>
+        </View>
         </View>
         </View>
 
