@@ -47,7 +47,6 @@ const PerfilProtectora = (props) => {
 
   const [cosas, setState] = useState(initialStatee);
   const [loading, setLoading] = useState(true);
-  const [cambios, setcambios] = useState(false);
   const [protectora, setProtectora] = useState(initialState);
 
   const clearLogin = () => {
@@ -94,6 +93,7 @@ const PerfilProtectora = (props) => {
     else {
         setLoading(false)
     }
+    console.log("num animales ->"+animales.length); 
 }
   const getAllAnimalesDeProtectora = async (id) => {
     const animales = []
@@ -101,9 +101,10 @@ const PerfilProtectora = (props) => {
     const dbRef = firebase.db.collection('animales').where("id_protectora", "==", id)
     const docs = await dbRef.get()
     docs.forEach(doc => {
-        const {nombre, sexo,descripcion, raza} = doc.data()
+        const {nombre, sexo,descripcion, raza, edad} = doc.data()
         animales.push({
             id: doc.id,
+            edad, 
             id_protectora: id,
             nombre,
             raza,
@@ -131,34 +132,33 @@ const PerfilProtectora = (props) => {
     if(animales.length > 0) {
       return(
           <View style={styles.containerListaAnimales}>
-                  <Text style={styles.titulo}> Animales en esta protectora</Text>
+                  <View style = {{marginTop : -90}}><Text style={styles.titulo}> Animales en esta protectora</Text></View>
                   {animales.map((animal, index) => {
                       return (
+                          <View style = {styles.listaCUADRADO1}>
                           <ListItem key={animal.id}
-                              bottomDivider
+                              style = {styles.listaCUADRADO}
                               onPress={() => {props.navigation.navigate('PerfilAnimal', {animalId: animal.id, userId: props.route.params.userId, esUsuario: false})}}>
-                              <Avatar 
+                              <Image 
                               style = {styles.imagen}
                               source={{uri: imagenes[index]}}
                               />
-                              <ListItem.Content 
-                              style = {styles.lista}
-                              >
-                                  <ListItem.Title> {animal.nombre} </ListItem.Title>
-                                  <ListItem.Subtitle> {animal.raza} </ListItem.Subtitle>
-                                  <ListItem.Subtitle> {animal.sexo} </ListItem.Subtitle>
+                              <ListItem.Content>
+                                  <ListItem.Title style = {styles.tituloNombreAnimal}> {animal.nombre} </ListItem.Title>
+                                  <ListItem.Subtitle style = {styles.tituloDataAnimal}> {animal.raza} </ListItem.Subtitle>
+                                  <ListItem.Subtitle style = {styles.tituloDataAnimal}> {animal.sexo} </ListItem.Subtitle>
+                                  <ListItem.Subtitle style = {styles.tituloDataAnimal}> {animal.edad} años </ListItem.Subtitle>
                               </ListItem.Content>
-                          </ListItem>);
+                          </ListItem>
+                          </View>);
                   })}
               </View>
       )
   } else {
       return (
-          <View>
-              <Text>
-                  NO HAY ANIMALES
-              </Text>
-          </View>
+        <View style={styles.containerListaAnimales}>
+        <View style = {{marginTop : -90}}><Text style={styles.titulo}> No hay animales! </Text></View>
+        </View>
       )
   }
   }
@@ -173,9 +173,10 @@ const PerfilProtectora = (props) => {
         </View>
       
         <View style={styles.containerInfoProte}>
-        <View style={{marginTop: -2150, padding: 40,marginBottom: -350}}><Text style={styles.titulo}>Datos</Text></View>
+        <View style={{marginTop: -2180, padding: 40,marginBottom: -350}}><Text style={styles.titulo}>Datos</Text></View>
         
         <View style={styles.containerInfoProteCUADRADO}>
+        <View style={{top: -25}}>
         <Text style={styles.textoInfoProteEnunciado}>Email</Text>
         <Text style={styles.textoInfoProte}>{protectora.email}</Text>
         <Text style={styles.textoInfoProteEnunciado}>Localizacion</Text>
@@ -184,6 +185,7 @@ const PerfilProtectora = (props) => {
         <Text style={styles.textoInfoProte}>{protectora.direccion} </Text>
         <Text style={styles.textoInfoProteEnunciado}>Descripción</Text>
         <Text style={styles.textoDescipcion}>{protectora.descripcion} </Text>
+        </View>
         </View>
         </View>
 
@@ -223,12 +225,12 @@ const PerfilProtectora = (props) => {
           <Appbar.Action icon="logout" size={30} onPress={clearLogin} />
           </Appbar.Header>
 
-        <View style={styles.textContainerGmailTlf}>
+        <View style={styles.textContainerGmailTlf_desdeProte}>
             {checkImage()}
-            <Text style={styles.textoNombreProte} >{protectora.nombre}</Text>
+            <View style={{marginTop: -225}}><Text style={styles.textoNombreProte} >{protectora.nombre}</Text></View>
         </View>
       
-        <View style={styles.containerInfoProte}>
+        <View style={styles.containerInfoProte_desdeProte}>
         <View style={styles.containerprueba}>
         <Text style={styles.textoInfoProteEnunciado}>Email</Text>
         <Text style={styles.textoInfoProte}>{protectora.email}</Text>
@@ -273,7 +275,7 @@ const PerfilProtectora = (props) => {
   useEffect(() => {
     cargarImagenes(); 
     getProtectoraById(props.route.params.protectoraId); 
-  }, [cambios]);
+  }, [animales]);
   
   if(loading) {
     return(
@@ -322,10 +324,10 @@ const styles = StyleSheet.create({
         backgroundColor: colors.amarillo 
   },
   containerListaAnimales: {
-    flex: 2, 
-    padding: 15, 
-    height: 1000, 
-    marginTop: 500 
+    flex: 1, 
+    padding: 10, 
+    height: 1500, 
+    marginTop: 600 
 },
   image: {
         width: 110,
@@ -352,13 +354,21 @@ textContainerGmailTlf: {
   alignSelf: 'center', 
   bottom: 60, 
   flex: 1
+},textContainerGmailTlf_desdeProte: {
+  height: '50%',
+  width: '100%',
+  justifyContent: 'center',
+  position: "absolute", 
+  alignSelf: 'center', 
+  padding: 50,
+  marginTop: 100
 },
   textoNombreProte: {
     fontSize: 24,
     alignSelf: "center", 
     color: colors.blanco,
-    fontWeight: 'bold', 
-    top: 12
+    fontWeight: 'bold',
+    top: 10
   },
   containerInfoProte: {
     height: 2000, 
@@ -369,6 +379,18 @@ textContainerGmailTlf: {
     borderRadius: 35, 
     alignSelf: 'center', 
     top: 220, 
+    flex: 1
+  },
+  containerInfoProte_desdeProte: {
+    height: 540, 
+    width: '100%',
+    justifyContent: 'center',
+    position: "absolute", 
+    backgroundColor: colors.blanco,
+    borderRadius: 35, 
+    alignSelf: 'center', 
+    top: 220, 
+    marginTop: 40,  
     flex: 1
   },
   containerInfoProteCUADRADO: {
@@ -387,7 +409,7 @@ textContainerGmailTlf: {
   },
   containerprueba: {
     marginBottom: 4, 
-    marginTop: -170
+    marginTop: -220
   }, 
   textoInfoProteEnunciado: {
     fontSize: 14, 
@@ -456,6 +478,32 @@ textContainerGmailTlf: {
     color: "#5B1D66",
     padding: 40
   },
+  tituloNombreAnimal: {
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
+  tituloDataAnimal: {
+    fontSize: 14
+  },
+  imagen: {
+    width: 70,
+    height: 70,
+    borderRadius: 50
+},
+listaCUADRADO1: {
+  margin: 12,
+  borderColor: colors.moradoPrincipal, 
+  borderWidth: 3,
+  borderRadius: 35, 
+  height: 160, 
+  width: 340, 
+},
+listaCUADRADO: { 
+  height: 160, 
+  width: 310, 
+  alignSelf: 'center', 
+  justifyContent: 'center',
+},
 
 });
 
