@@ -89,8 +89,8 @@ const ListaAnimalesProtectora = (props) => {
     } else {
         return (
             <View>
-                <Text>
-                    NO HAY ANIMALES
+                <Text style={styles.titulo}>
+                    No hay animales
                 </Text>
             </View>
         )

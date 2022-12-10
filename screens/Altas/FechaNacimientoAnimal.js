@@ -27,7 +27,7 @@ const FechaNacimientoAnimal = (props) => {
             props.navigation.navigate('RegistrarAnimal', {userId: props.route.params.userId, valueFecha: chosenDate})}
 
           }
-          }/>      
+        }/>      
     </View>
 
   

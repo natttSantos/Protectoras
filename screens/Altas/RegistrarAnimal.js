@@ -70,6 +70,7 @@ const RegistrarAnimal = (props) => {
 
     useEffect(() => {
       getProtectoraById(props.route.params.userId);
+      handleFecha();
     }, [protectora]);
 
     const saveNewUser =  async () => {
@@ -205,6 +206,7 @@ const RegistrarAnimal = (props) => {
       const [isPressPerro, setIsPressPerro] = useState(false);
       const [isPressMacho, setIsPressMacho] = useState(false);
       const [isPressHembra, setIsPressHembra] = useState(false);
+      const [fecha, setFecha] = useState("* Fecha de nacimiento");
 
       function handleTipo(value) {
         if (value == "Gato") {
@@ -219,15 +221,21 @@ const RegistrarAnimal = (props) => {
       }
 
       function handleSexo(value) {
-        if (value == "Macho") {
+        if (value == "Masculino") {
           setIsPressMacho(true);
           setIsPressHembra(false);
         }
-        else if (value == "Hembra") {
+        else if (value == "Femenino") {
           setIsPressMacho(false);
           setIsPressHembra(true);
         }
         setState({...state, ["sexo"]: value});
+      }
+
+      function handleFecha() {
+        if (props.route.params.valueFecha != undefined) {
+          setFecha(props.route.params.valueFecha);
+        }
       }
 
     return(
@@ -268,7 +276,7 @@ const RegistrarAnimal = (props) => {
               onPress={() => props.navigation.navigate('FechaNacimientoAnimal', {userId: props.route.params.userId, esProtectora: "No"})}
               style={styles.fechaNacimiento}>
               <View style={styles.botonFechaNacimiento}>
-                <Text style={styles.texto}> * Fecha de nacimiento </Text>
+                <Text style={styles.texto}> {fecha} </Text>
                 <Image
                   source={require('../../images/Calendario.png')}
                   style={styles.image}
@@ -298,7 +306,7 @@ const RegistrarAnimal = (props) => {
                 <Text style={ isPressHembra ? styles.caracteristicasSeleccionada : styles.caracteristicas }> Macho </Text>
                 <TouchableOpacity
                   style={ isPressMacho ? styles.botonPropiedadesSeleccionado : styles.botonPropiedades }
-                  onPress={() => handleSexo("Macho")}>
+                  onPress={() => handleSexo("Masculino")}>
                     <Image
                       source={ isPressMacho ? require('../../images/MachoSeleccionado.png') : require('../../images/Macho.png') }
                       style={ isPressHembra ? styles.imageSeleccionada : styles.image}
@@ -309,7 +317,7 @@ const RegistrarAnimal = (props) => {
                 <Text style={ isPressMacho ? styles.caracteristicasSeleccionada : styles.caracteristicas }> Hembra </Text>
                 <TouchableOpacity 
                   style={ isPressHembra ? styles.botonPropiedadesSeleccionado : styles.botonPropiedades }
-                  onPress={() => handleSexo("Hembra")}>
+                  onPress={() => handleSexo("Femenino")}>
                     <Image
                       source={ isPressHembra ? require('../../images/HembraSeleccionado.png') : require('../../images/Hembra.png') }
                       style={ isPressMacho ? styles.imageHembraSeleccionada : styles.imageHembra }
@@ -340,14 +348,14 @@ const RegistrarAnimal = (props) => {
               title="Vacunado"
               checked={vacunado}
               checkedColor={colors.moradoPrincipal}
-              
+              uncheckedColor={colors.moradoSecundario}
               onPress={() => setVacunado(!vacunado)}           
             />
             <CheckBox
               title="MicroChip"
-              textStyle={{fontFamily: "InterRegular"}}
               checked={microChip}
               checkedColor={colors.moradoPrincipal}
+              uncheckedColor={colors.moradoSecundario}
               onPress={() => setMicroChip(!microChip)}
             />
             <TextInput 
