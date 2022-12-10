@@ -276,7 +276,7 @@ const RegistrarAnimal = (props) => {
               onPress={() => props.navigation.navigate('FechaNacimientoAnimal', {userId: props.route.params.userId, esProtectora: "No"})}
               style={styles.fechaNacimiento}>
               <View style={styles.botonFechaNacimiento}>
-                <Text style={styles.texto}> {fecha} </Text>
+                <Text style={fecha != "* Fecha de nacimiento" ? styles.textoFecha : styles.texto}> {fecha} </Text>
                 <Image
                   source={require('../../images/Calendario.png')}
                   style={styles.image}
@@ -459,6 +459,20 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       marginLeft: 25
     },
+    fechaNacimiento: {
+      marginTop: 20,
+      height: 49,
+      borderRadius: 24.5,
+      borderColor: colors.moradoPrincipal,
+      borderWidth: 1,
+      justifyContent: 'center'
+    },
+    textoFecha: {
+      fontFamily: 'InterRegular',
+      color: colors.moradoSecundario,
+      fontSize: 16,
+      marginRight: 100
+    },
     botonCircularBlancoMorado : {
       backgroundColor: colors.blanco,
       borderColor: colors.moradoPrincipal,
@@ -490,14 +504,6 @@ const styles = StyleSheet.create({
       fontWeight: "bold",
       alignSelf: "center",
       marginTop: 5
-    },
-    fechaNacimiento: {
-      marginTop: 20,
-      height: 49,
-      borderRadius: 24.5,
-      borderColor: colors.moradoPrincipal,
-      borderWidth: 1,
-      justifyContent: 'center'
     },
     image: {
       flex: 1,

@@ -157,6 +157,7 @@ const RootStack = () => {
                                         <Stack.Screen
                                             name="FechaNacimientoAnimal"
                                             component={FechaNacimientoAnimal}
+                                            options={{headerTransparent: true, headerTitle: '', headerTintColor: colors.moradoPrincipal}}
                                         />
                                         <Stack.Screen
                                             name="MapaAnimalEncontradoProtectora"
