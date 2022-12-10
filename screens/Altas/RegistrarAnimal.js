@@ -201,7 +201,22 @@ const RegistrarAnimal = (props) => {
     
       const [date, setDate] = useState(new Date());
       const [fechaFormato, setFechaFormato] = useState('');
-     
+      const [isPressGato, setIsPressGato] = useState(false);
+      const [isPressPerro, setIsPressPerro] = useState(false);
+      const [isPressMacho, setIsPressMacho] = useState(false);
+      const [isPressHembra, setIsPressHembra] = useState(false);
+
+      function handleTipo(value) {
+        if (value == "Gato") {
+          setIsPressGato(true);
+          setIsPressPerro(false);
+        }
+        else if (value == "Perro") {
+          setIsPressGato(false);
+          setIsPressPerro(true);
+        }
+        setState({...state, ["tipo"]: value});
+      }
 
     return(
       <View style={styles.container}>
@@ -215,24 +230,24 @@ const RegistrarAnimal = (props) => {
             />
             <View style={styles.botonesHorizontales}>
               <View>
-                <Text style={styles.caracteristicas}> Gato </Text>
+                <Text style={ isPressPerro ? styles.caracteristicasSeleccionada : styles.caracteristicas }> Gato </Text>
                 <TouchableOpacity 
-                  style={styles.botonPropiedades}
-                  onPress={() => setTipo("Gato", "Gato")}>
+                  style={ isPressGato ? styles.botonPropiedadesSeleccionado : styles.botonPropiedades }
+                  onPress={() => handleTipo("Gato")}>
                     <Image
-                      source={require('../../images/Gato.png')}
-                      style={styles.image}
+                      source={ isPressGato ? require('../../images/GatoSeleccionado.png') : require("../../images/Gato.png")}
+                      style={ isPressPerro ? styles.imageSeleccionada : styles.image }
                     />
                 </TouchableOpacity>
               </View>
               <View>
-                <Text style={styles.caracteristicas}> Perro </Text>
+                <Text style={ isPressGato ? styles.caracteristicasSeleccionada : styles.caracteristicas }> Perro </Text>
                 <TouchableOpacity
-                   style={styles.botonPropiedades}
-                   onPress={() => setTipo("Perro", "Perro")}>
+                   style={ isPressPerro ? styles.botonPropiedadesSeleccionado : styles.botonPropiedades }
+                   onPress={() => handleTipo("Perro")}>
                     <Image
-                      source={require('../../images/Perro.png')}
-                      style={styles.image}
+                      source={ isPressPerro ? require('../../images/PerroSeleccionado.png') : require("../../images/Perro.png")}
+                      style={ isPressGato ? styles.imageSeleccionada : styles.image}
                     />
                 </TouchableOpacity>
               </View>
@@ -416,6 +431,16 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center'
     },
+    botonPropiedadesSeleccionado: {
+      width: 63,
+      height: 38,
+      borderRadius: 19,
+      borderColor: colors.amarillo,
+      backgroundColor: colors.amarillo,
+      borderWidth: 2,
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
     dropDownPicker : {
       marginTop: 30,
       borderRadius: 25,
@@ -475,6 +500,13 @@ const styles = StyleSheet.create({
       height: 22,
       resizeMode: 'contain'
     },
+    imageSeleccionada: {
+      flex: 1,
+      width: 22,
+      height: 22,
+      resizeMode: 'contain',
+      opacity: 0.5
+    },
     imageHembra: {
       flex: 1,
       resizeMode: 'contain',
@@ -485,6 +517,12 @@ const styles = StyleSheet.create({
       fontFamily: 'InterRegular',
       color: colors.amarillo,
       alignSelf: 'center'
+    },
+    caracteristicasSeleccionada : {
+      fontFamily: 'InterRegular',
+      color: colors.amarillo,
+      alignSelf: 'center',
+      opacity: 0.5
     },
     descripcion : {
         height: 120,
