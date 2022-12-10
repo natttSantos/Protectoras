@@ -201,7 +201,34 @@ const RegistrarAnimal = (props) => {
     
       const [date, setDate] = useState(new Date());
       const [fechaFormato, setFechaFormato] = useState('');
-     
+      const [isPressGato, setIsPressGato] = useState(false);
+      const [isPressPerro, setIsPressPerro] = useState(false);
+      const [isPressMacho, setIsPressMacho] = useState(false);
+      const [isPressHembra, setIsPressHembra] = useState(false);
+
+      function handleTipo(value) {
+        if (value == "Gato") {
+          setIsPressGato(true);
+          setIsPressPerro(false);
+        }
+        else if (value == "Perro") {
+          setIsPressGato(false);
+          setIsPressPerro(true);
+        }
+        setState({...state, ["tipo"]: value});
+      }
+
+      function handleSexo(value) {
+        if (value == "Macho") {
+          setIsPressMacho(true);
+          setIsPressHembra(false);
+        }
+        else if (value == "Hembra") {
+          setIsPressMacho(false);
+          setIsPressHembra(true);
+        }
+        setState({...state, ["sexo"]: value});
+      }
 
     return(
       <View style={styles.container}>
@@ -215,21 +242,25 @@ const RegistrarAnimal = (props) => {
             />
             <View style={styles.botonesHorizontales}>
               <View>
-                <Text style={styles.caracteristicas}> Gato </Text>
-                <TouchableOpacity style={styles.botonPropiedades}>
+                <Text style={ isPressPerro ? styles.caracteristicasSeleccionada : styles.caracteristicas }> Gato </Text>
+                <TouchableOpacity 
+                  style={ isPressGato ? styles.botonPropiedadesSeleccionado : styles.botonPropiedades }
+                  onPress={() => handleTipo("Gato")}>
                     <Image
-                      source={require('../../images/Gato.png')}
-                      style={styles.image}
+                      source={ isPressGato ? require('../../images/GatoSeleccionado.png') : require("../../images/Gato.png")}
+                      style={ isPressPerro ? styles.imageSeleccionada : styles.image }
                     />
-                  </TouchableOpacity>
+                </TouchableOpacity>
               </View>
               <View>
-                <Text style={styles.caracteristicas}> Perro </Text>
-                <TouchableOpacity style={styles.botonPropiedades}>
-                  <Image
-                    source={require('../../images/Perro.png')}
-                    style={styles.image}
-                  />
+                <Text style={ isPressGato ? styles.caracteristicasSeleccionada : styles.caracteristicas }> Perro </Text>
+                <TouchableOpacity
+                   style={ isPressPerro ? styles.botonPropiedadesSeleccionado : styles.botonPropiedades }
+                   onPress={() => handleTipo("Perro")}>
+                    <Image
+                      source={ isPressPerro ? require('../../images/PerroSeleccionado.png') : require("../../images/Perro.png")}
+                      style={ isPressGato ? styles.imageSeleccionada : styles.image}
+                    />
                 </TouchableOpacity>
               </View>
             </View>
@@ -256,19 +287,6 @@ const RegistrarAnimal = (props) => {
               placeholderTextColor={colors.moradoSecundario}
               onChangeText={(value) => handleChangeText('peso', value)}
             />
-            <DropDownPicker
-              style={{marginTop: 30}}
-              placeholder="* Tipo"
-              items={tipo}
-              setItems={setTipo}
-              open={tipoOpen}
-              setOpen={setTipoOpen}
-              value={tipoValue}
-              setValue={setTipoValue}
-              onChangeValue={(value) => {
-                  handleChangeText('tipo', value);
-                }}
-            />
             <TextInput 
               style={styles.textField}
               placeholder="* Raza"
@@ -277,53 +295,38 @@ const RegistrarAnimal = (props) => {
             />
             <View style={styles.botonesHorizontales}>
               <View>
-                <Text style={styles.caracteristicas}> Macho </Text>
-                <TouchableOpacity style={styles.botonPropiedades}>
+                <Text style={ isPressHembra ? styles.caracteristicasSeleccionada : styles.caracteristicas }> Macho </Text>
+                <TouchableOpacity
+                  style={ isPressMacho ? styles.botonPropiedadesSeleccionado : styles.botonPropiedades }
+                  onPress={() => handleSexo("Macho")}>
                     <Image
-                      source={require('../../images/Macho.png')}
-                      style={styles.image}
+                      source={ isPressMacho ? require('../../images/MachoSeleccionado.png') : require('../../images/Macho.png') }
+                      style={ isPressHembra ? styles.imageSeleccionada : styles.image}
                     />
                   </TouchableOpacity>
               </View>
               <View>
-                <Text style={styles.caracteristicas}> Hembra </Text>
-                <TouchableOpacity style={styles.botonPropiedades}>
-                  <Image
-                    source={require('../../images/Hembra.png')}
-                    style={styles.imageHembra}
-                  />
+                <Text style={ isPressMacho ? styles.caracteristicasSeleccionada : styles.caracteristicas }> Hembra </Text>
+                <TouchableOpacity 
+                  style={ isPressHembra ? styles.botonPropiedadesSeleccionado : styles.botonPropiedades }
+                  onPress={() => handleSexo("Hembra")}>
+                    <Image
+                      source={ isPressHembra ? require('../../images/HembraSeleccionado.png') : require('../../images/Hembra.png') }
+                      style={ isPressMacho ? styles.imageHembraSeleccionada : styles.imageHembra }
+                    />
                 </TouchableOpacity>
               </View>
             </View>
             <DropDownPicker
-              style={{marginTop: 30, marginBottom: 15}}
-              placeholder="* Sexo"
-              items={sexo}
-              setItems={setSexo}
-              open={sexoOpen}
-              setOpen={setSexoOpen}
-              value={sexoValue}
-              setValue={setSexoValue}
-              onChangeValue={(value) => {
-                  handleChangeText('sexo', value);
-                }}
-            />
-            <CheckBox
-              title="Vacunado"
-              checked={vacunado}
-              checkedColor="blue"
-              onPress={() => setVacunado(!vacunado)}           
-            />
-            <CheckBox
-              title="MicroChip"
-              checked={microChip}
-              checkedColor="blue"
-              onPress={() => setMicroChip(!microChip)}
-            />
-            <DropDownPicker
-              style={{marginTop: 20, marginBottom: 15}}
+              style={styles.dropDownPicker}
               placeholder="Nivel Actividad"
+              placeholderStyle={{
+                color: colors.moradoSecundario
+              }}
               items={nivel}
+              listItemLabelStyle={{
+                color: colors.moradoSecundario
+              }}
               setItems={setNivel}
               open={nivelOpen}
               setOpen={setNivelOpen}
@@ -332,6 +335,20 @@ const RegistrarAnimal = (props) => {
               onChangeValue={(value) => {
                 handleChangeText('nivelActividad', value);
               }}
+            />
+            <CheckBox
+              title="Vacunado"
+              checked={vacunado}
+              checkedColor={colors.moradoPrincipal}
+              
+              onPress={() => setVacunado(!vacunado)}           
+            />
+            <CheckBox
+              title="MicroChip"
+              textStyle={{fontFamily: "InterRegular"}}
+              checked={microChip}
+              checkedColor={colors.moradoPrincipal}
+              onPress={() => setMicroChip(!microChip)}
             />
             <TextInput 
               style={styles.descripcion}
@@ -405,6 +422,31 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center'
     },
+    botonPropiedadesSeleccionado: {
+      width: 63,
+      height: 38,
+      borderRadius: 19,
+      borderColor: colors.amarillo,
+      backgroundColor: colors.amarillo,
+      borderWidth: 2,
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    dropDownPicker : {
+      marginTop: 30,
+      marginBottom: 30,
+      borderRadius: 25,
+      borderColor: colors.moradoPrincipal,
+      borderWidth: 2,
+      fontStyle : {
+          color: colors.amarillo
+      }
+    },
+    checkBox: {
+      marginTop: 30,
+      borderColor: colors.moradoPrincipal,
+      borderRadius: 25
+    },
     botonFechaNacimiento: {
       flexDirection: 'row',
       marginLeft: 25
@@ -455,19 +497,40 @@ const styles = StyleSheet.create({
       height: 22,
       resizeMode: 'contain'
     },
+    imageSeleccionada: {
+      flex: 1,
+      width: 22,
+      height: 22,
+      resizeMode: 'contain',
+      opacity: 0.5
+    },
     imageHembra: {
       flex: 1,
       resizeMode: 'contain',
       width: 16,
       height: 20
     },
+    imageHembraSeleccionada: {
+      flex: 1,
+      resizeMode: 'contain',
+      width: 16,
+      height: 20,
+      opacity: 0.5
+    },
     caracteristicas: {
       fontFamily: 'InterRegular',
       color: colors.amarillo,
       alignSelf: 'center'
     },
+    caracteristicasSeleccionada : {
+      fontFamily: 'InterRegular',
+      color: colors.amarillo,
+      alignSelf: 'center',
+      opacity: 0.5
+    },
     descripcion : {
         height: 120,
+        marginTop: 30,
         marginBottom: 30,
         fontSize: 16,
         borderWidth: 2,
@@ -480,11 +543,10 @@ const styles = StyleSheet.create({
         textAlignVertical: 'top'
     }, 
     titulo : {
+        fontFamily: "DMSans",
         fontSize: 32,
-        fontWeight: "bold",
-        marginBottom: 10,
         color: colors.moradoPrincipal,
-        fontFamily: "DMSans"
+        marginTop: 40
     }
 })
 export default RegistrarAnimal;
