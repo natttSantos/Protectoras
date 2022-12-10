@@ -318,34 +318,15 @@ const RegistrarAnimal = (props) => {
               </View>
             </View>
             <DropDownPicker
-              style={{marginTop: 30, marginBottom: 15}}
-              placeholder="* Sexo"
-              items={sexo}
-              setItems={setSexo}
-              open={sexoOpen}
-              setOpen={setSexoOpen}
-              value={sexoValue}
-              setValue={setSexoValue}
-              onChangeValue={(value) => {
-                  handleChangeText('sexo', value);
-                }}
-            />
-            <CheckBox
-              title="Vacunado"
-              checked={vacunado}
-              checkedColor="blue"
-              onPress={() => setVacunado(!vacunado)}           
-            />
-            <CheckBox
-              title="MicroChip"
-              checked={microChip}
-              checkedColor="blue"
-              onPress={() => setMicroChip(!microChip)}
-            />
-            <DropDownPicker
-              style={{marginTop: 20, marginBottom: 15}}
+              style={styles.dropDownPicker}
               placeholder="Nivel Actividad"
+              placeholderStyle={{
+                color: colors.moradoSecundario
+              }}
               items={nivel}
+              listItemLabelStyle={{
+                color: colors.moradoSecundario
+              }}
               setItems={setNivel}
               open={nivelOpen}
               setOpen={setNivelOpen}
@@ -354,6 +335,20 @@ const RegistrarAnimal = (props) => {
               onChangeValue={(value) => {
                 handleChangeText('nivelActividad', value);
               }}
+            />
+            <CheckBox
+              title="Vacunado"
+              checked={vacunado}
+              checkedColor={colors.moradoPrincipal}
+              
+              onPress={() => setVacunado(!vacunado)}           
+            />
+            <CheckBox
+              title="MicroChip"
+              textStyle={{fontFamily: "InterRegular"}}
+              checked={microChip}
+              checkedColor={colors.moradoPrincipal}
+              onPress={() => setMicroChip(!microChip)}
             />
             <TextInput 
               style={styles.descripcion}
@@ -439,12 +434,18 @@ const styles = StyleSheet.create({
     },
     dropDownPicker : {
       marginTop: 30,
+      marginBottom: 30,
       borderRadius: 25,
       borderColor: colors.moradoPrincipal,
       borderWidth: 2,
       fontStyle : {
           color: colors.amarillo
       }
+    },
+    checkBox: {
+      marginTop: 30,
+      borderColor: colors.moradoPrincipal,
+      borderRadius: 25
     },
     botonFechaNacimiento: {
       flexDirection: 'row',
@@ -529,6 +530,7 @@ const styles = StyleSheet.create({
     },
     descripcion : {
         height: 120,
+        marginTop: 30,
         marginBottom: 30,
         fontSize: 16,
         borderWidth: 2,
