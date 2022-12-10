@@ -218,6 +218,18 @@ const RegistrarAnimal = (props) => {
         setState({...state, ["tipo"]: value});
       }
 
+      function handleSexo(value) {
+        if (value == "Macho") {
+          setIsPressMacho(true);
+          setIsPressHembra(false);
+        }
+        else if (value == "Hembra") {
+          setIsPressMacho(false);
+          setIsPressHembra(true);
+        }
+        setState({...state, ["sexo"]: value});
+      }
+
     return(
       <View style={styles.container}>
         <ScrollView contentContainerStyle={{justifyContent: 'space-around'}}> 
@@ -275,26 +287,6 @@ const RegistrarAnimal = (props) => {
               placeholderTextColor={colors.moradoSecundario}
               onChangeText={(value) => handleChangeText('peso', value)}
             />
-            <DropDownPicker
-              style={styles.dropDownPicker}
-              placeholder="* Tipo"
-              placeholderStyle={{
-                color: colors.moradoSecundario
-              }}
-              items={tipo}
-              setItems={setTipo}
-              listItemLabelStyle={{
-                color: colors.moradoSecundario
-              }}
-              selectedItemLabelStyle={{color: colors.moradoPrincipal, fontWeight: 'bold'}}
-              open={tipoOpen}
-              setOpen={setTipoOpen}
-              value={tipoValue}
-              setValue={setTipoValue}
-              onChangeValue={(value) => {
-                  handleChangeText('tipo', value);
-                }}
-            />
             <TextInput 
               style={styles.textField}
               placeholder="* Raza"
@@ -303,21 +295,25 @@ const RegistrarAnimal = (props) => {
             />
             <View style={styles.botonesHorizontales}>
               <View>
-                <Text style={styles.caracteristicas}> Macho </Text>
-                <TouchableOpacity style={styles.botonPropiedades}>
+                <Text style={ isPressHembra ? styles.caracteristicasSeleccionada : styles.caracteristicas }> Macho </Text>
+                <TouchableOpacity
+                  style={ isPressMacho ? styles.botonPropiedadesSeleccionado : styles.botonPropiedades }
+                  onPress={() => handleSexo("Macho")}>
                     <Image
-                      source={require('../../images/Macho.png')}
-                      style={styles.image}
+                      source={ isPressMacho ? require('../../images/MachoSeleccionado.png') : require('../../images/Macho.png') }
+                      style={ isPressHembra ? styles.imageSeleccionada : styles.image}
                     />
                   </TouchableOpacity>
               </View>
               <View>
-                <Text style={styles.caracteristicas}> Hembra </Text>
-                <TouchableOpacity style={styles.botonPropiedades}>
-                  <Image
-                    source={require('../../images/Hembra.png')}
-                    style={styles.imageHembra}
-                  />
+                <Text style={ isPressMacho ? styles.caracteristicasSeleccionada : styles.caracteristicas }> Hembra </Text>
+                <TouchableOpacity 
+                  style={ isPressHembra ? styles.botonPropiedadesSeleccionado : styles.botonPropiedades }
+                  onPress={() => handleSexo("Hembra")}>
+                    <Image
+                      source={ isPressHembra ? require('../../images/HembraSeleccionado.png') : require('../../images/Hembra.png') }
+                      style={ isPressMacho ? styles.imageHembraSeleccionada : styles.imageHembra }
+                    />
                 </TouchableOpacity>
               </View>
             </View>
@@ -512,6 +508,13 @@ const styles = StyleSheet.create({
       resizeMode: 'contain',
       width: 16,
       height: 20
+    },
+    imageHembraSeleccionada: {
+      flex: 1,
+      resizeMode: 'contain',
+      width: 16,
+      height: 20,
+      opacity: 0.5
     },
     caracteristicas: {
       fontFamily: 'InterRegular',
