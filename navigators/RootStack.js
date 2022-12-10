@@ -98,6 +98,7 @@ const RootStack = () => {
                                         <Stack.Screen
                                             name="FiltradoAnimales"
                                             component={FiltradoAnimales}
+                                            options={{headerTransparent: true, headerTitle: ''}}
                                         />
                                         <Stack.Screen
                                             name="AltaAdoptar"

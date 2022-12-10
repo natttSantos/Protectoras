@@ -3,7 +3,7 @@ import {ScrollView, View, StyleSheet, Text, TouchableOpacity}  from 'react-nativ
 import {Avatar, ListItem} from "react-native-elements";
 import { ActivityIndicator } from "react-native-paper";
 import firebase from "../../database/firebase";
-import DropDownPicker from "react-native-dropdown-picker";
+import { colors } from '../../components/Color'
  
 const FiltradoAnimales = (props) => {  
     var protectorasFiltrado_id = []; 
@@ -124,7 +124,9 @@ const FiltradoAnimales = (props) => {
         if(animalesFiltrado.length == 0){
           noHayAnimalesFiltrado = "No hay animales para los filtros seleccionados :("; 
         }
-        props.navigation.navigate('ListaAnimales', {animalesFiltrado: animalesFiltrado, filtrado: true, noHayAnimalesFiltrado: noHayAnimalesFiltrado});
+        props.route.params.onGoBack(animalesFiltrado)
+        props.navigation.goBack()
+        //props.navigation.navigate('ListaAnimales', {animalesFiltrado: animalesFiltrado, filtrado: true, noHayAnimalesFiltrado: noHayAnimalesFiltrado});
       }, 1000);       
     }
 
@@ -202,15 +204,15 @@ const FiltradoAnimales = (props) => {
       <View style ={{flexDirection:'row', justifyContent: 'space-between', width:90}}>
       <TouchableOpacity
           onPress={() => {handleColorChange('perro')}}
-          style={[styles.buttonGatoPerro, estado.perroPressed ? {backgroundColor: 'blue'} : {backgroundColor: 'white'}]}>
-            <Text style={styles.buttonText}>
+          style={[styles.buttonGatoPerro, estado.perroPressed ? {backgroundColor: colors.amarillo} : {backgroundColor: colors.blanco}]}>
+            <Text style={[styles.buttonText, estado.perroPressed ? {color: colors.blanco} : {color: colors.amarillo}]}>
                 PERRO
             </Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {handleColorChange('gato')}}
-          style={[styles.buttonGatoPerro, estado.gatoPressed ? {backgroundColor: 'blue'} : {backgroundColor: 'white'}]}>
-            <Text style={styles.buttonText}>
+          style={[styles.buttonGatoPerro, estado.gatoPressed ? {backgroundColor: colors.amarillo} : {backgroundColor: colors.blanco}]}>
+            <Text style={[styles.buttonText, estado.gatoPressed ? {color: colors.blanco} : {color: colors.amarillo}]}>
                 GATO
             </Text>
         </TouchableOpacity>
@@ -222,29 +224,29 @@ const FiltradoAnimales = (props) => {
         Localización
       </Text>
       </View>
-      <View style ={{flexDirection:'row', justifyContent: 'space-between', width:150}}>
-      <TouchableOpacity
-          onPress={() => {handleColorChangeLocalizacion('comunidadValenciana')}}
-          style={[styles.buttonLocalizacion, estado.comunidadValencianaPressed ? {backgroundColor: 'blue'} : {backgroundColor: 'white'}]}>
-            <Text style={styles.buttonText}>
-                 Valencia
-            </Text>
-        </TouchableOpacity>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <TouchableOpacity
-          onPress={() => {handleColorChangeLocalizacion('alicante')}}
-          style={[styles.buttonLocalizacion, estado.alicantePressed ? {backgroundColor: 'blue'} : {backgroundColor: 'white'}]}>
-            <Text style={styles.buttonText}>
-                Alicante
-            </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {handleColorChangeLocalizacion('cuenca')}}
-          style={[styles.buttonLocalizacion, estado.cuencaPressed ? {backgroundColor: 'blue'} : {backgroundColor: 'white'}]}>
-            <Text style={styles.buttonText}>
-                Cuenca
-            </Text>
-        </TouchableOpacity>
-        </View>
+            onPress={() => {handleColorChangeLocalizacion('comunidadValenciana')}}
+            style={[styles.buttonLocalizacion, estado.comunidadValencianaPressed ? {borderColor: colors.moradoPrincipal} : {borderColor: colors.moradoSecundario}]}>
+              <Text style={[styles.buttonText, estado.comunidadValencianaPressed ? {color: colors.moradoPrincipal} : {color: colors.moradoSecundario}]}>
+                  Valencia
+              </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {handleColorChangeLocalizacion('alicante')}}
+            style={[styles.buttonLocalizacion, estado.alicantePressed ? {borderColor: colors.moradoPrincipal} : {borderColor: colors.moradoSecundario}]}>
+              <Text style={[styles.buttonText, estado.alicantePressed ? {color: colors.moradoPrincipal} : {color: colors.moradoSecundario}]}>
+                  Alicante
+              </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {handleColorChangeLocalizacion('cuenca')}}
+            style={[styles.buttonLocalizacion, estado.cuencaPressed ? {borderColor: colors.moradoPrincipal} : {borderColor: colors.moradoSecundario}]}>
+              <Text style={[styles.buttonText, estado.cuencaPressed ? {color: colors.moradoPrincipal} : {color: colors.moradoSecundario}]}>
+                  Cuenca
+              </Text>
+          </TouchableOpacity>
+        </ScrollView>
       
       <TouchableOpacity 
                     onPress={() => cargarFiltros()}
@@ -264,7 +266,6 @@ const FiltradoAnimales = (props) => {
   container: {
       flex: 2, 
       padding: 20, 
-      height: 1000
   },
   image : {
     height : 250, 
@@ -279,18 +280,24 @@ const FiltradoAnimales = (props) => {
     textAlign: 'right'
   },
   buttonGatoPerro : {
-    elevation: 8,
     width:110,
     height: 40, 
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: colors.amarillo,
+    borderWidth: 2,
     padding: 6,
     marginTop: 20,
     marginLeft: 17, 
     marginBottom: 20
   }, 
   buttonLocalizacion : {
-    elevation: 8,
-    width:85,
-    height: 60, 
+    width:110,
+    height: 40, 
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: colors.moradoSecundario,
     padding: 6,
     marginTop: 20,
     marginLeft: 17, 
@@ -302,17 +309,16 @@ const FiltradoAnimales = (props) => {
     marginLeft: 17, 
     marginBottom: 20
   }, button : {
-    elevation: 3,
-    backgroundColor: "#6c91c2",
+    backgroundColor: colors.amarillo,
     padding: 10,
-    marginTop: 60,
+    marginTop: 40,
+    borderRadius: 20
 },
   buttonTextFinal: {
     fontSize: 18,
-    colors: "#ffffff",
-    fontWeight: "bold",
-    alignSelf: "center",
-    textTransform: "uppercase"    
+    color: colors.blanco,
+    fontFamily: 'DMSans',
+    alignSelf: "center",   
 }, 
 
   input: {
@@ -323,9 +329,11 @@ const FiltradoAnimales = (props) => {
   },
   titulo: {
       margin: 12,
+      marginTop: 40,
       padding: 10,
       fontSize: 40,
-      fontWeight: 'bold',
+      fontFamily: 'DMSans',
+      color: colors.moradoPrincipal,
       textAlign: "left"
   },
   lista: {
@@ -336,17 +344,16 @@ const FiltradoAnimales = (props) => {
       height: 60,
       width: 60
   },text: {
-    fontSize: 17,
-    colors: "#ffffff",
-    fontWeight: "bold", 
-    textTransform: "uppercase", 
+    fontSize: 20,
+    color: colors.moradoPrincipal,
+    fontFamily: 'DMSans', 
     marginTop: 20,
-    marginLeft: 17
+    marginLeft: 20
   }, 
   buttonText: {
     fontSize: 15,
-    colors: "#ffffff",
-    fontWeight: "bold",
+    color: colors.amarillo,
+    fontFamily: 'DMSans',
     alignSelf: "center",
     textTransform: "uppercase"    
   }
