@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { View, Button, TextInput, StyleSheet, ScrollView, Text, Alert, TouchableOpacity} from "react-native";
+import { View, TextInput, StyleSheet, Text, Alert, TouchableOpacity, Modal} from "react-native";
 import firebase from '../../database/firebase.js';
 
 //Bibliotecas colores CSS
@@ -20,21 +20,23 @@ const RegistrarUsuario = (props) => {
         if (state.nombre == '' || state.email == '' || state.telefono == '' || state.contraseña == ''){
             validateNullFields(); 
         }
-
-        let users = firebase.db.collection('users');
-        let emails = await users.where("email", "==", state.email).get();
-        let telefonos = await users.where("telefono", "==", state.telefono).get();
-        let noRepetidos = checkEmail(emails, telefonos);
-        if (noRepetidos && validatePasswordAndPhone(state.contraseña, state.telefono)) { 
-            await firebase.db.collection('users').add({
-                usuario: state.usuario, 
-                email: state.email,
-                contraseña: state.contraseña,
-                telefono: state.telefono,
-                alta: "No"
-            })
-            alert ("Bienvenid@ " + state.usuario); 
-            props.navigation.navigate('InicioSesion'); 
+        else{
+            let users = firebase.db.collection('users');
+            let emails = await users.where("email", "==", state.email).get();
+            let telefonos = await users.where("telefono", "==", state.telefono).get();
+            let noRepetidos = checkEmail(emails, telefonos);
+            if (noRepetidos && validatePasswordAndPhone(state.contraseña, state.telefono)) { 
+                await firebase.db.collection('users').add({
+                    usuario: state.usuario, 
+                    email: state.email,
+                    contraseña: state.contraseña,
+                    telefono: state.telefono,
+                    alta: "No"
+                })
+                setTextoAlerta("Bienvenid@ " + state.usuario);
+                setModal({...modal, visible: !modal.visible, correct: false});
+                props.navigation.navigate('InicioSesion'); 
+            }
         }
     } 
 
@@ -50,15 +52,19 @@ const RegistrarUsuario = (props) => {
 
     function validatePasswordAndPhone (password, phone) {
         let validation = true; 
+        let textoAlerta = "Problemas con: ";
         if (password.length < 4 || password.length > 8){
-            alert("La contraseña debe tener entre 4-8 caracteres"); 
+            textoAlerta += "\n -La contraseña debe tener entre 4-8 caracteres"; 
             validation = false; 
         }
         if (phone.length  != 9){
-            alert("El número de teléfono debe tener 9 dígitos"); 
+            textoAlerta += "\n -El número de teléfono debe tener 9 dígitos"; 
             validation = false; 
         }
+        setTextoAlerta(textoAlerta);
+        setModal({...modal, visible: !modal.visible, correct: false});
         return validation;
+        
     }
     
     const validateNullFields = () => {
@@ -71,15 +77,46 @@ const RegistrarUsuario = (props) => {
             textoAlerta += "\n - Contraseña "; 
         }
         if (state.telefono == ''){
-            textoAlerta += "\n - Telefono ";  
+            textoAlerta += "\n - Teléfono ";  
         }else if (state.telefono.length != 9 || isNaN(state.telefono)){
             textoAlerta += "\n - El teléfono debe contener 9 números ";  
         }
-        alert (textoAlerta); 
+        setTextoAlerta(textoAlerta);
+        setModal({...modal, visible: !modal.visible});
     }
+
+    //Alertas
+    const [modal, setModal] = useState({ visible: false });  
+    const [modalRegistro, setModalRegistro] = useState({ visible: false, correct: false });
+    const [textoAlerta, setTextoAlerta] = useState();
+
 
     return (
             <View style={styles.container}>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modal.visible}
+                    onRequestClose={() => {
+                        setModal({...modal, visible: !modal.visible});
+                    }}>
+                    <View style={styles.centeredView}>
+                        <View style={[styles.modalView, {height: '40%'}]}>
+                            <View style={{flex: 4}}>
+                                <Text style={styles.texto}> {textoAlerta} </Text>
+                            </View>
+                            <View style={styles.buttonGroup}>
+                                <TouchableOpacity
+                                onPress={() => setModal({...modal, visible: !modal.visible})}>
+                                    <View style={styles.botonCerrar}>
+                                        <Text style={styles.texto}>cerrar</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+                
                 <Text style={styles.titulo}> Registro </Text>
                 <TextInput 
                     style={styles.textFieldCircular}
@@ -156,7 +193,45 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         alignSelf: "center",
         marginTop: 5
-      }
+      },
+      centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+      },
+      modalView: {
+        margin: 10,
+        width: '90%',
+        backgroundColor: colors.amarillo,
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        borderWidth: 1,
+        borderColor: colors.moradoPrincipal
+      },
+      botonCerrar: {
+        marginRight: 10,
+        height: 40,
+        width: 120,
+        borderRadius: 10,
+        backgroundColor: colors.moradoPrincipal,
+        alignItems: 'center',
+        justifyContent: 'center'
+      },
+      texto: {
+        fontFamily: 'DMSans',
+        fontSize: 20,
+        color: colors.blanco,
+      },
 })
 
 
