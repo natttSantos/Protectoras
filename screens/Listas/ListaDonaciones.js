@@ -91,13 +91,13 @@ const ListaDonaciones = (props) => {
                             <TouchableOpacity
                             onPress={modal.aceptar ? () => aceptar() : () => declinar()}>
                                 <View style={styles.botonSi}>
-                                    <Text style={styles.texto}>Si</Text>
+                                    <Text style={styles.texto}>sí</Text>
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity
                             onPress={() => setModal({...modal, visible: !modal.visible})}>
                                 <View style={styles.botonNo}>
-                                    <Text style={styles.texto}>No</Text>
+                                    <Text style={styles.texto}>no</Text>
                                 </View>
                             </TouchableOpacity>
                         </View>
