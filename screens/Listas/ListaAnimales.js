@@ -85,7 +85,7 @@ const ListaAnimales = (props) => {
             let i = querySnapshot.docs.length
 
             querySnapshot.docs.forEach((doc) => {
-                const {nombre, tipo, raza, sexo, edad} = doc.data()
+                const {nombre, tipo, raza, sexo, edad, id_protectora} = doc.data()
                 firebase.st.ref(`images/${nombre}`)
                 .getDownloadURL().then(url => {
                   i--
@@ -96,6 +96,7 @@ const ListaAnimales = (props) => {
                       raza,
                       sexo,
                       edad,
+                      id_protectora,
                       url: url
                     })
                     if (i == 0){
@@ -198,7 +199,7 @@ const ListaAnimales = (props) => {
             <View style={styles.descripcionSexoContainer}>
               <View style={styles.descripcionContainer}>
                 <Text style={styles.descripcionTexto}>{animal.edad} años</Text>
-                <Text style={styles.descripcionTexto}>{animal.nombre}</Text>
+                <Text style={styles.descripcionTexto}>{protectoras.find(protectora => protectora.id == animal.id_protectora).nombre}</Text>
               </View>
               <View style={styles.sexoContainer}>
                 <Image source={animal.sexo == 'Masculino' ? require('../../images/Masculino.png') : require('../../images/Femenino.png')}/>
