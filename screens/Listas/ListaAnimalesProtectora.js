@@ -47,6 +47,41 @@ const ListaAnimalesProtectora = (props) => {
         
     }
 
+    const [estado, setEstado] = useState({
+        perroPressed: false,
+        gatoPressed: false,
+    })
+
+    const cargarFiltros = () => {
+        var animalesFiltrado = []; 
+        var noHayAnimalesFiltrado = "";
+        setTimeout(() => {
+            if (estado.gatoPressed){ 
+                animalesFiltrado = animales.filter(animal => animal.tipo === 'Gato');   
+            }
+            if(estado.perroPressed){
+                animalesFiltrado = animales.filter(animal => animal.tipo === 'Perro');
+            } 
+        }, 1000)
+        if(animalesFiltrado.length == 0){
+            noHayAnimalesFiltrado = "No hay animales para los filtros seleccionados :("; 
+        }
+    }
+
+    const handleColorChange = (animal) => {
+        if(animal == 'perro'){
+          if(estado.gatoPressed && !estado.perroPressed)
+            setEstado({ ...estado, ['perroPressed']: !estado.perroPressed, ['gatoPressed']: !estado.gatoPressed});
+          else
+            setEstado({ ...estado, ['perroPressed']: !estado.perroPressed});}
+        else { 
+          if(estado.perroPressed && !estado.gatoPressed)
+            setEstado({ ...estado, ['gatoPressed']: !estado.gatoPressed, ['perroPressed']: !estado.perroPressed});
+          else
+            setEstado({ ...estado, ['gatoPressed']: !estado.gatoPressed});}
+        cargarFiltros();
+    };
+
     useEffect(() => {
         cargarImagenes(),
         getProtectoraById(storedCredentials)
@@ -64,11 +99,15 @@ const ListaAnimalesProtectora = (props) => {
         return(
             <ScrollView>
                 <Text style={styles.titulo}> {titulo} </Text>
-                <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 20}}>
+                <View style={{flexDirection: 'row', alignContent:'flex-start', paddingLeft: 20}}>
                 <TouchableOpacity
                     style={styles.button}>
                     <Text style={styles.buttonText}> perros </Text>
-                    </TouchableOpacity>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.button}>
+                    <Text style={styles.buttonText}> gatos </Text>
+                </TouchableOpacity>
                 </View>
                 
                     {animales.map((animal, index) => {
@@ -125,6 +164,7 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 20,
         marginBottom: 20,
+        marginRight: 20
     },
     buttonText: {
         fontSize: 16,

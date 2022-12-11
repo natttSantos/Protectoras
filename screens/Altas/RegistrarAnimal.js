@@ -96,7 +96,7 @@ const RegistrarAnimal = (props) => {
                 longitud: protectora.longitud,
             })
             mensajeExito(); 
-            setModal({...modalFoto, visible: !modalFoto.visible, correct: true});
+            setModal({...modal, visible: !modal.visible, correct: true});
         }
     } 
 
