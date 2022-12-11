@@ -1,13 +1,14 @@
-import React, {useState, useEffect} from "react"
+import React, {useState, useEffect, useContext} from "react"
 import {ScrollView, View, StyleSheet, Text, TouchableOpacity, Image}  from 'react-native'
 import {Avatar, ListItem} from "react-native-elements";
 import { ActivityIndicator } from "react-native-paper";
 import firebase from "../../database/firebase";
-import DropDownPicker from "react-native-dropdown-picker";
+import { CredentialsContext } from "../../components/CredentialsContext";
 import { colors } from '../../components/Color';
  
 const ListaAnimales = (props) => {
-    const [loading, setLoading] = useState(true);
+    const [loadingAnimales, setLoadingAnimales] = useState(true);
+    const [loadingProtectoras, setLoadingProtectoras] = useState(true);
   
     // CÓDIGO LISTA ANIMALES //
 
@@ -16,51 +17,77 @@ const ListaAnimales = (props) => {
       gatoPressed: false
     })
 
-  
+    const {storedCredentials, setStoredCredentials} = useContext(CredentialsContext)
     const [animales, setAnimales] = useState([]);
     const [animalesACargar, setAnimalesACargar] = useState([]);
     const [protectoras, setProtectoras] = useState([])
+    const [favFiltro, setFavFiltro] = useState(false);
+    const [cambios, setCambios] = useState(false);
     // const [imagenes, setImagenes] = useState([]);
     // const [imagenesACargar, setACargar] = useState([]);
 
-    const cargarImagenes = async () => {
-        let i = animales.length
-        let imagenesAux = []
+    // const cargarImagenes = async () => {
+    //     let i = animales.length
+    //     let imagenesAux = []
 
-        if(i > 0){
-          animales.map(async (animal, index) => {
-            await firebase
-              .st
-              .ref(`images/${animal.nombre}`)
-              .getDownloadURL().then(function (url) {
-                i--;
-                imagenesAux[index] = url;
-                setImagenes(...imagenes, imagenesAux);
-                if (i == 0) 
-                  setLoading(false);
-              });
-          })
-        }
-        else {
-             setLoading(false)
-        }
-    }
+    //     if(i > 0){
+    //       animales.map(async (animal, index) => {
+    //         await firebase
+    //           .st
+    //           .ref(`images/${animal.nombre}`)
+    //           .getDownloadURL().then(function (url) {
+    //             i--;
+    //             imagenesAux[index] = url;
+    //             setImagenes(...imagenes, imagenesAux);
+    //             if (i == 0) 
+    //               setLoading(false);
+    //           });
+    //       })
+    //     }
+    //     else {
+    //          setLoading(false)
+    //     }
+    // }
 
-    const cargarAnimalesDeFiltrado = () => {
-      if(props.route.params.filtrado != undefined){
-        setAnimales(props.route.params.animalesFiltrado); 
-      }
-    }
+    // const cargarAnimalesDeFiltrado = () => {
+    //   if(props.route.params.filtrado != undefined){
+    //     setAnimales(props.route.params.animalesFiltrado); 
+    //   }
+    // }
 
-    const actualizarImagenes = () => {
-      const imagenesAux = []
+    // const actualizarImagenes = () => {
+    //   const imagenesAux = []
 
-      animales.map((animal) => {
-        const index = animales.findIndex(animalin => animalin == animal)
-        imagenesAux.push(imagenes[index])
-      })
-      setImagenes(imagenesAux)
+    //   animales.map((animal) => {
+    //     const index = animales.findIndex(animalin => animalin == animal)
+    //     imagenesAux.push(imagenes[index])
+    //   })
+    //   setImagenes(imagenesAux)
       
+    // }
+
+    const handleFavFiltroChange = () => {
+      setFavFiltro(!favFiltro)
+
+      if(!favFiltro)
+        setAnimalesACargar(animalesACargar.filter(animal => animal.fav == true))
+      else
+        setAnimalesACargar(animales)
+    }
+
+    const handleFavChange = (index) => {
+      // let animalesAux = animalesACargar
+      // const animalACambiar = animalesAux.find(animal => animal.id == animalId)
+      // animalACambiar.fav = !animalACambiar.fav
+      
+      // setAnimalesACargar(animalesAux)
+      setCambios(!cambios)
+      let animalesAux = animalesACargar
+      let animalACambiar = {...animalesAux[index]}
+      animalACambiar.fav = !animalACambiar.fav
+      animalesAux[index] = animalACambiar
+      
+      setAnimalesACargar(animalesAux)
     }
 
     const cargarProtectoras = async () => {
@@ -72,38 +99,41 @@ const ListaAnimales = (props) => {
         firebase.st.ref(`imagesProtectora/${doc.data().fotoModificada}`).getDownloadURL().then((url) => {
           protectorasAux.push({...doc.data(), url: url, id: doc.id})
           i--
-          if (i == 0)
-            setProtectoras(protectorasAux)
+          if (i == 0) {
+            setProtectoras(protectorasAux); setLoadingProtectoras(false)}
         })
       })
     }
 
       useEffect(() => {
         if(props.route.params.filtrado == undefined){
-        firebase.db.collection('animales').where("adoptado", "==", false).onSnapshot((querySnapshot) => {
-            const listaAnimales = []
-            let i = querySnapshot.docs.length
+          firebase.db.collection('animales').where("adoptado", "==", false).onSnapshot((querySnapshot) => {
+              const listaAnimales = []
+              let i = querySnapshot.docs.length
 
-            querySnapshot.docs.forEach((doc) => {
-                const {nombre, tipo, raza, sexo, edad, id_protectora} = doc.data()
-                firebase.st.ref(`images/${nombre}`)
-                .getDownloadURL().then(url => {
-                  i--
-                  listaAnimales.push({
-                      id: doc.id,
-                      nombre,
-                      tipo,
-                      raza,
-                      sexo,
-                      edad,
-                      id_protectora,
-                      url: url
-                    })
-                    if (i == 0){
-                      setAnimales(listaAnimales); setAnimalesACargar(listaAnimales); setLoading(false)}
-                })
-            });
-        })}
+              querySnapshot.docs.forEach(async (doc) => {
+                  const {nombre, tipo, raza, sexo, edad, id_protectora} = doc.data()
+                  const favoritos = await firebase.db.collection('favoritos').where("id_animal", "==", doc.id).where("id_usuario", "==", storedCredentials).get()
+                  const fav = !favoritos.empty
+                  firebase.st.ref(`images/${nombre}`)
+                  .getDownloadURL().then(url => {
+                    i--
+                    listaAnimales.push({
+                        id: doc.id,
+                        nombre,
+                        tipo,
+                        raza,
+                        sexo,
+                        edad,
+                        id_protectora,
+                        url: url,
+                        fav: fav,
+                      })
+                      if (i == 0){
+                        setAnimales(listaAnimales); setAnimalesACargar(listaAnimales); setLoadingAnimales(false)}
+                  })
+              });
+          })}
       }, [])
 
       useEffect(() => {
@@ -128,7 +158,7 @@ const ListaAnimales = (props) => {
     // }, [animales])
       
 
-    if(loading) {
+    if(loadingAnimales || loadingProtectoras) {
       return(
           <View>
               <ActivityIndicator />
@@ -142,7 +172,7 @@ const ListaAnimales = (props) => {
         <Text style={styles.titulo}>
           Nuestras protectoras
         </Text>
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{marginTop: 15}}>
           {protectoras.map((protectora, index) => {
             return(
               <TouchableOpacity
@@ -162,8 +192,15 @@ const ListaAnimales = (props) => {
         </ScrollView>
       </View>
       <View>
-        
-      <Text style={styles.titulo}>Animales en adopción</Text>
+      <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 12, marginVertical: 15}}> 
+        <Text style={styles.titulo}>Animales en adopción</Text>
+        <TouchableOpacity
+        onPress={() => handleFavFiltroChange()}>
+          <View style={{borderColor: colors.amarillo, borderWidth: 2, borderRadius: 20, width: 50, height: 40, justifyContent: 'center', alignItems: 'center'}}>
+            <Image source={favFiltro ? require('../../images/MarcadoFavorito.png') : require('../../images/NoMarcadoFavorito.png')}/>
+          </View>
+        </TouchableOpacity>
+      </View>
       <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 20}}>
         <TouchableOpacity
         onPress={() => props.navigation.navigate('FiltradoAnimales', { animales: animales, onGoBack: (animalesFiltrado) => setAnimalesACargar(animalesFiltrado)})}
@@ -194,7 +231,10 @@ const ListaAnimales = (props) => {
           <View style={styles.infoContainer}>
             <View style={styles.nombreContainer}>
               <Text style={styles.nombreTexto}>{animal.nombre}</Text>
-              <Text>A</Text>
+              <TouchableOpacity
+              onPress={() => {handleFavChange(index);}}>
+                <Image source={animal.fav ? require('../../images/MarcadoFavorito.png') : require('../../images/NoMarcadoFavorito.png')}/>
+              </TouchableOpacity>
             </View>
             <View style={styles.descripcionSexoContainer}>
               <View style={styles.descripcionContainer}>
@@ -244,7 +284,6 @@ const ListaAnimales = (props) => {
   container: {
       flex: 2, 
       padding: 15, 
-      height: 3000
   },
   protectorasContainer: {
     height: 170,
@@ -288,7 +327,6 @@ const ListaAnimales = (props) => {
     padding: 10,
   },
   titulo: {
-      margin: 12,
       padding: 10,
       color: colors.moradoPrincipal,
       fontSize: 32,

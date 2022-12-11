@@ -20,7 +20,6 @@ import {colors} from '../../components/Color';
 import { Appbar} from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
 import {Avatar, ListItem} from "react-native-elements";
-import { color } from "react-native-elements/dist/helpers";
 
 const PerfilProtectora = (props) => {
   const isFocused = useIsFocused()
@@ -74,47 +73,53 @@ const PerfilProtectora = (props) => {
     });
   };
 
-  const cargarImagenes = async () => {
-    let i = animales.length
+//   const cargarImagenes = async () => {
+//     let i = animales.length
 
-    if(i > 0){
-        await animales.map(async (animal, index) => {
-            await firebase
-            .st
-            .ref(`images/${animal.nombre}`)
-            .getDownloadURL().then(function(url) {
-                i--
-                imagenesAux[index] = url
-                setImagenes(...imagenes, imagenesAux)
-                if(i == 0) setLoading(false)
-            });
-        })
-    }
-    else {
-        setLoading(false)
-    }
-    console.log("num animales ->"+animales.length); 
-}
+//     if(i > 0){
+//         await animales.map(async (animal, index) => {
+//             await firebase
+//             .st
+//             .ref(`images/${animal.nombre}`)
+//             .getDownloadURL().then(function(url) {
+//                 i--
+//                 imagenesAux[index] = url
+//                 setImagenes(...imagenes, imagenesAux)
+//                 if(i == 0) setLoading(false)
+//             });
+//         })
+//     }
+//     else {
+//         setLoading(false)
+//     }
+// }
   const getAllAnimalesDeProtectora = async (id) => {
     const animales = []
 
     const dbRef = firebase.db.collection('animales').where("id_protectora", "==", id)
     const docs = await dbRef.get()
+    let i = docs.size
+    
     docs.forEach(doc => {
         const {nombre, sexo,descripcion, raza, edad} = doc.data()
-        animales.push({
+        firebase.st.ref(`images/${nombre}`).getDownloadURL().then(url => {
+          i--;
+          animales.push({
             id: doc.id,
             edad, 
             id_protectora: id,
             nombre,
             raza,
             descripcion,
-            sexo
+            sexo,
+            url: url
+          })
+          if (i == 0) {
+            setAnimales(animales)
+            setLoading(false)
+          }
         })
     })
-
-    setAnimales(animales)
-    setLoading(false)
   }
   const checkImage = () => {
     const { imageFirebase } = cosas;
@@ -141,7 +146,7 @@ const PerfilProtectora = (props) => {
                               onPress={() => {props.navigation.navigate('PerfilAnimal', {animalId: animal.id, userId: props.route.params.userId, esUsuario: true})}}>
                               <Image 
                               style = {styles.imagen}
-                              source={{uri: imagenes[index]}}
+                              source={{uri: animal.url}}
                               />
                               <ListItem.Content>
                                   <ListItem.Title style = {styles.tituloNombreAnimal}> {animal.nombre} </ListItem.Title>
@@ -214,7 +219,7 @@ const PerfilProtectora = (props) => {
   }
   
   const checkTipoUsuario_protectora = () => { 
-    if (!type == 'usuario') { //SESION PROTECTORA
+    if (!(type == 'usuario')) { //SESION PROTECTORA
       return (
         <View style={styles.container}>
           <Appbar.Header style={styles.appBar}>
@@ -273,7 +278,7 @@ const PerfilProtectora = (props) => {
   }, [isFocused]);
 
   useEffect(() => {
-    cargarImagenes(); 
+    //cargarImagenes(); 
     getProtectoraById(props.route.params.protectoraId); 
   }, [animales]);
   
