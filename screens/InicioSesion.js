@@ -1,5 +1,5 @@
 import React, {useState, useContext} from "react";
-import { View, Button, TextInput, Text,StyleSheet, ScrollView, ProgressViewIOSComponent, Alert, TouchableOpacity} from "react-native";
+import { View, TextInput, Text,StyleSheet, TouchableOpacity, Modal} from "react-native";
 import firebase from '../database/firebase';
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -19,11 +19,6 @@ const InicioSesion = (props) => {
         setState({...state, [nombre]: value}); 
     }; 
 
-    const showAlert = () => {
-        Alert.alert("Error", "El usuario o la contraseña son incorrectas", [
-            {text: "Cerrar"}
-        ]);
-    }
 
     const {storedCredentials, setStoredCredentials} = useContext(CredentialsContext);
     const {type, setType} = useContext(CredentialsContext);
@@ -50,7 +45,7 @@ const InicioSesion = (props) => {
             if (usuario.get("contraseña") == state.contraseña){
                 //props.navigation.navigate('SesionUsuario', {userId: usuario.id})
                 persistLogin(usuario, 'usuario');
-            } else { showAlert(); }
+            } else { setModal({...modal, visible: !modal.visible}) }
         }
         else {
             if (!snapshot2.empty) {
@@ -58,16 +53,42 @@ const InicioSesion = (props) => {
                 if(protectora.get('contraseña') == state.contraseña) {
                     //props.navigation.navigate('SesionProtectora', {userId: protectora.id})
                     persistLogin(protectora, '');
-                } else { showAlert(); }
+                } else { setModal({...modal, visible: !modal.visible}) }
             }
         }
         if (snapshot.empty && snapshot2.empty) {
-            showAlert();
+            setModal({...modal, visible: !modal.visible});
         }
     };
 
+    const [modal, setModal] = useState({ visible: false });
+
+
     return (
             <View style={styles.container}>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modal.visible}
+                    onRequestClose={() => {
+                        setModal({...modal, visible: !modal.visible});
+                    }}>
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <View style={{flex: 4}}>
+                                <Text style={styles.texto}> El usuario o la contraseña son incorrectas </Text>
+                            </View>
+                            <View style={styles.buttonGroup}>
+                                <TouchableOpacity
+                                onPress={() => setModal({...modal, visible: !modal.visible})}>
+                                    <View style={styles.botonCerrar}>
+                                        <Text style={styles.texto}>Cerrar</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
                 <Text style={styles.titulo}> Inicia sesión </Text>
                 <TextInput 
                 style={styles.textFieldCircular}           
@@ -137,8 +158,46 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         alignSelf: "center",
         marginTop: 5
-      }
-
+      },
+      centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+      },
+      modalView: {
+        margin: 10,
+        width: '90%',
+        height: 190,
+        backgroundColor: colors.amarillo,
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        borderWidth: 1,
+        borderColor: colors.moradoPrincipal
+      },
+      botonCerrar: {
+        marginRight: 10,
+        height: 40,
+        width: 120,
+        borderRadius: 10,
+        backgroundColor: colors.moradoPrincipal,
+        alignItems: 'center',
+        justifyContent: 'center'
+      },
+      texto: {
+        fontFamily: 'DMSans',
+        fontSize: 20,
+        color: colors.blanco,
+      },
     })
 
 export default InicioSesion; 
