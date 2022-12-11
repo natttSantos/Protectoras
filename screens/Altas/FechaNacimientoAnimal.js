@@ -9,9 +9,7 @@ const FechaNacimientoAnimal = (props) => {
         fecha: "22/10/2022"
       });
     const [chosenDate, setChosenDate] = useState('');
-    const [modal, setModal] = useState({
-        visible: false
-    });
+    const [modal, setModal] = useState({ visible: false });
     const {type, setType} = useContext(CredentialsContext);
 
     return(

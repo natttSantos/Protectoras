@@ -213,7 +213,7 @@ const getImagenProtectora = async (id_protectora) => {
 
 
   const validateOptionalFields = (value) => {
-    let noInfo = "No tenemos información sobre esta característica."; 
+    let noInfo = "NS/NC"; 
     if(value.peso == ""){
       setPesoOpcional(noInfo); 
     } else {

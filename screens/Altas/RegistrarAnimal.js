@@ -1,5 +1,5 @@
 import React, {useEffect, useState } from "react";
-import { ScrollView, View, Text, StyleSheet, TextInput,TouchableOpacity, Image } from "react-native";
+import { ScrollView, View, Text, StyleSheet, TextInput,TouchableOpacity, Image, Modal } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Button, CheckBox } from "react-native-elements";
 import firebase from '../../database/firebase';
@@ -96,7 +96,7 @@ const RegistrarAnimal = (props) => {
                 longitud: protectora.longitud,
             })
             mensajeExito(); 
-            props.navigation.navigate('SesionProtectora', {userId: props.route.params.userId}); 
+            setModal({...modalFoto, visible: !modalFoto.visible, correct: true});
         }
     } 
 
@@ -109,10 +109,15 @@ const RegistrarAnimal = (props) => {
 
     const mensajeExito = () =>{
         if(state.sexo == "Masculino"){
-            alert (state.nombre + " ha sido registrado!");     
+            setTextoAlerta(state.nombre + " ha sido registrado!");     
         } else{
-            alert (state.nombre + " ha sido registrada!"); 
+            setTextoAlerta(state.nombre + " ha sido registrada!"); 
         }
+    }
+
+    const cerrarAlerta = () => {
+      setModal({...modal, visible: !modal.visible})
+      props.navigation.navigate('SesionProtectora', {userId: props.route.params.userId});
     }
     const validateNullFields = () => {
         let textoAlerta = "Complete el campo: ";
@@ -135,7 +140,8 @@ const RegistrarAnimal = (props) => {
         if (props.route.params.valueFecha == undefined){
           textoAlerta += "\n - Fecha Nacimiento "; 
       }
-        alert (textoAlerta); 
+      setTextoAlerta(textoAlerta);
+      setModal({...modal, visible: !modal.visible, correct: false});
     }
 
 
@@ -163,7 +169,6 @@ const RegistrarAnimal = (props) => {
 
 
       const openGallery = async () => {
-    
         const resultPermission =true; 
         if (resultPermission) {
           const resultImagePicker = await ImagePicker.launchImageLibraryAsync({
@@ -183,6 +188,7 @@ const RegistrarAnimal = (props) => {
                   .put(resolve)
                   .then(resolve => {
                     console.log("Imagen subida correctamente");
+                    setTextoAlertaFoto("Imagen subida correctamente");
                     setFoto({
                         existe: "Si"
                      });
@@ -191,11 +197,13 @@ const RegistrarAnimal = (props) => {
                     console.log(error);
                     console.log(error);
                     console.log("Error al subir la imagen");
+                    setTextoAlertaFoto("Error al subir la imagen");
                   });
               })
               .catch(error => {
                 console.log(error);
               });
+              setmodalFoto({...modalFoto, visible: !modalFoto.visible});
           }
         }
       };
@@ -207,6 +215,10 @@ const RegistrarAnimal = (props) => {
       const [isPressMacho, setIsPressMacho] = useState(false);
       const [isPressHembra, setIsPressHembra] = useState(false);
       const [fecha, setFecha] = useState("* Fecha de nacimiento");
+      const [modalFoto, setmodalFoto] = useState({ visible: false });
+      const [modal, setModal] = useState({ visible: false, correct: false });
+      const [textoAlertaFoto, setTextoAlertaFoto] = useState();
+      const [textoAlerta, setTextoAlerta] = useState();
 
       function handleTipo(value) {
         if (value == "Gato") {
@@ -240,6 +252,52 @@ const RegistrarAnimal = (props) => {
 
     return(
       <View style={styles.container}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalFoto.visible}
+          onRequestClose={() => {
+              setmodalFoto({...modalFoto, visible: !modalFoto.visible});
+          }}>
+          <View style={styles.centeredView}>
+              <View style={styles.modalViewFoto}>
+                  <View style={{flex: 4}}>
+                      <Text style={styles.textoAlerta}> {textoAlertaFoto} </Text>
+                  </View>
+                  <View style={styles.buttonGroup}>
+                      <TouchableOpacity
+                      onPress={() => setmodalFoto({...modalFoto, visible: !modalFoto.visible})}>
+                          <View style={styles.botonCerrar}>
+                              <Text style={styles.textoAlerta}>cerrar</Text>
+                          </View>
+                      </TouchableOpacity>
+                  </View>
+              </View>
+          </View>
+        </Modal>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modal.visible}
+          onRequestClose={() => {
+              setModal({...modal, visible: !modal.visible});
+          }}>
+          <View style={styles.centeredView}>
+              <View style={modal.correct ? styles.modalViewFoto : styles.modalView}>
+                  <View style={{flex: 4}}>
+                      <Text style={styles.textoAlerta}> {textoAlerta} </Text>
+                  </View>
+                  <View style={styles.buttonGroup}>
+                      <TouchableOpacity
+                      onPress={modal.correct ? () => cerrarAlerta() : () => setModal({...modal, visible: !modal.visible})}>
+                          <View style={styles.botonCerrar}>
+                              <Text style={styles.textoAlerta}>cerrar</Text>
+                          </View>
+                      </TouchableOpacity>
+                  </View>
+              </View>
+          </View>
+        </Modal>
         <ScrollView contentContainerStyle={{justifyContent: 'space-around'}}> 
             <Text style={styles.titulo}> Registrar Animal</Text>
             <TextInput 
@@ -469,7 +527,7 @@ const styles = StyleSheet.create({
     },
     textoFecha: {
       fontFamily: 'InterRegular',
-      color: colors.moradoSecundario,
+      color: colors.moradoPrincipal,
       fontSize: 16,
       marginRight: 100
     },
@@ -561,6 +619,60 @@ const styles = StyleSheet.create({
         fontSize: 32,
         color: colors.moradoPrincipal,
         marginTop: 40
+    },
+    centeredView: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 22
+    },
+    modalViewFoto: {
+      margin: 10,
+      width: '90%',
+      height: 190,
+      backgroundColor: colors.amarillo,
+      borderRadius: 20,
+      padding: 35,
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+          width: 0,
+          height: 2
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5
+    },
+    modalView: {
+      margin: 10,
+      width: '90%',
+      height: '45%',
+      backgroundColor: colors.amarillo,
+      borderRadius: 20,
+      padding: 35,
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+          width: 0,
+          height: 2
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5
+    },
+    botonCerrar: {
+      marginRight: 10,
+      height: 40,
+      width: 120,
+      borderRadius: 10,
+      backgroundColor: colors.moradoPrincipal,
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    textoAlerta: {
+      fontFamily: 'DMSans',
+      fontSize: 20,
+      color: colors.blanco,
     }
 })
 export default RegistrarAnimal;
