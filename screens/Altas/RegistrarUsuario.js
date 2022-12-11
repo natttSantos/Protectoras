@@ -33,9 +33,8 @@ const RegistrarUsuario = (props) => {
                     telefono: state.telefono,
                     alta: "No"
                 })
-                setTextoAlerta("Bienvenid@ " + state.usuario);
-                setModal({...modal, visible: !modal.visible, correct: false});
-                props.navigation.navigate('InicioSesion'); 
+                setTextoAlertaRegistro("Bienvenid@ " + state.usuario);
+                setModalRegistro({...modalRegistro, visible: !modalRegistro.visible, correct: true});
             }
         }
     } 
@@ -43,9 +42,9 @@ const RegistrarUsuario = (props) => {
     function checkEmail (emails) {
         if (emails.empty) {return true;}
         else {
-            Alert.alert("Error", "El email introducido ya está en uso", [
-                {text: "Cerrar"}
-            ]);
+            let textoAlerta = "El email introducido ya está en uso";
+            setTextoAlerta(textoAlerta);
+            setModal({...modal, visible: !modal.visible});
             return false;
         }
     }
@@ -61,8 +60,10 @@ const RegistrarUsuario = (props) => {
             textoAlerta += "\n -El número de teléfono debe tener 9 dígitos"; 
             validation = false; 
         }
-        setTextoAlerta(textoAlerta);
-        setModal({...modal, visible: !modal.visible, correct: false});
+        if (!validation) {
+            setTextoAlerta(textoAlerta);
+            setModal({...modal, visible: !modal.visible});
+        }        
         return validation;
         
     }
@@ -89,7 +90,12 @@ const RegistrarUsuario = (props) => {
     const [modal, setModal] = useState({ visible: false });  
     const [modalRegistro, setModalRegistro] = useState({ visible: false, correct: false });
     const [textoAlerta, setTextoAlerta] = useState();
+    const [textoRegistro, setTextoAlertaRegistro] = useState();
 
+    const cerrarAlerta = () => {
+        setModalRegistro({...modalRegistro, visible: !modalRegistro.visible})
+        props.navigation.navigate('PrincipalScreen');       
+    }
 
     return (
             <View style={styles.container}>
@@ -103,20 +109,42 @@ const RegistrarUsuario = (props) => {
                     <View style={styles.centeredView}>
                         <View style={[styles.modalView, {height: '40%'}]}>
                             <View style={{flex: 4}}>
-                                <Text style={styles.texto}> {textoAlerta} </Text>
+                                <Text style={[styles.textoAlerta, {fontSize: 20}]}> {textoAlerta} </Text>
                             </View>
                             <View style={styles.buttonGroup}>
                                 <TouchableOpacity
                                 onPress={() => setModal({...modal, visible: !modal.visible})}>
                                     <View style={styles.botonCerrar}>
-                                        <Text style={styles.texto}>cerrar</Text>
+                                        <Text style={[styles.textoAlerta, {fontSize: 20}]}>cerrar</Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>
                         </View>
                     </View>
                 </Modal>
-                
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalRegistro.visible}
+                    onRequestClose={() => {
+                        setModalRegistro({...modalRegistro, visible: !modalRegistro.visible});
+                    }}>
+                    <View style={styles.centeredView}>
+                        <View style={[styles.modalView, {height: 170}]}>
+                            <View style={{flex: 4}}>
+                                <Text style={[styles.textoAlerta, {fontSize: 22}]}> {textoRegistro} </Text>
+                            </View>
+                            <View style={styles.buttonGroup}>
+                                <TouchableOpacity
+                                onPress={modalRegistro.correct ? () => cerrarAlerta() : () => setModalRegistro({...modalRegistro, visible: !modalRegistro.visible})}>
+                                    <View style={styles.botonCerrar}>
+                                        <Text style={[styles.textoAlerta, {fontSize: 20}]}>cerrar</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
                 <Text style={styles.titulo}> Registro </Text>
                 <TextInput 
                     style={styles.textFieldCircular}
@@ -227,9 +255,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
       },
-      texto: {
+      textoAlerta: {
         fontFamily: 'DMSans',
-        fontSize: 20,
         color: colors.blanco,
       },
 })
