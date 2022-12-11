@@ -163,7 +163,7 @@ const PerfilProtectora = (props) => {
   }
   }
   const checkTipoUsuario_usuario = () => { //SESION USUARIO
-    if (type == "usuario") {
+    if (type === 'usuario') {
       return (
         <ScrollView style={styles.container}>
         <View style={styles.container}>
@@ -214,7 +214,7 @@ const PerfilProtectora = (props) => {
   }
   
   const checkTipoUsuario_protectora = () => { 
-    if (!type == 'usuario') { //SESION PROTECTORA
+    if (!type) { //SESION PROTECTORA
       return (
         <View style={styles.container}>
           <Appbar.Header style={styles.appBar}>
