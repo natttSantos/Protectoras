@@ -46,11 +46,7 @@ const ListaAnimalesProtectora = (props) => {
         setLoading(false);
         
     }
-
-    const [estado, setEstado] = useState({
-        perroPressed: false,
-        gatoPressed: false,
-    })
+    
 
     const cargarFiltros = () => {
         var animalesFiltrado = []; 
@@ -67,6 +63,12 @@ const ListaAnimalesProtectora = (props) => {
             noHayAnimalesFiltrado = "No hay animales para los filtros seleccionados :("; 
         }
     }
+
+    const [estado, setEstado] = useState({
+        perroPressed: false,
+        gatoPressed: false,
+    })
+    const [animalesACargar, setAnimalesACargar] = useState([]);
 
     const handleColorChange = (animal) => {
         if(animal == 'perro'){
@@ -97,36 +99,56 @@ const ListaAnimalesProtectora = (props) => {
 
     if(animales.length > 0) {
         return(
-            <ScrollView>
+            <ScrollView style={styles.container}>
                 <Text style={styles.titulo}> {titulo} </Text>
-                <View style={{flexDirection: 'row', alignContent:'flex-start', paddingLeft: 20}}>
-                <TouchableOpacity
-                    style={styles.button}>
-                    <Text style={styles.buttonText}> perros </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.button}>
-                    <Text style={styles.buttonText}> gatos </Text>
-                </TouchableOpacity>
+                <View style={{flexDirection: 'row', paddingLeft: 20}}>
+                    <TouchableOpacity
+                        onPress={() => {handleColorChange('perro')}}
+                        style={[styles.buttonGatoPerro, estado.perroPressed ? {backgroundColor: colors.amarillo} : {backgroundColor: colors.blanco}]}>
+                            <Text style={[styles.buttonText, estado.perroPressed ? {color: colors.blanco} : {color: colors.amarillo}]}>
+                                perro
+                            </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {handleColorChange('gato')}}
+                        style={[styles.buttonGatoPerro, estado.gatoPressed ? {backgroundColor: colors.amarillo} : {backgroundColor: colors.blanco}]}>
+                            <Text style={[styles.buttonText, estado.gatoPressed ? {color: colors.blanco} : {color: colors.amarillo}]}>
+                                gato
+                            </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => setAnimalesACargar(animales)}
+                        style={[styles.button, {backgroundColor: colors.moradoPrincipal, marginLeft: 50}]}>
+                        <Text style={styles.buttonText}>
+                            quitar filtros
+                        </Text>
+                    </TouchableOpacity>
                 </View>
-                
+                <TouchableOpacity 
+                    onPress={() => props.navigation.navigate('RegistrarAnimal', {userId: props.route.params.userId}) }
+                    style={styles.buttonAltaAnimal}>
+                    <Text style={styles.textoAltaAnimal}> + Añadir nuevo animal </Text>
+                </TouchableOpacity>
                     {animales.map((animal, index) => {
                         return (
-                            <ListItem key={animal.id}
-                                bottomDivider
-                                onPress={() => {props.navigation.navigate('PerfilAnimal', {animalId: animal.id, userId: props.route.params.userId, esUsuario: false})}}>
-                                <Avatar 
-                                style = {styles.imagen}
-                                source={{uri: imagenes[index]}}
-                                />
-                                <ListItem.Content 
-                                style = {styles.lista}
-                                >
-                                    <ListItem.Title> {animal.nombre} </ListItem.Title>
-                                    <ListItem.Subtitle> {animal.raza} </ListItem.Subtitle>
-                                    <ListItem.Subtitle> {animal.sexo} </ListItem.Subtitle>
-                                </ListItem.Content>
-                            </ListItem>);
+                            <View key={animal.id} style={styles.animalContainer}>
+                                <ListItem key={animal.id}
+                                    bottomDivider
+                                    onPress={() => {props.navigation.navigate('PerfilAnimal', {animalId: animal.id, userId: props.route.params.userId, esUsuario: false})}}>
+                                    <Avatar 
+                                    style = {styles.imagen}
+                                    source={{uri: imagenes[index]}}
+                                    />
+                                    <ListItem.Content 
+                                    style = {styles.lista}
+                                    >
+                                        <ListItem.Title> {animal.nombre} </ListItem.Title>
+                                        <ListItem.Subtitle> {animal.raza} </ListItem.Subtitle>
+                                        <ListItem.Subtitle> {animal.sexo} </ListItem.Subtitle>
+                                    </ListItem.Content>
+                                </ListItem>
+                            </View>
+                            );
                     })}
                 </ScrollView>
         )
@@ -142,6 +164,11 @@ const ListaAnimalesProtectora = (props) => {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 2, 
+        padding: 15,
+        backgroundColor: 'white'
+    },
     imagen: {
         height: 60,
         width: 60
@@ -159,18 +186,54 @@ const styles = StyleSheet.create({
         color: colors.moradoPrincipal,
     },
     button : {
-        elevation: 3,
-        backgroundColor: colors.amarillo,
+        alignSelf: 'center',
         padding: 10,
         borderRadius: 20,
         marginBottom: 20,
-        marginRight: 20
+        marginRight: 6,
+        width: 120
     },
     buttonText: {
         fontSize: 16,
         color: colors.blanco,
         fontFamily: 'DMSans',
-       alignSelf: "center", 
-     },
+        alignSelf: "center", 
+    },
+    buttonGatoPerro : {
+        width: 80,
+        height: 40, 
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderColor: colors.amarillo,
+        borderWidth: 2,
+        padding: 6,
+        marginLeft: 5, 
+        marginBottom: 20
+    },
+    buttonAltaAnimal: {
+        width: '90%',
+        height: '15%',
+        borderRadius: 15,
+        borderWidth: 1,
+        borderColor: colors.moradoSecundario,
+        alignSelf: "center",
+        marginTop: 10,
+        marginBottom: 30,
+        justifyContent: 'center',
+    },
+    textoAltaAnimal: {
+        fontFamily: 'DMSans',
+        fontSize: 16,
+        alignSelf: 'center',
+        color: colors.moradoSecundario
+    },
+    animalContainer: {
+        borderColor: colors.moradoPrincipal,
+        borderWidth: 2,
+        borderRadius: 20,
+        marginHorizontal: 20,
+        marginBottom: 20,
+    },
 })
 export default ListaAnimalesProtectora;
