@@ -135,10 +135,10 @@ const PerfilProtectora = (props) => {
                   <View style = {{marginTop : -90}}><Text style={styles.titulo}> Animales en esta protectora</Text></View>
                   {animales.map((animal, index) => {
                       return (
-                          <View style = {styles.listaCUADRADO1}>
-                          <ListItem key={animal.id}
+                          <View key={animal.id} style = {styles.listaCUADRADO1}>
+                          <ListItem
                               style = {styles.listaCUADRADO}
-                              onPress={() => {props.navigation.navigate('PerfilAnimal', {animalId: animal.id, userId: props.route.params.userId, esUsuario: false})}}>
+                              onPress={() => {props.navigation.navigate('PerfilAnimal', {animalId: animal.id, userId: props.route.params.userId, esUsuario: true})}}>
                               <Image 
                               style = {styles.imagen}
                               source={{uri: imagenes[index]}}
@@ -163,7 +163,7 @@ const PerfilProtectora = (props) => {
   }
   }
   const checkTipoUsuario_usuario = () => { //SESION USUARIO
-    if (props.route.params.isUsuario) {
+    if (type == "usuario") {
       return (
         <ScrollView style={styles.container}>
         <View style={styles.container}>
@@ -214,7 +214,7 @@ const PerfilProtectora = (props) => {
   }
   
   const checkTipoUsuario_protectora = () => { 
-    if (!props.route.params.isUsuario) { //SESION PROTECTORA
+    if (!type == 'usuario') { //SESION PROTECTORA
       return (
         <View style={styles.container}>
           <Appbar.Header style={styles.appBar}>
