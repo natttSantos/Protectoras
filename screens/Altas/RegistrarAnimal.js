@@ -646,7 +646,9 @@ const styles = StyleSheet.create({
       },
       shadowOpacity: 0.25,
       shadowRadius: 4,
-      elevation: 5
+      elevation: 5,
+      borderWidth: 1,
+      borderColor: colors.moradoPrincipal
     },
     modalView: {
       margin: 10,
@@ -663,7 +665,9 @@ const styles = StyleSheet.create({
       },
       shadowOpacity: 0.25,
       shadowRadius: 4,
-      elevation: 5
+      elevation: 5,
+      borderWidth: 1,
+      borderColor: colors.moradoPrincipal
     },
     botonCerrar: {
       marginRight: 10,

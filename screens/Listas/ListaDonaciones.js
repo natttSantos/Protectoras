@@ -147,7 +147,9 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.25,
         shadowRadius: 4,
-        elevation: 5
+        elevation: 5,
+        borderWidth: 1,
+        borderColor: colors.moradoPrincipal
     },
     tituloContainer: {
         marginHorizontal: 20,
