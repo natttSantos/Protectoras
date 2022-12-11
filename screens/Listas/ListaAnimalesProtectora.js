@@ -63,9 +63,10 @@ const ListaAnimalesProtectora = (props) => {
     if(animales.length > 0) {
         return(
             <ScrollView>
-                <Text style={styles.titulo}>
-                    {titulo}
-                </Text>
+                <Text style={styles.titulo}> {titulo} </Text>
+                <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 20}}>
+                    
+                </View>
                     {animales.map((animal, index) => {
                         return (
                             <ListItem key={animal.id}

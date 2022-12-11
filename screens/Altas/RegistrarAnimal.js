@@ -75,7 +75,7 @@ const RegistrarAnimal = (props) => {
 
     const saveNewUser =  async () => {
       
-        if (state.nombre == '' || state.raza == '' || state.descripcion == '' || foto.existe == ''|| state.tipo == '' || state.sexo =='' || props.route.params.valueFecha == undefined){
+        if (state.nombre == '' || state.raza == '' || state.descripcion == '' || foto.existe == ''|| state.edad == '' || state.tipo == '' || state.sexo =='' || props.route.params.valueFecha == undefined){
             validateNullFields(); 
         } else{ 
             await firebase.db.collection('animales').add({
@@ -123,13 +123,20 @@ const RegistrarAnimal = (props) => {
         let textoAlerta = "Complete el campo: ";
         if (state.nombre == ''){
             textoAlerta += "\n - Nombre de animal"; 
-        } if (state.raza == ''){
+        }
+        if (state.tipo == ''){
+          textoAlerta += "\n - Tipo "; 
+        } 
+        if (props.route.params.valueFecha == undefined){
+          textoAlerta += "\n - Fecha Nacimiento "; 
+        }
+        if (state.edad == ''){
+          textoAlerta += "\n - Edad ";
+        }
+        if (state.raza == ''){
             textoAlerta += "\n - Raza "; 
         } if (state.descripcion == ''){
             textoAlerta += "\n - Descripción "; 
-        }
-        if (state.tipo == ''){
-            textoAlerta += "\n - Tipo "; 
         }
         if (state.sexo == ''){
             textoAlerta += "\n - Sexo "; 
@@ -137,9 +144,7 @@ const RegistrarAnimal = (props) => {
         if (foto.existe == ''){
             textoAlerta += "\n - Foto "; 
         }
-        if (props.route.params.valueFecha == undefined){
-          textoAlerta += "\n - Fecha Nacimiento "; 
-      }
+        
       setTextoAlerta(textoAlerta);
       setModal({...modal, visible: !modal.visible, correct: false});
     }
@@ -343,7 +348,7 @@ const RegistrarAnimal = (props) => {
             </TouchableOpacity>   
             <TextInput 
               style={styles.textField}
-              placeholder="Edad (en años)"
+              placeholder="* Edad (en años)"
               placeholderTextColor={colors.moradoSecundario}
               onChangeText={(value) => handleChangeText('edad', value)}
             />
@@ -646,7 +651,7 @@ const styles = StyleSheet.create({
     modalView: {
       margin: 10,
       width: '90%',
-      height: '45%',
+      height: '50%',
       backgroundColor: colors.amarillo,
       borderRadius: 20,
       padding: 35,
