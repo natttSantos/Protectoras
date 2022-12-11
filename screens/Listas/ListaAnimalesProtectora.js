@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from "react"
-import {ScrollView, View, StyleSheet, Text}  from 'react-native'
+import {ScrollView, View, StyleSheet, Text, TouchableOpacity}  from 'react-native'
 import {Avatar, ListItem} from "react-native-elements";
 import { ActivityIndicator } from "react-native-paper";
 import firebase from "../../database/firebase";
@@ -65,8 +65,12 @@ const ListaAnimalesProtectora = (props) => {
             <ScrollView>
                 <Text style={styles.titulo}> {titulo} </Text>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 20}}>
-                    
+                <TouchableOpacity
+                    style={styles.button}>
+                    <Text style={styles.buttonText}> perros </Text>
+                    </TouchableOpacity>
                 </View>
+                
                     {animales.map((animal, index) => {
                         return (
                             <ListItem key={animal.id}
@@ -114,6 +118,19 @@ const styles = StyleSheet.create({
         marginTop: 40,
         marginLeft: 30,
         color: colors.moradoPrincipal,
-    }
+    },
+    button : {
+        elevation: 3,
+        backgroundColor: colors.amarillo,
+        padding: 10,
+        borderRadius: 20,
+        marginBottom: 20,
+    },
+    buttonText: {
+        fontSize: 16,
+        color: colors.blanco,
+        fontFamily: 'DMSans',
+       alignSelf: "center", 
+     },
 })
 export default ListaAnimalesProtectora;
