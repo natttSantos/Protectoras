@@ -280,8 +280,8 @@ const AltaProtectora = (props) => {
                                 onPress={() => 
                                     openGallery()
                                 }
-                                style={styles.botonCircularBlancoMorado}>
-                                    <Text style={styles.botonTextoMorado}>
+                                style={[styles.botonPropiedades, {marginBottom: 20}, {borderColor: colors.moradoPrincipal}]}>
+                                    <Text style={[styles.botonTexto, {color: colors.moradoPrincipal}]}>
                                         Añadir imagen de perfil
                                     </Text>
                             </TouchableOpacity>
@@ -290,8 +290,8 @@ const AltaProtectora = (props) => {
                                 onPress={() => 
                                     saveNewProtectora()
                                 }
-                                style={styles.botonCircularAmarillo}>
-                                    <Text style={styles.botonTextoAmarillo}>
+                                style={[styles.botonPropiedades, {backgroundColor: colors.amarillo}, {borderColor: colors.amarillo}]}>
+                                    <Text style={[styles.botonTexto, {color: colors.blanco}, {fontWeight: 'bold'}]}>
                                         Enviar
                                     </Text>
                             </TouchableOpacity>
@@ -363,37 +363,17 @@ const styles = StyleSheet.create({
             color: colors.amarillo
         }
     },
-    botonCircularAmarillo : {
-        backgroundColor: colors.amarillo,
-        borderColor: colors.blanco,
+    botonPropiedades : {
         borderWidth: 2,
         width:260,
         height:50,
         borderRadius: 25,
         alignSelf: "center"
-      },
-    botonCircularBlancoMorado : {
-        backgroundColor: colors.blanco,
-        borderColor: colors.moradoPrincipal,
-        borderWidth: 2,
-        width:260,
-        height:50,
-        borderRadius: 25,
-        alignSelf: "center",
-        marginBottom: 20
-      },
-    botonTextoAmarillo: {
+      }, 
+    botonTexto : {
         fontSize: 20,
-        color: colors.blanco,
-        fontWeight: "bold",
         alignSelf: "center",
         marginTop: 5
-      },
-    botonTextoMorado: {
-        fontSize: 20,
-        color: colors.moradoPrincipal,
-        alignSelf: "center",
-        marginTop: 5
-      }
+    }
 })
 export default AltaProtectora;

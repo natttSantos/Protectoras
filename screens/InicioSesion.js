@@ -82,7 +82,7 @@ const InicioSesion = (props) => {
                                 <TouchableOpacity
                                 onPress={() => setModal({...modal, visible: !modal.visible})}>
                                     <View style={styles.botonCerrar}>
-                                        <Text style={styles.texto}>Cerrar</Text>
+                                        <Text style={styles.texto}>cerrar</Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>

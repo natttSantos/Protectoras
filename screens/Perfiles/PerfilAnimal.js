@@ -364,7 +364,7 @@ return (
             {animal.nombre}
           </Text>
           <TouchableOpacity
-          onPress={esUsuario ? () => props.navigation.navigate('PerfilProtectora', { protectoraId: animal.id_protectora })
+          onPress={props.route.params.esUsuario ? () => props.navigation.navigate('PerfilProtectora', { protectoraId: animal.id_protectora })
                    : null}>
             <Image source={{uri: fotoProtectora}} style={styles.imagenProtectora} />
           </TouchableOpacity>
