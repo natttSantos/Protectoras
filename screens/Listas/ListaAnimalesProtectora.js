@@ -55,9 +55,8 @@ const ListaAnimalesProtectora = (props) => {
     
 
     function cargarFiltros() {
-        var animalesFiltrado = []; 
-        var noHayAnimalesFiltrado = "";
-        console.log(estado)
+            var animalesFiltrado = []; 
+            var noHayAnimalesFiltrado = "";
             if (estado.gatoPressed){ 
                 animalesFiltrado = animales.filter(animal => animal.tipo == 'Gato');
             }
@@ -71,31 +70,42 @@ const ListaAnimalesProtectora = (props) => {
         if(animalesFiltrado.length == 0){
             noHayAnimalesFiltrado = "No hay animales para los filtros seleccionados :("; 
         }
-        console.log(animalesFiltrado)
         cargarAnimales(animalesFiltrado)
+        
     }
 
     const [estado, setEstado] = useState({
         perroPressed: false,
         gatoPressed: false,
     })
-    
 
-    function handleColorChange (animal) {
-        console.log(estado)
+    const handleColorChange = async (animal) => {
         if(animal == 'perro'){
-          if(estado.gatoPressed && !estado.perroPressed)
-            setEstado({['perroPressed']: !estado.perroPressed, ['gatoPressed']: !estado.gatoPressed});
-          else
-            setEstado({['perroPressed']: !estado.perroPressed});}
-        else { 
-          if(estado.perroPressed && !estado.gatoPressed)
-            setEstado({['gatoPressed']: !estado.gatoPressed, ['perroPressed']: !estado.perroPressed});
-          else
-            setEstado({['gatoPressed']: !estado.gatoPressed});}
-        
+            if(estado.gatoPressed && !estado.perroPressed) {
+                estado.perroPressed = !estado.perroPressed;
+                estado.gatoPressed = !estado.gatoPressed; 
+                let newEstado = {...estado};
+                setEstado(newEstado);
+            } else {
+                estado.perroPressed = !estado.perroPressed;
+                let newEstado = {...estado};
+                setEstado(newEstado);}
+            }
+          else { 
+            if(estado.perroPressed && !estado.gatoPressed) {
+                estado.gatoPressed = !estado.gatoPressed;
+                estado.perroPressed = !estado.perroPressed;
+                let newEstado = {...estado};
+                setEstado(newEstado);
+            } else {
+                estado.gatoPressed = !estado.gatoPressed;
+                let newEstado = {...estado}
+                setEstado(newEstado);
+            }
+        }
+            
         cargarFiltros();
-    };
+    }
 
     useEffect(() => {
         cargarAnimales(animales),
@@ -128,13 +138,6 @@ const ListaAnimalesProtectora = (props) => {
                             <Text style={[styles.buttonText, estado.gatoPressed ? {color: colors.blanco} : {color: colors.amarillo}]}>
                                 gato
                             </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => cargarAnimales(animales)}
-                        style={[styles.button, {backgroundColor: colors.moradoPrincipal, marginLeft: 50}]}>
-                        <Text style={styles.buttonText}>
-                            quitar filtros
-                        </Text>
                     </TouchableOpacity>
                 </View>
                 <TouchableOpacity 
