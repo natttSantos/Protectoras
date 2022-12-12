@@ -136,8 +136,8 @@ const PerfilProtectora = (props) => {
   const cargarListaAnimales = () => {
     if(animales.length > 0) {
       return(
-          <View style={styles.containerListaAnimales}>
-                  <View style = {{marginTop : -90}}><Text style={styles.titulo}> Animales en esta protectora</Text></View>
+          <ScrollView style={styles.containerListaAnimales}>
+                  <View style = {{marginTop : 90}}><Text style={styles.titulo}> Animales en esta protectora</Text></View>
                   {animales.map((animal, index) => {
                       return (
                           <View key={animal.id} style = {styles.listaCUADRADO1}>
@@ -157,12 +157,12 @@ const PerfilProtectora = (props) => {
                           </ListItem>
                           </View>);
                   })}
-              </View>
+              </ScrollView>
       )
   } else {
       return (
-        <View style={styles.containerListaAnimales}>
-        <View style = {{marginTop : -90}}><Text style={styles.titulo}> No hay animales! </Text></View>
+        <View style={[styles.containerListaAnimales, {height: 230}]}>
+          <View style = {{marginTop: 100}}><Text style={styles.titulo}> No hay animales! </Text></View>
         </View>
       )
   }
@@ -171,49 +171,48 @@ const PerfilProtectora = (props) => {
     if (type === 'usuario') {
       return (
         <ScrollView style={styles.container}>
-        <View style={styles.container}>
-        <View style={styles.textContainerGmailTlf}>
-            {checkImage()}
-            <Text style={styles.textoNombreProte} >{protectora.nombre}</Text>
-        </View>
-      
-        <View style={styles.containerInfoProte}>
-        <View style={{marginTop: -2180, padding: 40,marginBottom: -350}}><Text style={styles.titulo}>Datos</Text></View>
-        
-        <View style={styles.containerInfoProteCUADRADO}>
-        <View style={{top: -25}}>
-        <Text style={styles.textoInfoProteEnunciado}>Email</Text>
-        <Text style={styles.textoInfoProte}>{protectora.email}</Text>
-        <Text style={styles.textoInfoProteEnunciado}>Localizacion</Text>
-        <Text style={styles.textoInfoProte}>{protectora.localizacion}</Text>
-        <Text style={styles.textoInfoProteEnunciado}>Dirección</Text>
-        <Text style={styles.textoInfoProte}>{protectora.direccion} </Text>
-        <Text style={styles.textoInfoProteEnunciado}>Descripción</Text>
-        <Text style={styles.textoDescipcion}>{protectora.descripcion} </Text>
-        </View>
-        </View>
-        </View>
+          <View style={styles.container}>
+            <View style={styles.textContainerGmailTlf}>
+                {checkImage()}
+                <Text style={styles.textoNombreProte} >{protectora.nombre}</Text>
+            </View>
+            <View style={styles.containerInfoProte}>
+              <View style={{marginTop: -2180, padding: 40,marginBottom: -350}}><Text style={styles.titulo}>Datos</Text></View>
+              
+              <View style={styles.containerInfoProteCUADRADO}>
+                <View style={{top: -25}}>
+                  <Text style={styles.textoInfoProteEnunciado}>Email</Text>
+                  <Text style={styles.textoInfoProte}>{protectora.email}</Text>
+                  <Text style={styles.textoInfoProteEnunciado}>Localizacion</Text>
+                  <Text style={styles.textoInfoProte}>{protectora.localizacion}</Text>
+                  <Text style={styles.textoInfoProteEnunciado}>Dirección</Text>
+                  <Text style={styles.textoInfoProte}>{protectora.direccion} </Text>
+                  <Text style={styles.textoInfoProteEnunciado}>Descripción</Text>
+                  <Text style={styles.textoDescipcion}>{protectora.descripcion} </Text>
+                </View>
+              </View>
+            </View>
 
-        <View style={{marginTop: 708}}>
-        <BotonAbrirURL url={protectora.url}>
-          Página web
-        </BotonAbrirURL>
-        </View>
+            <View style={{marginTop: 708}}>
+              <BotonAbrirURL url={protectora.url}>
+                Página web
+              </BotonAbrirURL>
+            </View>
 
-        <View style={{marginTop: -537}}>
-        <TouchableOpacity 
-                      onPress={() => {
-                        props.navigation.navigate('Donaciones', {userId: storedCredentials,  protectoraId:props.route.params.protectoraId}) 
-                      }}
-                      style={styles.botonCircularMorado2}>
-                          <Text style={styles.botonTexto}>
-                              Donar
-                          </Text>
-          </TouchableOpacity>
-          </View>
+            <View style={{marginTop: -537}}>
+              <TouchableOpacity 
+                onPress={() => {
+                  props.navigation.navigate('Donaciones', {userId: storedCredentials,  protectoraId:props.route.params.protectoraId}) 
+                }}
+                style={styles.botonCircularMorado2}>
+                    <Text style={styles.botonTexto}>
+                        Donar
+                    </Text>
+              </TouchableOpacity>
+            </View>
           </View>
           {cargarListaAnimales()}
-    </ScrollView>
+        </ScrollView>
       )
     } 
   }
@@ -330,9 +329,8 @@ const styles = StyleSheet.create({
   },
   containerListaAnimales: {
     flex: 1, 
-    padding: 10, 
-    height: 1500, 
-    marginTop: 600 
+    padding: 10,  
+    marginTop: 400
 },
   image: {
         width: 110,

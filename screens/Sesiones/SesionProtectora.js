@@ -44,14 +44,16 @@ const SesionProtectora = (props) => {
     const dbRef = firebase.db.collection('animales').where("id_protectora", "==", id)
     const docs = await dbRef.get()
     docs.forEach(doc => {
-        const {nombre, sexo,descripcion, raza} = doc.data()
+        const {nombre, sexo,descripcion, raza, edad, tipo} = doc.data()
         animales.push({
             id: doc.id,
             id_protectora: id,
             nombre,
             raza,
             descripcion,
-            sexo
+            sexo,
+            edad,
+            tipo
         })
     })
 
@@ -80,6 +82,7 @@ const SesionProtectora = (props) => {
 
     return (
       <Tab.Navigator
+      initialRouteName='Home'
       screenOptions={{
         headerShown: false,
         "tabBarShowLabel": false,
@@ -100,16 +103,6 @@ const SesionProtectora = (props) => {
             }
           }}
           initialParams={{ animales: animales, userId: storedCredentials}}
-        />
-        <Tab.Screen name = 'Add' component = {AltaGlobal} 
-          options={{
-            tabBarIcon: ({ focused, color, size }) => {
-              let colorA = focused ? "#5B1D66" : "#FFB743";
-  
-              return <Icon name={'add-circle-outline'} size={35} color={colorA} />
-            }
-          }}
-          initialParams={{ userId: storedCredentials, isUsuario: false}}
         />
         <Tab.Screen name = 'Animal' component = {MapaAnimalEncontradoProtectora} 
          options={{

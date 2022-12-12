@@ -1,6 +1,6 @@
 import firebase from '../../database/firebase.js';
 import React, { useEffect, useState, useContext } from "react";
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 
 import PerfilUsuario from '../Perfiles/PerfilUsuario.js';
@@ -138,7 +138,8 @@ useEffect(() => {
 
   return (
     <Tab.Navigator
-    screenOptions={{
+    initialRouteName='Home'
+      screenOptions={{
       headerShown: false,
       "tabBarShowLabel": false,
       "tabBarStyle": [
@@ -148,46 +149,26 @@ useEffect(() => {
         null
       ]
     }}>
+      <Tab.Screen name = 'Avisar' component = {MapaAnimalEncontrado} 
+         options={{
+          tabBarIcon: ({ focused, color, size }) => {
+            let colorA = focused ? "#5B1D66" : "#FFB743";
+  
+              return <Icon name={'location-outline'} size={35} color={colorA} />
+          }
+        }}
+        initialParams={{ userId: storedCredentials, isUsuario:true}}
+      />
       <Tab.Screen name = 'Home' component = {ListaAnimales} 
          options={{
           tabBarIcon: ({ focused, color, size }) => {
-            let colorA = focused ? "#5B1D66" : "#FFB743";
-  
-              return <Icon name={'home-outline'} size={35} color={colorA} />
+            return <Image 
+              style={styles.image}
+              source={ focused ? require('../../images/LogoSeleccionado.png') : require('../../images/Logo.png')}
+            />
           }
         }}
         initialParams={{userId: storedCredentials, userName: nombreUsuario, isUsuario:true, animales:animales}}
-      />
-      <Tab.Screen name = 'Search' component = {ListaProtectoras} 
-         options={{
-          tabBarIcon: ({ focused, color, size }) => {
-            let colorA = focused ? "#5B1D66" : "#FFB743";
-  
-              return <Icon name={'search-outline'} size={35} color={colorA} />
-          }
-        }}
-        initialParams={{ userId: storedCredentials, isUsuario:true, protectoras:protectoras}}
-      />
-      <Tab.Screen name = 'Animal' component = {MapaAnimalEncontrado} 
-         options={{
-          tabBarIcon: ({ focused, color, size }) => {
-            let colorA = focused ? "#5B1D66" : "#FFB743";
-  
-              return <Icon name={'paw-outline'} size={35} color={colorA} />
-          }
-        }}
-        initialParams={{ userId: storedCredentials, isUsuario:true}}
-      />
-
-      <Tab.Screen name = 'Add' component = {AltaGlobal} 
-         options={{
-          tabBarIcon: ({ focused, color, size }) => {
-            let colorA = focused ? "#5B1D66" : "#FFB743";
-  
-              return <Icon name={'add-circle-outline'} size={35} color={colorA} />
-          }
-        }}
-        initialParams={{ userId: storedCredentials, isUsuario:true}}
       />
       <Tab.Screen name = 'Perfil' component = {PerfilUsuario} 
         options={{
@@ -218,6 +199,12 @@ const styles = StyleSheet.create({
       borderRadius: 17/2,
       alignItems: 'center',
       right: 12
+    },
+    image: {
+      flex: 1,
+      width: 22,
+      height: 22,
+      resizeMode: 'contain'
     }
 })
 export default SesionUsuario;

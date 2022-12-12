@@ -1,8 +1,6 @@
-import { style } from "deprecated-react-native-prop-types/DeprecatedTextPropTypes";
 import React, {useEffect, useState} from "react";
-import { ScrollView, View, Text, StyleSheet, TextInput,ActivityIndicator, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TextInput,ActivityIndicator, TouchableOpacity, Modal } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
-import { Button } from "react-native-elements";
 import firebase from '../../database/firebase';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
@@ -11,8 +9,6 @@ import KeyboardAvoidingWrapper from "../../components/KeyboardAvoiding";
 
 //Bibliotecas colores CSS
 import {colors} from '../../components/Color';
-import { numberOfLines, placeholderTextColor } from "deprecated-react-native-prop-types/DeprecatedTextInputPropTypes";
-import { color } from "react-native-elements/dist/helpers";
 
 const AltaProtectora = (props) => {
     DropDownPicker.setListMode("SCROLLVIEW");
@@ -65,8 +61,11 @@ const AltaProtectora = (props) => {
             const doc = await dbRef.where("email", "==", protectora.email.trim()).get()
             const emailRepe = doc.docs.length == 1
 
-            if(emailRepe)
-                alert("El email introducido ya ha sido registrado, pruebe con otro");
+            if(emailRepe) {
+                setTextoChikita("El email introducido ya ha sido registrado, pruebe con otro");
+                setModalChikita({...modalChikita, visible: !modalChikita.visible});
+                
+            }
             else {
                 await dbRef.add({
                     nombre: protectora.nombre,
@@ -81,7 +80,8 @@ const AltaProtectora = (props) => {
                     telefono: protectora.telefono,
                     fotoModificada :protectora.nombre+protectora.telefono
                 })
-                alert("Bienvenido " + protectora.nombre)
+                setTextoAlertaRegistro("Bienvenid@ " + protectora.nombre);
+                setModalRegistro({...modalRegistro, visible: !modalRegistro.visible, correct: true});
             }
         }
     }
@@ -151,7 +151,9 @@ const AltaProtectora = (props) => {
                     setFoto({
                         existe: "Si"
                      });
-                     alert("Imagen subida correctamente")
+                    setTextoChikita("Imagen subida correctamente");
+                    setModalChikita({...modalChikita, visible: !modalChikita.visible});
+                     
                   })
                   .catch(error => {
                     console.log(error);
@@ -164,8 +166,25 @@ const AltaProtectora = (props) => {
               });
           }
         }
-    }else{alert ("Primero debe introducir el nombre de la protectora y el número de teléfono");}
+    }else{
+        setTextoChikita("Primero debe introducir el nombre de la protectora y el número de teléfono");
+        setModalChikita({...modalChikita, visible: !modalChikita.visible});
+        }
       };
+
+    function validatePasswordAndPhone (password, phone) {
+        let validation = true; 
+        let textoAlerta = "Problemas con: ";
+        if (password.length < 4 || password.length > 8){
+            textoAlerta += "\n -La contraseña debe tener entre 4-8 caracteres"; 
+            validation = false; 
+        }
+        if (!validation) {
+            setTextoChikita(textoAlerta);
+            setModalChikita({...modalChikita, visible: !modalChikita.visible});
+        }        
+        return validation;
+      }
 
     const validateFields = () => {
         let textoAlerta = "Complete el campo: ";
@@ -188,8 +207,23 @@ const AltaProtectora = (props) => {
         }else if (protectora.telefono.length != 9 || isNaN(protectora.telefono)){
             textoAlerta += "\n - El teléfono debe contener 9 números ";  
         }
-        alert (textoAlerta); 
+        setTextoAlerta(textoAlerta);
+        setModalValidateFields({...modalValidateFields, visible: !modalValidateFields.visible});
     }
+
+    //Alertas
+    const [modalValidateFields, setModalValidateFields] = useState({ visible: false});  
+    const [modalChikita, setModalChikita] = useState({ visible: false});  
+    const [modalRegistro, setModalRegistro] = useState({ visible: false, correct: false });
+    const [textoAlerta, setTextoAlerta] = useState();
+    const [textoChikita, setTextoChikita] = useState();
+    const [textoRegistro, setTextoAlertaRegistro] = useState();
+
+    const cerrarAlerta = () => {
+        setModalRegistro({...modalRegistro, visible: !modalRegistro.visible})
+        props.navigation.navigate('PrincipalScreen');       
+    }
+
     if(loading) {
         return(
             <View>
@@ -201,119 +235,177 @@ const AltaProtectora = (props) => {
     return(
             <KeyboardAvoidingWrapper>
                 <View style={styles.container}> 
-                        <Text style={styles.titulo}> Da de alta tu protectora </Text>  
-                        <View 
-                        style={styles.inputGroup}> 
-                            <TextInput 
-                            style={styles.inputText}
-                            placeholder="* Nombre"
-                            placeholderTextColor={colors.moradoSecundario}
-                            onChangeText={(value) => handleChangeText('nombre', value)}
-                            />
-                            <TextInput 
-                            style={styles.inputText}
-                            secureTextEntry={true}
-                            placeholder="* Contraseña"
-                            placeholderTextColor={colors.moradoSecundario}
-                            onChangeText={(value) => handleChangeText('contraseña', value)}
-                            />
-                            <TextInput 
-                                style={styles.inputText}
-                                placeholder="* Email"
-                                placeholderTextColor={colors.moradoSecundario}
-                                onChangeText={(value) => handleChangeText('email', value)}
-                                />
-                            <DropDownPicker
-                                            style={styles.dropDownPicker}
-                                            placeholder="* Seleccione una localizacion"
-                                            placeholderStyle={{
-                                                color: colors.moradoSecundario
-                                                }}
-                                            items={items}
-                                            listItemLabelStyle={{
-                                                color: colors.moradoSecundario
-                                            }}
-                                            setItems={setItems}
-                                            open={open}
-                                            setOpen={setOpen}
-                                            value={value}
-                                            setValue={setValue}
-                                            onChangeValue={(value) => {
-                                                handleChangeText('localizacion', value);
-                                            }}
-                                        />
-                            <TextInput 
-                                style={styles.inputText}
-                                placeholder="* Dirección"
-                                placeholderTextColor={colors.moradoSecundario}
-                                onChangeText={(value) => handleChangeText('direccion', value)}
-                                />
-                            <TextInput 
-                                style={styles.inputText}
-                                placeholder="* URL de la página web"
-                                placeholderTextColor={colors.moradoSecundario}
-                                onChangeText={(value) => handleChangeText('url', value)}
-                                />
-                            <TextInput 
-                                style={styles.inputText}
-                                placeholder="* Teléfono"
-                                placeholderTextColor={colors.moradoSecundario}
-                                onChangeText={(value) => handleChangeText('telefono', value)}
-                                />
-                            <TextInput                     
-                                style={styles.descripcion}
-                                placeholder="Descripción (max. 200 caracteres)"
-                                placeholderTextColor={colors.moradoSecundario}
-                                maxLength = {200}
-                                multiline = {true}
-                                onChangeText={(value) => {
-                                    if (value.length == 180)
-                                        alert("¡Cuidado! Su descripción ya contiene 180 caracteres (max. 200)")
-                                    if (value.length == 200)
-                                        alert("¡Su descripción ya contiene los 200 caracteres permitidos!")
-                                    handleChangeText('descripcion', value)
-                                }}
-                                />
+                    <Modal
+                        animationType="slide"
+                        transparent={true}                    
+                        visible={modalValidateFields.visible}
+                        onRequestClose={() => {
+                            setModalValidateFields({...modalValidateFields, visible: !modalValidateFields.visible});
+                        }}>
+                        <View style={styles.centeredView}>
+                            <View style={[styles.modalView, {height: '50%'}]}>
+                                <View style={{flex: 4}}>
+                                    <Text style={[styles.textoAlerta, {fontSize: 20}]}> {textoAlerta} </Text>
+                                </View>
+                                <View style={styles.buttonGroup}>
+                                    <TouchableOpacity
+                                    onPress={() => setModalValidateFields({...modalValidateFields, visible: !modalValidateFields.visible})}>
+                                        <View style={styles.botonCerrar}>
+                                            <Text style={[styles.textoAlerta, {fontSize: 20}]}>cerrar</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
                         </View>
-                        <View> 
-                            <TouchableOpacity 
-                                onPress={() => 
-                                    openGallery()
-                                }
-                                style={[styles.botonPropiedades, {marginBottom: 20}, {borderColor: colors.moradoPrincipal}]}>
-                                    <Text style={[styles.botonTexto, {color: colors.moradoPrincipal}]}>
-                                        Añadir imagen de perfil
-                                    </Text>
-                            </TouchableOpacity>
+                    </Modal>
+                    <Modal
+                        animationType="slide"
+                        transparent={true}                    
+                        visible={modalChikita.visible}
+                        onRequestClose={() => {
+                            setModalChikita({...modalChikita, visible: !modalChikita.visible});
+                        }}>
+                        <View style={styles.centeredView}>
+                            <View style={[styles.modalView, {height: '30%'}]}>
+                                <View style={{flex: 4}}>
+                                    <Text style={[styles.textoAlerta, {fontSize: 20}]}> {textoChikita} </Text>
+                                </View>
+                                <View style={styles.buttonGroup}>
+                                    <TouchableOpacity
+                                    onPress={() => setModalChikita({...modalChikita, visible: !modalChikita.visible})}>
+                                        <View style={styles.botonCerrar}>
+                                            <Text style={[styles.textoAlerta, {fontSize: 20}]}>cerrar</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                    </Modal>
+                    <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalRegistro.visible}
+                    onRequestClose={() => {
+                        setModalRegistro({...modalRegistro, visible: !modalRegistro.visible});
+                    }}>
+                    <View style={styles.centeredView}>
+                        <View style={[styles.modalView, {height: 170}]}>
+                            <View style={{flex: 4}}>
+                                <Text style={[styles.textoAlerta, {fontSize: 22}]}> {textoRegistro} </Text>
+                            </View>
+                            <View style={styles.buttonGroup}>
+                                <TouchableOpacity
+                                onPress={modalRegistro.correct ? () => cerrarAlerta() : () => setModalRegistro({...modalRegistro, visible: !modalRegistro.visible})}>
+                                    <View style={styles.botonCerrar}>
+                                        <Text style={[styles.textoAlerta, {fontSize: 20}]}>cerrar</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+                    <Text style={styles.titulo}> Da de alta tu protectora </Text>  
+                    <View 
+                    style={styles.inputGroup}> 
+                        <TextInput 
+                        style={styles.inputText}
+                        placeholder="* Nombre"
+                        placeholderTextColor={colors.moradoSecundario}
+                        onChangeText={(value) => handleChangeText('nombre', value)}
+                        />
+                        <TextInput 
+                        style={styles.inputText}
+                        secureTextEntry={true}
+                        placeholder="* Contraseña"
+                        placeholderTextColor={colors.moradoSecundario}
+                        onChangeText={(value) => handleChangeText('contraseña', value)}
+                        />
+                        <TextInput 
+                            style={styles.inputText}
+                            placeholder="* Email"
+                            placeholderTextColor={colors.moradoSecundario}
+                            onChangeText={(value) => handleChangeText('email', value)}
+                            />
+                        <DropDownPicker
+                                        style={styles.dropDownPicker}
+                                        placeholder="* Seleccione una localizacion"
+                                        placeholderStyle={{
+                                            color: colors.moradoSecundario
+                                            }}
+                                        items={items}
+                                        listItemLabelStyle={{
+                                            color: colors.moradoSecundario
+                                        }}
+                                        setItems={setItems}
+                                        open={open}
+                                        setOpen={setOpen}
+                                        value={value}
+                                        setValue={setValue}
+                                        onChangeValue={(value) => {
+                                            handleChangeText('localizacion', value);
+                                        }}
+                                    />
+                        <TextInput 
+                            style={styles.inputText}
+                            placeholder="* Dirección"
+                            placeholderTextColor={colors.moradoSecundario}
+                            onChangeText={(value) => handleChangeText('direccion', value)}
+                            />
+                        <TextInput 
+                            style={styles.inputText}
+                            placeholder="* URL de la página web"
+                            placeholderTextColor={colors.moradoSecundario}
+                            onChangeText={(value) => handleChangeText('url', value)}
+                            />
+                        <TextInput 
+                            style={styles.inputText}
+                            placeholder="* Teléfono"
+                            placeholderTextColor={colors.moradoSecundario}
+                            onChangeText={(value) => handleChangeText('telefono', value)}
+                            />
+                        <TextInput                     
+                            style={styles.descripcion}
+                            placeholder="Descripción (max. 200 caracteres)"
+                            placeholderTextColor={colors.moradoSecundario}
+                            maxLength = {200}
+                            multiline = {true}
+                            onChangeText={(value) => {
+                                if (value.length == 180)
+                                    alert("¡Cuidado! Su descripción ya contiene 180 caracteres (max. 200)")
+                                if (value.length == 200)
+                                    alert("¡Su descripción ya contiene los 200 caracteres permitidos!")
+                                handleChangeText('descripcion', value)
+                            }}
+                            />
+                    </View>
+                    <View> 
+                        <TouchableOpacity 
+                            onPress={() => 
+                                openGallery()
+                            }
+                            style={[styles.botonPropiedades, {marginBottom: 20}, {borderColor: colors.moradoPrincipal}]}>
+                                <Text style={[styles.botonTexto, {color: colors.moradoPrincipal}]}>
+                                    Añadir imagen de perfil
+                                </Text>
+                        </TouchableOpacity>
 
-                            <TouchableOpacity 
-                                onPress={() => 
-                                    saveNewProtectora()
-                                }
-                                style={[styles.botonPropiedades, {backgroundColor: colors.amarillo}, {borderColor: colors.amarillo}]}>
-                                    <Text style={[styles.botonTexto, {color: colors.blanco}, {fontWeight: 'bold'}]}>
-                                        Enviar
-                                    </Text>
-                            </TouchableOpacity>
-                        </View> 
+                        <TouchableOpacity 
+                            onPress={() => 
+                                saveNewProtectora()
+                            }
+                            style={[styles.botonPropiedades, {backgroundColor: colors.amarillo}, {borderColor: colors.amarillo}]}>
+                                <Text style={[styles.botonTexto, {color: colors.blanco}, {fontWeight: 'bold'}]}>
+                                    Enviar
+                                </Text>
+                        </TouchableOpacity>
+                    </View> 
                 </View>
             </KeyboardAvoidingWrapper>
     )
   }
 }
 
-function validatePasswordAndPhone (password, phone) {
-    let validation = true; 
-    if (password.length < 4 || password.length > 8){
-        alert("La contraseña debe tener entre 4-8 caracteres"); 
-        validation = false; 
-    }
-    if (phone.length  != 9){
-        alert("El número de teléfono debe tener 9 dígitos"); 
-        validation = false; 
-    }
-    return validation;
-  }
+
 
 const styles = StyleSheet.create({
     container : {
@@ -374,6 +466,43 @@ const styles = StyleSheet.create({
         fontSize: 20,
         alignSelf: "center",
         marginTop: 5
-    }
+    },
+    centeredView: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 22
+    },
+    modalView: {
+      margin: 10,
+      width: '90%',
+      backgroundColor: colors.amarillo,
+      borderRadius: 20,
+      padding: 35,
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+          width: 0,
+          height: 2
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
+      borderWidth: 1,
+      borderColor: colors.moradoPrincipal
+    },
+    botonCerrar: {
+      marginRight: 10,
+      height: 40,
+      width: 120,
+      borderRadius: 10,
+      backgroundColor: colors.moradoPrincipal,
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    textoAlerta: {
+      fontFamily: 'DMSans',
+      color: colors.blanco,
+    },
 })
 export default AltaProtectora;

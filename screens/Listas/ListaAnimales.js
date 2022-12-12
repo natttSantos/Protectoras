@@ -210,15 +210,15 @@ const ListaAnimales = (props) => {
         <TouchableOpacity
         onPress={() => props.navigation.navigate('FiltradoAnimales', { animales: animales, onGoBack: (animalesFiltrado) => setAnimalesACargar(animalesFiltrado)})}
         style={styles.button}>
-          <Text style={styles.buttonText}>
-              Filtrar
+          <Text style={[styles.buttonText, {fontFamily: 'InterRegular'}]}>
+              filtrar
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
         onPress={() => setAnimalesACargar(animales)}
         style={[styles.button, {backgroundColor: colors.moradoPrincipal}]}>
-          <Text style={styles.buttonText}>
-              Quitar Filtros
+          <Text style={[styles.buttonText, {fontFamily: 'InterRegular'}]}>
+              quitar filtros
           </Text>
         </TouchableOpacity>
       </View>
@@ -243,7 +243,7 @@ const ListaAnimales = (props) => {
             </View>
             <View style={styles.descripcionSexoContainer}>
               <View style={styles.descripcionContainer}>
-                <Text style={styles.descripcionTexto}>{animal.edad} años</Text>
+                <Text style={styles.descripcionTexto}>{animal.edad} año(s)</Text>
                 <Text style={styles.descripcionTexto}>{protectoras.find(protectora => protectora.id == animal.id_protectora).nombre}</Text>
               </View>
               <View style={styles.sexoContainer}>
@@ -288,7 +288,8 @@ const ListaAnimales = (props) => {
  const styles = StyleSheet.create({
   container: {
       flex: 2, 
-      padding: 15, 
+      padding: 15,
+      backgroundColor: colors.blanco 
   },
   protectorasContainer: {
     height: 170,
