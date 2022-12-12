@@ -161,8 +161,8 @@ const PerfilProtectora = (props) => {
       )
   } else {
       return (
-        <View style={styles.containerListaAnimales}>
-        <View style = {{marginTop : -90}}><Text style={styles.titulo}> No hay animales! </Text></View>
+        <View style={[styles.containerListaAnimales, {height: 230}]}>
+          <View style = {{marginTop: 100}}><Text style={styles.titulo}> No hay animales! </Text></View>
         </View>
       )
   }
