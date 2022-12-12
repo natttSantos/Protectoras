@@ -83,6 +83,7 @@ const RootStack = () => {
                                         <Stack.Screen
                                             name="PerfilProtectora"
                                             component={PerfilProtectora}
+                                            options={{headerTransparent: true, headerTitle: ''}}
                                         />
                                         <Stack.Screen
                                             name="ModificarUsuario"
