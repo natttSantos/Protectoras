@@ -283,7 +283,8 @@ const ListaAnimales = (props) => {
  const styles = StyleSheet.create({
   container: {
       flex: 2, 
-      padding: 15, 
+      padding: 15,
+      backgroundColor: colors.blanco 
   },
   protectorasContainer: {
     height: 170,

@@ -82,6 +82,7 @@ const SesionProtectora = (props) => {
 
     return (
       <Tab.Navigator
+      initialRouteName='Home'
       screenOptions={{
         headerShown: false,
         "tabBarShowLabel": false,
@@ -102,16 +103,6 @@ const SesionProtectora = (props) => {
             }
           }}
           initialParams={{ animales: animales, userId: storedCredentials}}
-        />
-        <Tab.Screen name = 'Add' component = {AltaGlobal} 
-          options={{
-            tabBarIcon: ({ focused, color, size }) => {
-              let colorA = focused ? "#5B1D66" : "#FFB743";
-  
-              return <Icon name={'add-circle-outline'} size={35} color={colorA} />
-            }
-          }}
-          initialParams={{ userId: storedCredentials, isUsuario: false}}
         />
         <Tab.Screen name = 'Animal' component = {MapaAnimalEncontradoProtectora} 
          options={{

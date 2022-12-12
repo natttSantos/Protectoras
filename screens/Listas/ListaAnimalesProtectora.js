@@ -85,14 +85,14 @@ const ListaAnimalesProtectora = (props) => {
         console.log(estado)
         if(animal == 'perro'){
           if(estado.gatoPressed && !estado.perroPressed)
-            setEstado({ ...estado, ['perroPressed']: !estado.perroPressed, ['gatoPressed']: !estado.gatoPressed});
+            setEstado({['perroPressed']: !estado.perroPressed, ['gatoPressed']: !estado.gatoPressed});
           else
-            setEstado({ ...estado, ['perroPressed']: !estado.perroPressed});}
+            setEstado({['perroPressed']: !estado.perroPressed});}
         else { 
           if(estado.perroPressed && !estado.gatoPressed)
-            setEstado({ ...estado, ['gatoPressed']: !estado.gatoPressed, ['perroPressed']: !estado.perroPressed});
+            setEstado({['gatoPressed']: !estado.gatoPressed, ['perroPressed']: !estado.perroPressed});
           else
-            setEstado({ ...estado, ['gatoPressed']: !estado.gatoPressed});}
+            setEstado({['gatoPressed']: !estado.gatoPressed});}
         
         cargarFiltros();
     };
