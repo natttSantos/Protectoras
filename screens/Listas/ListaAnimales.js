@@ -75,19 +75,24 @@ const ListaAnimales = (props) => {
         setAnimalesACargar(animales)
     }
 
-    const handleFavChange = (index) => {
-      // let animalesAux = animalesACargar
-      // const animalACambiar = animalesAux.find(animal => animal.id == animalId)
-      // animalACambiar.fav = !animalACambiar.fav
-      
-      // setAnimalesACargar(animalesAux)
+    const handleFavChange = async (index) => {
       setCambios(!cambios)
+
       let animalesAux = animalesACargar
       let animalACambiar = {...animalesAux[index]}
       animalACambiar.fav = !animalACambiar.fav
       animalesAux[index] = animalACambiar
       
       setAnimalesACargar(animalesAux)
+
+      if(!animalACambiar.fav) {
+        const favAEliminar = await firebase.db.collection('favoritos').where("id_animal", "==", animalACambiar.id)
+        .where("id_usuario", "==", storedCredentials).get()
+        const test = favAEliminar.docs[0].id
+        await firebase.db.collection('favoritos').doc(test).delete()
+      }
+      else
+        await firebase.db.collection('favoritos').add({id_animal: animalACambiar.id, id_usuario: storedCredentials})
     }
 
     const cargarProtectoras = async () => {

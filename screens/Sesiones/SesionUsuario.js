@@ -88,7 +88,6 @@ const getAllNotificaciones = async (id_usuario) => {
     }
     notiAux.push(nose)
   })
-  console.log(notiAux)
   setNotificaciones(notiAux)
   setLoading(false)
 }
@@ -152,7 +151,6 @@ useEffect(() => {
     }}>
       <Tab.Screen name = 'Avisar' component = {MapaAnimalEncontrado} 
          options={{
-          headerShown: false,
           tabBarIcon: ({ focused, color, size }) => {
             let colorA = focused ? "#5B1D66" : "#FFB743";
   
@@ -163,7 +161,6 @@ useEffect(() => {
       />
       <Tab.Screen name = 'Home' component = {ListaAnimales} 
          options={{
-          headerShown: false,
           tabBarIcon: ({ focused, color, size }) => {
             return <Image 
               style={styles.image}
@@ -175,8 +172,6 @@ useEffect(() => {
       />
       <Tab.Screen name = 'Perfil' component = {PerfilUsuario} 
         options={{
-          headerShown: false,
-          tabBarShowLabel: false,
           tabBarIcon: ({ focused, color, size }) => {
             let colorA = focused ? "#5B1D66" : "#FFB743";
   
