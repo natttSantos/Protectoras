@@ -291,6 +291,8 @@ const checkMicrochip_Vacunado = (value) => {
   }, []);
 
   const [coordenadas, setCoordenadas] = useState({
+    latitude:"",
+    longitude:"",
   });
 
   const [posicionMapa, setposicionMapa] = useState({
@@ -345,7 +347,7 @@ NO BORRAR
 
 
 
-if(loading) {
+if(loading && (coordenadas.latitude != "" && coordenadas.longitude != "")) {
   return(
       <View>
           <ActivityIndicator />
