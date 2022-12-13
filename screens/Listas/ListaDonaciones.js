@@ -73,7 +73,7 @@ const ListaDonaciones = (props) => {
     }, [])
 
     return (
-        <ScrollView>
+        <ScrollView style = {styles.container}>
             <Modal
             animationType="slide"
             transparent={true}
@@ -126,11 +126,17 @@ const ListaDonaciones = (props) => {
 
 
 const styles = StyleSheet.create({
+    container : {
+        flex: 1, 
+        padding: 35,
+        backgroundColor: colors.blanco,
+        marginTop: 50
+    },
     centeredView: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        marginTop: 22
+        marginTop: 22,
     },
     modalView: {
         margin: 20,
@@ -153,7 +159,7 @@ const styles = StyleSheet.create({
     },
     tituloContainer: {
         marginHorizontal: 20,
-        marginTop: 64,
+        marginTop: 20,
         marginBottom: 26
     },
     solicitudContainer: {

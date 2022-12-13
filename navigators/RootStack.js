@@ -179,6 +179,13 @@ const RootStack = () => {
                                         <Stack.Screen
                                             name="ListaDonaciones"
                                             component={ListaDonaciones}
+                                            options={{ 
+                                                headerStyle: {
+                                                    backgroundColor: colors.blanco
+                                                },
+                                                headerTransparent: true,
+                                                headerTitle: '',                                    
+                                                }}
                                         />
                                         <Stack.Screen
                                             name="ListaSolicitudes"
