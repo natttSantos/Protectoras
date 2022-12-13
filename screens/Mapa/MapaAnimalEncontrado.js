@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import * as Location from 'expo-location';
-import { StyleSheet, Text, View,ActivityIndicator,ScrollView,TextInput,Alert } from 'react-native';
+import { StyleSheet, Text, View,ActivityIndicator,ScrollView,TextInput,TouchableOpacity, Alert, LogBox } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 //import MapViewDirections from 'react-native-maps-directions';
 //import { GOOGLE_MAPS_KEY } from '@env';
@@ -8,9 +8,15 @@ import { Button } from "react-native-elements";
 import firebase from '../../database/firebase';
 import DropDownPicker from "react-native-dropdown-picker";
 import * as ImagePicker from 'expo-image-picker';
+import { colors } from '../../components/Color';
+
 
 const MapaAnimalEncontrado = (props) => {
 
+  useEffect(() => {
+
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+    }, [])
 
   const [loading, setLoading] = useState(true);
   const [imagenes, setImagenes] = useState([]);
@@ -247,33 +253,48 @@ const validateFields = () => {
 }
 if(!loading) {
   return (
-    <ScrollView > 
+    <ScrollView>
     <View style={styles.container}>
-       
-    <DropDownPicker name="eleccion"
-                                style={{marginTop: 20, marginBottom: 20}}
-                                placeholder="Tipo"
-                                items={tipo}
-                                setItems={setTipo}
-                                open={tipoOpen}
-                                setOpen={setTipoOpen}
-                                value={tipoValue}
-                                setValue={setTipoValue}
-                                onChangeValue={(value) => {
-                                    handleChangeText('tipo', value);
-                                  }}
+    <Text style={styles.titulo}>Notificar animal en la calle</Text>  
+      <View>
+      <DropDownPicker name="eleccion"
+          style={styles.dropDownPicker}
+          listItemLabelStyle={{
+            color: colors.moradoSecundario
+        }}
+          placeholder="Tipo"
+          items={tipo}
+          setItems={setTipo}
+          open={tipoOpen}
+          setOpen={setTipoOpen}
+          value={tipoValue}
+         setValue={setTipoValue}
+         onChangeValue={(value) => {
+          handleChangeText('tipo', value);
+          }}
                                   
-                            />
-                            <TextInput  
-                    style={styles.descripcion}
-                    placeholder="Descripción (max 200 caracteres)"
-                    value={state1.value}
-                    onChangeText={(value) =>{ handleChangeText('descripcion', value)
-                    setState1({value: value})}}
-                    />
-                    <Button title="Adjuntar fotografía" onPress={() =>  openGallery()} /> 
-                    
-                    
+      />
+    </View>
+  <TextInput  
+    style={styles.descripcion}
+    placeholderTextColor={colors.moradoSecundario}
+    placeholder="Descripción (max 200 caracteres)"
+    value={state1.value}
+    onChangeText={(value) =>{ handleChangeText('descripcion', value)
+    setState1({value: value})}}
+  /> 
+ <View> 
+    <TouchableOpacity 
+      onPress={() => 
+      openGallery()
+    }
+      style={[styles.botonPropiedades, {marginBottom: 20}, {borderColor: colors.moradoPrincipal}]}>
+        <Text style={[styles.botonTexto, {color: colors.moradoPrincipal}]}>
+        Adjuntar fotografía
+        </Text>
+</TouchableOpacity>
+</View>
+    <View style={styles.mapaContainer}>
       <MapView 
         style={styles.map}
         initialRegion={{
@@ -292,36 +313,42 @@ if(!loading) {
             
         
       </MapView>
-      
-      <Button 
-                title="Cancelar" 
-                onPress={() => 
-                  Alert.alert("Información", "¿Está seguro que desea cancelar el avistamiento?", [
-                    {text: "Confirmar", 
-                    onPress: () => {
-                      {
-                        //props.navigation.navigate('MapaAnimalEncontrado', {userId: props.route.params.userId})
-                        console.log("no va???")
-                       // this.setTipoValue({value:""})
-                        setNotificacionAnimal({
-                          tipo:"",
-                          descripcion:""
-                        })
-                        setFoto({existe:"No"})
-                      }
-                      setState1({value:''})
-                    }}, 
-                    {text: "Cancelar"}
-                ])
-                
-                
-                
-                }/>
-
-
-      <Button 
-                title="Enviar" 
-                onPress={() => {guardarNotificacion()}}/>
+    </View>
+    <TouchableOpacity 
+          onPress={() => 
+            Alert.alert("Información", "¿Está seguro que desea cancelar el avistamiento?", [
+              {text: "Confirmar", 
+              onPress: () => {
+                {
+                  //props.navigation.navigate('MapaAnimalEncontrado', {userId: props.route.params.userId})
+                  console.log("no va???")
+                 // this.setTipoValue({value:""})
+                  setNotificacionAnimal({
+                    tipo:"",
+                    descripcion:""
+                  })
+                  setFoto({existe:"No"})
+                }
+                setState1({value:''})
+              }}, 
+              {text: "Cancelar"}
+          ])
+          
+          
+          
+          }
+          style={styles.botonCancelar}>
+            <Text style={styles.botonTexto}>
+              Cancelar
+            </Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          onPress={() => {guardarNotificacion()}}
+          style={styles.boton}>
+            <Text style={styles.botonTexto}>
+              Enviar
+            </Text>
+        </TouchableOpacity>
       </View>
       </ScrollView>
   );
@@ -338,21 +365,21 @@ if(!loading) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
-        padding: 35,
-        height:700,
-        marginBottom: 80
-  },
-  map: {
-    width: 290,
-    height: 360,
-    marginTop: 10,
-    marginBottom: 20
+    flex: 2, 
+    padding: 15,
+    backgroundColor: colors.blanco 
   },
   descripcion : {
     height: 100,
     borderWidth: 2,
-    borderColor: '#cccccc'
+    borderColor: colors.moradoPrincipal,
+    borderRadius: 15,
+    multiline: true,
+    textAlignVertical: "top",
+    color: colors.moradoPrincipal,
+    fontSize: 16,
+    padding: 10,
+    marginBottom: 30
 },
 inputGroup: {
   fontSize: 20, 
@@ -361,6 +388,76 @@ inputGroup: {
   marginTop: 10, 
   borderBottomWidth: 2, 
   borderBottomColor: '#cccccc'
+},
+titulo: {
+  padding: 10,
+  color: colors.moradoPrincipal,
+  fontSize: 29,
+  fontFamily: 'DMSans',
+  textAlign: "center",
+  marginTop: 70,
+  marginBottom: 20,
+},
+dropDownPicker : {
+  marginBottom: 25,
+  marginTop: 15,
+  borderRadius: 25,
+  borderColor: colors.moradoPrincipal,
+  borderWidth: 2,
+  fontStyle : {
+  color: colors.amarillo
+ }
+},
+botonPropiedades : {
+  borderWidth: 2,
+  width:260,
+  height:50,
+  borderRadius: 25,
+  alignSelf: "center"
+}, 
+botonTexto : {
+  fontSize: 22,
+  alignSelf: "center",
+  marginTop: 5
+},
+mapaContainer: {
+  width: 294,
+  height: 364,
+  marginHorizontal: 30,
+  marginVertical: 10,
+  borderColor: colors.moradoPrincipal,
+  borderWidth: 2,
+  marginBottom: 30
+},
+map: {
+  width: 290,
+  height: 360
+},
+boton : {
+  backgroundColor: colors.moradoPrincipal,
+  borderColor: colors.blanco,
+  borderWidth: 2,
+  width:170,
+  height:42,
+  borderRadius: 25,
+  alignSelf: "center",
+},
+botonCancelar : {
+  backgroundColor: colors.amarillo,
+  borderColor: colors.blanco,
+  borderWidth: 2,
+  width:170,
+  height:42,
+  borderRadius: 25,
+  alignSelf: "center",
+  marginBottom: 10
+},
+botonTexto: {
+  fontSize: 18,
+  color: colors.blanco,
+  fontWeight: "bold",
+  alignSelf: "center",
+  marginTop: 5
 }, 
 });
 export default MapaAnimalEncontrado;

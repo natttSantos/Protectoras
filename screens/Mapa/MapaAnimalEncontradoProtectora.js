@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import * as Location from 'expo-location';
-import { StyleSheet, Text, View,ActivityIndicator,ScrollView,TextInput,Image } from 'react-native';
+import { StyleSheet, Text, View,ActivityIndicator,ScrollView,TextInput,Image, TouchableOpacity } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 //import MapViewDirections from 'react-native-maps-directions';
 //import { GOOGLE_MAPS_KEY } from '@env';
@@ -9,7 +9,7 @@ const carImage = require('../../images/perfilUsuario.jpg')
 import firebase from '../../database/firebase';
 import DropDownPicker from "react-native-dropdown-picker";
 import * as ImagePicker from 'expo-image-picker';
-
+import { colors } from '../../components/Color';
 
 const MapaAnimalEncontradoProtectora = (props) => {
   DropDownPicker.setListMode("SCROLLVIEW");
@@ -236,20 +236,23 @@ const checkImage = () => {
    // setLoading2(false);
       return (
         <View>
-           <Text style = {styles.texto} >
-          {"Avistado por: "+notificacionCargar.usuario+" el " +notificacionCargar.dia +"/" + notificacionCargar.mes +"/" + notificacionCargar.año+ " a las " +notificacionCargar.horas +":"+notificacionCargar.minutos  }
+           <Text style = {styles.descripcion} >
+          { notificacionCargar.tipo + " avistado por "+notificacionCargar.usuario+" el " +notificacionCargar.dia +"/" + notificacionCargar.mes +"/" + notificacionCargar.año+ " a las " +notificacionCargar.horas +":"+notificacionCargar.minutos
+           + "\n \n Descripcion: " + notificacionCargar.descripcion  }
         </Text>
-        <Text style = {styles.texto} >
-          {"Animal: " + notificacionCargar.tipo}
-        </Text>
-        <Text style = {styles.texto} >
-          {"Descripcion: " + notificacionCargar.descripcion}
-        </Text>
-        <Image
-          style={{ width: 300, height: 300 }}
-          source={{ uri: imageFirebase }}
-        />
-        <Button title="Recogido" onPress={() =>  modificarNotificacion(notificacionCargar.id)} /> 
+        <View style={styles.imageContainer}>
+          <Image
+            style={styles.image}
+            source={{ uri: imageFirebase }}
+          />
+        </View>
+        <TouchableOpacity 
+          onPress={() =>  modificarNotificacion(notificacionCargar.id)}
+          style={styles.boton}>
+            <Text style={styles.botonTexto}>
+              Recogido
+            </Text>
+        </TouchableOpacity>
         </View>
 
       );
@@ -284,7 +287,8 @@ if(!loading) {
   return (
     <ScrollView > 
     <View style={styles.container}> 
-
+    <Text style={styles.titulo}>   Animales encontrados  </Text>
+    <View style={styles.mapaContainer}>
       <MapView 
         style={styles.map}
         initialRegion={{
@@ -315,6 +319,7 @@ if(!loading) {
           })}
 
       </MapView>
+      </View>
       {checkImage()}
       </View>
       </ScrollView>
@@ -331,19 +336,18 @@ if(!loading) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1, 
-        padding: 35,
-        height:900
-  },
-  map: {
-    width: 290,
-    height: 360
-  },
-  descripcion : {
-    height: 100,
-    borderWidth: 2,
-    borderColor: '#cccccc'
+  image:  { 
+    width: 200, 
+    height: 200, 
+},
+container: {
+  flex: 2, 
+  padding: 15,
+  backgroundColor: colors.blanco 
+},
+map: {
+  width: 290,
+  height: 360
 },
 inputGroup: {
   fontSize: 20, 
@@ -359,6 +363,64 @@ texto:{
   borderBottomWidth: 1,
   borderBottomColor: "#cccccc",
   marginTop : 13
-}
+},
+titulo: {
+  padding: 0,
+  color: colors.moradoPrincipal,
+  fontSize: 29,
+  fontFamily: 'DMSans',
+  textAlign: "left",
+  marginTop: 50,
+  marginBottom: 30,
+},
+mapaContainer: {
+  width: 294,
+  height: 364,
+  marginHorizontal: 30,
+  marginVertical: 10,
+  borderColor: colors.moradoPrincipal,
+  borderWidth: 2
+},
+imageContainer: {
+  width: 204,
+  height: 204,
+  marginHorizontal: 80,
+  marginVertical: 30,
+  borderColor: colors.moradoPrincipal,
+  borderWidth: 2,
+  marginBottom:30,
+},
+descripcion : {
+  height: 200,
+  borderWidth: 2,
+  borderColor: colors.moradoPrincipal,
+  borderRadius: 15,
+  multiline: true,
+  textAlignVertical: "top",
+  color: colors.moradoPrincipal,
+  fontSize: 21,
+  padding: 20,
+  marginBottom: 10,
+  marginTop: 30,
+  fontFamily: 'InterRegular'
+},
+boton : {
+  backgroundColor: colors.moradoPrincipal,
+  borderColor: colors.blanco,
+  borderWidth: 2,
+  width:170,
+  height:42,
+  borderRadius: 25,
+  alignSelf: "center",
+},
+botonTexto: {
+  fontSize: 18,
+  color: colors.blanco,
+  fontWeight: "bold",
+  alignSelf: "center",
+  marginTop: 5
+}, 
+
+
 });
 export default MapaAnimalEncontradoProtectora;

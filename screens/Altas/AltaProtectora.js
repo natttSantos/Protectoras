@@ -463,7 +463,7 @@ const styles = StyleSheet.create({
         alignSelf: "center"
       }, 
     botonTexto : {
-        fontSize: 20,
+        fontSize: 17,
         alignSelf: "center",
         marginTop: 5
     },
