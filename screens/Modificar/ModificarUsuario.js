@@ -157,7 +157,7 @@ const ModificarUsuario = (props) => {
         if (cosas != "") {
           return (
             <Image
-              style={{ width: 300, height: 300 }}
+              style={{ width: 300, height: 300, borderWidth: 2, borderColor: colors.moradoPrincipal, borderRadius: 20 }}
               source={{ uri: imageFirebase }}
             />
           );
@@ -197,7 +197,7 @@ const ModificarUsuario = (props) => {
 
     return(
       <ScrollView style={styles.container}> 
-      <View style={{  alignItems: 'center', justifyContent: 'center', }}>
+      <View style={{justifyContent: 'center', margintop: 50 }}>
         
         {checkImage()}
                         <TouchableOpacity 
@@ -328,7 +328,8 @@ const ModificarUsuario = (props) => {
 const styles = StyleSheet.create({
 container : {
         flex: 1, 
-        padding: 35
+        padding: 35,
+        marginTop: 50
     },
       inputGroup: {
         marginBottom: 10,

@@ -88,6 +88,7 @@ const RootStack = () => {
                                         <Stack.Screen
                                             name="ModificarUsuario"
                                             component={ModificarUsuario}
+                                            options={{headerTransparent: true, headerTitle: ''}}
                                         />
                                         <Stack.Screen
                                             name="MapaAnimalEncontrado"
