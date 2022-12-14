@@ -1,10 +1,11 @@
 import { style } from "deprecated-react-native-prop-types/DeprecatedTextPropTypes";
 import React, {useEffect, useState} from "react";
-import { ScrollView, View, Text, StyleSheet, TextInput, Image } from "react-native";
+import { ScrollView, View, Text, StyleSheet, TextInput, Image, TouchableOpacity } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Button } from "react-native-elements";
 import firebase from "../../database/firebase";
 import * as ImagePicker from 'expo-image-picker';
+import {colors} from '../../components/Color';
 
 const ModificarProtectora = (props) => {
     DropDownPicker.setListMode("SCROLLVIEW");
@@ -145,7 +146,7 @@ const ModificarProtectora = (props) => {
         if (cosas != "") {
           return (
             <Image
-              style={{ width: 300, height: 300 }}
+              style={{ width: 300, height: 300, }}
               source={{ uri: imageFirebase }}
             />
           );
@@ -186,8 +187,17 @@ const ModificarProtectora = (props) => {
 
 
         <ScrollView style={styles.container}> 
+        <View style={{  alignItems: 'center', justifyContent: 'center', }}>
         {checkImage()}
-        <Button style={{position: 'fixed',  right: 0}} title="Selecciona una imagen" onPress={() =>  openGallery()} /> 
+        <TouchableOpacity 
+                            onPress={() => 
+                                openGallery()
+                            }
+                            style={[styles.botonPropiedades, {marginBottom: 20}, {borderColor: colors.moradoPrincipal}]}>
+                                <Text style={[styles.botonTexto, {color: colors.moradoPrincipal}]}>
+                                    Actualizar imagen de perfil
+                                </Text>
+                        </TouchableOpacity>
             <Text style={{marginTop: 15, color: 'darkred'}}> * Campo obligatorio </Text>
             <View 
             style={styles.inputGroup}> 
@@ -219,19 +229,25 @@ const ModificarProtectora = (props) => {
                     />
             </View>
             <View>
-                <DropDownPicker
-                                style={{marginTop: 15, marginBottom: 15}}
-                                placeholder="* Seleccione una localizacion"
-                                items={items}
-                                setItems={setItems}
-                                open={open}
-                                setOpen={setOpen}
-                                value = {protectora.localizacion}
-                                setValue={setValue}
-                                onChangeValue={(value) => {
-                                    handleChangeText('localizacion', value);
-                                  }}
-                            />
+            <DropDownPicker
+                                        style={styles.dropDownPicker}
+                                        placeholder="* Seleccione una localizacion"
+                                        placeholderStyle={{
+                                            color: colors.moradoSecundario
+                                            }}
+                                        items={items}
+                                        listItemLabelStyle={{
+                                            color: colors.moradoSecundario
+                                        }}
+                                        setItems={setItems}
+                                        open={open}
+                                        setOpen={setOpen}
+                                        value={value}
+                                        setValue={setValue}
+                                        onChangeValue={(value) => {
+                                            handleChangeText('localizacion', value);
+                                        }}
+                                    />
             </View>
             <View 
             style={styles.inputGroup}>
@@ -260,10 +276,9 @@ const ModificarProtectora = (props) => {
                     onChangeText={(value) => handleChangeText('telefono', value)}
                     />
             </View>
-            <View 
-            style={styles.descripcion}>
+            <View>
                 <TextInput                     
-                    style={{fontSize: 17}}
+                    style={styles.descripcion}
                     placeholder="Descripcion (max. 200 caracteres)"
                     maxLength = {200}
                     multiline = {true}
@@ -279,11 +294,17 @@ const ModificarProtectora = (props) => {
             </View>
             <View style={{marginTop: 15, marginBottom: 80}}>
 
-                <Button 
-                title="Actualizar" 
-                onPress={() => {saveNewProtectora()}}/>
+            <TouchableOpacity 
+                            onPress={() => 
+                                saveNewProtectora()
+                            }
+                            style={[styles.botonPropiedades, {backgroundColor: colors.amarillo}, {borderColor: colors.amarillo}]}>
+                                <Text style={[styles.botonTexto, {color: colors.blanco}, {fontWeight: 'bold'}]}>
+                                    Actualizar
+                                </Text>
+                        </TouchableOpacity>
             </View>
-
+        </View>
         </ScrollView>
 
     )
@@ -295,25 +316,63 @@ const styles = StyleSheet.create({
         flex: 1, 
         padding: 35
     },
-    inputGroup: {
-        fontSize: 20, 
-        padding: 0,
+      inputGroup: {
         marginBottom: 10,
         marginTop: 10, 
-        borderBottomWidth: 2, 
-        borderBottomColor: '#cccccc'
     }, 
-    inputText: {
-        fontSize: 17
-    },
     title : {
         fontSize: 40,
         fontWeight: "bold"
     },
-    descripcion : {
-        height: 100,
-        borderWidth: 2,
-        borderColor: '#cccccc'
+    inputText: {
+      fontSize: 16,
+      color: colors.moradoPrincipal,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.moradoPrincipal,
+      marginBottom: 10,
+      marginTop: 10
+      
+  },
+  titulo : {
+      fontSize: 27,
+      color: colors.moradoPrincipal,
+      fontFamily: 'DMSans',
+      marginBottom: 10
+  },
+  descripcion : {
+      height: 100,
+      borderWidth: 2,
+      borderColor: colors.moradoPrincipal,
+      borderRadius: 15,
+      multiline: true,
+      textAlignVertical: "top",
+      color: colors.moradoPrincipal,
+      fontSize: 16,
+      padding: 10,
+      marginBottom: 10
+  },
+    botonPropiedades : {
+      borderWidth: 2,
+      width:260,
+      height:50,
+      borderRadius: 25,
+      alignSelf: "center",
+      marginTop: 30
+    }, 
+  botonTexto : {
+      fontSize: 17,
+      alignSelf: "center",
+      marginTop: 5
+  },
+  dropDownPicker : {
+    marginBottom: 15,
+    marginTop: 15,
+    borderRadius: 25,
+    borderColor: colors.moradoPrincipal,
+    borderWidth: 2,
+    fontStyle : {
+        color: colors.amarillo
     }
+  }
 })
 export default ModificarProtectora;
