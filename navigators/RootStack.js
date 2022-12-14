@@ -96,6 +96,7 @@ const RootStack = () => {
                                         <Stack.Screen
                                             name="Notificaciones"
                                             component={Notificaciones}
+                                            options={{headerTransparent: true, headerTitle: ''}}
                                         />
                                         <Stack.Screen
                                             name="FiltradoAnimales"

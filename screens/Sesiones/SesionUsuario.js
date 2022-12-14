@@ -85,6 +85,7 @@ const getAllNotificaciones = async (id_usuario) => {
       id_usuario: doc.data().id_usuario,
       mensaje: doc.data().mensaje,
       leido: doc.data().leido,
+      id_animal: doc.data().id_animal
     }
     notiAux.push(nose)
   })
