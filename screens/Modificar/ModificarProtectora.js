@@ -6,6 +6,7 @@ import { Button } from "react-native-elements";
 import firebase from "../../database/firebase";
 import * as ImagePicker from 'expo-image-picker';
 import {colors} from '../../components/Color';
+import { color } from "react-native-elements/dist/helpers";
 
 const ModificarProtectora = (props) => {
     DropDownPicker.setListMode("SCROLLVIEW");
@@ -63,8 +64,9 @@ const ModificarProtectora = (props) => {
                     fotoModificada : protectora.fotoModificada
                 })
                 alert("Datos cambiados correctamente")
+                props.navigation.goBack()
             }
-            props.navigation.goBack()
+            
         }
 
 
@@ -146,7 +148,7 @@ const ModificarProtectora = (props) => {
         if (cosas != "") {
           return (
             <Image
-              style={{ width: 300, height: 300, }}
+              style={{ width: 300, height: 300, borderColor: colors.moradoPrincipal, borderWidth: 2, borderRadius: 20 }}
               source={{ uri: imageFirebase }}
             />
           );
@@ -187,7 +189,7 @@ const ModificarProtectora = (props) => {
 
 
         <ScrollView style={styles.container}> 
-        <View style={{  alignItems: 'center', justifyContent: 'center', }}>
+        <View style={{ justifyContent: 'center', }}>
         {checkImage()}
         <TouchableOpacity 
                             onPress={() => 
@@ -314,7 +316,9 @@ const ModificarProtectora = (props) => {
 const styles = StyleSheet.create({
     container : {
         flex: 1, 
-        padding: 35
+        padding: 35,
+        backgroundColor: colors.blanco,
+        marginTop: 50
     },
       inputGroup: {
         marginBottom: 10,
