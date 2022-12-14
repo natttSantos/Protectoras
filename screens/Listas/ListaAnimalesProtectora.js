@@ -180,6 +180,11 @@ const ListaAnimalesProtectora = (props) => {
                 <Text style={styles.titulo}>
                     No hay animales
                 </Text>
+                <TouchableOpacity 
+                    onPress={() => props.navigation.navigate('RegistrarAnimal', {userId: props.route.params.userId}) }
+                    style={styles.buttonAltaAnimal}>
+                    <Text style={styles.textoAltaAnimal}> + Añadir nuevo animal </Text>
+                </TouchableOpacity>
             </View>
         )
     }
