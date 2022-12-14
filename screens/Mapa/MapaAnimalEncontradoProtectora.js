@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import * as Location from 'expo-location';
-import { StyleSheet, Text, View,ActivityIndicator,ScrollView,TextInput,Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View,ActivityIndicator,ScrollView,TextInput,Image, TouchableOpacity, Modal } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 //import MapViewDirections from 'react-native-maps-directions';
 //import { GOOGLE_MAPS_KEY } from '@env';
@@ -195,7 +195,8 @@ const [cosas, setFotoAnimal] = useState(initialStatee);
       usuario: notificacionCargar.usuario,
       recogido: "Si"
         })
-        alert("Notificacion enviada correctamente")
+        setTextoChikita("Notificacion enviada correctamente");
+        setModalChikita({...modalChikita, visible: !modalChikita.visible});
 }
 
   const animalRecogido = async () => {
@@ -224,7 +225,9 @@ const validateFields = () => {
   } if (foto.existe == ''){
       textoAlerta += "\n - Foto "; 
   } 
-  alert (textoAlerta); 
+  setTextoChikita(textoAlerta);
+  setModalChikita({...modalChikita, visible: !modalChikita.visible});
+  
 }
 
 const checkImage = () => {
@@ -276,6 +279,9 @@ const checkImage = () => {
               />);
 })}*/
 
+const [modalChikita, setModalChikita] = useState({ visible: false}); 
+const [textoChikita, setTextoChikita] = useState();
+
   if(loading) {
     return(
         <View>
@@ -286,7 +292,30 @@ const checkImage = () => {
 if(!loading) {
   return (
     <ScrollView > 
-    <View style={styles.container}> 
+    <View style={styles.container}>
+    <Modal
+        animationType="slide"
+        transparent={true}                    
+        visible={modalChikita.visible}
+        onRequestClose={() => {
+            setModalChikita({...modalChikita, visible: !modalChikita.visible});
+        }}>
+        <View style={styles.centeredView}>
+            <View style={[styles.modalView, {height: '30%'}]}>
+                <View style={{flex: 4}}>
+                    <Text style={[styles.textoAlerta, {fontSize: 20}]}> {textoChikita} </Text>
+                </View>
+                <View style={styles.buttonGroup}>
+                    <TouchableOpacity
+                    onPress={() => setModalChikita({...modalChikita, visible: !modalChikita.visible})}>
+                        <View style={styles.botonCerrar}>
+                            <Text style={[styles.textoAlerta, {fontSize: 20}]}>cerrar</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </View>
+    </Modal> 
     <Text style={styles.titulo}>   Animales encontrados  </Text>
     <View style={styles.mapaContainer}>
       <MapView 
@@ -420,7 +449,43 @@ botonTexto: {
   alignSelf: "center",
   marginTop: 5
 }, 
-
+centeredView: {
+  flex: 1,
+  justifyContent: "center",
+  alignItems: "center",
+  marginTop: 22
+},
+modalView: {
+  margin: 10,
+  width: '90%',
+  backgroundColor: colors.amarillo,
+  borderRadius: 20,
+  padding: 35,
+  alignItems: "center",
+  shadowColor: "#000",
+  shadowOffset: {
+      width: 0,
+      height: 2
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 4,
+  elevation: 5,
+  borderWidth: 1,
+  borderColor: colors.moradoPrincipal
+},
+botonCerrar: {
+  marginRight: 10,
+  height: 40,
+  width: 120,
+  borderRadius: 10,
+  backgroundColor: colors.moradoPrincipal,
+  alignItems: 'center',
+  justifyContent: 'center'
+},
+textoAlerta: {
+  fontFamily: 'DMSans',
+  color: colors.blanco,
+},
 
 });
 export default MapaAnimalEncontradoProtectora;
