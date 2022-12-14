@@ -250,7 +250,7 @@ const checkImage = () => {
           />
         </View>
         <TouchableOpacity 
-          onPress={() =>  modificarNotificacion(notificacionCargar.id)}
+          onPress={() =>  {modificarNotificacion(notificacionCargar.id);setLoading2(true)}}
           style={styles.boton}>
             <Text style={styles.botonTexto}>
               Recogido
