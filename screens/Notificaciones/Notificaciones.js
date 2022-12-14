@@ -6,6 +6,7 @@ import firebase from '../../database/firebase';
 
 const Notificaciones = (props) => {
     const [notificaciones, setNotificaciones] = useState(props.route.params.notificaciones)
+    const [notificacionesUnico, setNotificacionesUnico] = useState([]) 
     const [animales, setAnimales] = useState([]) 
     const [loading, setLoading] = useState(true) 
     const navigation = props.navigation
@@ -17,7 +18,7 @@ const Notificaciones = (props) => {
             if(notificacionesUnico.findIndex(notifi => notifi.id_animal == noti.id_animal) === -1) 
                 notificacionesUnico.push(noti)
         })
-        
+        setNotificacionesUnico(notificacionesUnico)
         let i = notificacionesUnico.length
 
         notificacionesUnico.map(async (noti, index) => {
@@ -37,40 +38,41 @@ const Notificaciones = (props) => {
         props.route.params.alVolver()
     },[navigation])
 
-    if(loading) {
+    if(loading || animales.length != notificacionesUnico.length) {
         return(
         <View>
             <ActivityIndicator/>
         </View>
         )
     }
-
-    return(
-        <ScrollView >
-            <View style={{marginTop: 54, padding: 20}}>
-                <Text style={styles.titulo}>
-                    Notificaciones
-                </Text>
-            </View>
-            {notificaciones.map((noti, index) => {
-                const aceptada = noti.mensaje.includes('aceptada')
-                return(
-                    <View bottomDivider 
-                    style={styles.notiContainer} key={index}>
-                        <View style={styles.imagenesContainer}>
-                            <Image source={{uri: animales.find(animal => animal.id == noti.id_animal).url}} style={{height: 70, width: 70, borderRadius: 35}}/>
-                            <View style={aceptada ? styles.tickContainer : styles.cruzContainer}>
-                                <Image source={aceptada ? require('../../images/Tick.png') : require('../../images/Cruz.png')}/>
+    else {
+        return(
+            <ScrollView >
+                <View style={{marginTop: 54, padding: 20}}>
+                    <Text style={styles.titulo}>
+                        Notificaciones
+                    </Text>
+                </View>
+                {notificaciones.map((noti, index) => {
+                    const aceptada = noti.mensaje.includes('aceptada')
+                    return(
+                        <View bottomDivider 
+                        style={styles.notiContainer} key={index}>
+                            <View style={styles.imagenesContainer}>
+                                <Image source={{uri: animales.find(animal => animal.id == noti.id_animal).url}} style={{height: 70, width: 70, borderRadius: 35}}/>
+                                <View style={aceptada ? styles.tickContainer : styles.cruzContainer}>
+                                    <Image source={aceptada ? require('../../images/Tick.png') : require('../../images/Cruz.png')}/>
+                                </View>
+                            </View>
+                            <View style={styles.textoContainer}>
+                                <Text style={styles.texto}>{noti.mensaje}</Text>
                             </View>
                         </View>
-                        <View style={styles.textoContainer}>
-                            <Text style={styles.texto}>{noti.mensaje}</Text>
-                        </View>
-                    </View>
-                )
-            })}
-        </ScrollView>
-    )
+                    )
+                })}
+            </ScrollView>
+        )
+    }
 
 }
 
