@@ -78,7 +78,7 @@ const RootStack = () => {
                                         <Stack.Screen
                                             name="PerfilAnimal"
                                             component={PerfilAnimal}
-                                            options={{headerTransparent: true, headerTitle: ''}}
+                                            options={{headerTransparent: true, headerTitle: '', headerTintColor: colors.amarillo}}
                                         />
                                         <Stack.Screen
                                             name="PerfilProtectora"
@@ -96,6 +96,7 @@ const RootStack = () => {
                                         <Stack.Screen
                                             name="Notificaciones"
                                             component={Notificaciones}
+                                            options={{headerTransparent: true, headerTitle: ''}}
                                         />
                                         <Stack.Screen
                                             name="FiltradoAnimales"

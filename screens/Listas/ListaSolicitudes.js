@@ -48,7 +48,8 @@ const ListaSolicitudes = (props) => {
                 firebase.db.collection('notificaciones').add({
                     id_usuario: doc.data().id_usuario,
                     mensaje: "Tu solicitud de adopción de " + nombreAnimal + " ha sido rechazada ",
-                    leido: false
+                    leido: false,
+                    id_animal: doc.data().id_animal
                 })
             }
             doc.ref.delete()
@@ -73,7 +74,8 @@ const ListaSolicitudes = (props) => {
         firebase.db.collection('notificaciones').add({
             id_usuario: solicitudes[modal.indexSeleccionado].id_usuario,
             mensaje: mensajeAdopcion,
-            leido: false
+            leido: false,
+            id_animal: solicitudes[modal.indexSeleccionado].id_animal
         })
 
         setModal({...modal, visible: !modal.visible})
@@ -97,7 +99,8 @@ const ListaSolicitudes = (props) => {
         firebase.db.collection('notificaciones').add({
             id_usuario: solicitudes[modal.indexSeleccionado].id_usuario,
             mensaje: mensajeAdopcion,
-            leido: false
+            leido: false,
+            id_animal: solicitudes[modal.indexSeleccionado].id_animal,
         })
 
         setModal({...modal, visible: !modal.visible})
@@ -151,7 +154,7 @@ const ListaSolicitudes = (props) => {
                 <Text style={styles.titulo}>Solicitudes de adopción</Text>
             </View>
             <View style={styles.solicitudContainer}>
-                {solicitudes.map((solicitud, index) => {
+                {solicitudes.length != 0 ? solicitudes.map((solicitud, index) => {
                     return (
                         <View
                         key={solicitud.id}
@@ -161,7 +164,8 @@ const ListaSolicitudes = (props) => {
                             declinar={(nombreAnimal) => declinarClick(index, nombreAnimal)} aceptar={(nombreAnimal) => aceptarClick(index, nombreAnimal)}/>
                         </View>
                     )
-                })}
+                })
+            : <Text style ={{fontSize: 18.5, marginTop: 12, padding: 2, color: 'gray'}}>No hay más solicitudes de adopción {':('}</Text>}
             </View>
         </ScrollView>
     )
