@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { View, Button, TextInput, StyleSheet, ScrollView, Text, Alert, TouchableOpacity, Image} from "react-native";
+import { View, Button, TextInput, StyleSheet, ScrollView, Text, Alert, TouchableOpacity, Image, Modal} from "react-native";
 import firebase from '.././database/firebase.js';
 
 import KeyboardAvoidingWrapper from "../components/KeyboardAvoiding.js";
@@ -23,12 +23,19 @@ const Donaciones = (props) => {
     const [perfil, setPerfilAdoptar] = useState(); //DAMI: AÑADÍ ESTO PARA DECLARAR EL PERFIL, NO SE SI VA BIEN PERO YA NO SALE WARNING
     const [cambios, setcambios] = useState(false);
     const [usuario, setUsario] = useState();
-
+    const [fecha, setFecha] = useState("* Fecha de expiración");
+    const [textoChikita, setTextoChikita] = useState();
+    const [modalChikita, setModalChikita] = useState({ visible: false}); 
+    const [modalValidateFields, setModalValidateFields] = useState({ visible: false});
+    const [textoAlerta, setTextoAlerta] = useState();
 
     useEffect(() => {
         getProtectoraById(props.route.params.protectoraId);
         getUsuarioById(props.route.params.userId);
-      }, []);
+        handleFecha();
+      }, [protectora]);
+
+      
 
       let fechaActual = new Date();
 
@@ -36,7 +43,6 @@ const Donaciones = (props) => {
         const dbRef = firebase.db.collection("users").doc(id);
         const doc = await dbRef.get();
         const usuario = doc.data();
-        console.log(usuario)
         setUsario({ ...usuario, id: doc.id });
         if (usuario.alta == "Si"){
           setPerfilAdoptar({ ...usuario, id: doc.id });
@@ -53,6 +59,13 @@ const Donaciones = (props) => {
     const handleChangeText = (nombre, value) => {
         setState({...state, [nombre]: value}); 
     }; 
+    
+    function handleFecha() {
+        if (props.route.params.valueFecha != undefined) {
+            setFecha(props.route.params.valueFecha);
+        }
+    }
+
     const saveDonacion =  async () => {
         if (state.nombre == '' || state.apellidos == '' || state.cvv == '' || props.route.params.valueFecha == undefined||state.dineroDonado==''||state.numeroTarjeta==""){
             validateNullFields(); 
@@ -71,7 +84,11 @@ const Donaciones = (props) => {
                 mes : fechaActual.getMonth(),
                 año: fechaActual.getFullYear(),
             })
-            alert ("Donación completada"); }
+            setTextoChikita("Donación completada");
+            setModalChikita({...modalChikita, visible: !modalChikita.visible});
+        }
+
+            
         
     } 
 
@@ -93,56 +110,107 @@ const Donaciones = (props) => {
         if (state.dineroDonado == '' || isNaN(state.dineroDonado)){
             textoAlerta += "\n - Debe poner una cantidad de dinero con dígitos "; 
         }
-        alert (textoAlerta); 
+        setTextoAlerta(textoAlerta);
+        setModalValidateFields({...modalValidateFields, visible: !modalValidateFields.visible});
     }
-
+  
 
     return (
         <KeyboardAvoidingWrapper>
             <View style={styles.container}>
+            <Modal
+                animationType="slide"
+                transparent={true}                    
+                visible={modalValidateFields.visible}
+                onRequestClose={() => {
+                    setModalValidateFields({...modalValidateFields, visible: !modalValidateFields.visible});
+                }}>
+                <View style={styles.centeredView}>
+                    <View style={[styles.modalView, {height: '50%'}]}>
+                        <View style={{flex: 4}}>
+                            <Text style={[styles.textoAlerta, {fontSize: 20}]}> {textoAlerta} </Text>
+                        </View>
+                        <View style={styles.buttonGroup}>
+                            <TouchableOpacity
+                            onPress={() => setModalValidateFields({...modalValidateFields, visible: !modalValidateFields.visible})}>
+                                <View style={styles.botonCerrar}>
+                                    <Text style={[styles.textoAlerta, {fontSize: 20}]}>cerrar</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+            <Modal
+                animationType="slide"
+                transparent={true}                    
+                visible={modalChikita.visible}
+                onRequestClose={() => {
+                    setModalChikita({...modalChikita, visible: !modalChikita.visible});
+                }}>
+                <View style={styles.centeredView}>
+                    <View style={[styles.modalView, {height: '30%'}]}>
+                        <View style={{flex: 4}}>
+                            <Text style={[styles.textoAlerta, {fontSize: 20}]}> {textoChikita} </Text>
+                        </View>
+                        <View style={styles.buttonGroup}>
+                            <TouchableOpacity
+                            onPress={() => setModalChikita({...modalChikita, visible: !modalChikita.visible})}>
+                                <View style={styles.botonCerrar}>
+                                    <Text style={[styles.textoAlerta, {fontSize: 20}]}>cerrar</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
                 <Text style={styles.titulo}> Donaciones </Text>
                 <TextInput 
-                    style={styles.textFieldCircular}
-                    placeholder="Nombre"
+                    style={styles.textField}
+                    placeholder="* Nombre"
+                    placeholderTextColor={colors.moradoSecundario}
                     onChangeText={(value) => handleChangeText('nombre', value)}
                 />
                 <TextInput 
-                    style={styles.textFieldCircular}
-                    placeholder="Apellidos" 
+                    style={styles.textField}
+                    placeholder="* Apellidos"
+                    placeholderTextColor={colors.moradoSecundario} 
                     onChangeText={(value) => handleChangeText('apellidos', value)}
                 />
                 <TextInput 
-                    style={styles.textFieldCircular}
-                    placeholder="Número de tarjeta" 
+                    style={styles.textField}
+                    placeholder="* Número de tarjeta" 
+                    placeholderTextColor={colors.moradoSecundario}
                     onChangeText={(value) => handleChangeText('numeroTarjeta', value)}
                 />
                 <TextInput 
-                    style={styles.textFieldCircular}
-                    placeholder="CVV" 
+                    style={styles.textField}
+                    placeholder="* CVV" 
+                    placeholderTextColor={colors.moradoSecundario}
                     onChangeText={(value) => handleChangeText('cvv', value)}
                 />
                 <TouchableOpacity 
-                     onPress={() => props.navigation.navigate('FechaExpiracion', {userId: props.route.params.userId, esProtectora: "No"})}
-                     style={styles.fechaNacimiento}>
-                     <View style={styles.botonFechaNacimiento}>
-                        <Text style={styles.texto}> Fecha de expiración: </Text>
-                        <Image
-                        source={require('.././images/Calendario.png')}
-                        style={styles.image}
-                        />
-                    </View>
+                onPress={() => props.navigation.navigate('FechaExpiracion', {userId: props.route.params.userId, esProtectora: "No"})}
+                style={styles.fechaNacimiento}>
+                <View style={styles.botonFechaNacimiento}>
+                    <Text style={fecha != "* Fecha de expiración" ? styles.textoFecha : styles.texto}> {fecha} </Text>
+                    <Image
+                    source={require('.././images/Calendario.png')}
+                    style={styles.image}
+                    />
+                </View>
                 </TouchableOpacity>
                 <TextInput 
-                    style={styles.textFieldCircular}
-                    placeholder="Cantidad a donar en €" 
+                    style={styles.textField}
+                    placeholder="* Cantidad a donar en €" 
+                    placeholderTextColor={colors.moradoSecundario}
                     onChangeText={(value) => handleChangeText('dineroDonado', value)}
-                />
-                
+                />                
                 <View>                    
                     <TouchableOpacity 
                         onPress={() => saveDonacion()}
                         style={styles.botonCircularAmarillo}>
-                            <Text style={styles.botonTexto}>
+                            <Text style={styles.botonTextoAmarillo}>
                                 Donar
                             </Text>
                     </TouchableOpacity>
@@ -156,13 +224,12 @@ const styles = StyleSheet.create({
     container : {
         flex: 1, 
         padding: 35,
-        backgroundColor: colors.amarillo,
+        backgroundColor: colors.blanco,
         marginTop: 50,
-        height: 800
+        height: 750
     },
     titulo : {
         fontSize: 32,
-        fontWeight: 'bold',
         marginBottom: 30,
         color: colors.moradoPrincipal,
         fontFamily: 'DMSans'
@@ -172,6 +239,17 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginLeft: 5,
         marginRight: 15
+    },
+    textField: {
+        marginTop: 20,
+        borderWidth: 1,
+        borderBottomColor: colors.moradoPrincipal,
+        borderRightColor: colors.blanco,
+        borderLeftColor: colors.blanco,
+        borderTopColor: colors.blanco,
+        fontSize: 16,
+        color: colors.moradoPrincipal,
+        fontFamily: 'InterRegular'
       },
     textFieldCircular: {
         width:320,
@@ -183,16 +261,16 @@ const styles = StyleSheet.create({
         marginBottom: 12
       },
       botonCircularAmarillo : {
+        marginTop: 100,
         backgroundColor: colors.amarillo,
         borderColor: colors.blanco,
         borderWidth: 2,
-        width:217,
-        height:47,
+        width:260,
+        height:50,
         borderRadius: 25,
-        marginTop: 100,
-        alignSelf: 'center'
+        alignSelf: "center"
       },
-      botonTexto: {
+      botonTextoAmarillo: {
         fontSize: 20,
         color: colors.blanco,
         fontWeight: "bold",
@@ -200,16 +278,67 @@ const styles = StyleSheet.create({
         marginTop: 5
       },
       texto: {
-        fontSize: 20,
-        color: colors.blanco,
-        fontWeight: "bold",
-        alignSelf: "center",
-        marginBottom: 20
+        fontFamily: 'InterRegular',
+        color: colors.moradoSecundario,
+        fontSize: 16
       },
       image: {
-        marginBottom: 15,
-        marginRight: 50
-      }
+        flex: 1,
+        width: 22,
+        height: 22,
+        resizeMode: 'contain'
+      },
+      fechaNacimiento: {
+        marginTop: 20,
+        height: 49,
+        borderRadius: 24.5,
+        borderColor: colors.moradoPrincipal,
+        borderWidth: 1,
+        justifyContent: 'center'
+      },
+      textoFecha: {
+        fontFamily: 'InterRegular',
+        color: colors.moradoPrincipal,
+        fontSize: 16,
+        marginRight: 100
+      },
+      centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+      },
+      modalView: {
+        margin: 10,
+        width: '90%',
+        backgroundColor: colors.amarillo,
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        borderWidth: 1,
+        borderColor: colors.moradoPrincipal
+      },
+      botonCerrar: {
+        marginRight: 10,
+        height: 40,
+        width: 120,
+        borderRadius: 10,
+        backgroundColor: colors.moradoPrincipal,
+        alignItems: 'center',
+        justifyContent: 'center'
+      },
+      textoAlerta: {
+        fontFamily: 'DMSans',
+        color: colors.blanco,
+      },
 })
 
 

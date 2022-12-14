@@ -371,8 +371,10 @@ const styles = StyleSheet.create({
 },
 container: {
   flex: 2, 
-  padding: 15,
-  backgroundColor: colors.blanco 
+  paddingTop: 15,
+  paddingHorizontal: 15,
+  paddingBottom: 15,
+  backgroundColor: colors.blanco
 },
 map: {
   width: 290,

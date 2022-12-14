@@ -121,7 +121,7 @@ const RootStack = () => {
                                             component={Donaciones}
                                             options={{ 
                                                 headerStyle: {
-                                                    backgroundColor: colors.amarillo
+                                                    backgroundColor: colors.blanco
                                                 },
                                                 headerTransparent: true,
                                                 headerTitle: '',                                    
@@ -130,6 +130,13 @@ const RootStack = () => {
                                          <Stack.Screen
                                             name="FechaExpiracion"
                                             component={FechaExpiracion}
+                                            options={{ 
+                                                headerStyle: {
+                                                    backgroundColor: colors.blanco
+                                                },
+                                                headerTransparent: true,
+                                                headerTitle: '',                                    
+                                                }}
                                         />
                                     </>
                                 ) : (
