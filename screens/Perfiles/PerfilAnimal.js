@@ -46,7 +46,8 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
     localizacion:"",
     dni:"",
     n_animales:"",
-
+    latitud:"",
+    longitud:"",
   };
   var u = "aaa";
 
@@ -86,11 +87,11 @@ async function getLocationPermission() {
     latitude: location.coords.latitude,
     longitude: location.coords.longitude
   }
-  setCoordenadas({
+  /*setCoordenadas({
     latitud: location.coords.latitude,
     longitud: location.coords.longitude
 
-  })
+  })*/
   setposicionMapa(current);
   setCoordenadas(current);
   setLoading(false);
@@ -347,7 +348,7 @@ NO BORRAR
 
 
 
-if(loading && (coordenadas.latitude != "" && coordenadas.longitude != "")) {
+if(loading && (coordenadas.latitude != "" && coordenadas.longitude != "" && animal.latitud != "" && animal.longitud != "")) {
   return(
       <View>
           <ActivityIndicator />
