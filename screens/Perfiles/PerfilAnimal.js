@@ -173,11 +173,6 @@ const getUsuarioById = async (id) => {
   const doc = await dbRef.get();
   const usuario = doc.data();
   setUsario({...usuario, id: doc.id});
-
-  if(!props.route.params.esUsuario) {
-    firebase.st.ref(`imagesProtectora/${usuario.fotoModificada}`).getDownloadURL().then(
-      (url) => setfotoProtectora(url), (error) => alert(error))
-  }
 };
 
 
@@ -368,7 +363,7 @@ return (
           <TouchableOpacity
           onPress={props.route.params.esUsuario ? () => props.navigation.navigate('PerfilProtectora', { protectoraId: animal.id_protectora })
                    : null}>
-            <Image source={{uri: fotoProtectora}} style={styles.imagenProtectora} />
+            {fotoProtectora == "" || !props.route.params.esUsuario ? null : <Image source={{uri: fotoProtectora}} style={styles.imagenProtectora} />}
           </TouchableOpacity>
         </View>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{marginVertical: 10}}>
@@ -433,40 +428,41 @@ return (
             {animal.descripcion}
           </Text>
         </View>
-        <View style={styles.mapaContainer}>
-          <MapView
-            style={styles.map}
-            initialRegion={{
-              latitude: posicionMapa.latitude,
-              longitude: posicionMapa.longitude,
-              latitudeDelta: 0.09,
-              longitudeDelta: 0.04
-            }}
-          >
-            <Marker
-              pinColor='#BD562A'
-              coordinate={coordenadas}
-              onDragEnd={(direction) => setposicionMapa(direction.nativeEvent.coordinate)} />
+        {props.route.params.esUsuario ? 
+          <View style={styles.mapaContainer}>
+              <MapView
+              style={styles.map}
+              initialRegion={{
+                latitude: posicionMapa.latitude,
+                longitude: posicionMapa.longitude,
+                latitudeDelta: 0.09,
+                longitudeDelta: 0.04
+              }}
+              >
+              <Marker
+                pinColor='#BD562A'
+                coordinate={coordenadas}
+                onDragEnd={(direction) => setposicionMapa(direction.nativeEvent.coordinate)} />
 
-            <Marker
-              pinColor='#6BE795'
-              coordinate={{
-                longitude: animal.longitud,
-                latitude: animal.latitud
-              }} />
-          </MapView>
-        </View>
-
-        {esUsuario ?
-        <View style={{width: '100%', alignItems: 'center', marginBottom: 20}}>
-          <TouchableOpacity
-            style={styles.boton}
-            onPress={() => adoptarAnimal()}
-          >
-            <Text style={styles.texto}>Solicitar adopción</Text>
-          </TouchableOpacity>
-        </View>
-          : null}
+              <Marker
+                pinColor='#6BE795'
+                coordinate={{
+                  longitude: animal.longitud,
+                  latitude: animal.latitud
+                }} />
+            </MapView>
+          </View>
+        : null}
+        {props.route.params.esUsuario ?
+          <View style={{ width: '100%', alignItems: 'center', marginBottom: 20 }}>
+            <TouchableOpacity
+              style={styles.boton}
+              onPress={() => adoptarAnimal()}
+            >
+              <Text style={styles.texto}>Solicitar adopción</Text>
+            </TouchableOpacity>
+          </View>
+        : null}
       </View>
     </ScrollView></>
   );
@@ -475,7 +471,7 @@ return (
 
 const styles = StyleSheet.create({
   container: {
-    flex: 5
+    flex: 5,
   },
   perfilContainer: {
     width: '100%',

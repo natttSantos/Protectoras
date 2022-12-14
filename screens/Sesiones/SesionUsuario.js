@@ -105,8 +105,7 @@ const alVolver = () => {
     const doc = await dbRef.get();
     const usuario = doc.data();
     setUsuario({ ...usuario, id: doc.id });
-    setNombreUsuario(usuario.usuario)
-    console.log(usuario.usuario)
+    setNombreUsuario(usuario.nombre)
     //setLoading(false);
   };
 
@@ -124,7 +123,7 @@ useEffect(() => {
     headerRight: () => (
       <TouchableOpacity onPress={() => navigation.navigate('Notificaciones', 
         { alVolver: () => alVolver(), notificaciones: notificaciones })} style={styles.notiContainer}>
-        <Icon name="notifications" size={25}/>
+        <Image source={require('../../images/Notificaciones.png')}/>
         {notificaciones.filter(noti => noti.leido == false) != 0 ?
           <View style={styles.numNotisContainer}>
             <Text style={styles.numNotis}>{notificaciones.filter(noti => noti.leido == false).length}</Text>
@@ -178,7 +177,7 @@ useEffect(() => {
               return <Icon name={'person-circle-outline'} size={35} color={colorA} />
           }
         }}
-        initialParams={{ userId: storedCredentials, canEdit: true }}/>
+        initialParams={{ canEdit: true }}/>
     </Tab.Navigator>  
   );
 };

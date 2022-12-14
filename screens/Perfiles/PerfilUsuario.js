@@ -17,7 +17,7 @@ import {colors} from '../../components/Color';
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CredentialsContext } from "../../components/CredentialsContext";
-import { color } from 'react-native-elements/dist/helpers/index.js';
+import _ from 'lodash';
 
 const PerfilUsuario = (props) => {
   
@@ -60,14 +60,14 @@ const PerfilUsuario = (props) => {
     const dbRef = firebase.db.collection("users").doc(id);
     const doc = await dbRef.get();
     const usuario = doc.data();
-    console.log(usuario)
+    
     setUsario({ ...usuario, id: doc.id });
     setLoading(false);
     if (usuario.alta == "Si"){
       setPerfilAdoptar({ ...usuario, id: doc.id });
       firebase
       .st
-      .ref(`imagesUsuario/${storedCredentials}`)
+      .ref(`imagesUsuario/${id}`)
       .getDownloadURL().then(function (url) {
         console.log(url);
         setState({
@@ -108,10 +108,7 @@ const PerfilUsuario = (props) => {
           <>
            <TouchableOpacity 
                    onPress={() => {
-                    if (usuario.alta == "No")
                       props.navigation.navigate('AltaAdoptar', { userId: storedCredentials });
-                    else
-                      alert("Ya se ha dado de alta");
                   }}
                     style={styles.botonCircularMorado}>
                         <Text style={styles.botonTexto}>
@@ -141,7 +138,7 @@ const PerfilUsuario = (props) => {
         <Text style={styles.textoPerfilAdopcion}>{perfilAdoptar.localizacion} </Text>
         <View style= {styles.textContainer}>
           
-        {props.route.params.canEdit ?
+        {/* {props.route.params.canEdit ?
           <>
            <TouchableOpacity 
                    onPress={() => {
@@ -156,7 +153,7 @@ const PerfilUsuario = (props) => {
                         </Text>
                 </TouchableOpacity>
         </>
-        : null}
+        : null} */}
         </View>
         </View>
       );
@@ -165,8 +162,7 @@ const PerfilUsuario = (props) => {
   }
 
   useEffect(() => {
-    console.log(props.route.params.userId)
-    if (props.route.params.userId === undefined ) {
+    if (_.isUndefined(props.route.params.userId)) {
       getUsuarioById(storedCredentials);
     } else {getUsuarioById(props.route.params.userId)}
   }, []);
@@ -192,16 +188,18 @@ const PerfilUsuario = (props) => {
   return (
     <View style={styles.container}>
 
-    <Appbar.Header style={styles.appBar}>
-        <Appbar.Content title="" />
-        <Appbar.Action icon="lead-pencil" size={30} onPress={() => {
-                if (usuario.alta == "Si")
-                  props.navigation.navigate('ModificarUsuario', { userId: storedCredentials });
-                else
-                  alert("Primero debe darse de alta!");
-              }} />
-        <Appbar.Action icon="logout" size={30} onPress={clearLogin} />
-  </Appbar.Header>
+    {props.route.params.canEdit ? 
+      <Appbar.Header style={styles.appBar}>
+          <Appbar.Content title="" />
+          <Appbar.Action icon="lead-pencil" size={30} onPress={() => {
+                  if (usuario.alta == "Si")
+                    props.navigation.navigate('ModificarUsuario', { userId: storedCredentials });
+                  else
+                    alert("Primero debe darse de alta!");
+                }} />
+          <Appbar.Action icon="logout" size={30} onPress={clearLogin} />
+    </Appbar.Header>
+  : null}
 
 
       <View style={styles.textContainerGmailTlf}>

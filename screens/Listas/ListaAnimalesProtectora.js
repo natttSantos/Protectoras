@@ -150,7 +150,7 @@ const ListaAnimalesProtectora = (props) => {
                             <View key={animal.id}>
                                 <TouchableOpacity
                                     style={styles.animalContainer}
-                                    onPress={() => props.navigation.navigate('PerfilAnimal', { animalId: animal.id, userId: props.route.params.userId, esUsuario: true })}>
+                                    onPress={() => props.navigation.navigate('PerfilAnimal', { animalId: animal.id, userId: props.route.params.userId, esUsuario: false })}>
                                     <View style={styles.imagenContainer}>
                                         <Image source={{uri: animal.url}} style={{width:100, height: 100, borderRadius: 50}} />
                                     </View>

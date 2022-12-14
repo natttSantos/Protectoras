@@ -203,6 +203,11 @@ const RootStack = () => {
                                         <Stack.Screen
                                             name="PerfilUsuario"
                                             component={PerfilUsuario}
+                                            options={{
+                                                headerTintColor: '#fff',
+                                                headerTransparent: true,
+                                                headerTitle: ''
+                                            }}
                                         />
                                     </>
                                 )}
