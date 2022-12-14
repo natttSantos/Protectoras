@@ -165,7 +165,7 @@ const ListaSolicitudes = (props) => {
                         </View>
                     )
                 })
-            : <Text style ={{fontSize: 18.5, marginTop: 12, padding: 2, color: 'gray'}}>No hay más solicitudes de adopción {':('}</Text>}
+            : <Text style ={{fontSize: 18.5, marginTop: 12, padding: 2, color: 'gray'}}>No hay solicitudes de adopción {':('}</Text>}
             </View>
         </ScrollView>
     )
