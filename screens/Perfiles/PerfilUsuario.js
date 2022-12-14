@@ -279,7 +279,7 @@ textContainerGmailTlf: {
     backgroundColor: colors.blanco,
     borderRadius: 35, 
     alignSelf: 'center', 
-    bottom: -26, 
+    bottom: -45, 
     flex: 1
   },
   tituloPerfilAdopcionEnunciado: {
