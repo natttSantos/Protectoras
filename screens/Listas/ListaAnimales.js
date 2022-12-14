@@ -226,12 +226,11 @@ const ListaAnimales = (props) => {
       animalesACargar.map((animal, index) => {
       return(
 
-        <View key={animal.id} style={styles.animalContainer}>
-          <View style={styles.imagenContainer}>
-            <TouchableOpacity
+        <TouchableOpacity key={animal.id}
             onPress={() => props.navigation.navigate('PerfilAnimal', { animalId: animal.id, userId: props.route.params.userId, esUsuario: true })}>
+        <View style={styles.animalContainer}>
+          <View style={styles.imagenContainer}>
               <Image source={{uri: animal.url}} style={{width:100, height: 100, borderRadius: 50}} />
-            </TouchableOpacity>
           </View>
           <View style={styles.infoContainer}>
             <View style={styles.nombreContainer}>
@@ -252,6 +251,7 @@ const ListaAnimales = (props) => {
             </View>
           </View>
         </View>
+        </TouchableOpacity>
                       
         // <ListItem key={animal.id}       
         // bottomDivider
