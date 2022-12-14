@@ -35,7 +35,7 @@ const AltaProtectora = (props) => {
     const [value, setValue] = useState(null)
     const [items, setItems] = useState([{label: 'Valencia', value: 'Valencia'},
                         {label: 'Alicante', value: 'Alicante'},
-                        {label: 'Cuenca', value: 'Cuenca'}])
+                        {label: 'Castellon', value: 'Castellon'}])
 
     const handleChangeText = (nombre, value) => {
         setProtectora({...protectora, [nombre]: value});
