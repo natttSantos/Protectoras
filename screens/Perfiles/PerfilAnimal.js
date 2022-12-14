@@ -46,13 +46,14 @@ const a = "https://firebasestorage.googleapis.com/v0/b/react-native-firebase-a2b
     localizacion:"",
     dni:"",
     n_animales:"",
-    latitud:"",
-    longitud:"",
+   // latitud:"",
+    //longitud:"",
   };
   var u = "aaa";
 
   const [animal, setAnimal] = useState(initialState);
   const [loading, setLoading] = useState(true);
+  const [loading2, setLoading2] = useState(true);
   const [cosas, setState] = useState(initialStatee);
   const [fotoProtectora, setfotoProtectora] = useState(""); 
   
@@ -87,14 +88,15 @@ async function getLocationPermission() {
     latitude: location.coords.latitude,
     longitude: location.coords.longitude
   }
-  /*setCoordenadas({
+  setCoordenadas({
     latitud: location.coords.latitude,
-    longitud: location.coords.longitude
+    longitud: location.coords.longitude,
+    verdad: "true"
 
-  })*/
+  })
   setposicionMapa(current);
   setCoordenadas(current);
-  setLoading(false);
+  setLoading2(false);
   
 }
 
@@ -196,6 +198,7 @@ const getAnimalById = async (id) => {
 });
   validateOptionalFields(animal); 
   checkMicrochip_Vacunado(animal); 
+  setLoading(false);
 };
 
 const getImagenProtectora = async (id_protectora) => {
@@ -287,8 +290,7 @@ const checkMicrochip_Vacunado = (value) => {
   }, []);
 
   const [coordenadas, setCoordenadas] = useState({
-    latitude:"",
-    longitude:"",
+    verdad: "false",
   });
 
   const [posicionMapa, setposicionMapa] = useState({
@@ -343,14 +345,15 @@ NO BORRAR
 
 
 
-if(loading && (coordenadas.latitude != "" && coordenadas.longitude != "" && animal.latitud != "" && animal.longitud != "")) {
+if(loading||  loading2) {
   return(
       <View>
           <ActivityIndicator />
       </View>
   )
 }
-if(!loading) {
+if(!loading && !loading2) {
+  console.log(coordenadas.latitude);
 return (
      <><View style={styles.imagenContainer}>
     {checkImage()}
