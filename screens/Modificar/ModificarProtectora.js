@@ -148,7 +148,7 @@ const ModificarProtectora = (props) => {
         if (cosas != "") {
           return (
             <Image
-              style={{ width: 300, height: 300, borderColor: colors.moradoPrincipal, borderWidth: 2, borderRadius: 20 }}
+              style={{ width: 300, height: 300, borderColor: colors.moradoPrincipal, borderWidth: 2, borderRadius: 20, alignSelf: "center" }}
               source={{ uri: imageFirebase }}
             />
           );
