@@ -7,7 +7,7 @@ import { colors } from '../../components/Color'
 
 import {
   ScrollView,
-  Button,
+  Modal,
   View,
   Text,
   Alert,
@@ -267,20 +267,23 @@ const checkMicrochip_Vacunado = (value) => {
     const soliRepe = await solicitudes.where("id_protectora", "==", animal.id_protectora)
     .where("id_animal", "==", animal.id)
     .where("id_usuario", "==", usuario.id).get()
-    
+    let textoAlerta = ''
     const estaRepetido = !soliRepe.empty
 
     if(!estaRepetido) {
       await solicitudes.add(solicitudAEnviar)
-
+      textoAlerta = 'Solicitud enviada correctamente'
       Alert.alert("Información", "Solicitud enviada correctamente", [
         {text: "Cerrar"}
       ])
     } else {
+      textoAlerta = "Ya enviaste la solicitud de adopción"
       Alert.alert("Información", "Ya enviaste la solicitud de adopcion", [
         {text: "Cerrar"}
       ])
     }
+    setTextoChikita(textoAlerta);
+    setModalChikita({...modalChikita, visible: !modalChikita.visible})
   }
 
   useEffect(() => {
@@ -342,7 +345,8 @@ NO BORRAR
 
 */
 
-
+const [modalChikita, setModalChikita] = useState({ visible: false}); 
+const [textoChikita, setTextoChikita] = useState();
 
 
 if(loading||  loading2) {
@@ -359,6 +363,29 @@ return (
     {checkImage()}
   </View>
   <ScrollView style={styles.container}>
+  <Modal
+        animationType="slide"
+        transparent={true}                    
+        visible={modalChikita.visible}
+        onRequestClose={() => {
+            setModalChikita({...modalChikita, visible: !modalChikita.visible});
+        }}>
+        <View style={styles.centeredView}>
+            <View style={[styles.modalView, {height: '30%'}]}>
+                <View style={{flex: 4}}>
+                    <Text style={[styles.textoAlerta, {fontSize: 20}]}> {textoChikita} </Text>
+                </View>
+                <View style={styles.buttonGroup}>
+                    <TouchableOpacity
+                    onPress={() => setModalChikita({...modalChikita, visible: !modalChikita.visible})}>
+                        <View style={styles.botonCerrar}>
+                            <Text style={[styles.textoAlerta, {fontSize: 20}]}>cerrar</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </View>
+    </Modal> 
       <View style={styles.perfilContainer}>
         <View style={styles.nombreContainer}>
           <Text style={styles.textoNombre}>
@@ -584,6 +611,43 @@ mapaContainer: {
   marginVertical: 30,
   borderColor: colors.moradoPrincipal,
   borderWidth: 2
+},
+centeredView: {
+  flex: 1,
+  justifyContent: "center",
+  alignItems: "center",
+  marginTop: 22
+},
+modalView: {
+  margin: 10,
+  width: '90%',
+  backgroundColor: colors.amarillo,
+  borderRadius: 20,
+  padding: 35,
+  alignItems: "center",
+  shadowColor: "#000",
+  shadowOffset: {
+      width: 0,
+      height: 2
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 4,
+  elevation: 5,
+  borderWidth: 1,
+  borderColor: colors.moradoPrincipal
+},
+botonCerrar: {
+  marginRight: 10,
+  height: 40,
+  width: 120,
+  borderRadius: 10,
+  backgroundColor: colors.moradoPrincipal,
+  alignItems: 'center',
+  justifyContent: 'center'
+},
+textoAlerta: {
+  fontFamily: 'DMSans',
+  color: colors.blanco,
 },
 });
 
