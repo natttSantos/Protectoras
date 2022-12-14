@@ -211,14 +211,14 @@ const ListaAnimales = (props) => {
         onPress={() => props.navigation.navigate('FiltradoAnimales', { animales: animales, onGoBack: (animalesFiltrado) => setAnimalesACargar(animalesFiltrado)})}
         style={styles.button}>
           <Text style={[styles.buttonText, {fontFamily: 'InterRegular'}]}>
-              filtrar
+              Filtrar
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
         onPress={() => setAnimalesACargar(animales)}
         style={[styles.button, {backgroundColor: colors.moradoPrincipal}]}>
           <Text style={[styles.buttonText, {fontFamily: 'InterRegular'}]}>
-              quitar filtros
+              Quitar filtros
           </Text>
         </TouchableOpacity>
       </View>

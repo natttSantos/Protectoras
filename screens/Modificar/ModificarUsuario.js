@@ -375,9 +375,9 @@ container : {
       marginTop: 30
     }, 
   botonTexto : {
-      fontSize: 17,
+      fontSize: 20,
       alignSelf: "center",
-      marginTop: 5
+      marginTop: 6
   },
   dropDownPicker : {
     marginBottom: 15,
