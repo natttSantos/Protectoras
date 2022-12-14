@@ -18,9 +18,9 @@ const FiltradoAnimales = (props) => {
     const [estado, setEstado] = useState({
       perroPressed: false,
       gatoPressed: false, 
-      comunidadValencianaPressed: false, 
+      valenciaPressed: false, 
       alicantePressed: false, 
-      cuencaPressed: false
+      castellonPressed: false
     })
 
     //DROPDOWNPICKER
@@ -131,7 +131,7 @@ const FiltradoAnimales = (props) => {
     }
 
     const seleccionMultiple_Localizacion = () => {
-      if(estado.comunidadValencianaPressed){ 
+      if(estado.valenciaPressed){ 
         localizaciones_selected.push('Valencia'); 
         console.log("paso1")
       }
@@ -139,8 +139,8 @@ const FiltradoAnimales = (props) => {
         localizaciones_selected.push('Alicante');
         console.log("paso2")
       }
-      if(estado.cuencaPressed){ 
-        localizaciones_selected.push('Cuenca');
+      if(estado.castellonPressed){ 
+        localizaciones_selected.push('Castellon');
         console.log("paso3")
       }
     }
@@ -172,12 +172,12 @@ const FiltradoAnimales = (props) => {
           setEstado({ ...estado, ['gatoPressed']: !estado.gatoPressed});}
     };
     const handleColorChangeLocalizacion = (localizacion) => {
-          if(localizacion == 'comunidadValenciana'){
-            setEstado({ ...estado, ['comunidadValencianaPressed']: !estado.comunidadValencianaPressed});
+          if(localizacion == 'valencia'){
+            setEstado({ ...estado, ['valenciaPressed']: !estado.valenciaPressed});
           } if (localizacion == 'alicante'){
             setEstado({ ...estado, ['alicantePressed']: !estado.alicantePressed});  
-          } if (localizacion == 'cuenca'){
-            setEstado({ ...estado, ['cuencaPressed']: !estado.cuencaPressed});  
+          } if (localizacion == 'castellon'){
+            setEstado({ ...estado, ['castellonPressed']: !estado.castellonPressed});  
           }
     };
 
@@ -226,9 +226,9 @@ const FiltradoAnimales = (props) => {
       </View>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <TouchableOpacity
-            onPress={() => {handleColorChangeLocalizacion('comunidadValenciana')}}
-            style={[styles.buttonLocalizacion, estado.comunidadValencianaPressed ? {borderColor: colors.moradoPrincipal} : {borderColor: colors.moradoSecundario}]}>
-              <Text style={[styles.buttonText, estado.comunidadValencianaPressed ? {color: colors.moradoPrincipal} : {color: colors.moradoSecundario}]}>
+            onPress={() => {handleColorChangeLocalizacion('valencia')}}
+            style={[styles.buttonLocalizacion, estado.valenciaPressed ? {borderColor: colors.moradoPrincipal} : {borderColor: colors.moradoSecundario}]}>
+              <Text style={[styles.buttonText, estado.valenciaPressed ? {color: colors.moradoPrincipal} : {color: colors.moradoSecundario}]}>
                   Valencia
               </Text>
           </TouchableOpacity>
@@ -240,10 +240,10 @@ const FiltradoAnimales = (props) => {
               </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => {handleColorChangeLocalizacion('cuenca')}}
-            style={[styles.buttonLocalizacion, estado.cuencaPressed ? {borderColor: colors.moradoPrincipal} : {borderColor: colors.moradoSecundario}]}>
-              <Text style={[styles.buttonText, estado.cuencaPressed ? {color: colors.moradoPrincipal} : {color: colors.moradoSecundario}]}>
-                  Cuenca
+            onPress={() => {handleColorChangeLocalizacion('castellon')}}
+            style={[styles.buttonLocalizacion, estado.castellonPressed ? {borderColor: colors.moradoPrincipal} : {borderColor: colors.moradoSecundario}]}>
+              <Text style={[styles.buttonText, estado.castellonPressed ? {color: colors.moradoPrincipal} : {color: colors.moradoSecundario}]}>
+                  Castellon
               </Text>
           </TouchableOpacity>
         </ScrollView>

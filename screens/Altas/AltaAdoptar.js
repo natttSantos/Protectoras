@@ -38,9 +38,9 @@ const AltaAdoptar = (props) => {
     const [loading, setLoading] = useState(true);
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState(null)
-    const [items, setItems] = useState([{label: 'Comunidad Valenciana', value: 'Comunidad Valenciana'},
+    const [items, setItems] = useState([{label: 'Valencia', value: 'Valencia'},
                         {label: 'Alicante', value: 'Alicante'},
-                        {label: 'Cuenca', value: 'Cuenca'}])
+                        {label: 'Castellon', value: 'Castellon'}])
 
     const handleChangeText = (nombre, value) => {
         setNuevosDatos({...nuevosDatos, [nombre]: value});
