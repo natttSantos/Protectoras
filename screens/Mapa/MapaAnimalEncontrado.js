@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import * as Location from 'expo-location';
-import { StyleSheet, Text, View,ActivityIndicator,ScrollView,TextInput,TouchableOpacity, Alert, LogBox } from 'react-native';
+import { StyleSheet, Text, View,ActivityIndicator,ScrollView,TextInput,TouchableOpacity, Alert, LogBox, Modal } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 //import MapViewDirections from 'react-native-maps-directions';
 //import { GOOGLE_MAPS_KEY } from '@env';
@@ -44,6 +44,8 @@ const [notificacionAnimal, setNotificacionAnimal] = useState({
   descripcion:"",
 });
 
+const [modalChikita, setModalChikita] = useState({ visible: false}); 
+const [textoChikita, setTextoChikita] = useState();
 
 const [coordenadas, setCoordenadas] = useState({
 });
@@ -156,6 +158,7 @@ if(notificacionAnimal.tipo != "" && notificacionAnimal.descripcion != ""){
     
       if (resultImagePicker.cancelled === false) {
         const imageUri = resultImagePicker.uri;
+        let textoAlerta = "";
         uploadImage(imageUri)
           .then(resolve => {
             let ref = firebase
@@ -169,7 +172,7 @@ if(notificacionAnimal.tipo != "" && notificacionAnimal.descripcion != ""){
                 setFoto({
                     existe: "Si"
                  });
-                 alert("Imagen subida correctamente")
+                 textoAlerta = "Imagen subida correctamente"
               })
               .catch(error => {
                 console.log(error);
@@ -183,7 +186,11 @@ if(notificacionAnimal.tipo != "" && notificacionAnimal.descripcion != ""){
       }
       
     }
-}else{alert ("Primero debe introducir el tipo de animal y su descripción");}
+}else{
+  textoAlerta = "Primero debe introducir el tipo de animal y descripción";
+}
+setTextoChikita(textoAlerta);
+setModalChikita({...modalChikita, visible: !modalChikita.visible});
   };
 
 
@@ -205,7 +212,8 @@ if(notificacionAnimal.tipo != "" && notificacionAnimal.descripcion != ""){
                 minutos: fechaActual.getMinutes(),
 
             })
-            alert("Notificacion enviada correctamente")
+            setTextoChikita("Notificacion enviada correctamente");
+            setModalChikita({...modalChikita, visible: !modalChikita.visible});
         
     }
 }
@@ -226,7 +234,8 @@ const validateFields = () => {
   } if (foto.existe == ''){
       textoAlerta += "\n - Foto "; 
   } 
-  alert (textoAlerta); 
+  setTextoChikita(textoAlerta);
+  setModalChikita({...modalChikita, visible: !modalChikita.visible}); 
 }
 
   /* Codigo para saber donde estan las protectoras
@@ -255,6 +264,29 @@ if(!loading) {
   return (
     <ScrollView>
     <View style={styles.container}>
+    <Modal
+        animationType="slide"
+        transparent={true}                    
+        visible={modalChikita.visible}
+        onRequestClose={() => {
+            setModalChikita({...modalChikita, visible: !modalChikita.visible});
+        }}>
+        <View style={styles.centeredView}>
+            <View style={[styles.modalView, {height: '30%'}]}>
+                <View style={{flex: 4}}>
+                    <Text style={[styles.textoAlerta, {fontSize: 20}]}> {textoChikita} </Text>
+                </View>
+                <View style={styles.buttonGroup}>
+                    <TouchableOpacity
+                    onPress={() => setModalChikita({...modalChikita, visible: !modalChikita.visible})}>
+                        <View style={styles.botonCerrar}>
+                            <Text style={[styles.textoAlerta, {fontSize: 20}]}>cerrar</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </View>
+    </Modal> 
     <Text style={styles.titulo}>Notificar animal en la calle</Text>  
       <View>
       <DropDownPicker name="eleccion"
@@ -459,5 +491,42 @@ botonTexto: {
   alignSelf: "center",
   marginTop: 5
 }, 
+centeredView: {
+  flex: 1,
+  justifyContent: "center",
+  alignItems: "center",
+  marginTop: 22
+},
+modalView: {
+  margin: 10,
+  width: '90%',
+  backgroundColor: colors.amarillo,
+  borderRadius: 20,
+  padding: 35,
+  alignItems: "center",
+  shadowColor: "#000",
+  shadowOffset: {
+      width: 0,
+      height: 2
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 4,
+  elevation: 5,
+  borderWidth: 1,
+  borderColor: colors.moradoPrincipal
+},
+botonCerrar: {
+  marginRight: 10,
+  height: 40,
+  width: 120,
+  borderRadius: 10,
+  backgroundColor: colors.moradoPrincipal,
+  alignItems: 'center',
+  justifyContent: 'center'
+},
+textoAlerta: {
+  fontFamily: 'DMSans',
+  color: colors.blanco,
+},
 });
 export default MapaAnimalEncontrado;
