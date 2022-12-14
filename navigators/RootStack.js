@@ -203,6 +203,13 @@ const RootStack = () => {
                                         <Stack.Screen
                                             name="ModificarProtectora"
                                             component={ModificarProtectora}
+                                            options={{ 
+                                                headerStyle: {
+                                                    backgroundColor: colors.blanco
+                                                },
+                                                headerTransparent: true,
+                                                headerTitle: '',                                    
+                                                }}
                                         />
                                         <Stack.Screen
                                             name="PerfilAnimal"
