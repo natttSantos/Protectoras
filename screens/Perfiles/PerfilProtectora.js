@@ -338,7 +338,9 @@ const styles = StyleSheet.create({
         alignSelf: "center", 
         top: -50, 
         position: "absolute", 
-        borderRadius: 75
+        borderRadius: 75,
+        borderWidth: 2,
+        borderColor: colors.moradoPrincipal
   },
   textContainer: {
     height: '50%',
