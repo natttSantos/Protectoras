@@ -132,7 +132,7 @@ const FiltradoAnimales = (props) => {
 
     const seleccionMultiple_Localizacion = () => {
       if(estado.comunidadValencianaPressed){ 
-        localizaciones_selected.push('Comunidad Valenciana'); 
+        localizaciones_selected.push('Valencia'); 
         console.log("paso1")
       }
       if(estado.alicantePressed){ 

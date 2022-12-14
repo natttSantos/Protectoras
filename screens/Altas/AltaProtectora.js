@@ -33,7 +33,7 @@ const AltaProtectora = (props) => {
 
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState(null)
-    const [items, setItems] = useState([{label: 'Comunidad Valenciana', value: 'Comunidad Valenciana'},
+    const [items, setItems] = useState([{label: 'Valencia', value: 'Valencia'},
                         {label: 'Alicante', value: 'Alicante'},
                         {label: 'Cuenca', value: 'Cuenca'}])
 
