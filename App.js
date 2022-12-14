@@ -81,6 +81,10 @@ function MyStack (){
   )
 }
 export default function App() {
+
+  LogBox.ignoreAllLogs();
+  LogBox.ignoreLogs(['Warning: ...']);
+
   useFonts({
     InterRegular: require('./assets/fonts/Inter-Regular.ttf'),
     DMSans: require('./assets/fonts/DMSans-Bold.ttf'),

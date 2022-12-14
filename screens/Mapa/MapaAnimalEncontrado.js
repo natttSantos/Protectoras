@@ -13,6 +13,8 @@ import { colors } from '../../components/Color';
 
 const MapaAnimalEncontrado = (props) => {
 
+  DropDownPicker.setListMode("SCROLLVIEW");
+
   useEffect(() => {
 
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -27,6 +29,7 @@ const MapaAnimalEncontrado = (props) => {
     { label: "Gato", value: "Gato" },
   ]);
 
+  const drop = DropDownPicker.setListMode("SCROLLVIEW");
 
   const [foto, setFoto] = useState({
     existe:"",
@@ -158,7 +161,6 @@ if(notificacionAnimal.tipo != "" && notificacionAnimal.descripcion != ""){
     
       if (resultImagePicker.cancelled === false) {
         const imageUri = resultImagePicker.uri;
-        let textoAlerta = "";
         uploadImage(imageUri)
           .then(resolve => {
             let ref = firebase
@@ -172,7 +174,8 @@ if(notificacionAnimal.tipo != "" && notificacionAnimal.descripcion != ""){
                 setFoto({
                     existe: "Si"
                  });
-                 textoAlerta = "Imagen subida correctamente"
+                  setTextoChikita("Imagen subida correctamente");
+                  setModalChikita({...modalChikita, visible: !modalChikita.visible});
               })
               .catch(error => {
                 console.log(error);
@@ -187,10 +190,10 @@ if(notificacionAnimal.tipo != "" && notificacionAnimal.descripcion != ""){
       
     }
 }else{
-  textoAlerta = "Primero debe introducir el tipo de animal y descripción";
+  setTextoChikita("Primero debe introducir el tipo de animal y descripción");
+  setModalChikita({...modalChikita, visible: !modalChikita.visible});
 }
-setTextoChikita(textoAlerta);
-setModalChikita({...modalChikita, visible: !modalChikita.visible});
+
   };
 
 
@@ -375,8 +378,15 @@ if(!loading) {
             </Text>
         </TouchableOpacity>
         <TouchableOpacity 
-          onPress={() => {guardarNotificacion()}}
+          onPress={() => {[
+
+            guardarNotificacion(), 
+            setNotificacionAnimal({ tipo:"", descripcion:""}),
+            setFoto({existe:"No"}), 
+            setState1({value:''})] }}
+
           style={styles.boton}>
+            
             <Text style={styles.botonTexto}>
               Enviar
             </Text>
