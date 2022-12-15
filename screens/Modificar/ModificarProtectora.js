@@ -1,11 +1,12 @@
 import { style } from "deprecated-react-native-prop-types/DeprecatedTextPropTypes";
 import React, {useEffect, useState} from "react";
-import { ScrollView, View, Text, StyleSheet, TextInput, Image, TouchableOpacity } from "react-native";
+import { ScrollView, View, Text, StyleSheet, TextInput, Image, TouchableOpacity, Modal } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Button } from "react-native-elements";
 import firebase from "../../database/firebase";
 import * as ImagePicker from 'expo-image-picker';
 import {colors} from '../../components/Color';
+import { color } from "react-native-elements/dist/helpers";
 
 const ModificarProtectora = (props) => {
     DropDownPicker.setListMode("SCROLLVIEW");
@@ -62,9 +63,11 @@ const ModificarProtectora = (props) => {
                     telefono: protectora.telefono,
                     fotoModificada : protectora.fotoModificada
                 })
-                alert("Datos cambiados correctamente")
+                setTextoChikita("Datos cambiado correctamente");
+                setModalChikita({...modalChikita, visible: !modalChikita.visible});
+                props.navigation.goBack()
             }
-            props.navigation.goBack()
+            
         }
 
 
@@ -95,6 +98,7 @@ const ModificarProtectora = (props) => {
           });
 
           if (resultImagePicker.cancelled === false) {
+            let textoAlerta = '';
             const imageUri = resultImagePicker.uri;
             uploadImage(imageUri)
               .then(resolve => {
@@ -108,17 +112,19 @@ const ModificarProtectora = (props) => {
                     setFoto({
                         existe: "Si"
                      });
-                     alert("Imagen subida correctamente")
+                     textoAlerta = 'Image subida correctamente'
                   })
                   .catch(error => {
                     console.log(error);
                     console.log(error);
-                    console.log("Error al subir la imagen");
+                    textoAlerta = 'Error al subir la imagen';
                   });
               })
               .catch(error => {
                 console.log(error);
               });
+              setTextoChikita(textoAlerta);
+              setModalChikita({...modalChikita, visible: !modalChikita.visible});
           }
         }
       };
@@ -140,13 +146,17 @@ const ModificarProtectora = (props) => {
     });
       };
 
+    const [textoChikita, setTextoChikita] = useState();
+    const [modalChikita, setModalChikita] = useState({ visible: false});
+    const [modalValidateFields, setModalValidateFields] = useState({ visible: false});
+    const [textoAlerta, setTextoAlerta] = useState();
 
       const checkImage = () => {
         const { imageFirebase } = cosas;
         if (cosas != "") {
           return (
             <Image
-              style={{ width: 300, height: 300, }}
+              style={{ width: 300, height: 300, borderColor: colors.moradoPrincipal, borderWidth: 2, borderRadius: 20, alignSelf: "center" }}
               source={{ uri: imageFirebase }}
             />
           );
@@ -176,18 +186,65 @@ const ModificarProtectora = (props) => {
         } if (protectora.url == ''){
             textoAlerta += "\n - URL de tu web ";  
         } if (protectora.telefono == ''){
-            textoAlerta += "\n - Telefono ";  
+            textoAlerta += "\n - Teléfono ";  
         }else if (protectora.telefono.length != 9 || isNaN(protectora.telefono)){
             textoAlerta += "\n - El teléfono debe contener 9 números ";  
         }
-        alert (textoAlerta); 
+        setTextoAlerta(textoAlerta);
+        setModalValidateFields({...modalValidateFields, visible: !modalValidateFields.visible});
     }
 
     return(
 
 
-        <ScrollView style={styles.container}> 
-        <View style={{  alignItems: 'center', justifyContent: 'center', }}>
+        <ScrollView style={styles.container}>
+          <Modal
+              animationType="slide"
+              transparent={true}                    
+              visible={modalValidateFields.visible}
+              onRequestClose={() => {
+                  setModalValidateFields({...modalValidateFields, visible: !modalValidateFields.visible});
+              }}>
+              <View style={styles.centeredView}>
+                  <View style={[styles.modalView, {height: '50%'}]}>
+                      <View style={{flex: 4}}>
+                          <Text style={[styles.textoAlerta, {fontSize: 20}]}> {textoAlerta} </Text>
+                      </View>
+                      <View style={styles.buttonGroup}>
+                          <TouchableOpacity
+                          onPress={() => setModalValidateFields({...modalValidateFields, visible: !modalValidateFields.visible})}>
+                              <View style={styles.botonCerrar}>
+                                  <Text style={[styles.textoAlerta, {fontSize: 20}]}>cerrar</Text>
+                              </View>
+                          </TouchableOpacity>
+                      </View>
+                  </View>
+              </View>
+          </Modal>
+          <Modal
+            animationType="slide"
+            transparent={true}                    
+            visible={modalChikita.visible}
+            onRequestClose={() => {
+                setModalChikita({...modalChikita, visible: !modalChikita.visible});
+            }}>
+            <View style={styles.centeredView}>
+                <View style={[styles.modalView, {height: '30%'}]}>
+                    <View style={{flex: 4}}>
+                        <Text style={[styles.textoAlerta, {fontSize: 20}]}> {textoChikita} </Text>
+                    </View>
+                    <View style={styles.buttonGroup}>
+                        <TouchableOpacity
+                        onPress={() => setModalChikita({...modalChikita, visible: !modalChikita.visible})}>
+                            <View style={styles.botonCerrar}>
+                                <Text style={[styles.textoAlerta, {fontSize: 20}]}>cerrar</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        </Modal> 
+        <View style={{ justifyContent: 'center', }}>
         {checkImage()}
         <TouchableOpacity 
                             onPress={() => 
@@ -205,6 +262,7 @@ const ModificarProtectora = (props) => {
                 <TextInput 
                 style={styles.inputText}
                 placeholder="* Nombre"
+                placeholderTextColor={colors.moradoSecundario}
                 value = {protectora.nombre}
                 onChangeText={(value) => handleChangeText('nombre', value)}
                 />
@@ -215,6 +273,7 @@ const ModificarProtectora = (props) => {
                 style={styles.inputText}
                 secureTextEntry={true}
                 placeholder="* Contraseña"
+                placeholderTextColor={colors.moradoSecundario}
                 value = {protectora.contraseña}
                 onChangeText={(value) => handleChangeText('contraseña', value)}
                 />
@@ -224,6 +283,7 @@ const ModificarProtectora = (props) => {
                 <TextInput 
                     style={styles.inputText}
                     placeholder="* Email"
+                    placeholderTextColor={colors.moradoSecundario}
                     value = {protectora.email}
                     onChangeText={(value) => handleChangeText('email', value)}
                     />
@@ -254,6 +314,7 @@ const ModificarProtectora = (props) => {
                 <TextInput 
                     style={styles.inputText}
                     placeholder="* Dirección"
+                    placeholderTextColor={colors.moradoSecundario}
                     value = {protectora.direccion}
                     onChangeText={(value) => handleChangeText('direccion', value)}
                     />
@@ -263,6 +324,7 @@ const ModificarProtectora = (props) => {
                 <TextInput 
                     style={styles.inputText}
                     placeholder="* URL de la página web"
+                    placeholderTextColor={colors.moradoSecundario}
                     value = {protectora.url}
                     onChangeText={(value) => handleChangeText('url', value)}
                     />
@@ -271,7 +333,8 @@ const ModificarProtectora = (props) => {
             style={styles.inputGroup}>
                 <TextInput 
                     style={styles.inputText}
-                    placeholder="* Telefono"
+                    placeholder="* Teléfono"
+                    placeholderTextColor={colors.moradoSecundario}
                     value = {protectora.telefono}
                     onChangeText={(value) => handleChangeText('telefono', value)}
                     />
@@ -279,15 +342,20 @@ const ModificarProtectora = (props) => {
             <View>
                 <TextInput                     
                     style={styles.descripcion}
-                    placeholder="Descripcion (max. 200 caracteres)"
+                    placeholder="Descripción (max. 200 caracteres)"
+                    placeholderTextColor={colors.moradoSecundario}
                     maxLength = {200}
                     multiline = {true}
                     value = {protectora.descripcion}
                     onChangeText={(value) => {
-                        if (value.length == 180)
-                            alert("¡Cuidado! Su descripción ya contiene 180 caracteres (max. 200)")
-                        if (value.length == 200)
-                            alert("¡Su descripción ya contiene los 200 caracteres permitidos!")
+                        if (value.length == 180)  {
+                            setTextoChikita("¡Cuidado! Su descripción ya contiene 180 caracteres (max. 200)");
+                            setModalChikita({...modalChikita, visible: !modalChikita.visible})
+                          };
+                        if (value.length == 200)  {
+                            setTextoChikita("¡Su descripción ya contiene los 200 caracteres permitidos!");
+                            setModalChikita({...modalChikita, visible: !modalChikita.visible})
+                          };
                         handleChangeText('descripcion', value)
                     }}
                     />
@@ -314,7 +382,9 @@ const ModificarProtectora = (props) => {
 const styles = StyleSheet.create({
     container : {
         flex: 1, 
-        padding: 35
+        padding: 35,
+        backgroundColor: colors.blanco,
+        marginTop: 50
     },
       inputGroup: {
         marginBottom: 10,
@@ -373,6 +443,43 @@ const styles = StyleSheet.create({
     fontStyle : {
         color: colors.amarillo
     }
-  }
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 10,
+    width: '90%',
+    backgroundColor: colors.amarillo,
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+        width: 0,
+        height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: colors.moradoPrincipal
+  },
+  botonCerrar: {
+    marginRight: 10,
+    height: 40,
+    width: 120,
+    borderRadius: 10,
+    backgroundColor: colors.moradoPrincipal,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  textoAlerta: {
+    fontFamily: 'DMSans',
+    color: colors.blanco,
+  },
 })
 export default ModificarProtectora;

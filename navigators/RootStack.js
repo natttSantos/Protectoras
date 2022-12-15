@@ -88,6 +88,7 @@ const RootStack = () => {
                                         <Stack.Screen
                                             name="ModificarUsuario"
                                             component={ModificarUsuario}
+                                            options={{headerTransparent: true, headerTitle: ''}}
                                         />
                                         <Stack.Screen
                                             name="MapaAnimalEncontrado"
@@ -106,6 +107,11 @@ const RootStack = () => {
                                         <Stack.Screen
                                             name="AltaAdoptar"
                                             component={AltaAdoptar}
+                                            options={{
+                                                headerTransparent: true,
+                                                headerTitle: ''
+                                            }}
+
                                         />
                                         
                                         <Stack.Screen
@@ -121,7 +127,7 @@ const RootStack = () => {
                                             component={Donaciones}
                                             options={{ 
                                                 headerStyle: {
-                                                    backgroundColor: colors.amarillo
+                                                    backgroundColor: colors.blanco
                                                 },
                                                 headerTransparent: true,
                                                 headerTitle: '',                                    
@@ -130,6 +136,13 @@ const RootStack = () => {
                                          <Stack.Screen
                                             name="FechaExpiracion"
                                             component={FechaExpiracion}
+                                            options={{ 
+                                                headerStyle: {
+                                                    backgroundColor: colors.blanco
+                                                },
+                                                headerTransparent: true,
+                                                headerTitle: '',                                    
+                                                }}
                                         />
                                     </>
                                 ) : (
@@ -195,6 +208,13 @@ const RootStack = () => {
                                         <Stack.Screen
                                             name="ModificarProtectora"
                                             component={ModificarProtectora}
+                                            options={{ 
+                                                headerStyle: {
+                                                    backgroundColor: colors.blanco
+                                                },
+                                                headerTransparent: true,
+                                                headerTitle: '',                                    
+                                                }}
                                         />
                                         <Stack.Screen
                                             name="PerfilAnimal"

@@ -1,11 +1,14 @@
 import React, {useEffect, useState, useContext } from "react";
-import { ScrollView, View, Text, StyleSheet, TextInput } from "react-native";
+import { ScrollView, View, Text, StyleSheet, TextInput, Modal } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Button } from "react-native-elements";
 import firebase from '../../database/firebase';
 import { CredentialsContext } from "../../components/CredentialsContext";
 import * as ImagePicker from 'expo-image-picker';
 
+
+//Bibliotecas colores CSS
+import {colors} from '../../components/Color';
 
 const AltaAdoptar = (props) => {
     const initialState = {
@@ -147,65 +150,61 @@ const AltaAdoptar = (props) => {
     }
 
     return(
-        <ScrollView style={styles.container}> 
-        
-            <Text style={styles.title}> Crear Perfil Adoptar </Text>
-            <View 
-            style={styles.inputGroup}> 
-                <TextInput 
-                style={styles.inputText}
-                placeholder="Nombre"
-                onChangeText={(value) => handleChangeText('nombre', value)}
-                
-                />
-            </View>
-            <View 
-            style={styles.inputGroup}>
-                <TextInput 
-                
-                    style={styles.inputText}
-                    placeholder="Apellidos"
-                    onChangeText={(value) => handleChangeText('apellidos', value)}
-                    />
-            </View>
-            <View>
-                <DropDownPicker
-                                style={{marginTop: 15, marginBottom: 15}}
-                                placeholder="Seleccione una localidad"
-                                items={items}
-                                setItems={setItems}
-                                open={open}
-                                setOpen={setOpen}
-                                value={value}
-                                setValue={setValue}
-                                onChangeValue={(value) => {
-                                    handleChangeText('localizacion', value);
-                                  }}
-                            />
-            </View>
-            <View 
-            style={styles.inputGroup}>
-                <TextInput 
-                    style={styles.inputText}
-                    placeholder="DNI"
-                    onChangeText={(value) => handleChangeText('dni', value)}
-                    />
-            </View>
-            <View 
-            style={styles.inputGroup}>
-                <TextInput 
-                    style={styles.inputText}
-                    placeholder="Número de animales"
-                    onChangeText={(value) => handleChangeText('n_animales', value)}
-                    />
-            </View>
-            <Button style={{position: 'fixed',  right: 0}} title="Selecciona una imagen" onPress={() =>  openGallery()} /> 
-            <View style={{marginTop: 15}}>
-                <Button 
-                title="Dar de alta" 
-                onPress={() => {updateUsuario();
-                     }}/>
-            </View>
+        <ScrollView style={styles.container}>           
+          <Text style={styles.titulo}> Crear Perfil Adoptar </Text>
+          
+          <TextInput 
+            style={styles.inputText}
+            placeholder="Nombre"
+            placeholderTextColor={colors.moradoSecundario}
+            onChangeText={(value) => handleChangeText('nombre', value)}                
+          />
+          <TextInput                 
+            style={styles.inputText}
+            placeholder="Apellidos"
+            placeholderTextColor={colors.moradoSecundario}
+            onChangeText={(value) => handleChangeText('apellidos', value)}
+          />
+          <View>
+          <DropDownPicker
+              style={styles.dropDownPicker}
+              placeholder="Seleccione una localidad"
+              placeholderStyle={{
+                color: colors.moradoSecundario
+                }}
+              items={items}
+              listItemLabelStyle={{
+                  color: colors.moradoSecundario
+              }}
+              setItems={setItems}
+              open={open}
+              setOpen={setOpen}
+              value={value}
+              setValue={setValue}
+              onChangeValue={(value) => {
+                  handleChangeText('localizacion', value);
+                }}
+          />
+          </View>
+              <TextInput 
+                  style={styles.inputText}
+                  placeholder="DNI"
+                  placeholderTextColor={colors.moradoSecundario}
+                  onChangeText={(value) => handleChangeText('dni', value)}
+                  />
+              <TextInput 
+                  style={styles.inputText}
+                  placeholder="Número de animales"
+                  placeholderTextColor={colors.moradoSecundario}
+                  onChangeText={(value) => handleChangeText('n_animales', value)}
+                  />
+          <Button style={{position: 'fixed',  right: 0}} title="Selecciona una imagen" onPress={() =>  openGallery()} /> 
+          <View style={{marginTop: 15}}>
+              <Button 
+              title="Dar de alta" 
+              onPress={() => {updateUsuario();
+                    }}/>
+          </View>
         </ScrollView>
     )
 }
@@ -213,23 +212,33 @@ const AltaAdoptar = (props) => {
 const styles = StyleSheet.create({
     container : {
         flex: 1, 
-        padding: 35
+        padding: 35,
+        height: 350,
+        backgroundColor: colors.blanco
     },
-    inputGroup: {
-        fontSize: 20, 
-        padding: 0,
-        marginBottom: 10,
-        marginTop: 10, 
-        borderBottomWidth: 2, 
-        borderBottomColor: '#cccccc'
-    }, 
     inputText: {
-        fontSize: 17
-    },
-    title : {
-        fontSize: 40,
-        fontWeight: "bold"
-    },
+      fontSize: 16,
+      color: colors.moradoPrincipal,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.moradoPrincipal,
+      marginTop: 20      
+  },
+  dropDownPicker : {
+    marginTop: 25,
+    borderRadius: 25,
+    borderColor: colors.moradoPrincipal,
+    borderWidth: 2,
+    fontStyle : {
+        color: colors.amarillo
+    }
+},
+    titulo : {
+      fontSize: 32,
+      fontWeight: 'bold',
+      marginTop: 30,
+      color: colors.moradoPrincipal,
+      fontFamily: 'DMSans'
+  },
     descripcion : {
         height: 100,
         borderWidth: 2,
