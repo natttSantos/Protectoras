@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext } from "react";
-import { ScrollView, View, Text, StyleSheet, TextInput, Modal } from "react-native";
+import { ScrollView, View, Text, StyleSheet, TextInput, Modal, TouchableOpacity } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Button } from "react-native-elements";
 import firebase from '../../database/firebase';
@@ -69,7 +69,8 @@ const AltaAdoptar = (props) => {
           telefono: usuario.telefono,
         });
         setUsuario(initialState);
-        props.navigation.navigate('SesionUsuario', {userId: usuario.id})
+        setTextoAlertaRegistro("Perfil de adopción creado");
+        setModalRegistro({...modalRegistro, visible: !modalRegistro.visible, correct: true});
         }
       };
 
@@ -115,7 +116,8 @@ const AltaAdoptar = (props) => {
                     setFoto({
                         existe: "Si"
                      });
-                     alert("Imagen subida correctamente")
+                    setTextoChikita("Imagen subida correctamente");
+                    setModalChikita({...modalChikita, visible: !modalChikita.visible});
                   })
                   .catch(error => {
                     console.log(error);
@@ -146,11 +148,93 @@ const AltaAdoptar = (props) => {
         }if (fotoModificada.existe == ''){
             textoAlerta += "\n - Foto ";  
         }
-        alert (textoAlerta); 
+        setTextoAlerta(textoAlerta);
+        setModalValidateFields({...modalValidateFields, visible: !modalValidateFields.visible});
+    }
+
+    const [modalChikita, setModalChikita] = useState({ visible: false});  
+    const [textoChikita, setTextoChikita] = useState();
+    const [modalValidateFields, setModalValidateFields] = useState({ visible: false});  
+    const [textoAlerta, setTextoAlerta] = useState();
+    const [modalRegistro, setModalRegistro] = useState({ visible: false, correct: false });
+    const [textoRegistro, setTextoAlertaRegistro] = useState();
+
+    const cerrarAlerta = () => {
+      setModalRegistro({...modalRegistro, visible: !modalRegistro.visible})
+      props.navigation.navigate('SesionUsuario', {userId: usuario.id})  
     }
 
     return(
         <ScrollView style={styles.container}>           
+          <Modal
+              animationType="slide"
+              transparent={true}                    
+              visible={modalValidateFields.visible}
+              onRequestClose={() => {
+                  setModalValidateFields({...modalValidateFields, visible: !modalValidateFields.visible});
+              }}>
+              <View style={styles.centeredView}>
+                  <View style={[styles.modalView, {height: '45%'}]}>
+                      <View style={{flex: 4}}>
+                          <Text style={[styles.textoAlerta, {fontSize: 20}]}> {textoAlerta} </Text>
+                      </View>
+                      <View style={styles.buttonGroup}>
+                          <TouchableOpacity
+                          onPress={() => setModalValidateFields({...modalValidateFields, visible: !modalValidateFields.visible})}>
+                              <View style={styles.botonCerrar}>
+                                  <Text style={[styles.textoAlerta, {fontSize: 20}]}>cerrar</Text>
+                              </View>
+                          </TouchableOpacity>
+                      </View>
+                  </View>
+              </View>
+          </Modal>
+          <Modal
+              animationType="slide"
+              transparent={true}                    
+              visible={modalChikita.visible}
+              onRequestClose={() => {
+                  setModalChikita({...modalChikita, visible: !modalChikita.visible});
+              }}>
+              <View style={styles.centeredView}>
+                  <View style={[styles.modalView, {height: '30%'}]}>
+                      <View style={{flex: 4}}>
+                          <Text style={[styles.textoAlerta, {fontSize: 20}]}> {textoChikita} </Text>
+                      </View>
+                      <View style={styles.buttonGroup}>
+                          <TouchableOpacity
+                          onPress={() => setModalChikita({...modalChikita, visible: !modalChikita.visible})}>
+                              <View style={styles.botonCerrar}>
+                                  <Text style={[styles.textoAlerta, {fontSize: 20}]}>cerrar</Text>
+                              </View>
+                          </TouchableOpacity>
+                      </View>
+                  </View>
+              </View>
+          </Modal>
+          <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalRegistro.visible}
+              onRequestClose={() => {
+                  setModalRegistro({...modalRegistro, visible: !modalRegistro.visible});
+              }}>
+              <View style={styles.centeredView}>
+                  <View style={[styles.modalView, {height: 170}]}>
+                      <View style={{flex: 4}}>
+                          <Text style={[styles.textoAlerta, {fontSize: 22}]}> {textoRegistro} </Text>
+                      </View>
+                      <View style={styles.buttonGroup}>
+                          <TouchableOpacity
+                          onPress={modalRegistro.correct ? () => cerrarAlerta() : () => setModalRegistro({...modalRegistro, visible: !modalRegistro.visible})}>
+                              <View style={styles.botonCerrar}>
+                                  <Text style={[styles.textoAlerta, {fontSize: 20}]}>cerrar</Text>
+                              </View>
+                          </TouchableOpacity>
+                      </View>
+                  </View>
+              </View>
+          </Modal>
           <Text style={styles.titulo}> Crear Perfil Adoptar </Text>
           
           <TextInput 
@@ -198,12 +282,27 @@ const AltaAdoptar = (props) => {
                   placeholderTextColor={colors.moradoSecundario}
                   onChangeText={(value) => handleChangeText('n_animales', value)}
                   />
-          <Button style={{position: 'fixed',  right: 0}} title="Selecciona una imagen" onPress={() =>  openGallery()} /> 
+                  
           <View style={{marginTop: 15}}>
-              <Button 
-              title="Dar de alta" 
-              onPress={() => {updateUsuario();
-                    }}/>
+            <TouchableOpacity 
+                  onPress={() => 
+                      openGallery()
+                  }
+                  style={[styles.botonPropiedades, {marginBottom: 10}, {borderColor: colors.moradoPrincipal}]}>
+                      <Text style={[styles.botonTexto, {color: colors.moradoPrincipal}]}>
+                          Añadir imagen de perfil
+                      </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+                onPress={() => 
+                  updateUsuario()
+                }
+                style={[styles.botonPropiedades, {backgroundColor: colors.amarillo}, {borderColor: colors.amarillo}]}>
+                    <Text style={[styles.botonTexto, {color: colors.blanco}, {fontWeight: 'bold'}]}>
+                        Dar de alta
+                    </Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
     )
@@ -243,6 +342,57 @@ const styles = StyleSheet.create({
         height: 100,
         borderWidth: 2,
         borderColor: '#cccccc'
-    }
+    },
+    centeredView: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 22
+    },
+    modalView: {
+      margin: 10,
+      width: '90%',
+      backgroundColor: colors.amarillo,
+      borderRadius: 20,
+      padding: 35,
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+          width: 0,
+          height: 2
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
+      borderWidth: 1,
+      borderColor: colors.moradoPrincipal
+    },
+    botonCerrar: {
+      marginRight: 10,
+      height: 40,
+      width: 120,
+      borderRadius: 10,
+      backgroundColor: colors.moradoPrincipal,
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    textoAlerta: {
+      fontFamily: 'DMSans',
+      color: colors.blanco,
+    },
+    botonPropiedades : {
+      borderWidth: 2,
+      width:260,
+      height:50,
+      borderRadius: 25,
+      alignSelf: "center",
+      marginTop: 20
+    }, 
+     
+    botonTexto : {
+      fontSize: 20,
+      alignSelf: "center",
+      marginTop: 5
+  },
 })
 export default AltaAdoptar;
