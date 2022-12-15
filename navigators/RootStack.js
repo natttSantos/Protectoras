@@ -107,6 +107,11 @@ const RootStack = () => {
                                         <Stack.Screen
                                             name="AltaAdoptar"
                                             component={AltaAdoptar}
+                                            options={{
+                                                headerTransparent: true,
+                                                headerTitle: ''
+                                            }}
+
                                         />
                                         
                                         <Stack.Screen
