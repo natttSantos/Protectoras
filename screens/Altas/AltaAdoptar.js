@@ -69,7 +69,7 @@ const AltaAdoptar = (props) => {
           telefono: usuario.telefono,
         });
         setUsuario(initialState);
-        setTextoAlertaRegistro("Perfil de adopción creado");
+        setTextoAlertaRegistro("Perfil actualizado, reinicie la sesión");
         setModalRegistro({...modalRegistro, visible: !modalRegistro.visible, correct: true});
         }
       };
@@ -182,7 +182,7 @@ const AltaAdoptar = (props) => {
                           <TouchableOpacity
                           onPress={() => setModalValidateFields({...modalValidateFields, visible: !modalValidateFields.visible})}>
                               <View style={styles.botonCerrar}>
-                                  <Text style={[styles.textoAlerta, {fontSize: 20}]}>cerrar</Text>
+                                  <Text style={[styles.textoAlerta, {fontSize: 20}]}>Cerrar</Text>
                               </View>
                           </TouchableOpacity>
                       </View>
@@ -205,7 +205,7 @@ const AltaAdoptar = (props) => {
                           <TouchableOpacity
                           onPress={() => setModalChikita({...modalChikita, visible: !modalChikita.visible})}>
                               <View style={styles.botonCerrar}>
-                                  <Text style={[styles.textoAlerta, {fontSize: 20}]}>cerrar</Text>
+                                  <Text style={[styles.textoAlerta, {fontSize: 20}]}>Cerrar</Text>
                               </View>
                           </TouchableOpacity>
                       </View>
@@ -228,7 +228,7 @@ const AltaAdoptar = (props) => {
                           <TouchableOpacity
                           onPress={modalRegistro.correct ? () => cerrarAlerta() : () => setModalRegistro({...modalRegistro, visible: !modalRegistro.visible})}>
                               <View style={styles.botonCerrar}>
-                                  <Text style={[styles.textoAlerta, {fontSize: 20}]}>cerrar</Text>
+                                  <Text style={[styles.textoAlerta, {fontSize: 20}]}>Cerrar</Text>
                               </View>
                           </TouchableOpacity>
                       </View>
