@@ -412,7 +412,8 @@ const styles = StyleSheet.create({
         flex: 1, 
         padding: 35,
         backgroundColor: colors.blanco,
-        marginTop: 50
+        marginTop: 50,
+        height: 750
     },
     inputGroup: {
         marginBottom: 10,
