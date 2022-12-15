@@ -310,7 +310,7 @@ textContainerGmailTlf: {
         width:260,
         height:42,
         borderRadius: 25,
-        marginBottom: -100, 
+        marginBottom: -10, 
         alignSelf: "center",
         marginTop: -330
       },
