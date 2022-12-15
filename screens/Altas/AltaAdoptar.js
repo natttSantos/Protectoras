@@ -278,7 +278,7 @@ const AltaAdoptar = (props) => {
                   />
               <TextInput 
                   style={styles.inputText}
-                  placeholder="Número de animales"
+                  placeholder="Número de mascotas actuales"
                   placeholderTextColor={colors.moradoSecundario}
                   onChangeText={(value) => handleChangeText('n_animales', value)}
                   />
